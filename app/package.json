@@ -19,9 +19,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start:hive": "HOST=hive.bhive.co.local react-scripts start",
-    "start:fk": "HOST=fk.bhive.co.local react-scripts start",
-    "start": "react-scripts start",
+    "start": "npm run compile-sass && npm run compile-css && react-scripts start",
+    "compile-css": "npx tailwindcss -i src/app.css -o src/output.css",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
