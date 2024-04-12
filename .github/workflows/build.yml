@@ -22,7 +22,7 @@ jobs:
 
       - name: Build and push app Docker image
         run: |
-          cd b-hive-app && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-app .
+          cd app && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-app .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/bhive-app
       - name: Build and push backend Docker image
         run: |

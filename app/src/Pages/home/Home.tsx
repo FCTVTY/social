@@ -1,0 +1,130 @@
+import {EnvelopeIcon, PhoneIcon} from '@heroicons/react/20/solid'
+import React from "react";
+import {XMarkIcon} from '@heroicons/react/20/solid'
+
+const people = [
+    {
+        name: 'Tim Cook',
+        title: 'Paradigm Representative',
+        role: 'Admin',
+        email: 'janecooper@example.com',
+        telephone: '+1-202-555-0170',
+        imageUrl:
+            'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1746&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    {
+        name: 'Tim Cook',
+        title: 'Paradigm Representative',
+        role: 'Admin',
+        email: 'janecooper@example.com',
+        telephone: '+1-202-555-0170',
+        imageUrl:
+            'https://images.unsplash.com/photo-1527208043690-e3db1cc93456?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    },
+    {
+        name: 'Tim Cook',
+        title: 'Paradigm Representative',
+        role: 'Admin',
+        email: 'janecooper@example.com',
+        telephone: '+1-202-555-0170',
+        imageUrl:
+            'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1746&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    }
+]
+
+interface HomeProps {
+    host?: string
+}
+
+export default function Home({host}: HomeProps) {
+    return (
+
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center gap-x-6 bg-indigo-600 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 rounded-md ">
+                <p className="text-sm leading-6 text-white">
+                    <a href="#">
+                        <strong className="font-semibold">viewing {host}</strong>
+                    </a>
+                </p>
+                <div className="flex flex-1 justify-end">
+                    <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+                        <span className="sr-only">Dismiss</span>
+                        <XMarkIcon className="h-5 w-5 text-white" aria-hidden="true"/>
+                    </button>
+                </div>
+            </div>
+
+
+            <ul role="list"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
+                {people.map((person) => (
+                    <li
+                        key={person.email}
+                        className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl"
+                    >
+                        <div className="flex flex-1 flex-col p-8">
+
+                            <dl className="mt-1 flex flex-grow flex-col justify-between">
+                                <a href="#" className="group block flex-shrink-0">
+                                    <div className="flex items-center">
+                                        <div>
+                                            <img
+                                                className="inline-block h-9 w-9 rounded-full"
+                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <div className="ml-3">
+                                            <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{person.name}</p>
+                                            <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
+                                                profile</p>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <img className="mx-auto mt-2" src={person.imageUrl} alt=""/>
+
+                                <div className="flex py-4 justify-between">
+
+                                    <div className="flex space-x-2">
+                                        <div className="flex space-x-1 items-center">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-gray-600 cursor-pointer" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+          </span>
+                                            <span>22</span>
+                                        </div>
+                                        <div className="flex space-x-1 items-center">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 className="h-7 w-7 text-red-500 hover:text-red-400 transition duration-100 cursor-pointer"
+                 viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </span>
+                                            <span>20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <dd className="text-sm text-gray-500">10 views</dd>
+                                <dd className="text-sm text-gray-500">Some description #bhive</dd>
+                                <dd className="text-sm text-gray-200">View all comments</dd>
+                                <dd className="text-sm text-gray-200 font-bold">5 days ago</dd>
+                            </dl>
+                        </div>
+                        <div>
+
+                        </div>
+                        <div className="divide-x"></div>
+                    </li>
+
+                ))}
+            </ul>
+        </div>
+    )
+}
