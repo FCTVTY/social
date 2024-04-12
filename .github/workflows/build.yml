@@ -3,7 +3,7 @@ name: Deploy to Docker Hub and Server
 on:
   push:
     branches:
-      - master
+      - main
       - 1.2.0
 
 jobs:
