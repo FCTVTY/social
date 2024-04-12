@@ -1,7 +1,7 @@
 import React, {Fragment, useState} from 'react';
 import LogoSquare from "../assets/logo-light.svg";
 import LogoSquareDark from "../assets/logo-dark.svg";
-
+import fk from "../assets/FK.svg";
 import {Dialog, Disclosure, Menu, Transition} from '@headlessui/react';
 import {
     Bars3Icon,
@@ -413,7 +413,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                             <div className="pl-2 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
 
                                 <div className="flex flex-1 items-center gap-x-4 lg:gap-x-6">
-                                    <img src="https://img.logoipsum.com/325.svg" className="mx-auto"/>
+                                    <img src={fk} className="mx-auto h-9 py-1"/>
 
                                     {/* Separator */}
                                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"/>
