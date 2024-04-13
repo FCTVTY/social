@@ -11,7 +11,7 @@ WORKDIR /app
 COPY ./package.json ./
 
 RUN npm install
-RUN npm install vite --save-dev
+RUN npm i vite
 RUN npm i @rollup/rollup-linux-x64-musl
 # Copying all the files in our project
 COPY . .
