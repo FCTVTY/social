@@ -7,7 +7,7 @@ import ApplicationLayout from "./layout/applicationLayout";
 import Join from "./Pages/home/join";
 import AuthLayout from "./layout/AuthLayout";
 import Login from "./Pages/auth/login";
-import {SuperTokensWrapper} from 'supertokens-auth-react';
+import {SuperTokensWrapper} from "supertokens-auth-react";
 import {SessionAuth} from 'supertokens-auth-react/recipe/session';
 import {initSuperTokens} from "./lib/auth/supertokens";
 import Register from "./Pages/auth/register";

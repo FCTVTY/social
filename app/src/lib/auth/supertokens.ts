@@ -15,13 +15,13 @@ import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 
 
 export function getApiDomain() {
-  const apiUrl = process.env.REACT_APP_API_DOMAIN || 'http://localhost:3001/v1';
+  const apiUrl = import.meta.env.REACT_APP_API_DOMAIN || 'http://localhost:3001/v1';
   console.log(apiUrl);
   return apiUrl;
 }
 
 export function getWebsiteDomain() {
-  const websiteUrl = process.env.REACT_APP_WEBSITE_DOMAIN || 'http://localhost:3000';
+  const websiteUrl = import.meta.env.REACT_APP_WEBSITE_DOMAIN || 'http://localhost:3000';
   return websiteUrl;
 }
 
