@@ -15,6 +15,7 @@ RUN yarn install --frozen-lockfile
 
 # Copying all the files in our project
 COPY . .
+RUN yarn add vite --dev
 
 # Building our application
 RUN yarn build
