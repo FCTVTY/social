@@ -5,6 +5,14 @@ import {Route, Routes, Navigate} from 'react-router-dom';
 import Home from "./Pages/home/Home";
 import ApplicationLayout from "./layout/applicationLayout";
 import Join from "./Pages/home/join";
+import AuthLayout from "./layout/AuthLayout";
+import Login from "./Pages/auth/login";
+import {SuperTokensWrapper} from 'supertokens-auth-react';
+import {SessionAuth} from 'supertokens-auth-react/recipe/session';
+import {initSuperTokens} from "./lib/auth/supertokens";
+import Register from "./Pages/auth/register";
+
+initSuperTokens();
 
 function App() {
 
@@ -25,16 +33,25 @@ function App() {
 
 
   return (
-      <>
+      <SuperTokensWrapper>
 
         <Routes>
-            <Route path="/" element={<ApplicationLayout host={subdomain}>
+            <Route path="/login" element={<AuthLayout>
+<Login/>
+                </AuthLayout>}/>
+            <Route path="/register" element={<AuthLayout>
+                <Register/>
+            </AuthLayout>}/>
+
+            <Route path="/" element={ <SessionAuth><ApplicationLayout host={subdomain}>
 
                 <Join/>
-                <Home host={subdomain}/></ApplicationLayout>}/>
-
+                <Home host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+            <Route path='/auth' element={<AuthLayout>
+                <Login/>
+            </AuthLayout>}/>
         </Routes>
-      </>
+      </SuperTokensWrapper>
 
     );
 }
