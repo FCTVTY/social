@@ -7,20 +7,17 @@ ENV NODE_ENV production
 # Setting up the work directory
 WORKDIR /app
 
-# Installing dependencies
-COPY ./package.json ./
+# Copying package.json and yarn.lock first
+COPY package.json yarn.lock ./
 
-RUN npm install
-RUN npm install -g vite
-RUN npm i @rollup/rollup-linux-x64-musl
+# Installing dependencies
+RUN yarn install --frozen-lockfile
+
 # Copying all the files in our project
 COPY . .
 
-# Run the script to update manifest.json
-
-
 # Building our application
-RUN npm run build
+RUN yarn build
 
 # Fetching the latest nginx image
 FROM nginx
@@ -30,4 +27,5 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copying our nginx.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 5000
+
+EXPOSE 80
