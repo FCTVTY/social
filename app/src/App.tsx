@@ -63,7 +63,7 @@ function App() {
                 <Register/>
             </AuthLayout>}/>
 
-            <Route path="/feed/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain}>
+            <Route path="/feed/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
                 <Feed host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>

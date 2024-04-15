@@ -114,6 +114,35 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func CreatePost(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	var v models.Posts
+
+	// We decode our body request params
+	err := json.NewDecoder(r.Body).Decode(&v)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	v.ID = primitive.NewObjectID()
+	v.Date = time.Now()
+	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
+	v.Tags = []string{}
+	result, err := postCollection.InsertOne(context.Background(), v)
+	if err != nil {
+		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(rw).Encode(result.InsertedID)
+
+}
+
 func Posts(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())

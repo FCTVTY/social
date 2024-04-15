@@ -44,4 +44,6 @@ type Posts struct {
 	Commentsallowed bool               `json:"commentsallowed"`
 	SoftDelete      bool               `json:"softDelete"`
 	Channel         primitive.ObjectID `bson:"channel" json:"channel,omitempty"`
+	Desc            string             `json:"desc"`
+	Channelstring   string             `json:"channelstring"`
 }

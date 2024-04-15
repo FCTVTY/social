@@ -131,6 +131,11 @@ func main() {
 
 			return
 		}
+		if parsedURL.Path == "/v1/community/createpost" && r.Method == "POST" {
+			session.VerifySession(nil, client.CreatePost).ServeHTTP(rw, r)
+
+			return
+		}
 
 		rw.WriteHeader(404)
 	})))))

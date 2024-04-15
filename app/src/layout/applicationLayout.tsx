@@ -44,7 +44,8 @@ interface UserNavigationItem {
 
 interface Props {
     children: React.ReactNode,
-    host?: string
+    host?: string,
+    channel?: string
 }
 
 function classNames(...classes: string[]) {
@@ -52,9 +53,9 @@ function classNames(...classes: string[]) {
 }
 
 
-const ApplicationLayout: React.FC<Props> = ({children, host}) => {
+const ApplicationLayout: React.FC<Props> = ({children, host, channel}) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [community, setCommunity] = useState<Partial<CommunityCollection>>(null);
+    const [community, setCommunity] = useState<Partial<CommunityCollection>>();
     const [navigation, setNavigation] = useState<NavigationItem[]>([]);
 
 
@@ -79,14 +80,20 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
             setCommunity(response.data);
 
 
-
         } catch (error) {
-        console.error('Error fetching community details:', error);
-    }
+            console.error('Error fetching community details:', error);
+        }
     };
 
     useEffect(() => {
         if (community && community.channels) {
+            console.log("loading"+  channel)
+            if(channel === undefined)
+            {
+
+                window.location.assign('/feed/'+ community.channels[0].id);
+            }
+
             const channelNavigation = community.channels.map((channel, index) => ({
                 name: channel.name,
                 href: `/feed/${channel.id}`, // Update with appropriate channel ID or URL
@@ -308,7 +315,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                                                     </ul>
                                                 </li>
                                                 <li>
-                                                <div className="text-xs font-semibold leading-6 text-gray-400">Your
+                                                    <div className="text-xs font-semibold leading-6 text-gray-400">Your
                                                         teams
                                                     </div>
                                                     <ul role="list" className="-mx-2 mt-2 space-y-1">
@@ -378,7 +385,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                                                 >
                                                      <span
                                                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                            {item.name.slice(0,2)}
+                            {item.name.slice(0, 2)}
                           </span>
                                                     {item.name}
                                                 </a>
@@ -447,7 +454,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                             <div className="pl-2 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
 
                                 <div className="flex flex-1 items-center gap-x-4 lg:gap-x-6">
-                                    <img src={community && community.community.logo} className="sm:mx-auto h-9 py-1"/>
+                                    <img src={community && community.community?.logo} className="sm:mx-auto h-9 py-1"/>
                                     {/* Separator */}
                                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"/>
 

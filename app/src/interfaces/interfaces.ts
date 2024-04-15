@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 
 interface Community {
-    _id: ObjectId;
+    id: ObjectId;
     name: string;
     logo: string;
     desc: string;
@@ -9,7 +9,7 @@ interface Community {
 }
 
 interface Channel {
-    _id: ObjectId;
+    id: ObjectId;
     name: string;
     locked: boolean;
 }
@@ -24,7 +24,7 @@ export interface CommunityCollection {
 }
 
 export interface Post {
-    id: string
+    id: ObjectId
     userId: string
     media: string
     tags: string[]
@@ -32,5 +32,8 @@ export interface Post {
     locked: boolean
     commentsallowed: boolean
     softDelete: boolean
-    channel: string
+    channel: ObjectId
+    channelstring: string
+
+    desc: string
 }
