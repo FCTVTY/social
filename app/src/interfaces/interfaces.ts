@@ -23,3 +23,14 @@ export interface CommunityCollection {
     user:User;
 }
 
+export interface Post {
+    id: string
+    userId: string
+    media: string
+    tags: string[]
+    date: string
+    locked: boolean
+    commentsallowed: boolean
+    softDelete: boolean
+    channel: string
+}

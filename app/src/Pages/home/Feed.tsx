@@ -3,37 +3,9 @@ import React, {useEffect, useState} from "react";
 import {XMarkIcon} from '@heroicons/react/20/solid'
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
-import {CommunityCollection} from "../../interfaces/interfaces";
-
-const people = [
-    {
-        name: 'Tim Cook',
-        title: 'Paradigm Representative',
-        role: 'Admin',
-        email: 'janecooper@example.com',
-        telephone: '+1-202-555-0170',
-        imageUrl:
-            'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1746&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    },
-    {
-        name: 'Tim Cook',
-        title: 'Paradigm Representative',
-        role: 'Admin',
-        email: 'janecooper@example.com',
-        telephone: '+1-202-555-0170',
-        imageUrl:
-            'https://images.unsplash.com/photo-1527208043690-e3db1cc93456?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    },
-    {
-        name: 'Tim Cook',
-        title: 'Paradigm Representative',
-        role: 'Admin',
-        email: 'janecooper@example.com',
-        telephone: '+1-202-555-0170',
-        imageUrl:
-            'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1746&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    }
-]
+import {CommunityCollection, Post} from "../../interfaces/interfaces";
+import { formatDistanceToNow } from 'date-fns';
+import Create from "./create";
 
 interface HomeProps {
     host?: string,
@@ -41,7 +13,7 @@ interface HomeProps {
 }
 
 export default function Feed({host, channel}: HomeProps) {
-    const [community, setCommunity] = useState<Partial<CommunityCollection>>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
 
     if(channel != null)
     {
@@ -52,7 +24,7 @@ export default function Feed({host, channel}: HomeProps) {
         const fetchDetails = async () => {
             try {
                 const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}`);
-                setCommunity(response.data);
+                setPosts(response.data);
 
 
 
@@ -67,16 +39,20 @@ export default function Feed({host, channel}: HomeProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 
 
+
+
             <ul role="list"
                 className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
 
-
-                {people.map((person) => (
+<li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
+    <Create/>
+</li>
+                {posts.map((person) => (
                     <li
-                        key={person.email}
+                        key={person.userId}
                         className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl"
                     >
-                        <div className="flex flex-1 flex-col p-8">
+                        <div className="flex flex-1 flex-col p-3">
 
                             <dl className="mt-1 flex flex-grow flex-col justify-between">
                                 <a href="#" className="group block flex-shrink-0">
@@ -84,19 +60,19 @@ export default function Feed({host, channel}: HomeProps) {
                                         <div>
                                             <img
                                                 className="inline-block h-9 w-9 rounded-full"
-                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                src={person.media}
                                                 alt=""
                                             />
                                         </div>
                                         <div className="ml-3">
-                                            <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{person.name}</p>
+                                            <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{person.userId}</p>
                                             <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                                 profile</p>
                                         </div>
                                     </div>
                                 </a>
 
-                                <img className="mx-auto mt-2" src={person.imageUrl} alt=""/>
+                                <img className="mx-auto mt-2 rounded-md" src={person.media} alt=""/>
 
                                 <div className="flex py-4 justify-between">
 
@@ -125,10 +101,14 @@ export default function Feed({host, channel}: HomeProps) {
                                         </div>
                                     </div>
                                 </div>
-                                <dd className="text-sm text-gray-500">10 views</dd>
-                                <dd className="text-sm text-gray-500">Some description #bhive</dd>
+                                <dd className="text-sm text-gray-500"> views</dd>
+                                <dd className="text-sm text-gray-500">
+                                    {person.tags.map(tag => (
+                                        <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
+                                    ))}
+                                </dd>
                                 <dd className="text-sm text-gray-200">View all comments</dd>
-                                <dd className="text-sm text-gray-200 font-bold">5 days ago</dd>
+                                <dd className="text-sm text-gray-200 font-bold">{formatDistanceToNow(new Date(person.date), {addSuffix: true})}</dd>
                             </dl>
                         </div>
                         <div>

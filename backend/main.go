@@ -141,7 +141,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 		origin := r.Header.Get("Origin")
 
 		// Check if the request Origin header is allowed
-		if strings.Contains(origin, "bhivecommunity.co.uk") {
+		if strings.Contains(origin, "bhivecommunity.co.uk") || strings.Contains(origin, "localhost") {
 			// If the origin is allowed, set it in the response header
 			response.Header().Set("Access-Control-Allow-Origin", origin)
 		}

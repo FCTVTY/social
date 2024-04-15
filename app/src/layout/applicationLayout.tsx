@@ -89,7 +89,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
         if (community && community.channels) {
             const channelNavigation = community.channels.map((channel, index) => ({
                 name: channel.name,
-                href: `/feed/${channel._id}`, // Update with appropriate channel ID or URL
+                href: `/feed/${channel.id}`, // Update with appropriate channel ID or URL
                 icon: ChartPieIcon, // Update with appropriate icon
                 current: index === 0, // Set the first channel as current by default
             }));
