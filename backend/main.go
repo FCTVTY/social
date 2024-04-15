@@ -85,7 +85,7 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler()) // Expose Prometheus metrics
 
-	http.ListenAndServe(":3001", logMiddleware(corsMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+	http.ListenAndServe(":3001", logMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 
 		parsedURL, err := url.Parse(r.URL.Path)
 		if err != nil {
@@ -133,7 +133,7 @@ func main() {
 		}
 
 		rw.WriteHeader(404)
-	})))))
+	}))))
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
