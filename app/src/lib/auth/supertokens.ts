@@ -21,7 +21,7 @@ export function getApiDomain() {
 }
 
 export function getWebsiteDomain() {
-  const websiteUrl = import.meta.env.VITE_WEBSITE_DOMAIN || 'http://localhost:5173';
+  const websiteUrl = window.location.host;
   console.log(websiteUrl);
   return websiteUrl;
 }

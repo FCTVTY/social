@@ -20,6 +20,7 @@ import (
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/supertokens"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -29,13 +30,10 @@ import (
 )
 
 var (
-	client                *mongo.Client
-	brandingCollection    *mongo.Collection
-	walkCollection        *mongo.Collection
-	voucherCollection     *mongo.Collection
-	userVoucherCollection *mongo.Collection
-	placeCollection       *mongo.Collection
-	userHistoryCollection *mongo.Collection
+	client               *mongo.Client
+	communitesCollection *mongo.Collection
+	channelCollection    *mongo.Collection
+	postCollection       *mongo.Collection
 )
 
 func init() {
@@ -59,76 +57,107 @@ func init() {
 		log.Fatalf("Error connecting to MongoDB: %v", err)
 	}
 
-	database := client.Database("tenants")
-	brandingCollection = database.Collection("tenants")
-	walkCollection = database.Collection("walks")
-	voucherCollection = database.Collection("voucher")
-	userVoucherCollection = database.Collection("uservouchers")
-	placeCollection = database.Collection("place")
+	database := client.Database("bhive")
+	communitesCollection = database.Collection("communites")
+	channelCollection = database.Collection("channels")
+	postCollection = database.Collection("posts")
+
 }
 
-func AddUVoucher(rw http.ResponseWriter, r *http.Request) {
-	var v models.VouchersUsersMapping
+func Community(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {
 		http.Error(rw, "no session found", http.StatusInternalServerError)
 		return
 	}
 
-	// We decode our body request params
-	err := json.NewDecoder(r.Body).Decode(&v)
+	// Validate and retrieve community name from URL query parameters
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		http.Error(rw, "community name is required", http.StatusBadRequest)
+		return
+	}
+	var collection models.CommunityCollection
+	// Check if the community exists in the database
+	filter := bson.M{"name": name}
+	var community models.Community
+	err := communitesCollection.FindOne(context.Background(), filter).Decode(&community)
 	if err != nil {
-		http.Error(rw, err.Error(), http.StatusBadRequest)
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "community not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "failed to fetch community details", http.StatusInternalServerError)
 		return
 	}
 
-	v.Usid = sessionContainer.GetUserID()
+	collection.Community = community
 
-	// Check if the mapping already exists
-	filter := bson.M{"vid": v.Vid, "usid": v.Usid}
-	existingMapping := userVoucherCollection.FindOne(context.Background(), filter)
-	if existingMapping.Err() == nil {
-		errorMessage := map[string]string{"error": "Mapping already exists"}
-		rw.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(rw).Encode(errorMessage)
-		return
-	}
-
-	// Insert the new mapping
-	result, err := userVoucherCollection.InsertOne(context.Background(), v)
-	if err != nil {
-		errorMessage := map[string]string{"error": "Oh no, Something went wrong"}
-		rw.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(rw).Encode(errorMessage)
-		return
-	}
-
-	json.NewEncoder(rw).Encode(result)
-}
-
-func Tenants(w http.ResponseWriter, r *http.Request) {
-
-	var results []bson.M
-
-	cursor, err := brandingCollection.Find(context.Background(), bson.M{})
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	cursor, err := channelCollection.Find(context.Background(), bson.M{"parent": community.ID})
 	defer cursor.Close(context.Background())
 
 	for cursor.Next(context.Background()) {
-		var result bson.M
+		var result models.Channel
 		err := cursor.Decode(&result)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		collection.Channels = append(collection.Channels, result)
+	}
+	// Encode and send community details in the response
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(collection); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
 
-		results = append(results, result)
+func Posts(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
 	}
 
-	json.NewEncoder(w).Encode(results)
+	// Validate and retrieve community name from URL query parameters
+	name := r.URL.Query().Get("oid")
+	if name == "" {
+		http.Error(rw, "channel id is required", http.StatusBadRequest)
+		return
+	}
+	objectId, err := primitive.ObjectIDFromHex(name)
+
+	// Check if the community exists in the database
+
+	var posts []models.Posts
+
+	cursor, err := postCollection.Find(context.Background(), bson.M{"channel": objectId})
+	if err != nil {
+		http.Error(rw, "failed to fetch posts", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var post models.Posts
+		if err := cursor.Decode(&post); err != nil {
+			http.Error(rw, "failed to decode post", http.StatusInternalServerError)
+			return
+		}
+		posts = append(posts, post)
+	}
+	if err := cursor.Err(); err != nil {
+		http.Error(rw, "cursor error", http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(posts); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
 }
 
 func Sessioninfo(w http.ResponseWriter, r *http.Request) {

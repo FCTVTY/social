@@ -12,19 +12,15 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"footallfitserver/cmd/server/v1/admin"
 	"footallfitserver/cmd/server/v1/client"
 	_ "footallfitserver/models"
-	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/supertokens"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net/http"
 	"net/url"
@@ -68,26 +64,6 @@ func logMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
-	envFile := ".env.dev" // Change this to ".env.prod" for production
-	if os.Getenv("ENV") == "prod" {
-		envFile = ".env.prod"
-	}
-
-	if err := godotenv.Load(envFile); err != nil {
-		log.Fatalf("Error loading %s file: %v", envFile, err)
-	}
-
-	mongoURI := os.Getenv("MONGO_URI")
-
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-
-	mgclient, _ = mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))
-	database := mgclient.Database("tenants")
-	brandingCollection = database.Collection("tenants")
-	walkCollection = database.Collection("walks")
-	voucherCollection = database.Collection("voucher")
-	userVoucherCollection = database.Collection("uservouchers")
-	placeCollection = database.Collection("place")
 
 	err := supertokens.Init(SuperTokensConfig)
 	if err != nil {
@@ -145,19 +121,14 @@ func main() {
 			return
 		}
 
-		if parsedURL.Path == "/v1/tenants" && r.Method == "GET" {
-			session.VerifySession(nil, client.Tenants).ServeHTTP(rw, r)
+		if parsedURL.Path == "/v1/community" && r.Method == "GET" {
+			session.VerifySession(nil, client.Community).ServeHTTP(rw, r)
 
 			return
 		}
+		if parsedURL.Path == "/v1/community/posts" && r.Method == "GET" {
+			session.VerifySession(nil, client.Posts).ServeHTTP(rw, r)
 
-		if parsedURL.Path == "/v1/admin/attachvoucher" && r.Method == "POST" {
-			session.VerifySession(nil, admin.AddWVoucher).ServeHTTP(rw, r)
-			return
-		}
-
-		if parsedURL.Path == "/v1/user/voucher" && r.Method == "POST" {
-			session.VerifySession(nil, client.AddUVoucher).ServeHTTP(rw, r)
 			return
 		}
 
@@ -170,18 +141,14 @@ func corsMiddleware(next http.Handler) http.Handler {
 		origin := r.Header.Get("Origin")
 
 		// Check if the request Origin header is allowed
-		if isAllowedOrigin(origin) {
-			response.Header().Set("Access-Control-Allow-Origin", origin)
-			response.Header().Set("Access-Control-Allow-Credentials", "true")
-		}
+
+		response.Header().Set("Access-Control-Allow-Origin", origin)
+		response.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if r.Method == "OPTIONS" {
 			response.Header().Set("Access-Control-Allow-Headers", strings.Join(append([]string{"Content-Type"}, supertokens.GetAllCORSHeaders()...), ","))
 			response.Header().Set("Access-Control-Allow-Methods", "*")
 			response.Write([]byte(""))
-		} else {
-			requestCount.WithLabelValues(r.Method, r.URL.Path, "200").Inc()
-			next.ServeHTTP(response, r)
 		}
 	})
 }

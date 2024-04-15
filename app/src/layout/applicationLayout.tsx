@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import LogoSquare from "../assets/logo-light.svg";
 import LogoSquareDark from "../assets/logo-dark.svg";
 import fk from "../assets/FK.svg";
@@ -16,6 +16,11 @@ import {
     XMarkIcon,
 } from '@heroicons/react/24/outline';
 import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/react/20/solid';
+import {getApiDomain} from "../lib/auth/supertokens";
+import axios from 'axios';
+import {any} from "zod";
+import {CommunityCollection} from "../interfaces/interfaces";
+import Join from "../Pages/home/join";
 
 interface NavigationItem {
     name: string;
@@ -46,17 +51,12 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
+
 const ApplicationLayout: React.FC<Props> = ({children, host}) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [community, setCommunity] = useState<Partial<CommunityCollection>>(null);
+    const [navigation, setNavigation] = useState<NavigationItem[]>([]);
 
-    const navigation: NavigationItem[] = [
-        {name: 'Dashboard', href: '#', icon: HomeIcon, current: true},
-        {name: 'Team', href: '#', icon: UsersIcon, current: false},
-        {name: 'Projects', href: '#', icon: FolderIcon, current: false},
-        {name: 'Calendar', href: '#', icon: CalendarIcon, current: false},
-        {name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false},
-        {name: 'Reports', href: '#', icon: ChartPieIcon, current: false},
-    ];
 
     const teams: TeamItem[] = [
         {id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false},
@@ -68,6 +68,35 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
         {name: 'Your profile', href: '#'},
         {name: 'Sign out', href: '#'},
     ];
+
+    useEffect(() => {
+        fetchDetails();
+    }, [host]);
+
+    const fetchDetails = async () => {
+        try {
+            const response = await axios.get(`${getApiDomain()}/community?name=${host}`);
+            setCommunity(response.data);
+
+
+
+        } catch (error) {
+        console.error('Error fetching community details:', error);
+    }
+    };
+
+    useEffect(() => {
+        if (community && community.channels) {
+            const channelNavigation = community.channels.map((channel, index) => ({
+                name: channel.name,
+                href: `/feed/${channel._id}`, // Update with appropriate channel ID or URL
+                icon: ChartPieIcon, // Update with appropriate icon
+                current: index === 0, // Set the first channel as current by default
+            }));
+
+            setNavigation(prevNavigation => [...prevNavigation, ...channelNavigation]);
+        }
+    }, [community]);
 
     // @ts-ignore
     return (
@@ -268,8 +297,10 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                                     )}
                                                                 >
-                                                                    <item.icon className="h-6 w-6 shrink-0"
-                                                                               aria-hidden="true"/>
+                                                                   <span
+                                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                            {item.name.slice(0, 2)}
+                          </span>
                                                                     {item.name}
                                                                 </a>
                                                             </li>
@@ -277,7 +308,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                                                     </ul>
                                                 </li>
                                                 <li>
-                                                    <div className="text-xs font-semibold leading-6 text-gray-400">Your
+                                                <div className="text-xs font-semibold leading-6 text-gray-400">Your
                                                         teams
                                                     </div>
                                                     <ul role="list" className="-mx-2 mt-2 space-y-1">
@@ -345,7 +376,10 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                     )}
                                                 >
-                                                    <item.icon className="h-6 w-6 shrink-0" aria-hidden="true"/>
+                                                     <span
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                            {item.name.slice(0,2)}
+                          </span>
                                                     {item.name}
                                                 </a>
                                             </li>
@@ -413,8 +447,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                             <div className="pl-2 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
 
                                 <div className="flex flex-1 items-center gap-x-4 lg:gap-x-6">
-                                    <img src={fk} className="mx-auto h-9 py-1"/>
-
+                                    <img src={community && community.community.logo} className="sm:mx-auto h-9 py-1"/>
                                     {/* Separator */}
                                     <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"/>
 
@@ -442,7 +475,14 @@ const ApplicationLayout: React.FC<Props> = ({children, host}) => {
                     </div>
 
                     <main className="py-10 bg">
-                        {children}
+
+                        {
+                            community?.community?.private && community?.user?.notjoined ? (
+                                <Join text={community.community.desc} logo={community.community.logo}/>
+                            ) : (
+                                children
+                            )
+                        }
                     </main>
                 </div>
             </div>
