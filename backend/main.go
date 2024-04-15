@@ -85,7 +85,7 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler()) // Expose Prometheus metrics
 
-	http.ListenAndServe(":3001", logMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+	http.ListenAndServe(":3001", logMiddleware(corsMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 
 		parsedURL, err := url.Parse(r.URL.Path)
 		if err != nil {
@@ -133,14 +133,20 @@ func main() {
 		}
 
 		rw.WriteHeader(404)
-	}))))
+	})))))
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(response http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
 
-		// Set the response headers to allow all origins
-		response.Header().Set("Access-Control-Allow-Origin", "*")
+		// Check if the request Origin header is allowed
+		if strings.Contains(origin, "bhivecommunity.co.uk") {
+			// If the origin is allowed, set it in the response header
+			response.Header().Set("Access-Control-Allow-Origin", origin)
+		}
+
+		// Always allow credentials
 		response.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if r.Method == "OPTIONS" {
