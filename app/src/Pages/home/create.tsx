@@ -76,7 +76,8 @@ export default function Create({ channel }: CreateProps) {
                 </div>
             )}
             <textarea
-                name="message"
+                id="desc"
+                name="desc"
                 placeholder="Type something..."
                 value={post.desc}
                 onChange={handleInputChange}
