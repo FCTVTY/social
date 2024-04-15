@@ -138,17 +138,19 @@ func main() {
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(response http.ResponseWriter, r *http.Request) {
-		origin := r.Header.Get("Origin")
 
-		// Check if the request Origin header is allowed
-
-		response.Header().Set("Access-Control-Allow-Origin", origin)
+		// Set the response headers to allow all origins
+		response.Header().Set("Access-Control-Allow-Origin", "*")
 		response.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if r.Method == "OPTIONS" {
+			// For preflight requests, set additional headers
 			response.Header().Set("Access-Control-Allow-Headers", strings.Join(append([]string{"Content-Type"}, supertokens.GetAllCORSHeaders()...), ","))
 			response.Header().Set("Access-Control-Allow-Methods", "*")
 			response.Write([]byte(""))
+		} else {
+			// Call the next handler in the chain
+			next.ServeHTTP(response, r)
 		}
 	})
 }
