@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import logo from './logo.svg';
-import './output.css';
+import './App.css';
 import {Route, Routes, Navigate} from 'react-router-dom';
 import Feed from "./Pages/home/Feed";
 import ApplicationLayout from "./layout/applicationLayout";
@@ -11,6 +11,8 @@ import {SuperTokensWrapper} from "supertokens-auth-react";
 import {SessionAuth} from 'supertokens-auth-react/recipe/session';
 import {initSuperTokens} from "./lib/auth/supertokens";
 import Register from "./Pages/auth/register";
+import Settings from "./Pages/profile/settings";
+import Home from "./Pages/home/Home";
 
 initSuperTokens();
 
@@ -34,7 +36,7 @@ function App() {
         console.log(host)
         if(host === "localhost:5173")
         {
-            setSubDomain("fk")
+            setSubDomain("dev")
         }
 
 
@@ -67,6 +69,18 @@ function App() {
 
 
                 <Feed host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
+
+
+            <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                <Home/></ApplicationLayout> </SessionAuth>}/>
+
+            <Route path="/settings" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                <Settings/></ApplicationLayout> </SessionAuth>}/>
+
             <Route path='/auth' element={<AuthLayout>
                 <Login/>
             </AuthLayout>}/>

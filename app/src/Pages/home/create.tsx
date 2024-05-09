@@ -6,10 +6,11 @@ import {Post} from "../../interfaces/interfaces";
 import {ObjectId} from "mongodb";
 import mongoose from "mongoose"; // will work
 interface CreateProps {
+    onSubmit: () => void;
     channel: string;
 }
 
-export default function Create({ channel }: CreateProps) {
+export default function Create({ onSubmit, channel }: CreateProps) {
     const [message, setMessage] = useState("");
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [post, setPost] = useState<Partial<Post>>({});
@@ -63,6 +64,8 @@ export default function Create({ channel }: CreateProps) {
             // Clear form fields after successful submission
             setMessage("");
             setSelectedImage(null);
+
+            onSubmit();
         } catch (error) {
             console.error('Error creating post:', error);
         }

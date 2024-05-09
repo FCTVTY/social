@@ -37,3 +37,35 @@ export interface Post {
 
     desc: string
 }
+
+export interface PPosts {
+    _id: string
+    channel: string
+    channelstring: string
+    commentsallowed: boolean
+    date: string
+    desc: string
+    locked: boolean
+    media: string
+    profile: Profile[]
+    softdelete: boolean
+    tags: any[]
+    userid: string
+    postLikes: PostLike[]
+
+}
+
+export interface Profile {
+    _id: string
+    email: string
+    first_name: string
+    last_name: string
+    profilePicture: string
+    supertokensId: string
+    username: string
+}
+export interface PostLike {
+    _id: string
+    postId: string
+    userId: string
+}

@@ -34,6 +34,7 @@ var (
 	communitesCollection *mongo.Collection
 	channelCollection    *mongo.Collection
 	postCollection       *mongo.Collection
+	ppostCollection      *mongo.Collection
 )
 
 func init() {
@@ -61,6 +62,7 @@ func init() {
 	communitesCollection = database.Collection("communites")
 	channelCollection = database.Collection("channels")
 	postCollection = database.Collection("posts")
+	ppostCollection = database.Collection("pposts")
 
 }
 
@@ -134,6 +136,7 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Date = time.Now()
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
+	v.UserID = sessionContainer.GetUserID()
 	result, err := postCollection.InsertOne(context.Background(), v)
 	if err != nil {
 		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
@@ -161,16 +164,16 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 
 	// Check if the community exists in the database
 
-	var posts []models.Posts
+	var posts []bson.M
 
-	cursor, err := postCollection.Find(context.Background(), bson.M{"channel": objectId})
+	cursor, err := ppostCollection.Find(context.Background(), bson.M{"channel": objectId})
 	if err != nil {
 		http.Error(rw, "failed to fetch posts", http.StatusInternalServerError)
 		return
 	}
 	defer cursor.Close(context.Background())
 	for cursor.Next(context.Background()) {
-		var post models.Posts
+		var post bson.M
 		if err := cursor.Decode(&post); err != nil {
 			http.Error(rw, "failed to decode post", http.StatusInternalServerError)
 			return

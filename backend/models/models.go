@@ -47,3 +47,25 @@ type Posts struct {
 	Desc            string             `json:"desc"`
 	Channelstring   string             `json:"channelstring"`
 }
+type PPosts []struct {
+	ID              string    `json:"_id"`
+	Channel         string    `json:"channel"`
+	Channelstring   string    `json:"channelstring"`
+	Commentsallowed bool      `json:"commentsallowed"`
+	Date            time.Time `json:"date"`
+	Desc            string    `json:"desc"`
+	Locked          bool      `json:"locked"`
+	Media           string    `json:"media"`
+	Profile         []struct {
+		ID             string `json:"_id"`
+		Email          string `json:"email"`
+		FirstName      string `json:"first_name"`
+		LastName       string `json:"last_name"`
+		ProfilePicture string `json:"profilePicture"`
+		SupertokensID  string `json:"supertokensId"`
+		Username       string `json:"username"`
+	} `json:"profile"`
+	Softdelete bool   `json:"softdelete"`
+	Tags       []any  `json:"tags"`
+	Userid     string `json:"userid"`
+}
