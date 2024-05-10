@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-interface Community {
+export interface Community {
     id: ObjectId;
     name: string;
     logo: string;

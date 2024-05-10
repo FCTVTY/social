@@ -15,6 +15,11 @@ import (
 	"context"
 	"encoding/json"
 	"footallfitserver/models"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/joho/godotenv"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
@@ -23,10 +28,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 var (
@@ -65,7 +66,43 @@ func init() {
 	ppostCollection = database.Collection("pposts")
 
 }
+func Communities(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
 
+	var collection []bson.M
+	// Check if the community exists in the database
+	cursor, err := communitesCollection.Find(context.Background(), bson.M{"private": false})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "community not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "failed to fetch community details", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var result bson.M
+		err := cursor.Decode(&result)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		collection = append(collection, result)
+	}
+	// Encode and send community details in the response
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(collection); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
 func Community(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())

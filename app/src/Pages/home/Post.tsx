@@ -90,7 +90,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                                         <img className="mx-auto mt-2 rounded-md" src={ppost.media} alt=""/>
                                         
 
-                                        {ppost.article !== "" ? (
+                                        {ppost.article !== "" || ppost.article !== undefined  ? (
                                             <dd className="text-sm text-gray-500"
                                                 dangerouslySetInnerHTML={{__html: ppost.article}}></dd>
                                         ) : (

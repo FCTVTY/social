@@ -15,18 +15,19 @@ import (
 	"fmt"
 	"footallfitserver/cmd/server/v1/client"
 	_ "footallfitserver/models"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/supertokens/supertokens-golang/recipe/session"
-	"github.com/supertokens/supertokens-golang/recipe/userroles"
-	"github.com/supertokens/supertokens-golang/supertokens"
-	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/supertokens/supertokens-golang/recipe/session"
+	"github.com/supertokens/supertokens-golang/recipe/userroles"
+	"github.com/supertokens/supertokens-golang/supertokens"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var mgclient *mongo.Client
@@ -120,7 +121,11 @@ func main() {
 			session.VerifySession(nil, client.Sessioninfo).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/communities" && r.Method == "GET" {
+			session.VerifySession(nil, client.Communities).ServeHTTP(rw, r)
 
+			return
+		}
 		if parsedURL.Path == "/v1/community" && r.Method == "GET" {
 			session.VerifySession(nil, client.Community).ServeHTTP(rw, r)
 
