@@ -51,21 +51,21 @@ export default function Feed({ host, channel }: HomeProps) {
                         <li className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl">
                             <article className="rounded-xl border-2 border-gray-100 bg-white my-3">
                                 <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
-                                    <a href="#" className="block shrink-0">
+                                    <a href="https://www.fkcreative.co.uk/" className="block shrink-0">
                                         <img
                                             alt=""
-                                            src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg"
+                                            src="https://assets-global.website-files.com/62fb74d9bbaf096f3efa16ab/630ce7b8225a43839188fca8_FKlogo.svg"
                                             className="size-14 rounded-lg object-contain"
                                         />
                                     </a>
 
                                     <div>
                                         <h3 className="font-medium sm:text-lg">
-                                            <a href="#" className="hover:underline"> ADVERT </a>
+                                            <a href="https://www.fkcreative.co.uk/" className="hover:underline"> FK Creative </a>
                                         </h3>
 
                                         <p className="line-clamp-2 text-sm text-gray-700">
-                                            AD AD AD AD
+                                        From branding and design to digital marketing and content creation, we offer a wide range of services to help your brand stand out in a crowded world.
                                         </p>
 
                                         <div className="mt-2 sm:flex sm:items-center sm:gap-2">
@@ -73,9 +73,9 @@ export default function Feed({ host, channel }: HomeProps) {
 
                                             <span className="hidden sm:block" aria-hidden="true">&middot;</span>
 
-                                            <p className="hidden sm:block sm:text-xs sm:text-gray-500">
+                                            <p className="sm:block sm:text-xs sm:text-gray-500">
 
-                                                <a href="#"
+                                                <a href="https://www.fkcreative.co.uk/"
                                                    className="font-medium underline hover:text-gray-700">  Read More </a>
                                             </p>
                                         </div>
