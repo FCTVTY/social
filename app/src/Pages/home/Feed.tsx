@@ -169,7 +169,7 @@ export default function Feed({ host, channel }: HomeProps) {
                                             </div>
                                         </div>
                                         <a  href={`/feed/${channel}/${post._id}`}>
-                                            <h2  dangerouslySetInnerHTML={{__html: post.desc}}>></h2>
+                                            <h2  dangerouslySetInnerHTML={{__html: post.desc}}></h2>
                                         </a>
                                         {post.article !== "" &&
                                             <Button className="flex items-center mr-2" color="slate" variant="outline" type="button">Read Article</Button>
