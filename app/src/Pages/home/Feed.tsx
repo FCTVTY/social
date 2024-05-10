@@ -168,7 +168,7 @@ export default function Feed({ host, channel }: HomeProps) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <dd className="text-sm text-gray-500"
+                                        <dd className="text-sm"
                                             dangerouslySetInnerHTML={{__html: post.desc}}></dd>
                                         {post.article !== "" &&
                                             <Button className="flex items-center mr-2" color="slate" variant="outline" type="button">Read Article</Button>
