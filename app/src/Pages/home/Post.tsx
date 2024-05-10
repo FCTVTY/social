@@ -81,7 +81,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                          src={ppost.profile[0].profilePicture} alt=""/>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile[0].first_name} {ppost.profile[0].last_name}</p>
+                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile[0].first_name} {ppost.profile[0].last_name} - Published {formatDistanceToNow(new Date(ppost.date), {addSuffix: true})} </p>
                                                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                                         profile</p>
                                                 </div>
@@ -89,7 +89,6 @@ export default function PostView({host, channel, post}: HomeProps) {
                                         </a>
                                         <img className="mx-auto mt-2 rounded-md" src={ppost.media} alt=""/>
                                         
-                                        <dd className="mt-0.5 text-sm text-gray-500">{formatDistanceToNow(new Date(ppost.date), {addSuffix: true})}</dd>
 
                                         {ppost.article !== "" ? (
                                             <dd className="text-sm text-gray-500"
