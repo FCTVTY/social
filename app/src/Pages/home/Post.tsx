@@ -89,7 +89,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                                         </a>
                                         <img className="mx-auto mt-2 rounded-md" src={ppost.media} alt=""/>
                                         
-                                        <dd className="">{formatDistanceToNow(new Date(ppost.date), {addSuffix: true})}</dd>
+                                        <dd className="mt-0.5 text-sm text-gray-500">{formatDistanceToNow(new Date(ppost.date), {addSuffix: true})}</dd>
 
                                         {ppost.article !== "" ? (
                                             <dd className="text-sm text-gray-500"

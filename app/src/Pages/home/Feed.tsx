@@ -173,13 +173,13 @@ export default function Feed({ host, channel }: HomeProps) {
                                         </div>
                                        
                                        
-                                        <dd className="text-sm text-gray-500">
+                                        <dd className="mt-0.5 text-sm text-gray-500">
                                             {post.tags.map(tag => (
                                                 <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
                                             ))}
                                         </dd>
-                                        <a className="text-sm " href={`/feed/${channel}/${post._id}`}>View all comments</a>
-                                        <dd className="text-sm ">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
+                                        <a className="mt-0.5 text-sm text-gray-500" href={`/feed/${channel}/${post._id}`}>View all comments</a>
+                                        <dd className="mt-0.5 text-sm text-gray-500 ">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
                                     </dl>
                                 </div>
                                 <div></div>
