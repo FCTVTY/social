@@ -88,6 +88,22 @@ export default function PostView({host, channel, post}: HomeProps) {
                                             </div>
                                         </a>
                                         <img className="mx-auto mt-2 rounded-md" src={ppost.media} alt=""/>
+                                        
+                                        <dd className="">{formatDistanceToNow(new Date(ppost.date), {addSuffix: true})}</dd>
+
+                                        {ppost.article !== "" ? (
+                                            <dd className="text-sm text-gray-500"
+                                                dangerouslySetInnerHTML={{__html: ppost.article}}></dd>
+                                        ) : (
+                                            <dd className="text-sm text-gray-500"
+                                                dangerouslySetInnerHTML={{__html: ppost.desc}}></dd>
+                                        )}
+                                        <dd className="text-sm text-gray-500">
+                                            {ppost.tags.map(tag => (
+                                                <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
+                                            ))}
+                                        </dd>
+
                                         <div className="flex py-4 justify-between">
                                             <div className="flex space-x-2">
                                                 <div className="flex space-x-1 items-center">
@@ -128,18 +144,6 @@ export default function PostView({host, channel, post}: HomeProps) {
                                             </div>
                                         </div>
 
-                                        {ppost.article !== "" ? (
-                                            <dd className="text-sm text-gray-500"
-                                                dangerouslySetInnerHTML={{__html: ppost.article}}></dd>
-                                        ) : (
-                                            <dd className="text-sm text-gray-500"
-                                                dangerouslySetInnerHTML={{__html: ppost.desc}}></dd>
-                                        )}
-                                        <dd className="text-sm text-gray-500">
-                                            {ppost.tags.map(tag => (
-                                                <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
-                                            ))}
-                                        </dd>
                                         <div className="divide-x"></div>
 
 
@@ -260,7 +264,6 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                 ))}
                                             </ul>
                                         </div>
-                                        <dd className="text-sm text-gray-200 font-bold">{formatDistanceToNow(new Date(ppost.date), {addSuffix: true})}</dd>
                                     </dl>
                                 </div>
                                 <div></div>
