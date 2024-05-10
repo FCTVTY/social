@@ -13,6 +13,8 @@ import {initSuperTokens} from "./lib/auth/supertokens";
 import Register from "./Pages/auth/register";
 import Settings from "./Pages/profile/settings";
 import Home from "./Pages/home/Home";
+import Post from "./Pages/home/Post";
+import PostView from "./Pages/home/Post";
 
 initSuperTokens();
 
@@ -42,14 +44,18 @@ function App() {
 
         // Parse the URL
         const parsedUrl = window.location.href
+        const url = new URL(window.location.href);
 
-// Split the path by '/' and get the last part
-        const pathParts = parsedUrl.split('/');
-        const postId = pathParts[pathParts.length - 1];
+// Extracting the channel and post IDs from the URL
+        const pathnameParts = url.pathname.split('/');
+        const channelID = pathnameParts[2];
+        const postID = pathnameParts[3]; // This may be undefined if the URL structure changes
 
-        console.log(postId); // Output: 661c1dde507583ad27517dc9
+        console.log('Channel ID:', channelID);
+        console.log('Post ID:', postID);
 
-        setChannel(postId)
+
+        setChannel(channelID)
 
     }, []);
 
@@ -70,7 +76,10 @@ function App() {
 
                 <Feed host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
+            <Route path="/feed/:ID/:post" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+
+                <PostView host={subdomain} post="663d35d2c3dfa80a73a5784b" /></ApplicationLayout> </SessionAuth>}/>
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 

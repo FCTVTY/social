@@ -5,6 +5,7 @@ import { getApiDomain } from "../../lib/auth/supertokens";
 import {CommunityCollection, Post, PPosts} from "../../interfaces/interfaces";
 import { formatDistanceToNow } from 'date-fns';
 import Create from "./create";
+import Button from "../../components/Button";
 
 interface HomeProps {
     host?: string;
@@ -42,29 +43,95 @@ export default function Feed({ host, channel }: HomeProps) {
             {channel && (
                 <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 
-                <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
-                    <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
-                        <Create channel={channel} onSubmit={handleRefresh} />
-                    </li>
-                    {posts.sort().map((post) => (
-                        <li key={post._id} className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
-                            <div className="flex flex-1 flex-col p-3">
-                                <dl className="mt-1 flex flex-grow flex-col justify-between">
-                                    <a href="#" className="group block flex-shrink-0">
-                                        <div className="flex items-center">
-                                            <div>
-                                                <img className="inline-block h-9 w-9 rounded-full" src={post.profile[0].profilePicture} alt="" />
-                                            </div>
-                                            <div className="ml-3">
-                                                <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{post.profile[0].first_name} {post.profile[0].last_name}</p>
-                                                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View profile</p>
-                                            </div>
-                                        </div>
+                    <ul role="list"
+                        className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
+                        <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
+                            <Create channel={channel} onSubmit={handleRefresh}/>
+                        </li>
+                        <li className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl">
+                            <article className="rounded-xl border-2 border-gray-100 bg-white my-3">
+                                <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
+                                    <a href="#" className="block shrink-0">
+                                        <img
+                                            alt=""
+                                            src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg"
+                                            className="size-14 rounded-lg object-contain"
+                                        />
                                     </a>
-                                    <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
-                                    <div className="flex py-4 justify-between">
-                                        <div className="flex space-x-2">
-                                            <div className="flex space-x-1 items-center">
+
+                                    <div>
+                                        <h3 className="font-medium sm:text-lg">
+                                            <a href="#" className="hover:underline"> ADVERT </a>
+                                        </h3>
+
+                                        <p className="line-clamp-2 text-sm text-gray-700">
+                                            AD AD AD AD
+                                        </p>
+
+                                        <div className="mt-2 sm:flex sm:items-center sm:gap-2">
+
+
+                                            <span className="hidden sm:block" aria-hidden="true">&middot;</span>
+
+                                            <p className="hidden sm:block sm:text-xs sm:text-gray-500">
+
+                                                <a href="#"
+                                                   className="font-medium underline hover:text-gray-700">  Read More </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end">
+                                    <strong
+                                        className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 px-3 py-1.5 text-white"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-4 w-4"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                                            />
+                                        </svg>
+
+                                        <span className="text-[10px] font-medium sm:text-xs">Advert</span>
+                                    </strong>
+                                </div>
+                            </article>
+                            <div className="divide-x"></div>
+                        </li>
+
+                        {
+
+                            posts.sort().map((post) => (
+                            <li key={post._id}
+                                className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
+                                <div className="flex flex-1 flex-col p-3">
+                                    <dl className="mt-1 flex flex-grow flex-col justify-between">
+                                        <a href="#" className="group block flex-shrink-0">
+                                            <div className="flex items-center">
+                                                <div>
+                                                    <img className="inline-block h-9 w-9 rounded-full"
+                                                         src={post.profile[0].profilePicture} alt=""/>
+                                                </div>
+                                                <div className="ml-3">
+                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{post.profile[0].first_name} {post.profile[0].last_name}</p>
+                                                    <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
+                                                        profile</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
+                                        <div className="flex py-4 justify-between">
+                                            <div className="flex space-x-2">
+                                                <div className="flex space-x-1 items-center">
                                                 <span>
                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
@@ -74,9 +141,9 @@ export default function Feed({ host, channel }: HomeProps) {
 </svg>
 
                                                 </span>
-                                                <span>22</span>
-                                            </div>
-                                            <div className="flex space-x-1 items-center">
+                                                    <span>22</span>
+                                                </div>
+                                                <div className="flex space-x-1 items-center">
                                                 <span>
                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
@@ -86,9 +153,9 @@ export default function Feed({ host, channel }: HomeProps) {
 </svg>
 
                                                 </span>
-                                                <span>{post.postLikes.length}</span>
-                                            </div>
-                                            <div className="flex space-x-1 items-center">
+                                                    <span>{post.postLikes.length}</span>
+                                                </div>
+                                                <div className="flex space-x-1 items-center">
                                                 <span>
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                          fill="currentColor" className="w-6 h-6 text-red-500">
@@ -97,25 +164,30 @@ export default function Feed({ host, channel }: HomeProps) {
 </svg>
 
                                                 </span>
-                                                <span>{post.postLikes.length}</span>
+                                                    <span>{post.postLikes.length}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <dd className="text-sm text-gray-500"> {post.desc}</dd>
-                                    <dd className="text-sm text-gray-500">
-                                        {post.tags.map(tag => (
-                                            <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
-                                        ))}
-                                    </dd>
-                                    <dd className="text-sm text-gray-200">View all comments</dd>
-                                    <dd className="text-sm text-gray-200 font-bold">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
-                                </dl>
-                            </div>
-                            <div></div>
-                            <div className="divide-x"></div>
-                        </li>
-                    ))}
-                </ul>
+                                        <dd className="text-sm text-gray-500"
+                                            dangerouslySetInnerHTML={{__html: post.desc}}></dd>
+                                        {post.article !== "" &&
+                                            <Button className="flex items-center mr-2" color="slate" variant="outline" type="button">Create Article</Button>
+
+                                        }
+                                        <dd className="text-sm text-gray-500">
+                                            {post.tags.map(tag => (
+                                                <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
+                                            ))}
+                                        </dd>
+                                        <dd className="text-sm text-gray-200">View all comments</dd>
+                                        <dd className="text-sm text-gray-200 font-bold">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
+                                    </dl>
+                                </div>
+                                <div></div>
+                                <div className="divide-x"></div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
             {!channel && (

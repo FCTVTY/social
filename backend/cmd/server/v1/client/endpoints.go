@@ -191,7 +191,42 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func Post(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
 
+	// Validate and retrieve post ID from URL query parameters
+	postID := r.URL.Query().Get("oid")
+	if postID == "" {
+		http.Error(rw, "post ID is required", http.StatusBadRequest)
+		return
+	}
+	objectID, err := primitive.ObjectIDFromHex(postID)
+	if err != nil {
+		http.Error(rw, "invalid post ID", http.StatusBadRequest)
+		return
+	}
+
+	// Fetch post from the database
+	var post bson.M
+	err = ppostCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&post)
+	if err != nil {
+		http.Error(rw, "failed to fetch post", http.StatusInternalServerError)
+		return
+	}
+
+	// Encode post as JSON and write response
+	rw.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(rw).Encode(post)
+	if err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
 func Sessioninfo(w http.ResponseWriter, r *http.Request) {
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 

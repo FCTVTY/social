@@ -45,6 +45,7 @@ export interface PPosts {
     commentsallowed: boolean
     date: string
     desc: string
+    article: string
     locked: boolean
     media: string
     profile: Profile[]
