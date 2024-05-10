@@ -23,6 +23,7 @@ function App() {
     const [subdomain, setSubDomain] = useState("null");
     const [communityFound, setCommunity] = useState("null");
     const [channel, setChannel] = useState("null");
+    const [post, setPost] = useState("null");
 
     useEffect(() => {
         const host = window.location.host; // gets the full domain of the app
@@ -56,7 +57,7 @@ function App() {
 
 
         setChannel(channelID)
-
+        setPost(postID)    
     }, []);
 
 
@@ -79,7 +80,7 @@ function App() {
             <Route path="/feed/:ID/:post" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-                <PostView host={subdomain} post="663d35d2c3dfa80a73a5784b" /></ApplicationLayout> </SessionAuth>}/>
+                <PostView host={subdomain} post={post} /></ApplicationLayout> </SessionAuth>}/>
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 

@@ -171,7 +171,7 @@ export default function Feed({ host, channel }: HomeProps) {
                                         <dd className="text-sm text-gray-500"
                                             dangerouslySetInnerHTML={{__html: post.desc}}></dd>
                                         {post.article !== "" &&
-                                            <Button className="flex items-center mr-2" color="slate" variant="outline" type="button">Create Article</Button>
+                                            <Button className="flex items-center mr-2" color="slate" variant="outline" type="button">Read Article</Button>
 
                                         }
                                         <dd className="text-sm text-gray-500">
@@ -179,7 +179,7 @@ export default function Feed({ host, channel }: HomeProps) {
                                                 <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
                                             ))}
                                         </dd>
-                                        <dd className="text-sm text-gray-200">View all comments</dd>
+                                        <a className="text-sm text-gray-200" href="/feed/${channel}/${post._id}">View all comments</a>
                                         <dd className="text-sm text-gray-200 font-bold">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
                                     </dl>
                                 </div>
