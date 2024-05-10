@@ -129,6 +129,9 @@ export default function Feed({ host, channel }: HomeProps) {
                                             </div>
                                         </a>
                                         <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
+                                        <a className='my-3'  href={`/feed/${channel}/${post._id}`}>
+                                            <h2  dangerouslySetInnerHTML={{__html: post.desc}}></h2>
+                                        </a>
                                         <div className="flex py-4 justify-between">
                                             <div className="flex space-x-2">
                                                 <div className="flex space-x-1 items-center">
@@ -168,9 +171,7 @@ export default function Feed({ host, channel }: HomeProps) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <a  href={`/feed/${channel}/${post._id}`}>
-                                            <h2  dangerouslySetInnerHTML={{__html: post.desc}}></h2>
-                                        </a>
+                                       
                                        
                                         <dd className="text-sm text-gray-500">
                                             {post.tags.map(tag => (
