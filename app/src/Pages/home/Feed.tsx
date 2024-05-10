@@ -171,17 +171,14 @@ export default function Feed({ host, channel }: HomeProps) {
                                         <a  href={`/feed/${channel}/${post._id}`}>
                                             <h2  dangerouslySetInnerHTML={{__html: post.desc}}></h2>
                                         </a>
-                                        {post.article !== "" &&
-                                            <Button className="flex items-center mr-2" color="slate" variant="outline" type="button">Read Article</Button>
-
-                                        }
+                                       
                                         <dd className="text-sm text-gray-500">
                                             {post.tags.map(tag => (
                                                 <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
                                             ))}
                                         </dd>
-                                        <a className="text-sm text-gray-400" href={`/feed/${channel}/${post._id}`}>View all comments</a>
-                                        <dd className="text-sm text-gray-400 font-bold">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
+                                        <a className="text-sm " href={`/feed/${channel}/${post._id}`}>View all comments</a>
+                                        <dd className="text-sm ">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
                                     </dl>
                                 </div>
                                 <div></div>

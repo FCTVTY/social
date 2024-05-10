@@ -264,7 +264,6 @@ export default function PostView({host, channel, post}: HomeProps) {
                                     </dl>
                                 </div>
                                 <div></div>
-                                <div className="divide-x"></div>
                             </li>
 
                         </ul>
