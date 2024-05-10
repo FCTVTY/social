@@ -41,13 +41,13 @@ export default function Home({host}: HomeProps) {
                 {
 
 communities?.map((c) => (  <div className="bg-gray-400/5 p-8 sm:p-10">
-                        <img
+                        <a href={`${c.name}.app.bhivecommunity.co.uk`}><img
                             className="max-h-12 w-full object-contain"
                             src={c.logo}
                             alt={c.name}
                             width={158}
                             height={48}
-                        />
+                        /></a>
                     </div>
 ))}
                 </div>
