@@ -81,16 +81,17 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                          src={ppost.profile[0].profilePicture} alt=""/>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile[0].first_name} {ppost.profile[0].last_name} - Published {formatDistanceToNow(new Date(ppost.date), {addSuffix: true})} </p>
+                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile[0].first_name} {ppost.profile[0].last_name} -
+                                                        Published {formatDistanceToNow(new Date(ppost.date), {addSuffix: true})} </p>
                                                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                                         profile</p>
                                                 </div>
                                             </div>
                                         </a>
                                         <img className="mx-auto mt-2 rounded-md" src={ppost.media} alt=""/>
-                                        
 
-                                        {ppost.article !== "" || ppost.article !== undefined  ? (
+
+                                        {ppost.article !== "" || ppost.article !== undefined ? (
                                             <dd className="text-sm text-gray-500"
                                                 dangerouslySetInnerHTML={{__html: ppost.article}}></dd>
                                         ) : (
@@ -272,7 +273,39 @@ export default function PostView({host, channel, post}: HomeProps) {
                     </div>
                 </>
             )}
+            <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mt-3">
+                <form className=" bg-white shadow rounded-lg p-3">
 
+                <textarea
+                    id="desc"
+                    name="desc"
+                    placeholder="Type something..."
+
+                    className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400"
+                />
+                    <footer className="flex justify-between mt-2">
+                        <div className="flex gap-2">
+
+                        </div>
+                        <label htmlFor="image-upload" className="cursor-pointer">
+                            <Button className="flex items-center mr-2" color="white" type="submit">Leave
+                                Comment</Button>
+
+
+                        </label>
+                    </footer>
+                </form>
+            </div>
+<div className="fixed bottom-2 left-2 w-[20vw] lg:hidden">
+    <a href="/"  className="w-full flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+             className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round"
+                  d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+
+    </a>
+</div>
         </>
     );
 }

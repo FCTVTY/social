@@ -15,6 +15,8 @@ import Settings from "./Pages/profile/settings";
 import Home from "./Pages/home/Home";
 import Post from "./Pages/home/Post";
 import PostView from "./Pages/home/Post";
+import EventsPage from "./Pages/home/events";
+import Profile from "./Pages/home/Profile";
 
 initSuperTokens();
 
@@ -72,7 +74,7 @@ function App() {
                 <Register/>
             </AuthLayout>}/>
 
-            <Route path="/feed/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+            <Route path="/feed/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel} isChanelPage={true}>
 
 
                 <Feed host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
@@ -81,6 +83,20 @@ function App() {
 
 
                 <PostView host={subdomain} post={post} /></ApplicationLayout> </SessionAuth>}/>
+
+            <Route path="/events/:ID"
+                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                       <EventsPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
+
+            <Route path="/profile/:ID"
+                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                       <Profile host={subdomain}/></ApplicationLayout></SessionAuth>}/>
+
+
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
