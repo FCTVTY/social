@@ -110,7 +110,9 @@ export default function Feed({ host, channel }: HomeProps) {
 
                         {
 
-                            posts.sort().map((post) => (
+                            posts.sort(post=> {
+                                return post.type != "event";
+                            }).map((post) => (
                             <li key={post._id}
                                 className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
                                 <div className="flex flex-1 flex-col p-3">

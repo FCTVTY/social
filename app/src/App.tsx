@@ -17,6 +17,7 @@ import Post from "./Pages/home/Post";
 import PostView from "./Pages/home/Post";
 import EventsPage from "./Pages/home/events";
 import Profile from "./Pages/home/Profile";
+import EventPage from "./Pages/home/event";
 
 initSuperTokens();
 
@@ -59,7 +60,16 @@ function App() {
 
 
         setChannel(channelID)
-        setPost(postID)    
+        setPost(postID)
+
+        if(url.pathname.includes("event"))
+        {
+            console.log("event page")
+            const postID = pathnameParts[2];
+            console.log('Post ID:', postID);
+            setPost(postID)
+        }
+
     }, []);
 
 
@@ -89,7 +99,11 @@ function App() {
 
 
                        <EventsPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
+            <Route path="/event/:ID"
+                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+
+                       <EventPage host={subdomain} post={post}/></ApplicationLayout></SessionAuth>}/>
             <Route path="/profile/:ID"
                    element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 

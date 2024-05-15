@@ -135,7 +135,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         ],
     }
     const teams: TeamItem[] = [
-        {id: 1, name: 'Events', href: '#', initial: 'E', current: false},
+        {id: 1, name: 'Events', href: '/events/upcoming', initial: 'E', current: false},
         {id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false},
         {id: 3, name: 'Workcation', href: '#', initial: 'W', current: false},
     ];
@@ -183,7 +183,32 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     // @ts-ignore
     return (
         <>
+            <div
+                className="hidden fixed z-[999] isolate w-full flex items-center gap-x-6 overflow-hidden bg-red-500 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+                <div
+                    className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
+                    aria-hidden="true"
+                >
 
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <p className="text-sm leading-6 text-white">
+                        <strong className="font-semibold">Maintenance Window</strong>
+                        <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
+                            <circle cx={1} cy={1} r={1}/>
+                        </svg>
+                        Offline during...
+                    </p>
+
+                </div>
+                <div className="flex flex-1 justify-end">
+                    <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+                        <span className="sr-only">Dismiss</span>
+                        <XMarkIcon className="h-5 w-5 text-gray-900" aria-hidden="true"/>
+                    </button>
+                </div>
+            </div>
 
             <Disclosure as="nav" className="sticky top-0 z-50 bg-white border-b border-gray-200">
                 {({open}) => (
@@ -390,7 +415,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     </ul>
                                                 </li>
                                                 <li>
-                                                    <div className="text-xs font-semibold leading-6 text-gray-400">General
+                                                    <div
+                                                        className="text-xs font-semibold leading-6 text-gray-400">General
                                                     </div>
                                                     <ul role="list" className="-mx-2 mt-2 space-y-1">
                                                         {teams.map((team) => (
@@ -567,30 +593,33 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                     </main>
 
 
-            <footer className="bg-white">
-                <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-                    <nav className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
-                        {fnavigation.main.map((item) => (
-                            <div key={item.name} className="pb-6">
-                                <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                                    {item.name}
-                                </a>
+                    <footer className="">
+                        <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
+                            <nav className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
+                                 aria-label="Footer">
+                                {fnavigation.main.map((item) => (
+                                    <div key={item.name} className="pb-6">
+                                        <a href={item.href}
+                                           className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                                            {item.name}
+                                        </a>
+                                    </div>
+                                ))}
+                            </nav>
+                            <div className="mt-10 flex justify-center space-x-10">
+                                {fnavigation.social.map((item) => (
+                                    <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
+                                        <span className="sr-only">{item.name}</span>
+                                        <item.icon className="h-6 w-6" aria-hidden="true"/>
+                                    </a>
+                                ))}
                             </div>
-                        ))}
-                    </nav>
-                    <div className="mt-10 flex justify-center space-x-10">
-                        {fnavigation.social.map((item) => (
-                            <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
-                                <span className="sr-only">{item.name}</span>
-                                <item.icon className="h-6 w-6" aria-hidden="true"/>
-                            </a>
-                        ))}
-                    </div>
-                    <p className="mt-10 text-center text-xs leading-5 text-gray-500">
-                        &copy; 2024 SCC, Inc. All rights reserved.
-                    </p>
+                            <p className="mt-10 text-center text-xs leading-5 text-gray-500">
+                                &copy; 2024 SCC, Inc. All rights reserved.
+                            </p>
+                        </div>
+                    </footer>
                 </div>
-            </footer>   </div>
             </div>
         </>
     );

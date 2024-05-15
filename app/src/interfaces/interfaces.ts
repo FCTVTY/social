@@ -53,7 +53,7 @@ export interface PPosts {
     tags: any[]
     userid: string
     postLikes: PostLike[]
-
+    type:string
 }
 
 export interface Profile {
