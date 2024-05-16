@@ -136,8 +136,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     }
     const teams: TeamItem[] = [
         {id: 1, name: 'Events', href: '/events/upcoming', initial: 'E', current: false},
-        {id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false},
-        {id: 3, name: 'Workcation', href: '#', initial: 'W', current: false},
+        {id: 2, name: 'Members', href: '/members/list', initial: 'M', current: false},
     ];
 
     const userNavigation: UserNavigationItem[] = [
@@ -427,7 +426,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                         team.current
                                                                             ? 'bg-gray-800 text-white'
                                                                             : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                                     )}
                                                                 >
                           <span
@@ -504,7 +503,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         team.current
                                                             ? 'bg-gray-800 text-white'
                                                             : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                     )}
                                                 >
                           <span

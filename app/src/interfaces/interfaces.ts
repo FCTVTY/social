@@ -48,12 +48,15 @@ export interface PPosts {
     article: string
     locked: boolean
     media: string
-    profile: Profile[]
+    profile: Profile
     softdelete: boolean
     tags: any[]
     userid: string
     postLikes: PostLike[]
     type:string
+    channels: Channel
+    communites: Community
+    eventDetails?: EventDetails
 }
 
 export interface Profile {
@@ -69,4 +72,10 @@ export interface PostLike {
     _id: string
     postId: string
     userId: string
+}
+export interface EventDetails {
+    allowSignups: boolean
+    date: string
+    location: string
+    etype: string
 }

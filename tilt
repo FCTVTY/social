@@ -1,0 +1,20 @@
+# Tiltfile
+
+# Import the Tilt SDK
+load('ext://k8s.py', 'v1', 'K8sResource', 'k8s_kind', 'k8s_obj')
+
+# Define your services
+frontend = k8s_obj("deployment.yaml")
+backend = k8s_obj("deployment.yaml")
+
+# Define the resources to watch
+watch_list = [frontend, backend]
+
+# Define the Tilt configuration
+config = {
+    'k8s_resource': watch_list,
+    'local_resource': 'docker-compose.yaml'
+}
+
+# Apply the configuration
+k8s_resource(**config)

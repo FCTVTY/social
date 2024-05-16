@@ -110,10 +110,8 @@ export default function Feed({ host, channel }: HomeProps) {
 
                         {
 
-                            posts.sort(post=> {
-                                return post.type != "event";
-                            }).map((post) => (
-                            <li key={post._id}
+                            posts.filter(post => post.type !== "event").map(post => (
+                                <li key={post._id}
                                 className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
                                 <div className="flex flex-1 flex-col p-3">
                                     <dl className="mt-1 flex flex-grow flex-col justify-between">
@@ -121,10 +119,10 @@ export default function Feed({ host, channel }: HomeProps) {
                                             <div className="flex items-center">
                                                 <div>
                                                     <img className="inline-block h-9 w-9 rounded-full"
-                                                         src={post.profile[0].profilePicture} alt=""/>
+                                                         src={post.profile.profilePicture} alt=""/>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{post.profile[0].first_name} {post.profile[0].last_name}</p>
+                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{post.profile.first_name} {post.profile.last_name}</p>
                                                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                                         profile</p>
                                                 </div>

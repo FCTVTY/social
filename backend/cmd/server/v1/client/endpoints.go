@@ -192,18 +192,32 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate and retrieve community name from URL query parameters
-	name := r.URL.Query().Get("oid")
-	if name == "" {
-		http.Error(rw, "channel id is required", http.StatusBadRequest)
-		return
-	}
-	objectId, err := primitive.ObjectIDFromHex(name)
 
-	// Check if the community exists in the database
+	data := bson.M{}
+
+	name := r.URL.Query().Get("oid")
+	if name != "" {
+
+		objectId, err := primitive.ObjectIDFromHex(name)
+		data = bson.M{"channel": objectId}
+		// Check if the community exists in the database
+
+		if err != nil {
+			http.Error(rw, "failed to fetch posts", http.StatusInternalServerError)
+			return
+		}
+	}
+
+	name = r.URL.Query().Get("host")
+	if name != "" {
+
+		data = bson.M{"communites.name": name}
+		// Check if the community exists in the database
+	}
 
 	var posts []bson.M
 
-	cursor, err := ppostCollection.Find(context.Background(), bson.M{"channel": objectId})
+	cursor, err := ppostCollection.Find(context.Background(), data)
 	if err != nil {
 		http.Error(rw, "failed to fetch posts", http.StatusInternalServerError)
 		return

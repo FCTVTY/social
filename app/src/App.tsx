@@ -18,6 +18,7 @@ import PostView from "./Pages/home/Post";
 import EventsPage from "./Pages/home/events";
 import Profile from "./Pages/home/Profile";
 import EventPage from "./Pages/home/event";
+import MembersPage from "./Pages/home/members";
 
 initSuperTokens();
 
@@ -93,7 +94,11 @@ function App() {
 
 
                 <PostView host={subdomain} post={post} /></ApplicationLayout> </SessionAuth>}/>
+            <Route path="/members/:ID"
+                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+
+                       <MembersPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
             <Route path="/events/:ID"
                    element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
