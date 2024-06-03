@@ -78,10 +78,10 @@ export default function PostView({host, channel, post}: HomeProps) {
                                             <div className="flex items-center">
                                                 <div>
                                                     <img className="inline-block h-9 w-9 rounded-full"
-                                                         src={ppost.profile[0].profilePicture} alt=""/>
+                                                         src={ppost.profile.profilePicture} alt=""/>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile[0].first_name} {ppost.profile[0].last_name} -
+                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile.first_name} {ppost.profile.last_name} -
                                                         Published {formatDistanceToNow(new Date(ppost.date), {addSuffix: true})} </p>
                                                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                                         profile</p>
@@ -149,8 +149,8 @@ export default function PostView({host, channel, post}: HomeProps) {
 
                                         <div className="flow-root mt-3">
                                             <ul role="list" className="-mb-8">
-                                                {activity.map((activityItem, activityItemIdx) => (
-                                                    <li key={activityItem.id}>
+                                                {ppost && ppost.postComments.map((activityItem, activityItemIdx) => (
+                                                    <li key={activityItem._id}>
                                                         <div className="relative pb-8">
                                                             {activityItemIdx !== activity.length - 1 ? (
                                                                 <span
@@ -158,12 +158,12 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                                     aria-hidden="true"/>
                                                             ) : null}
                                                             <div className="relative flex items-start space-x-3">
-                                                                {activityItem.type === 'comment' ? (
+
                                                                     <>
                                                                         <div className="relative">
                                                                             <img
                                                                                 className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
-                                                                                src={activityItem.imageUrl}
+                                                                                src={activityItem.userId}
                                                                                 alt=""
                                                                             />
 
@@ -172,92 +172,19 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                                         <div className="min-w-0 flex-1">
                                                                             <div>
                                                                                 <div className="text-sm">
-                                                                                    <a href={activityItem.person.href}
+                                                                                    <a href={activityItem._id}
                                                                                        className="font-medium text-gray-900">
-                                                                                        {activityItem.person.name}
+                                                                                        {activityItem._id}
                                                                                     </a>
                                                                                 </div>
-                                                                                <p className="mt-0.5 text-sm text-gray-500">Commented {activityItem.date}</p>
+                                                                                <p className="mt-0.5 text-sm text-gray-500">Commented {activityItem.postId}</p>
                                                                             </div>
                                                                             <div className="mt-2 text-sm text-gray-700">
                                                                                 <p>{activityItem.comment}</p>
                                                                             </div>
                                                                         </div>
                                                                     </>
-                                                                ) : activityItem.type === 'assignment' ? (
-                                                                    <>
-                                                                        <div>
-                                                                            <div className="relative px-1">
-                                                                                <div
-                                                                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
-                                                                                    <UserCircleIcon
-                                                                                        className="h-5 w-5 text-gray-500"
-                                                                                        aria-hidden="true"/>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="min-w-0 flex-1 py-1.5">
-                                                                            <div className="text-sm text-gray-500">
-                                                                                <a href={activityItem.person.href}
-                                                                                   className="font-medium text-gray-900">
-                                                                                    {activityItem.person.name}
-                                                                                </a>{' '}
-                                                                                assigned{' '}
-                                                                                <a href={activityItem.assigned.href}
-                                                                                   className="font-medium text-gray-900">
-                                                                                    {activityItem.assigned.name}
-                                                                                </a>{' '}
-                                                                                <span
-                                                                                    className="whitespace-nowrap">{activityItem.date}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </>
-                                                                ) : activityItem.type === 'tags' ? (
-                                                                    <>
-                                                                        <div>
-                                                                            <div className="relative px-1">
-                                                                                <div
-                                                                                    className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
-                                                                                    <TagIcon
-                                                                                        className="h-5 w-5 text-gray-500"
-                                                                                        aria-hidden="true"/>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="min-w-0 flex-1 py-0">
-                                                                            <div
-                                                                                className="text-sm leading-8 text-gray-500">
-                        <span className="mr-0.5">
-                          <a href={activityItem.person.href} className="font-medium text-gray-900">
-                            {activityItem.person.name}
-                          </a>{' '}
-                            added tags
-                        </span>{' '}
-                                                                                <span className="mr-0.5">
-                          {activityItem.tags.map((tag) => (
-                              <Fragment key={tag.name}>
-                                  <a
-                                      href={tag.href}
-                                      className="inline-flex items-center gap-x-1.5 rounded-full px-2 py-1 text-xs font-medium text-gray-900 ring-1 ring-inset ring-gray-200"
-                                  >
-                                      <svg
-                                          className={classNames(tag.color, 'h-1.5 w-1.5')}
-                                          viewBox="0 0 6 6"
-                                          aria-hidden="true"
-                                      >
-                                          <circle cx={3} cy={3} r={3}/>
-                                      </svg>
-                                      {tag.name}
-                                  </a>{' '}
-                              </Fragment>
-                          ))}
-                        </span>
-                                                                                <span
-                                                                                    className="whitespace-nowrap">{activityItem.date}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </>
-                                                                ) : null}
+
                                                             </div>
                                                         </div>
                                                     </li>

@@ -19,6 +19,7 @@ import EventsPage from "./Pages/home/events";
 import Profile from "./Pages/home/Profile";
 import EventPage from "./Pages/home/event";
 import MembersPage from "./Pages/home/members";
+import ProfilePage from "./Pages/home/Profile";
 
 initSuperTokens();
 
@@ -109,11 +110,11 @@ function App() {
 
 
                        <EventPage host={subdomain} post={post}/></ApplicationLayout></SessionAuth>}/>
-            <Route path="/profile/:ID"
+            <Route path="/profile/:id"
                    element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-                       <Profile host={subdomain}/></ApplicationLayout></SessionAuth>}/>
+                       <ProfilePage host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
 
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>

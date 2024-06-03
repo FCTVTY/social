@@ -37,8 +37,14 @@ export interface Post {
 
     desc: string
 }
-
+export interface PostComment {
+    _id: string
+    comment: string
+    postId: string
+    userId: string
+}
 export interface PPosts {
+    postComments: PostComment[];
     _id: string
     channel: string
     channelstring: string
@@ -60,6 +66,7 @@ export interface PPosts {
 }
 
 export interface Profile {
+    bio: string;
     _id: string
     email: string
     first_name: string
@@ -67,6 +74,7 @@ export interface Profile {
     profilePicture: string
     supertokensId: string
     username: string
+    me :boolean
 }
 export interface PostLike {
     _id: string
@@ -78,4 +86,12 @@ export interface EventDetails {
     date: string
     location: string
     etype: string
+}
+export interface Ads {
+    _id: string
+    ad: string
+    clicks: number
+    logo: string
+    name: string
+    url: string
 }

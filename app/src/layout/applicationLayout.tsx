@@ -19,7 +19,7 @@ import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/react/20/solid';
 import {getApiDomain} from "../lib/auth/supertokens";
 import axios from 'axios';
 import {any} from "zod";
-import {CommunityCollection} from "../interfaces/interfaces";
+import {CommunityCollection, Profile} from "../interfaces/interfaces";
 import Join from "../Pages/home/join";
 import { JSX } from 'react/jsx-runtime';
 import {b} from "vite/dist/node/types.d-aGj9QkWt";
@@ -59,6 +59,8 @@ function classNames(...classes: string[]) {
 const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPage =false}) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [community, setCommunity] = useState<Partial<CommunityCollection>>();
+    const [profile, setProfile] = useState<Partial<Profile>>();
+
     const [navigation, setNavigation] = useState<NavigationItem[]>([]);
     const fnavigation = {
         main: [
@@ -152,7 +154,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         try {
             const response = await axios.get(`${getApiDomain()}/community?name=${host}`);
             setCommunity(response.data);
+            const profileresponse = await axios.get(`${getApiDomain()}/profile`);
 
+            setProfile(profileresponse.data);
 
         } catch (error) {
             console.error('Error fetching community details:', error);
@@ -230,7 +234,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             className="hidden h-8 w-auto lg:block"
                                             src={LogoSquare}
                                             alt="b:hive"
-                                        />
+                                        /> <span
+                                        className="inline-flex items-center rounded-md bg-gray-950 px-2 py-1 text-xs font-medium text-orange-300 ring-1 ring-inset ring-gray-500/10 ml-3">UAT</span>
+
                                     </div>
 
                                 </div>
@@ -252,7 +258,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                 <span className="sr-only">Open user menu</span>
                                                 <img
                                                     className="h-8 w-8 rounded-full"
-                                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                    src={profile?.profilePicture}
                                                     alt=""
                                                 />
                                             </Menu.Button>
@@ -271,7 +277,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                 <Menu.Item>
                                                     {({active}) => (
                                                         <a
-                                                            href="#"
+                                                            href={`/profile/${profile?._id}`}
                                                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                         >
                                                             Your Profile
@@ -446,11 +452,11 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     >
                                                         <img
                                                             className="h-8 w-8 rounded-full bg-gray-800"
-                                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                            src={profile?.profilePicture}
                                                             alt=""
                                                         />
                                                         <span className="sr-only">Your profile</span>
-                                                        <span aria-hidden="true">Tom Cook</span>
+                                                        <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -518,16 +524,16 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                 </li>
                                 <li className="-mx-6 mt-auto">
                                     <a
-                                        href="#"
+                                        href={`/profile/${profile?._id}`}
                                         className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
                                     >
                                         <img
                                             className="h-8 w-8 rounded-full bg-gray-800"
-                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                            src={profile?.profilePicture}
                                             alt=""
                                         />
                                         <span className="sr-only">Your profile</span>
-                                        <span aria-hidden="true">Tom Cook</span>
+                                        <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                     </a>
                                 </li>
                             </ul>

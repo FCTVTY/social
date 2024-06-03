@@ -1,157 +1,142 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {Ads, Post, Profile} from "../../interfaces/interfaces";
+import axios from "axios";
+import {getApiDomain} from "../../lib/auth/supertokens";
 interface HomeProps {
     host?: string;
-    channel?: string;
+    profileid?: string;
 }
 
-export default function Profile({ host, channel }: HomeProps) {
+export default function ProfilePage({ host, profileid }: HomeProps) {
+    const [profile, setProfile] = useState<Profile>();
 
+    console.log(profileid)
+
+    useEffect(() => {
+        if (profileid) {
+            fetchDetails();
+        }
+    }, [host, profileid]);
+
+    const fetchDetails = async () => {
+        try {
+            const response = await axios.get(`${getApiDomain()}/profile?oid=${profileid}`);
+
+            setProfile(response.data);
+
+        } catch (error) {
+            console.error('Error fetching profile details:', error);
+        }
+    };
     return (
-<main className="profile-page">
-    <section className="relative block h-500-px">
-        <div
-            className="absolute top-0 w-full h-full bg-center bg-cover"
-            style={{
-                backgroundImage:
-                    'url("https://images.unsplash.com/photo-1499336315816-097655dcfbda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2710&q=80")'
-            }}
-        >
-      <span
-          id="blackOverlay"
-          className="w-full h-full absolute opacity-50 bg-black"
-      />
-        </div>
-        <div
-            className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
-            style={{ transform: "translateZ(0px)" }}
-        >
-            <svg
-                className="absolute bottom-0 overflow-hidden"
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="none"
-                version="1.1"
-                viewBox="0 0 2560 100"
-                x={0}
-                y={0}
-            >
-                <polygon
-                    className="text-blueGray-200 fill-current"
-                    points="2560 0 2560 100 0 100"
-                />
-            </svg>
-        </div>
-    </section>
-    <section className="relative py-16 bg-blueGray-200">
-        <div className="container mx-auto px-4">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
-                <div className="px-6">
-                    <div className="flex flex-wrap justify-center">
-                        <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                            <div className="relative">
-                                <img
-                                    alt="..."
-                                    src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                                    className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                                />
+        <main className="profile-page">
+            {profile && (
+
+            <div className=" min-h-screen">
+                <div className="container mx-auto p-4">
+                    {/* Header */}
+                    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                        <div className="relative">
+                            <img
+                                src="https://images.pexels.com/photos/22475982/pexels-photo-22475982/free-photo-of-historic-stone-house-with-a-roof-overgrown-with-grass-in-an-icelandic-fjord.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                alt="Cover Photo"
+                                className="w-full h-48 object-cover"
+                            />
+                            <div className="absolute bottom-0 left-0 p-4">
+                                <div className="flex items-center">
+                                    <img
+                                        src={profile.profilePicture}
+                                        alt="Profile"
+                                        className="w-32 h-32 rounded-full border-4 border-white -mt-16"
+                                    />
+                                    <div className="ml-4">
+                                        <h1 className="text-2xl font-bold text-white">{profile.first_name} {profile.last_name}</h1>
+                                        <p className="text-gray-200 hidden">Software Engineer</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                            <div className="py-6 px-3 mt-32 sm:mt-0">
+                        {profile.me && (
+                        <div className="p-4">
+                            <div className="flex justify-end">
+
                                 <button
-                                    className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                                    type="button"
-                                >
-                                    Connect
+                                    className="ml-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300">
+                                    Edit Profile
                                 </button>
                             </div>
-                        </div>
-                        <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                            <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                                <div className="mr-4 p-3 text-center">
-                  <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                    22
-                  </span>
-                                    <span className="text-sm text-blueGray-400">Friends</span>
-                                </div>
-                                <div className="mr-4 p-3 text-center">
-                  <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                    10
-                  </span>
-                                    <span className="text-sm text-blueGray-400">Photos</span>
-                                </div>
-                                <div className="lg:mr-4 p-3 text-center">
-                  <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                    89
-                  </span>
-                                    <span className="text-sm text-blueGray-400">Comments</span>
-                                </div>
-                            </div>
-                        </div>
+                        </div>)}
                     </div>
-                    <div className="text-center mt-12">
-                        <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                            Jenna Stones
-                        </h3>
-                        <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                            <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400" />
-                            Los Angeles, California
-                        </div>
-                        <div className="mb-2 text-blueGray-600 mt-10">
-                            <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400" />
-                            Solution Manager - Creative Tim Officer
-                        </div>
-                        <div className="mb-2 text-blueGray-600">
-                            <i className="fas fa-university mr-2 text-lg text-blueGray-400" />
-                            University of Computer Science
-                        </div>
-                    </div>
-                    <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                        <div className="flex flex-wrap justify-center">
-                            <div className="w-full lg:w-9/12 px-4">
-                                <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                                    An artist of considerable range, Jenna the name taken by
-                                    Melbourne-raised, Brooklyn-based Nick Murphy writes, performs
-                                    and records all of his own music, giving it a warm, intimate
-                                    feel with a solid groove structure. An artist of considerable
-                                    range.
+
+                    {/* Main Content */}
+                    <div className="mt-4 lg:flex gap-4">
+                        {/* Sidebar */}
+                        <div className="lg:w-1/3 sm:w-full">
+                            <div className="bg-white shadow-md rounded-lg p-4 mb-4">
+                                <h2 className="text-lg font-bold mb-2">About</h2>
+                                <p className="text-gray-700">
+                                    {profile.bio}
                                 </p>
-                                <a href="#pablo" className="font-normal text-pink-500">
-                                    Show more
-                                </a>
+                            </div>
+                            <div className="bg-white shadow-md rounded-lg p-4 mb-4">
+                                <h2 className="text-lg font-bold mb-2">Communities</h2>
+                                <div className="flex flex-wrap">
+                                    {/* Example Friends */}
+                                    {Array.from({length: 6}).map((_, i) => (
+                                        <img
+                                            key={i}
+                                            src={`https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&h=130`}
+                                            alt={`COMMUNITY ${i + 1}`}
+                                            className="w-12 h-12 rounded-full border-2 border-white m-1"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Posts */}
+                        <div className="lg:w-2/3 sm:w-full">
+
+                            {/* Example Post */}
+                            <div className="bg-white shadow-md rounded-lg p-4 mb-4">
+                                <div className="flex items-center mb-2">
+                                    <img
+                                        src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                        alt="Profile"
+                                        className="w-10 h-10 rounded-full"
+                                    />
+                                    <div className="ml-2">
+                                        <p className="font-bold">John Doe</p>
+                                        <p className="text-gray-600 text-sm">2 hrs ago</p>
+                                    </div>
+                                </div>
+                                <p className="text-gray-700 mb-2">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                </p>
+                                <img
+                                    src="https://images.pexels.com/photos/2793440/pexels-photo-2793440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                    alt="Post"
+                                    className="w-full h-auto rounded-lg"
+                                />
+                                <div className="mt-2 flex justify-between">
+                                    <button className="text-gray-600 hover:text-blue-600">
+                                        Like
+                                    </button>
+                                    <button className="text-gray-600 hover:text-blue-600">
+                                        Comment
+                                    </button>
+                                    <button className="text-gray-600 hover:text-blue-600">
+                                        Share
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-wrap items-center md:justify-between justify-center">
-                    <div className="w-full md:w-6/12 px-4 mx-auto text-center">
-                        <div className="text-sm text-blueGray-500 font-semibold py-1">
-                            Made with{" "}
-                            <a
-                                href="https://www.creative-tim.com/product/notus-js"
-                                className="text-blueGray-500 hover:text-gray-800"
-                                target="_blank"
-                            >
-                                Notus JS
-                            </a>{" "}
-                            by{" "}
-                            <a
-                                href="https://www.creative-tim.com"
-                                className="text-blueGray-500 hover:text-blueGray-800"
-                                target="_blank"
-                            >
-                                {" "}
-                                Creative Tim
-                            </a>
-                            .
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </section>
-</main>
-    )}
+
+        )
+            }
+                </main>
+                )
+}

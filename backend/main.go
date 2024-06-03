@@ -146,6 +146,15 @@ func main() {
 
 			return
 		}
+		if parsedURL.Path == "/v1/ads/get" {
+			session.VerifySession(nil, client.GetAds).ServeHTTP(rw, r)
+		}
+		if parsedURL.Path == "/v1/profile" {
+			session.VerifySession(nil, client.GetProfile).ServeHTTP(rw, r)
+		}
+		if parsedURL.Path == "/v1/postLikes" && r.Method == "POST" {
+			session.VerifySession(nil, client.PostLikes).ServeHTTP(rw, r)
+		}
 
 		rw.WriteHeader(404)
 	})))))

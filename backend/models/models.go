@@ -56,16 +56,35 @@ type PPosts []struct {
 	Desc            string    `json:"desc"`
 	Locked          bool      `json:"locked"`
 	Media           string    `json:"media"`
-	Profile         []struct {
-		ID             string `json:"_id"`
-		Email          string `json:"email"`
-		FirstName      string `json:"first_name"`
-		LastName       string `json:"last_name"`
-		ProfilePicture string `json:"profilePicture"`
-		SupertokensID  string `json:"supertokensId"`
-		Username       string `json:"username"`
-	} `json:"profile"`
-	Softdelete bool   `json:"softdelete"`
-	Tags       []any  `json:"tags"`
-	Userid     string `json:"userid"`
+	Profile         []Profile `json:"profile"`
+	Softdelete      bool      `json:"softdelete"`
+	Tags            []any     `json:"tags"`
+	Userid          string    `json:"userid"`
+}
+
+type Profile struct {
+	ID             string `json:"_id"`
+	Email          string `json:"email"`
+	FirstName      string `json:"first_name"`
+	LastName       string `json:"last_name"`
+	ProfilePicture string `json:"profilePicture"`
+	SupertokensID  string `json:"supertokensId"`
+	Username       string `json:"username"`
+	Me             bool   `json:"me"`
+}
+
+type Ads struct {
+	ID struct {
+		Oid string `json:"$oid"`
+	} `json:"_id"`
+	Name   string `json:"name"`
+	Logo   string `json:"logo"`
+	Ad     string `json:"ad"`
+	URL    string `json:"url"`
+	Clicks int    `json:"clicks"`
+}
+type PostLike struct {
+	PostID string `json:"postId"`
+	UserID string `json:"userId"`
+	Liked  bool   `json:"liked"`
 }

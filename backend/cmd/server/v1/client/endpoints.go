@@ -36,6 +36,9 @@ var (
 	channelCollection    *mongo.Collection
 	postCollection       *mongo.Collection
 	ppostCollection      *mongo.Collection
+	adsCollection        *mongo.Collection
+	profileCollection    *mongo.Collection
+	likesCollection      *mongo.Collection
 )
 
 func init() {
@@ -64,7 +67,9 @@ func init() {
 	channelCollection = database.Collection("channels")
 	postCollection = database.Collection("posts")
 	ppostCollection = database.Collection("pposts")
-
+	adsCollection = database.Collection("ads")
+	profileCollection = database.Collection("profile")
+	likesCollection = database.Collection("postLikes")
 }
 func Communities(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
@@ -353,4 +358,128 @@ func Sessioninfo(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Write(bytes)
 	}
+}
+
+func GetAds(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+
+	var collection []bson.M
+	// Check if the community exists in the database
+	cursor, err := adsCollection.Find(context.Background(), bson.D{})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "community not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "failed to fetch community details:"+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var result bson.M
+		err := cursor.Decode(&result)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		collection = append(collection, result)
+	}
+	// Encode and send community details in the response
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(collection); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
+func GetProfile(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	self := false
+	// Validate and retrieve post ID from URL query parameters
+	oid := r.URL.Query().Get("oid")
+	if oid == "" {
+		oid = sessionContainer.GetUserID()
+		self = true
+	}
+
+	var profile bson.M
+
+	if !self {
+		objectID, err := primitive.ObjectIDFromHex(oid)
+		if err != nil {
+			http.Error(rw, "invalid post ID", http.StatusBadRequest)
+			return
+		}
+		err = profileCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&profile)
+		if err != nil {
+			http.Error(rw, "failed to fetch post", http.StatusInternalServerError)
+			return
+		}
+	}
+	if self {
+		err := profileCollection.FindOne(context.Background(), bson.M{"supertokensId": oid}).Decode(&profile)
+		if err != nil {
+			http.Error(rw, "failed to fetch post", http.StatusInternalServerError)
+			return
+		}
+	}
+	// Fetch post from the database
+
+	// Get user ID from session container
+	userID := sessionContainer.GetUserID()
+
+	// Check if user ID matches profile's SupertokensID
+	if profile["supertokensId"] == userID {
+		// Mark as self profile
+		profile["me"] = true
+	}
+
+	// Encode post as JSON and write response
+	rw.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(rw).Encode(profile)
+	if err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
+func PostLikes(rw http.ResponseWriter, r *http.Request) {
+	var like models.PostLike
+	err := json.NewDecoder(r.Body).Decode(&like)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+	oid, _ := primitive.ObjectIDFromHex(like.PostID)
+	filter := bson.M{"postId": oid, "userId": like.UserID}
+	if like.Liked {
+		_, err = likesCollection.InsertOne(context.Background(), bson.M{
+			"postId": oid,
+			"userId": like.UserID,
+		})
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		_, err = likesCollection.DeleteOne(context.Background(), filter)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	rw.WriteHeader(http.StatusOK)
+	rw.Write([]byte("Success"))
 }
