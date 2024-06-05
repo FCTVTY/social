@@ -67,7 +67,7 @@ const Register: React.FC = () => {
     }
 
     // Redirect user to desired page upon successful registration
-    window.location.assign('/feed');
+    window.location.assign('/onboarding');
   };
 
   return (
@@ -188,13 +188,7 @@ const Register: React.FC = () => {
                       )}
                   />
               )}
-              <SelectField className="col-span-full" label="How did you hear about us?" id="referral_source"
-                           name="referral_source">
-                  <option>AltaVista search</option>
-                  <option>Super Bowl commercial</option>
-                  <option>Our route 34 city bus ad</option>
-                  <option>The “Never Use This” podcast</option>
-              </SelectField>
+              
               <div className="col-span-full">
                   <Button type="submit" variant="solid" color="slate" className="w-full">
                       <span>Sign up <span aria-hidden="true">&rarr;</span></span>

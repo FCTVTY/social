@@ -33,10 +33,7 @@ export default function Feed({host, channel}: HomeProps) {
                 window.location.href = '/feed/'+Cresponse.data.channels[0].id;
             }
 
-            if(profile === undefined)
-            {
-                window.location.href = '/Onboarding/'
-            }
+
 
             const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}`);
             const sortedPosts = response.data.sort((a: Post, b: Post) => {
@@ -50,6 +47,8 @@ export default function Feed({host, channel}: HomeProps) {
             const profileresponse = await axios.get(`${getApiDomain()}/profile`);
 
             setProfile(profileresponse.data);
+
+            
 
         } catch (error) {
             console.error('Error fetching community details:', error);
