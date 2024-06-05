@@ -1,6 +1,6 @@
 module bhiveserver
 
-go 1.21.1
+go 1.22.4
 
 require (
 	github.com/chai2010/webp v1.1.2-0.20220219151144-e81c7511b15a
