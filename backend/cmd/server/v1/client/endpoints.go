@@ -687,7 +687,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var id = community.ID.String()
+	var id = community.ID.Hex()
 
 	v.Communities = append(v.Communities, id)
 
