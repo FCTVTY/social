@@ -241,7 +241,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                                 </div>
                                 <div
-                                    className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                    className="hidden absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                     <button
                                         type="button"
                                         className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -256,11 +256,11 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             <Menu.Button
                                                 className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                 <span className="sr-only">Open user menu</span>
-                                                <img
+                                                {profile && (<img
                                                     className="h-8 w-8 rounded-full"
                                                     src={profile?.profilePicture}
                                                     alt=""
-                                                />
+                                                />)}
                                             </Menu.Button>
                                         </div>
                                         <Transition
@@ -445,7 +445,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         ))}
                                                     </ul>
                                                 </li>
-                                                <li className="-mx-6 mt-auto">
+                                               {profile &&( 
+                                               <li className="-mx-6 mt-auto">
                                                     <a
                                                         href="#"
                                                         className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
@@ -459,6 +460,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                                     </a>
                                                 </li>
+                                            )}
                                             </ul>
                                         </nav>
                                     </div>
@@ -522,7 +524,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         ))}
                                     </ul>
                                 </li>
-                                <li className="-mx-6 mt-auto">
+                                {profile &&(   <li className="-mx-6 mt-auto">
                                     <a
                                         href={`/profile/${profile?._id}`}
                                         className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
@@ -535,7 +537,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         <span className="sr-only">Your profile</span>
                                         <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                     </a>
-                                </li>
+                                </li> )}
                             </ul>
                         </nav>
                     </div>
