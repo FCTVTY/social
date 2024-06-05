@@ -12,12 +12,12 @@
 package client
 
 import (
+	"bhiveserver/models"
 	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"footallfitserver/models"
 	"github.com/chai2010/webp"
 	"github.com/pkg/errors"
 	"github.com/supertokens/supertokens-golang/recipe/emailpassword"

@@ -12,9 +12,9 @@
 package main
 
 import (
+	"bhiveserver/cmd/server/v1/client"
+	_ "bhiveserver/models"
 	"fmt"
-	"footallfitserver/cmd/server/v1/client"
-	_ "footallfitserver/models"
 	"log"
 	"net/http"
 	"net/url"
