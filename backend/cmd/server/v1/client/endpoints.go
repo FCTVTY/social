@@ -18,10 +18,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/chai2010/webp"
-	"github.com/pkg/errors"
-	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
-	"github.com/supertokens/supertokens-golang/recipe/usermetadata"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -30,6 +26,11 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/chai2010/webp"
+	"github.com/pkg/errors"
+	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
+	"github.com/supertokens/supertokens-golang/recipe/usermetadata"
 
 	"github.com/joho/godotenv"
 	"github.com/supertokens/supertokens-golang/recipe/session"
@@ -685,7 +686,10 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "failed to fetch community details", http.StatusInternalServerError)
 		return
 	}
-	v.Communities = append(v.Communities, community.ID.String())
+
+	var id = community.ID.String()
+
+	v.Communities = append(v.Communities, id)
 
 	// Check if a profile already exists for this user
 	filter = bson.M{"supertokensId": v.SupertokensID}
