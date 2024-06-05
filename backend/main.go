@@ -152,10 +152,21 @@ func main() {
 		if parsedURL.Path == "/v1/profile" {
 			session.VerifySession(nil, client.GetProfile).ServeHTTP(rw, r)
 		}
+
+		if parsedURL.Path == "/v1/createProfile" && r.Method == "POST" {
+			session.VerifySession(nil, client.CreateProfile).ServeHTTP(rw, r)
+		}
+
 		if parsedURL.Path == "/v1/postLikes" && r.Method == "POST" {
 			session.VerifySession(nil, client.PostLikes).ServeHTTP(rw, r)
 		}
 
+		if parsedURL.Path == "/v1/comment" && r.Method == "POST" {
+			session.VerifySession(nil, client.Comment).ServeHTTP(rw, r)
+		}
+		if parsedURL.Path == "/v1/members" && r.Method == "GET" {
+			session.VerifySession(nil, client.Members).ServeHTTP(rw, r)
+		}
 		rw.WriteHeader(404)
 	})))))
 }

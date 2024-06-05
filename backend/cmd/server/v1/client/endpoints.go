@@ -12,12 +12,23 @@
 package client
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"footallfitserver/models"
+	"github.com/chai2010/webp"
+	"github.com/pkg/errors"
+	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
+	"github.com/supertokens/supertokens-golang/recipe/usermetadata"
+	"image"
+	"image/jpeg"
+	"image/png"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -39,6 +50,9 @@ var (
 	adsCollection        *mongo.Collection
 	profileCollection    *mongo.Collection
 	likesCollection      *mongo.Collection
+	commentCollection    *mongo.Collection
+	membersCollection    *mongo.Collection
+	pprofileCollection   *mongo.Collection
 )
 
 func init() {
@@ -68,8 +82,12 @@ func init() {
 	postCollection = database.Collection("posts")
 	ppostCollection = database.Collection("pposts")
 	adsCollection = database.Collection("ads")
+	pprofileCollection = database.Collection("pprofile")
 	profileCollection = database.Collection("profile")
+
 	likesCollection = database.Collection("postLikes")
+	commentCollection = database.Collection("postComments")
+	membersCollection = database.Collection("members")
 }
 func Communities(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
@@ -135,7 +153,9 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "failed to fetch community details", http.StatusInternalServerError)
 		return
 	}
-
+	if community.OwnerId == sessionContainer.GetUserID() {
+		community.Create = true
+	}
 	collection.Community = community
 
 	cursor, err := channelCollection.Find(context.Background(), bson.M{"parent": community.ID})
@@ -179,6 +199,25 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
 	v.UserID = sessionContainer.GetUserID()
+
+	if v.Media != "" {
+		img, _, err := decodeDataURI(v.Media)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		// Encode the image to WebP format
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		// Convert the WebP bytes to a data URI
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		v.Media = webpDataURI
+	}
+
 	result, err := postCollection.InsertOne(context.Background(), v)
 	if err != nil {
 		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
@@ -188,6 +227,50 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 
 }
 
+func decodeDataURI(dataURI string) (image.Image, string, error) {
+	if !strings.HasPrefix(dataURI, "data:image/") {
+		return nil, "", errors.New("invalid data URI")
+	}
+
+	// Split the metadata and the data
+	parts := strings.SplitN(dataURI, ",", 2)
+	if len(parts) != 2 {
+		return nil, "", errors.New("invalid data URI format")
+	}
+
+	// Get the MIME type
+	mimeParts := strings.Split(parts[0], ";")
+	if len(mimeParts) < 2 {
+		return nil, "", errors.New("invalid MIME type")
+	}
+	mime := mimeParts[0][len("data:image/"):]
+
+	// Decode the base64 data
+	data, err := base64.StdEncoding.DecodeString(parts[1])
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to decode base64 data: %w", err)
+	}
+
+	// Decode the image
+	var img image.Image
+	switch mime {
+	case "jpeg":
+		img, err = jpeg.Decode(bytes.NewReader(data))
+	case "png":
+		img, err = png.Decode(bytes.NewReader(data))
+	case "webp":
+		img, err = webp.Decode(bytes.NewReader(data))
+
+	default:
+		return nil, "", fmt.Errorf("unsupported image type: %s", mime)
+	}
+
+	if err != nil {
+		return nil, "", fmt.Errorf("failed to decode image: %w", err)
+	}
+
+	return img, mime, nil
+}
 func Posts(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
@@ -421,16 +504,16 @@ func GetProfile(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, "invalid post ID", http.StatusBadRequest)
 			return
 		}
-		err = profileCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&profile)
+		err = pprofileCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&profile)
 		if err != nil {
-			http.Error(rw, "failed to fetch post", http.StatusInternalServerError)
+			http.Error(rw, "failed to fetch profile "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
 	if self {
-		err := profileCollection.FindOne(context.Background(), bson.M{"supertokensId": oid}).Decode(&profile)
+		err := pprofileCollection.FindOne(context.Background(), bson.M{"supertokensId": oid}).Decode(&profile)
 		if err != nil {
-			http.Error(rw, "failed to fetch post", http.StatusInternalServerError)
+			http.Error(rw, "failed to fetch profile "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
@@ -482,4 +565,182 @@ func PostLikes(rw http.ResponseWriter, r *http.Request) {
 
 	rw.WriteHeader(http.StatusOK)
 	rw.Write([]byte("Success"))
+}
+
+func Comment(rw http.ResponseWriter, r *http.Request) {
+
+	var comment models.Comment
+	err := json.NewDecoder(r.Body).Decode(&comment)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+	oid, _ := primitive.ObjectIDFromHex(comment.PostID)
+
+	_, err = commentCollection.InsertOne(context.Background(), bson.M{
+		"postId":  oid,
+		"userId":  comment.UserID,
+		"comment": comment.Comment,
+		"date":    time.Now(),
+	})
+
+	rw.WriteHeader(http.StatusOK)
+	rw.Write([]byte("Success"))
+}
+
+func Members(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+
+	// Validate and retrieve community name from URL query parameters
+
+	data := bson.M{}
+
+	name := r.URL.Query().Get("name")
+	if name != "" {
+
+		data = bson.M{"name": name}
+		// Check if the community exists in the database
+	}
+
+	c := bson.M{}
+
+	err := membersCollection.FindOne(context.Background(), data).Decode(c)
+	if err != nil {
+		http.Error(rw, "failed to fetch Members"+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(c); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
+func CreateProfile(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	var v models.Profile
+
+	// We decode our body request params
+	err := json.NewDecoder(r.Body).Decode(&v)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	v.SupertokensID = sessionContainer.GetUserID()
+
+	if v.ProfilePicture != "" {
+		img, _, err := decodeDataURI(v.ProfilePicture)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		// Encode the image to WebP format
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		// Convert the WebP bytes to a data URI
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		v.ProfilePicture = webpDataURI
+	}
+	if v.CoverPicture != "" {
+		img, _, err := decodeDataURI(v.CoverPicture)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		// Encode the image to WebP format
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		// Convert the WebP bytes to a data URI
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		v.CoverPicture = webpDataURI
+	}
+	filter := bson.M{"name": v.Username}
+	var community models.Community
+	err = communitesCollection.FindOne(context.Background(), filter).Decode(&community)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "community not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "failed to fetch community details", http.StatusInternalServerError)
+		return
+	}
+	v.Communities = append(v.Communities, community.ID.String())
+
+	// Check if a profile already exists for this user
+	filter = bson.M{"supertokensId": v.SupertokensID}
+	var existingProfile models.Profile
+	err = profileCollection.FindOne(context.Background(), filter).Decode(&existingProfile)
+	if err != nil {
+		if err != mongo.ErrNoDocuments {
+			http.Error(rw, "failed to fetch existing profile: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// No existing profile found, create a new one
+		userID := sessionContainer.GetUserID()
+		// You can learn more about the `User` object over here https://github.com/supertokens/core-driver-interface/wiki
+		id, _ := emailpassword.GetUserByID(sessionContainer.GetUserID())
+
+		metadata, err := usermetadata.GetUserMetadata(userID)
+		if err != nil {
+			// TODO: handle error...
+		}
+
+		updateData := bson.M{
+			"username":       v.Username,
+			"profilePicture": v.ProfilePicture,
+			"coverPicture":   v.CoverPicture,
+			"bio":            v.Bio,
+			"supertokensId":  sessionContainer.GetUserID(),
+			"first_name":     metadata["first_name"],
+			"last_name":      metadata["last_name"],
+			"communities":    v.Communities,
+			"email":          id.Email,
+		}
+
+		result, err := profileCollection.InsertOne(context.Background(), updateData)
+		if err != nil {
+			http.Error(rw, "failed to insert profile: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		json.NewEncoder(rw).Encode(result.InsertedID)
+		return
+	}
+
+	// Profile already exists, update it
+	updateData := bson.M{
+		"username":       v.Username,
+		"profilePicture": v.ProfilePicture,
+		"coverPicture":   v.CoverPicture,
+		"bio":            v.Bio,
+	}
+
+	update := bson.M{"$set": updateData}
+
+	_, err = profileCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(rw, "failed to update profile: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 }

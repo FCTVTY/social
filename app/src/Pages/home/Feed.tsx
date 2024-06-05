@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
-import {Ads, Post, PPosts, Profile} from "../../interfaces/interfaces";
+import {Ads, CommunityCollection, Post, PPosts, Profile} from "../../interfaces/interfaces";
 import {formatDistanceToNow} from 'date-fns';
 import Create from "./create";
 import PostItem from "./Feeditem";
@@ -15,15 +15,24 @@ export default function Feed({host, channel}: HomeProps) {
     const [posts, setPosts] = useState<PPosts[]>([]);
     const [ad, setAds] = useState<Ads[]>([]);
     const [profile, setProfile] = useState<Profile>();
+    const [community, setCommunity] = useState<Partial<CommunityCollection>>();
 
     useEffect(() => {
-        if (channel) {
+
             fetchDetails();
-        }
+
     }, [host, channel]);
 
     const fetchDetails = async () => {
         try {
+            const Cresponse = await axios.get(`${getApiDomain()}/community?name=${host}`);
+            setCommunity(Cresponse.data);
+
+            if(channel === undefined)
+            {
+                window.location.href = '/feed/'+Cresponse.data.channels[0].id;
+            }
+
             const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}`);
             const sortedPosts = response.data.sort((a: Post, b: Post) => {
                 return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -141,7 +150,7 @@ export default function Feed({host, channel}: HomeProps) {
                     <div className="lg:col-span-2 lg:col-start-4">
                         <div className="rounded-xl border-2 border-gray-100 bg-white p-3">
                             <h2 className="text-xl">About</h2>
-                            <p className={`py-2`}>[communites.desc]</p>
+                            <p className={`py-2`}>{community?.community?.desc}</p>
                             <dl>
                                 <dt className="inline-flex py-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -173,11 +182,11 @@ export default function Feed({host, channel}: HomeProps) {
 
                         </div>
 
-                        <div className="rounded-xl border-2 border-gray-100 bg-white p-3 mt-4">
+                        <div className="rounded-xl border-2 border-gray-100 bg-white p-3 mt-4 hidden">
                             <h2 className="text-xl">Members</h2>
 
 
-                            <dl>
+                            <dl className="">
                                 <dt className="inline-flex py-2">
 
                                     Newest Members
@@ -185,6 +194,7 @@ export default function Feed({host, channel}: HomeProps) {
                                 <dd className="text-sm text-gray-700">
 
                                     <div className="isolate flex -space-x-2 overflow-hidden">
+
                                         <img
                                             className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
                                             src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -208,7 +218,7 @@ export default function Feed({host, channel}: HomeProps) {
                                     </div>
                                 </dd>
                             </dl>
-                            <dl>
+                            <dl className="hidden">
                                 <dt className="inline-flex py-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          strokeWidth={1.5} stroke="currentColor" className="inline-block w-5 h-5 mr-1">

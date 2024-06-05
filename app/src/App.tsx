@@ -20,6 +20,7 @@ import Profile from "./Pages/home/Profile";
 import EventPage from "./Pages/home/event";
 import MembersPage from "./Pages/home/members";
 import ProfilePage from "./Pages/home/Profile";
+import Onboarding from "./Pages/auth/Onboarding";
 
 initSuperTokens();
 
@@ -116,7 +117,10 @@ function App() {
 
                        <ProfilePage host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
+            <Route path="/Onboarding" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+
+                <Onboarding host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 

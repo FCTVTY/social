@@ -11,7 +11,7 @@ import {
 import {Menu, Transition} from "@headlessui/react";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {CalendarIcon} from "@heroicons/react/24/outline";
-import {Post, PPosts} from "../../interfaces/interfaces";
+import {CommunityCollection, Post, PPosts} from "../../interfaces/interfaces";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
@@ -26,6 +26,7 @@ function classNames(...classes: any[]) {
 }
 export default function EventsPage({ host, channel }: HomeProps) {
     const [posts, setPosts] = useState<PPosts[]>([]);
+    const [community, setCommunity] = useState<CommunityCollection>();
 
     useEffect(() => {
         if (host) {
@@ -35,6 +36,8 @@ export default function EventsPage({ host, channel }: HomeProps) {
 
     const fetchDetails = async () => {
         try {
+            const Cresponse = await axios.get(`${getApiDomain()}/community?name=${host}`);
+            setCommunity(Cresponse.data)
             const response = await axios.get(`${getApiDomain()}/community/posts?host=${host}`);
             const sortedPosts = response.data.sort((a: Post, b: Post) => {
                 return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -56,41 +59,42 @@ export default function EventsPage({ host, channel }: HomeProps) {
                 <div className="min-w-0 flex-1">
 
                     <h2 className="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                        [COMMUNTY_NAME]   Events
+                        {community?.community?.name}   Events
                     </h2>
 
                 </div>
                 <div className="mt-5 flex lg:ml-4 lg:mt-0">
 
 
-                    <span className="sm:ml-3">[IF OWNER]
-          <button
-              type="button"
-              className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
+          <span className="sm:ml-3">
+    {community && community.community?.create && (
+        <button
+            type="button"
+            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
             <CheckIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true"/>
             Create
-          </button>
-                        [END IF]
-        </span>
+        </button>
+    )}
+</span>
 
 
                 </div>
             </div>
 
 
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 
-        <ul
-            role="list"
-            className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
-        >
-            {
+                <ul
+                    role="list"
+                    className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+                >
+                    {
 
-                posts.filter(post => post.type === "event").map(post => (
-                <li key={post._id}
-                    className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
-                    <div className="flex gap-x-4">
+                        posts.filter(post => post.type === "event").map(post => (
+                            <li key={post._id}
+                                className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+                                <div className="flex gap-x-4">
                         <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={post.media} alt=""/>
                         <div className="min-w-0 flex-auto">
                             <p className="text-sm font-semibold leading-6 text-gray-900">

@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Ads, Post, Profile} from "../../interfaces/interfaces";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
+import PostItem from "./Feeditem";
+import PostItemLite from "./FeeditemLite";
 interface HomeProps {
     host?: string;
     profileid?: string;
@@ -38,7 +40,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                     <div className="bg-white shadow-md rounded-lg overflow-hidden">
                         <div className="relative">
                             <img
-                                src="https://images.pexels.com/photos/22475982/pexels-photo-22475982/free-photo-of-historic-stone-house-with-a-roof-overgrown-with-grass-in-an-icelandic-fjord.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                src={profile.coverPicture}
                                 alt="Cover Photo"
                                 className="w-full h-48 object-cover"
                             />
@@ -78,7 +80,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                                     {profile.bio}
                                 </p>
                             </div>
-                            <div className="bg-white shadow-md rounded-lg p-4 mb-4">
+                            <div className="hidden bg-white shadow-md rounded-lg p-4 mb-4">
                                 <h2 className="text-lg font-bold mb-2">Communities</h2>
                                 <div className="flex flex-wrap">
                                     {/* Example Friends */}
@@ -95,42 +97,12 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                         </div>
 
                         {/* Posts */}
-                        <div className="lg:w-2/3 sm:w-full">
-
-                            {/* Example Post */}
-                            <div className="bg-white shadow-md rounded-lg p-4 mb-4">
-                                <div className="flex items-center mb-2">
-                                    <img
-                                        src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                        alt="Profile"
-                                        className="w-10 h-10 rounded-full"
-                                    />
-                                    <div className="ml-2">
-                                        <p className="font-bold">John Doe</p>
-                                        <p className="text-gray-600 text-sm">2 hrs ago</p>
-                                    </div>
-                                </div>
-                                <p className="text-gray-700 mb-2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </p>
-                                <img
-                                    src="https://images.pexels.com/photos/2793440/pexels-photo-2793440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                                    alt="Post"
-                                    className="w-full h-auto rounded-lg"
-                                />
-                                <div className="mt-2 flex justify-between">
-                                    <button className="text-gray-600 hover:text-blue-600">
-                                        Like
-                                    </button>
-                                    <button className="text-gray-600 hover:text-blue-600">
-                                        Comment
-                                    </button>
-                                    <button className="text-gray-600 hover:text-blue-600">
-                                        Share
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <div className="lg:w-2/3 sm:w-full ">
+<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
+                            {profile.posts && profile.posts.filter(post => post.type !== "event").map(post => (
+                                <PostItemLite key={post._id} post={post} profile={profile} lite={true}/>
+                            ))}
+                        </div></div>
                     </div>
                 </div>
             </div>

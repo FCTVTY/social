@@ -6,6 +6,9 @@ export interface Community {
     logo: string;
     desc: string;
     private: boolean;
+    create: boolean
+    profiles: Profile[]
+
 }
 
 interface Channel {
@@ -42,6 +45,7 @@ export interface PostComment {
     comment: string
     postId: string
     userId: string
+    Profile: Profile
 }
 export interface PPosts {
     postComments: PostComment[];
@@ -72,9 +76,12 @@ export interface Profile {
     first_name: string
     last_name: string
     profilePicture: string
+    coverPicture: string
+
     supertokensId: string
     username: string
     me :boolean
+    posts : PPosts[]
 }
 export interface PostLike {
     _id: string

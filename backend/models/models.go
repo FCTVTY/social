@@ -22,6 +22,8 @@ type Community struct {
 	Logo    string             `json:"logo"`
 	Desc    string             `json:"desc"`
 	Private bool               `json:"private"`
+	OwnerId string             `json:"ownerId"`
+	Create  bool               `json:"create"`
 }
 type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
@@ -63,14 +65,17 @@ type PPosts []struct {
 }
 
 type Profile struct {
-	ID             string `json:"_id"`
-	Email          string `json:"email"`
-	FirstName      string `json:"first_name"`
-	LastName       string `json:"last_name"`
-	ProfilePicture string `json:"profilePicture"`
-	SupertokensID  string `json:"supertokensId"`
-	Username       string `json:"username"`
-	Me             bool   `json:"me"`
+	ID             primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Email          string             `json:"email"`
+	FirstName      string             `json:"first_name"`
+	LastName       string             `json:"last_name"`
+	ProfilePicture string             `json:"profilePicture"`
+	CoverPicture   string             `json:"coverPicture"`
+	SupertokensID  string             `json:"supertokensId"`
+	Username       string             `json:"username"`
+	Me             bool               `json:"me"`
+	Communities    []any              `json:"communities"`
+	Bio            string             `json:"bio"`
 }
 
 type Ads struct {
@@ -87,4 +92,9 @@ type PostLike struct {
 	PostID string `json:"postId"`
 	UserID string `json:"userId"`
 	Liked  bool   `json:"liked"`
+}
+type Comment struct {
+	PostID  string `json:"postId"`
+	UserID  string `json:"userId"`
+	Comment string `json:"comment"`
 }
