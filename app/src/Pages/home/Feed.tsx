@@ -70,7 +70,9 @@ export default function Feed({host, channel}: HomeProps) {
 
     const handleRefresh = () => {
         if (channel) {
-            fetchDetails();
+            setTimeout(() => {
+                fetchDetails();
+            }, 3000); // 3000 milliseconds = 3 seconds
         }
     };
 

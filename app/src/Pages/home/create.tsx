@@ -103,7 +103,7 @@ export default function Create({ onSubmit, channel }: CreateProps) {
                         </label>
                     </div>
                     <label htmlFor="image-upload" className="cursor-pointer">
-                        <Button className="flex items-center mr-2" color="white" type="submit">Create Article</Button>
+                        <Button className=" hidden flex items-center mr-2" color="white" type="submit">Create Article</Button>
 
                         <Button className="flex items-center" color="slate" type="submit">Upload</Button>
                         <input type="file" id="image-upload" accept="image/*" style={{display: 'none'}}
