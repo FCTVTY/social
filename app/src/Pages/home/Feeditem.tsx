@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {getApiDomain} from "../../lib/auth/supertokens";
+import YouTubeEmbed from "./youtube";
+import YouTubeEmbedsmall from "./youtubesmall";
 
 interface PostItemProps {
     lite?: boolean
@@ -74,6 +76,9 @@ const PostItem = ({post, profile, lite}) => {
                     <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
                     <a className='my-3' href={`/feed/${post.channel}/${post._id}`}>
                         <h2 dangerouslySetInnerHTML={{__html: post.desc}}></h2>
+
+                            <YouTubeEmbedsmall url={post.desc}/>
+
                     </a>
                     <div className="flex py-4 justify-between">
                         <div className="flex space-x-2">

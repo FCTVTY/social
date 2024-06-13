@@ -8,6 +8,7 @@ import Create from "./create";
 import Button from "../../components/Button";
 import {TagIcon, UserCircleIcon} from "@heroicons/react/16/solid";
 import Comment from "./comment";
+import YouTubeEmbed from "./youtube";
 
 interface HomeProps {
     host?: string,
@@ -112,10 +113,17 @@ export default function PostView({host, channel, post}: HomeProps) {
 
 
                                         {ppost.article && ppost.article !== "" ? (
-                                            <dd className="text-sm text-gray-500" dangerouslySetInnerHTML={{ __html: ppost.article }}></dd>
+                                            <dd className="text-sm text-gray-500"
+                                                dangerouslySetInnerHTML={{__html: ppost.article}}></dd>
                                         ) : (
-                                            <h2 dangerouslySetInnerHTML={{ __html: ppost.desc }}></h2>
+                                            <h2 dangerouslySetInnerHTML={{__html: ppost.desc}}></h2>
                                         )}
+
+                                        <div className="relative">
+                                            <YouTubeEmbed url={ppost.desc}/>
+                                        </div>
+
+
                                         <dd className="text-sm text-gray-500">
                                             {ppost.tags.map(tag => (
                                                 <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
@@ -176,29 +184,29 @@ export default function PostView({host, channel, post}: HomeProps) {
 
                                                                 <>
                                                                     <div className="relative">
-                                                                    <img
-                                                                                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
-                                                                                src={activityItem.profile.profilePicture}
-                                                                                alt=""
-                                                                            />
+                                                                        <img
+                                                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
+                                                                            src={activityItem.profile.profilePicture}
+                                                                            alt=""
+                                                                        />
 
 
-                                                                        </div>
-                                                                        <div className="min-w-0 flex-1">
-                                                                            <div>
-                                                                                <div className="text-sm">
-                                                                                    <a href={activityItem._id}
-                                                                                       className="font-medium text-gray-900">
-                                                                                        {activityItem.profile.first_name} {activityItem.profile.last_name}
-                                                                                    </a>
-                                                                                </div>
-                                                                                <p className="mt-0.5 text-sm text-gray-500">Commented {formatDistanceToNow(new Date(activityItem.date), { addSuffix: true })}</p>
+                                                                    </div>
+                                                                    <div className="min-w-0 flex-1">
+                                                                        <div>
+                                                                            <div className="text-sm">
+                                                                                <a href={activityItem._id}
+                                                                                   className="font-medium text-gray-900">
+                                                                                    {activityItem.profile.first_name} {activityItem.profile.last_name}
+                                                                                </a>
                                                                             </div>
-                                                                            <div className="mt-2 text-sm text-gray-700">
-                                                                                <p>{activityItem.comment}</p>
-                                                                            </div>
+                                                                            <p className="mt-0.5 text-sm text-gray-500">Commented {formatDistanceToNow(new Date(activityItem.date), {addSuffix: true})}</p>
                                                                         </div>
-                                                                    </>
+                                                                        <div className="mt-2 text-sm text-gray-700">
+                                                                            <p>{activityItem.comment}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
 
                                                             </div>
                                                         </div>
