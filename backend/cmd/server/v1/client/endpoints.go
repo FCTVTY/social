@@ -24,6 +24,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -281,32 +282,55 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate and retrieve community name from URL query parameters
-
 	data := bson.M{}
 
 	name := r.URL.Query().Get("oid")
 	if name != "" {
-
 		objectId, err := primitive.ObjectIDFromHex(name)
-		data = bson.M{"channel": objectId}
-		// Check if the community exists in the database
-
 		if err != nil {
-			http.Error(rw, "failed to fetch posts", http.StatusInternalServerError)
+			http.Error(rw, "invalid object ID", http.StatusBadRequest)
 			return
 		}
+		data = bson.M{"channel": objectId}
 	}
 
 	name = r.URL.Query().Get("host")
 	if name != "" {
-
 		data = bson.M{"communites.name": name}
-		// Check if the community exists in the database
 	}
 
-	var posts []bson.M
+	// Pagination parameters
+	limitStr := r.URL.Query().Get("limit")
+	pageStr := r.URL.Query().Get("page")
 
-	cursor, err := ppostCollection.Find(context.Background(), data)
+	limit := 3 // default limit
+	page := 1  // default page
+
+	if limitStr != "" {
+		l, err := strconv.Atoi(limitStr)
+		if err == nil && l > 0 {
+			limit = l
+		}
+	}
+
+	if pageStr != "" {
+		p, err := strconv.Atoi(pageStr)
+		if err == nil && p > 0 {
+			page = p
+		}
+	}
+
+	// Calculate skip
+	skip := (page - 1) * limit
+
+	// Find options with limit and skip for pagination
+	findOptions := options.Find()
+	findOptions.SetLimit(int64(limit))
+	findOptions.SetSkip(int64(skip))
+
+	// Fetch posts with pagination
+	var posts []bson.M
+	cursor, err := ppostCollection.Find(context.Background(), data, findOptions)
 	if err != nil {
 		http.Error(rw, "failed to fetch posts", http.StatusInternalServerError)
 		return
@@ -325,6 +349,7 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Response with posts in JSON format
 	rw.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(rw).Encode(posts); err != nil {
 		http.Error(rw, "failed to encode response", http.StatusInternalServerError)

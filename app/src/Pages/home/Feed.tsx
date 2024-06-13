@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import {Ads, CommunityCollection, Post, PPosts, Profile} from "../../interfaces/interfaces";
@@ -12,53 +12,87 @@ interface HomeProps {
 }
 
 export default function Feed({host, channel}: HomeProps) {
-    const [posts, setPosts] = useState<PPosts[]>([]);
-    const [ad, setAds] = useState<Ads[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [ads, setAds] = useState<Ads[]>([]);
     const [profile, setProfile] = useState<Profile>();
     const [community, setCommunity] = useState<Partial<CommunityCollection>>();
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const observer = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
-
-            fetchDetails();
-
+        fetchDetails();
     }, [host, channel]);
+
+    useEffect(() => {
+        if (!loading) return;
+
+        const loadMorePosts = async () => {
+            try {
+                const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`);
+                const newPosts = response.data.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                setPosts(prevPosts => [...prevPosts, ...newPosts]);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching more posts:', error);
+                setLoading(false);
+            }
+        };
+
+        loadMorePosts();
+    }, [loading, channel, page]);
 
     const fetchDetails = async () => {
         try {
-            const Cresponse = await axios.get(`${getApiDomain()}/community?name=${host}`);
-            setCommunity(Cresponse.data);
+            const communityResponse = await axios.get(`${getApiDomain()}/community?name=${host}`);
+            const communityData: CommunityCollection = communityResponse.data;
+            setCommunity(communityData);
 
-            if(channel === undefined)
-            {
-                window.location.href = '/feed/'+Cresponse.data.channels[0].id;
+            if (!channel) {
+                window.location.href = '/feed/' + communityData.channels[0].id;
+                return;
             }
 
+            const [postsResponse, adsResponse, profileResponse] = await Promise.all([
+                axios.get(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`),
+                axios.get(`${getApiDomain()}/ads/get`),
+                axios.get(`${getApiDomain()}/profile`)
+            ]);
 
-
-            const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}`);
-            const sortedPosts = response.data.sort((a: Post, b: Post) => {
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-            });
+            const sortedPosts = postsResponse.data.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
             setPosts(sortedPosts);
-
-            const adresponse = await axios.get(`${getApiDomain()}/ads/get`);
-            setAds(adresponse.data)
-
-            const profileresponse = await axios.get(`${getApiDomain()}/profile`);
-
-            setProfile(profileresponse.data);
-
-            
-
+            setAds(adsResponse.data);
+            setProfile(profileResponse.data);
         } catch (error) {
             console.error('Error fetching community details:', error);
         }
     };
+
     const handleRefresh = () => {
         if (channel) {
             fetchDetails();
         }
     };
+
+    const lastPostElementRef = useRef<HTMLLIElement>(null);
+
+    const handleObserver = (node: Element | null) => {
+        if (loading) return;
+
+        if (observer.current) observer.current.disconnect();
+
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) {
+                setLoading(true);
+                setPage(prevPage => prevPage + 1);
+            }
+        });
+
+        if (node) observer.current.observe(node);
+    };
+
+
+
 
     return (
         <>
@@ -74,9 +108,9 @@ export default function Feed({host, channel}: HomeProps) {
                                     <Create channel={channel} onSubmit={handleRefresh}/>
                                 </li>
                                 {
-                                    ad && ad.length > 0 && (() => {
-                                        const randomIndex = Math.floor(Math.random() * ad.length);
-                                        const randomPost = ad[randomIndex];
+                                    ads && ads.length > 0 && (() => {
+                                        const randomIndex = Math.floor(Math.random() * ads.length);
+                                        const randomPost = ads[randomIndex];
                                         if (!randomPost) {
                                             return null; // Return null if randomPost is undefined
                                         }
@@ -146,8 +180,10 @@ export default function Feed({host, channel}: HomeProps) {
                                     })()
                                 }
                                 {posts.filter(post => post.type !== "event").map(post => (
-                                    <PostItem key={post._id} post={post} profile={profile} />
+                                    <PostItem key={post._id} post={post} profile={profile} lite={undefined} />
                                 ))}
+
+                                <div ref={handleObserver}></div>
                             </ul>
                         </div>
 
