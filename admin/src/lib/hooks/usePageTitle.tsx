@@ -5,6 +5,6 @@ import { useDocumentTitle } from "usehooks-ts";
  * @param feature - The name of the feature or page.
  */
 export const usePageTitle = (feature: string = '') => {
- const title = feature ? `${feature} - FootFall Fit` : "FootFall Fit";
+ const title = feature ? `${feature} - B:Hive` : "B:Hive";
  useDocumentTitle(title);
 };

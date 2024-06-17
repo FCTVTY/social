@@ -210,7 +210,7 @@ export const LoginPage = () => {
                                     alt="Your Company"
                                 />
                                 <h2 className="mt-8 font-heading text-3xl leading-9 tracking-tight">
-                                    {verb} to Footfallfit Admin{" "}
+                                    {verb} to B:hive Admin{" "}
                                 </h2>
                             </div>
 
