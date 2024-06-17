@@ -18,7 +18,7 @@ export function getWebsiteDomain() {
 
 export const SuperTokensConfig = {
     appInfo: {
-        appName: "Footfallfit",
+        appName: "bhive",
         apiDomain: getApiDomain(),
         websiteDomain: getWebsiteDomain(),
     },
