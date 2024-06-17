@@ -1,0 +1,7 @@
+
+// Variable overrides first
+$enable-shadows: true;
+$enable-important-utilities: false;
+$enable-important-utilities: false;
+// Then import Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
