@@ -28,3 +28,7 @@ jobs:
         run: |
           cd backend && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-backend .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/bhive-backend
+      - name: Build and push admin Docker image
+        run: |
+          cd backend && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-admin .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bhive-admin
