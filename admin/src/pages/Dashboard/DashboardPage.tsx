@@ -25,7 +25,7 @@ import {usePageTitle} from "../../lib/hooks/usePageTitle";
 import React, {FC, useEffect} from "react";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
-import {Branding, Walk} from "../../models/models";
+import {Branding, Community, Walk} from "../../models/models";
 import { Switch } from '@headlessui/react'
 import UINotificationSuccess from "../../components/ui/uiNotificationSuccess";
 
@@ -56,7 +56,7 @@ export const DashboardPage: FC = () => {
   }
 
 
-  const [Communities, setCommunities] = useState<Walk[]>([]);
+  const [Communities, setCommunities] = useState<Community[]>([]);
   const [enabled, setEnabled] = useState(false)
   const [userData, setUserData] = useState({ first_name: "", last_name: "", fff_tenant: "", gravatar: "", email:"" });
     const [branding, setBrand] = useState<Partial<Branding>>({  logo: "", name: "", personalWalks :false,  mapboxToken: ""});
@@ -126,20 +126,21 @@ export const DashboardPage: FC = () => {
               {/* Deployment list */}
               <ul role="list" className="divide-y divide-white/5">
                   {Communities && Communities.map((Community) => (
-                      <li key={Community.id} className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
+                      <li key={Community.name} className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
                           <div className="min-w-0 flex-auto">
                               <div className="flex items-center gap-x-3">
 
                                   <h2 className="min-w-0 text-sm font-semibold leading-6 ">
-                                      <a href={`/dashboard/${Community.id}`} className="flex gap-x-2">
+                                      <a href={`/dashboard/${Community._id}`} className="flex gap-x-2">
                                           <span className="text-gray-400">/</span>
-                                          <span className="whitespace-nowrap">{Community.name}</span>
+                                          <span className="whitespace-nowrap">{Community.name} - https://{Community.name}.app.bhivecommunity.co.uk </span>
                                           <span className="absolute inset-0"/>
                                       </a>
                                   </h2>
                               </div>
                               <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
-                                  <p className="truncate">{Community.details}</p>
+                                  <p className="truncate"><img src={Community.logo} className="h-5"/></p>
+                                  <p className="truncate">{Community.desc}</p>
                                   <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
                                       <circle cx={1} cy={1} r={1}/>
                                   </svg>

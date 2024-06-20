@@ -12,6 +12,7 @@
 package main
 
 import (
+	"bhiveserver/cmd/server/v1/admin"
 	"bhiveserver/cmd/server/v1/client"
 	_ "bhiveserver/models"
 	"fmt"
@@ -166,6 +167,33 @@ func main() {
 		}
 		if parsedURL.Path == "/v1/members" && r.Method == "GET" {
 			session.VerifySession(nil, client.Members).ServeHTTP(rw, r)
+		}
+
+		//admin sections
+		if parsedURL.Path == "/v1/admin/community" && r.Method == "GET" {
+			session.VerifySession(nil, admin.Community).ServeHTTP(rw, r)
+
+			return
+		}
+		if parsedURL.Path == "/v1/admin/community" && r.Method == "POST" {
+			session.VerifySession(nil, admin.CreateCommunity).ServeHTTP(rw, r)
+
+			return
+		}
+		if parsedURL.Path == "/v1/admin/channel" && r.Method == "GET" {
+			session.VerifySession(nil, admin.Channels).ServeHTTP(rw, r)
+
+			return
+		}
+		if parsedURL.Path == "/v1/admin/channel" && r.Method == "POST" {
+			session.VerifySession(nil, admin.CreateChannel).ServeHTTP(rw, r)
+
+			return
+		}
+		if parsedURL.Path == "/v1/admin/addAd" && r.Method == "POST" {
+			session.VerifySession(nil, admin.CreatePost).ServeHTTP(rw, r)
+
+			return
 		}
 		rw.WriteHeader(404)
 	})))))

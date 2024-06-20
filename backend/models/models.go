@@ -29,6 +29,7 @@ type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Name   string             `json:"name"`
 	Locked bool               `json:"locked"`
+	Parent primitive.ObjectID `bson:"parent" json:"parent,omitempty"`
 }
 
 type CommunityCollection struct {
@@ -79,14 +80,12 @@ type Profile struct {
 }
 
 type Ads struct {
-	ID struct {
-		Oid string `json:"$oid"`
-	} `json:"_id"`
-	Name   string `json:"name"`
-	Logo   string `json:"logo"`
-	Ad     string `json:"ad"`
-	URL    string `json:"url"`
-	Clicks int    `json:"clicks"`
+	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Name   string             `json:"name"`
+	Logo   string             `json:"logo"`
+	Ad     string             `json:"ad"`
+	URL    string             `json:"url"`
+	Clicks int                `json:"clicks"`
 }
 type PostLike struct {
 	PostID string `json:"postId"`

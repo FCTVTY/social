@@ -5,6 +5,7 @@ go 1.22.4
 require (
 	github.com/chai2010/webp v1.1.2-0.20220219151144-e81c7511b15a
 	github.com/joho/godotenv v1.5.1
+	github.com/mailjet/mailjet-apiv3-go/v4 v4.0.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.19.0
 	github.com/supertokens/supertokens-golang v0.17.4
@@ -23,6 +24,7 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/h2non/parth v0.0.0-20190131123155-b4df798d6542 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/mailjet/mailjet-apiv3-go/v3 v3.2.0 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/nyaruka/phonenumbers v1.0.73 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

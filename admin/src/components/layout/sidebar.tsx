@@ -34,8 +34,8 @@ export const Sidebar = () => {
       isActive: (href: string) => window.location.pathname === href,
     },
     {
-      name: "Places",
-      href: `/places`,
+      name: "Posts",
+      href: `/Posts`,
       icon: HomeIcon,
       isActive: (href: string) => window.location.pathname.startsWith(href),
     },

@@ -13,7 +13,7 @@ import React, {FC, useState, useEffect, FormEvent} from 'react';
 import axios from 'axios';
 import {useParams} from 'react-router-dom';
 import {getApiDomain} from '../../lib/auth/supertokens';
-import {Place, Voucher} from "../../models/models";
+import {Ads, Place, Voucher} from "../../models/models";
 import UINotificationSuccess from "../../components/ui/uiNotificationSuccess";
 
 export const AdminvoucherAdd: FC = () => {
@@ -21,11 +21,11 @@ export const AdminvoucherAdd: FC = () => {
   const [message, setMessage] = useState(false);
   const [places, setPlaces] = useState<Place[]>([]);
 
-  const [updatedWalk, setUpdatedWalk] = useState<Partial<Voucher>>({
+  const [updatedWalk, setUpdatedWalk] = useState<Partial<Ads>>({
     name: '',
     logo: '',
-    details: '',
-    tenant: 'app',
+    ad: '',
+    url: '',
   });
 
 
@@ -100,7 +100,7 @@ export const AdminvoucherAdd: FC = () => {
   const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      var result = await axios.post(`${getApiDomain()}/v1/admin/addVoucher`, updatedWalk); // Update the endpoint to the correct one for adding walks
+      var result = await axios.post(`${getApiDomain()}/v1/admin/addAd`, updatedWalk); // Update the endpoint to the correct one for adding walks
       // Handle success
 
       setMessage(true)
@@ -108,7 +108,7 @@ export const AdminvoucherAdd: FC = () => {
       console.log(result.data)
       const timer = setTimeout(() => {
         // Redirect to the desired location after 3 seconds
-        window.location.href = '/vouchers/' + result.data;
+        window.location.href = '/ad/';
       }, 3000);
     } catch (error) {
       // Handle error
@@ -141,7 +141,7 @@ export const AdminvoucherAdd: FC = () => {
       {updatedWalk && (
         <div className="my-3 px-3">
           <div className="px-4 sm:px-0">
-            <h3 className="text-base font-semibold leading-7 ">Voucher Information</h3>
+            <h3 className="text-base font-semibold leading-7 ">Advert Information</h3>
             <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
               <input
                 type="text"
@@ -186,48 +186,29 @@ export const AdminvoucherAdd: FC = () => {
                 </dd>
               </div>
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt className="text-sm font-medium leading-6 ">Code</dt>
+                <dt className="text-sm font-medium leading-6 ">URL</dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
                   <input
                     type="text"
-                    name="code"
-                    id="code"
-                    autoComplete="code"
+                    name="url"
+                    id="url"
+                    autoComplete="url"
                     className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                    placeholder={updatedWalk.code}
-                    defaultValue={updatedWalk.code}
+                    placeholder={updatedWalk.url}
+                    defaultValue={updatedWalk.url}
                     onChange={handleInputChange}
                   />
 
                 </dd>
               </div>
-              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt className="text-sm font-medium leading-6 ">Place Id</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
-                  <select
-                    name="pid"
-                    id="pid"
-                    className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                    value={updatedWalk.pid || ''}
-                    onChange={handlePlaceChange}
-                  >
-                    <option value="">Select a place</option>
-                    {places.map((place) => (
-                      <option key={place.id} value={place.id}>
-                        {place.name}
-                      </option>
-                    ))}
-                  </select>
 
-                </dd>
-              </div>
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 ">Details</dt>
-                <dd className="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0"><textarea id="details"
-                                                                                                     name="details"
+                <dd className="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0"><textarea id="ad"
+                                                                                                     name="ad"
                                                                                                      rows={3}
                                                                                                      className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                                                                                                     defaultValue={updatedWalk.details}
+                                                                                                     defaultValue={updatedWalk.ad}
                                                                                                      onChange={handleInputChange}
                 />
                 </dd>

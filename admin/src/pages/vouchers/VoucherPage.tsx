@@ -25,7 +25,8 @@ import {usePageTitle} from "../../lib/hooks/usePageTitle";
 import React, {FC, useEffect} from "react";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
-import {Place, Voucher, Walk} from "../../models/models";
+import {Ads, Place, Voucher, Walk} from "../../models/models";
+import {ArchiveBoxXMarkIcon} from "@heroicons/react/24/solid";
 
 export const VoucherPage: FC = () => {
   usePageTitle("Dashboard");
@@ -52,13 +53,13 @@ export const VoucherPage: FC = () => {
 
 
   const [walks, setWalks] = useState<Voucher[]>([]);
-  const [vouchers, setVouchers] = useState<Voucher[]>([]);
+  const [vouchers, setVouchers] = useState<Ads[]>([]);
 
   const fetchData = async () => {
     try {
 
 
-      const vouchersResponse = await axios.get<Voucher[]>(`${getApiDomain()}/v1/adminvouchers`);
+      const vouchersResponse = await axios.get<Ads[]>(`${getApiDomain()}/v1/ads/get`);
       setVouchers(vouchersResponse.data);
     } catch (error) {
       console.log(error);
@@ -78,7 +79,7 @@ export const VoucherPage: FC = () => {
     <>
       <div className="border-b border-b-border">
         <div className="container flex h-24 items-center justify-between p-6">
-          <h1>Voucher Dashboard</h1>
+          <h1>Ad Dashboard</h1>
           <div className="flex gap-2">
           </div>
         </div>
@@ -88,12 +89,12 @@ export const VoucherPage: FC = () => {
       <main className="">
         <header
           className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-          <h1 className="text-base font-semibold leading-7 ">Vouchers</h1>
+          <h1 className="text-base font-semibold leading-7 ">Ads</h1>
           <a
-            href={`/vouchers/add`}
+            href={`/ad/add`}
             className="rounded bg-white/10 px-2 py-1 text-xs font-semibold  shadow-sm hover:bg-white/20"
           >
-            Add Voucher
+            Add Advert
           </a>
 
         </header>
@@ -101,28 +102,28 @@ export const VoucherPage: FC = () => {
         {/* Deployment list */}
         <ul role="list" className="divide-y divide-white/5">
           {vouchers && vouchers.map((walk) => (
-            <li key={walk.id} className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
+            <li key={walk._id} className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
               <div className="min-w-0 flex-auto">
                 <div className="flex items-center gap-x-3">
 
                   <h2 className="min-w-0 text-sm font-semibold leading-6 ">
-                    <a href={`/vouchers/${walk.id}`} className="flex gap-x-2">
-                      <span className="truncate">{walk.tenant}</span>
+
                       <span className="text-gray-400">/</span>
                       <span className="whitespace-nowrap">{walk.name}</span>
                       <span className="absolute inset-0"/>
-                    </a>
+
                   </h2>
                 </div>
                 <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
-                  <p className="truncate">{walk.details} : {walk.code} </p>
+                  <p className="truncate"><img src={walk.logo} className="h-20"/> : {walk.ad} </p>
                   <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
                     <circle cx={1} cy={1} r={1}/>
                   </svg>
                 </div>
               </div>
-
-              <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
+              <a href={`/ad/edit/${walk._id}`}>
+              <ArchiveBoxXMarkIcon className="h-5 w-5 flex-none text-red-400" aria-hidden="true"/>
+              </a>
             </li>
           ))}
         </ul>

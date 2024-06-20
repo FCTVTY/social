@@ -21,7 +21,7 @@ import React, { FC } from "react";
 import axios from "axios";
 import {getApiDomain, getWebsiteDomain} from "../../lib/auth/supertokens";
 import { useParams } from "react-router-dom";
-import { Place, Voucher, Walk } from "../../models/models";
+import {Community, Channel, Voucher, Walk} from "../../models/models";
 
 
 export const DashboardPage: FC = () => {
@@ -47,23 +47,20 @@ export const DashboardPage: FC = () => {
     Disabled: 'text-red-400 bg-red-400/10 ring-red-400/30',
   };
 
-  const [walk, setWalk] = useState<Walk | null>(null);
-  const [places, setPlaces] = useState<Place[]>([]);
-  const [vouchers, setVouchers] = useState<Voucher[]>([]);
+  const [community, setCommunity] = useState<Community | null>(null);
+  const [channels, setChannels] = useState<Channel[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch walks data
-        const walkResponse = await axios.get<Walk>(`${getApiDomain()}/v1/walkdetails?walkID=${ID}`);
+        const walkResponse = await axios.get<Community>(`${getApiDomain()}/v1/admin/community?id=${ID}`);
         // Update walks state with the received data
-        setWalk(walkResponse.data);
+        setCommunity(walkResponse.data);
+        const Response = await axios.get<Channel[]>(`${getApiDomain()}/v1/admin/channel?oid=${ID}`);
+        // Update walks state with the received data
+       setChannels(Response.data);
 
-        const placesResponse = await axios.get<Place[]>(`${getApiDomain()}/v1/places?walkID=${ID}`);
-        setPlaces(placesResponse.data);
-
-        const vouchersResponse = await axios.get(`${getApiDomain()}/v1/walkdetailsvouchers?walkID=${ID}`);
-        setVouchers(vouchersResponse.data);
       } catch (error) {
         // handle error
         console.log(error);
@@ -94,30 +91,52 @@ export const DashboardPage: FC = () => {
 
   return (
       <>
-        {walk && (
+        {community && (
             <div className="my-3 px-3">
               <div className="px-4 sm:px-0">
-                <h3 className="text-base font-semibold leading-7 ">Walk Information</h3>
-                <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">{walk.name}</p>
+                <h3 className="text-base font-semibold leading-7 ">Community Information </h3>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">{community.name}</p>
               </div>
               <div className="mt-6 border-t border-white/10">
                 <dl className="divide-y divide-white/10">
-                  {/* Walk details */}
-                  {/* Place and Voucher attachments */}
+                  <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead>
+                      <tr>
+                        <th scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                          Channels
+                        </th>
+
+                        <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                          <span className="sr-only">Edit</span>
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                      {channels.map((c) => (
+                          <tr key={c.name}>
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                              {c.name}
+                            </td>
+
+                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+
+                            </td>
+                          </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </dl>
                 <div className="px-4 py-6 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-0">
                   <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <a href={`/dashboard/edit/${walk.id}`}
+                    <a href={`/dashboard/addChannel/${ID}`}
                        className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 text-white"
                     >
-                      Edit
+                      Add Channel
                     </a>
-                    <button
-                        onClick={handleDelete} // Call handleDelete function on button click
-                        className="rounded-md bg-red-800 px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 text-white"
-                    >
-                      Delete
-                    </button>
+
                   </div>
                 </div>
               </div>

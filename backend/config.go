@@ -12,6 +12,9 @@
 package main
 
 import (
+	"fmt"
+	"github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 	"github.com/supertokens/supertokens-golang/recipe/dashboard"
 	"github.com/supertokens/supertokens-golang/recipe/dashboard/dashboardmodels"
 	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
@@ -67,6 +70,47 @@ var SuperTokensConfig = supertokens.TypeInput{
 								"roles":      []string{"user"},
 							})
 
+							mailjetClient := mailjet.NewMailjetClient("64dd14ec7f5d2456d348c2f5331462ac", "9384f5cd0c51dd09e1e50b6da8520b9c")
+							var data []resources.Contact
+							mr := &mailjet.Request{
+								Resource: "contact",
+							}
+							fmr := &mailjet.FullRequest{
+								Info: mr,
+								Payload: &resources.Contact{
+									Email:                   formFields[0].Value,
+									IsExcludedFromCampaigns: false,
+									Name:                    formFields[2].Value + " " + formFields[3].Value,
+								},
+							}
+							err := mailjetClient.Post(fmr, &data)
+							if err != nil {
+								fmt.Println(err)
+							}
+							fmt.Printf("Data array: %+v\n", data)
+
+							var data2 []resources.ContactManagecontactslists
+							mr = &mailjet.Request{
+								Resource: "contact",
+								ID:       data[0].ID, // replace with your contact ID here
+								Action:   "managecontactslists",
+							}
+							fmr = &mailjet.FullRequest{
+								Info: mr,
+								Payload: &resources.ContactManagecontactslists{
+									ContactsLists: []resources.ContactsListAction{ // replace with your contact lists here
+
+										{
+											ListID: 362887,
+											Action: "addforce",
+										},
+									},
+								},
+							}
+							err = mailjetClient.Post(fmr, &data2)
+							if err != nil {
+								fmt.Println(err)
+							}
 						}
 
 						return resp, err

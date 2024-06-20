@@ -19,7 +19,6 @@ import {DashboardPage} from './pages/Dashboard/DashboardPage';
 import VoucherPage from './pages/vouchers/VoucherPage';
 import "./output.css";
 import {PwaPrompt} from 'react-ios-pwa-prompt-ts'
-import {SettingsPage} from './pages/settings/SettingsPage';
 import axios from 'axios';
 import ScrollToTop from "react-scroll-to-top";
 import OfflineBanner from "./components/common/Offline";
@@ -29,16 +28,14 @@ import AdminWalkEdit from "./pages/Dashboard/AdminWalkEdit";
 import AdminWalkPlaces from "./pages/Dashboard/AdminWalkPlaces";
 import AdminWalkAdd from "./pages/Dashboard/AdminWalkAdd";
 import AdminWalkVoucher from "./pages/Dashboard/AdminWalkVouchers";
-import PlacesPage from "./pages/Places/PlacesPage";
-import AdminPlaceDetails from "./pages/Places/AdminPlaceDetails";
-import AdminplaceEdit from "./pages/Places/AdminplaceEdit";
-import AdminplaceAdd from "./pages/Places/AdminplaceAdd";
+
 import Session from "supertokens-auth-react/recipe/session";
 import {UserRoleClaim} from "supertokens-auth-react/recipe/userroles"
 import AdminVoucherDetails, {VoucherDetailPage} from "./pages/vouchers/AdminVoucherDetails";
 import AdminvoucherEdit from "./pages/vouchers/AdminvoucherEdit";
 import AdminvoucherAdd from "./pages/vouchers/AdminvoucherAdd";
 import {AdminRoute} from "./components/common/AdminRoute";
+import AdminChannelAdd from "./pages/Dashboard/AdminChannelAdd";
 
 
 initSuperTokens();
@@ -148,6 +145,14 @@ function App() {
                 <AdminWalkAdd/>
               </LayoutWrapper></AdminRoute>}
           />
+
+            <Route
+                path="/dashboard/addChannel/:ID"
+                element={<AdminRoute>
+                    <LayoutWrapper withSideNav={true}>
+                        <AdminChannelAdd/>
+                    </LayoutWrapper></AdminRoute>}
+            />
           <Route
             path="/dashboard/edit/:ID"
             element={<AdminRoute>
@@ -163,58 +168,21 @@ function App() {
               </LayoutWrapper></AdminRoute>}
           />
           <Route
-            path="/dashboard/editVouchers/:ID"
+            path="/dashboard/editAd/:ID"
             element={<AdminRoute>
               <LayoutWrapper withSideNav={true}>
                 <AdminWalkVoucher/>
               </LayoutWrapper></AdminRoute>}
           />
 
-          <Route
-            path="/places"
-            element={
-              <AdminRoute>
-                <LayoutWrapper withSideNav={true}>
-                  <PlacesPage/>
-                </LayoutWrapper>
-              </AdminRoute>
-            }
-          />
 
-          <Route
-            path="/places/:ID"
-            element={
-              <AdminRoute>
-                <LayoutWrapper withSideNav={true}>
-                  <AdminPlaceDetails/>
-                </LayoutWrapper>
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/places/edit/:ID"
-            element={
-              <AdminRoute>
-                <LayoutWrapper withSideNav={true}>
-                  <AdminplaceEdit/>
-                </LayoutWrapper>
-              </AdminRoute>
-            }
-          />
-          <Route
-            path="/places/add"
-            element={
-              <AdminRoute>
-                <LayoutWrapper withSideNav={true}>
-                  <AdminplaceAdd/>
-                </LayoutWrapper>
-              </AdminRoute>
-            }
-          />
+
+
+
 
 
           <Route
-            path="/vouchers"
+            path="/Ad"
             element={
               <AdminRoute>
                 <LayoutWrapper withSideNav={true}>
@@ -225,7 +193,7 @@ function App() {
           />
 
           <Route
-            path="/vouchers/:ID"
+            path="/Ad/:ID"
             element={
               <AdminRoute>
                 <LayoutWrapper withSideNav={true}>
@@ -235,7 +203,7 @@ function App() {
             }
           />
           <Route
-            path="/vouchers/edit/:ID"
+            path="/Ad/edit/:ID"
             element={
               <AdminRoute>
                 <LayoutWrapper withSideNav={true}>
@@ -245,7 +213,7 @@ function App() {
             }
           />
           <Route
-            path="/vouchers/add"
+            path="/Ad/add"
             element={
               <AdminRoute>
                 <LayoutWrapper withSideNav={true}>

@@ -41,13 +41,13 @@ import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/react/20/solid'
 import Navbar from "./navbar";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
+import {MessageCircleIcon} from "lucide-react";
+import {PresentationChartBarIcon} from "@heroicons/react/16/solid";
 
 
 const navigation = [
   {name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true},
-  {name: 'Walks', href: '/dashboard', icon: UsersIcon, current: false},
-  {name: 'Places', href: '/places', icon: FolderIcon, current: false},
-  {name: 'Vouchers', href: '/vouchers', icon: CalendarIcon, current: false},
+  {name: 'Adverts', href: '/Ad', icon: PresentationChartBarIcon, current: false},
 
 ]
 const teams = [
