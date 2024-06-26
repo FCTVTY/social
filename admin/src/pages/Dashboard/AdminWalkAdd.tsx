@@ -20,7 +20,8 @@ export const AdminWalkAdd: FC = () => {
   const [newCommunity, setNewCommunity] = useState<Partial<Community>>({
     name: '',
     logo: '',
-    desc: ''
+    desc: '',
+    url: '',
   });
 
   const [userData, setUserData] = useState({ first_name: "", last_name: "", fff_tenant: "", gravatar: "", email:"" });
@@ -103,16 +104,34 @@ export const AdminWalkAdd: FC = () => {
           <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
 
             <input
-                type="text"
-                name="name"
-                id="name"
-                autoComplete="name"
-                className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                placeholder={newCommunity.name}
-                value={newCommunity.name}
-                onChange={handleInputChange}
+              type="text"
+              name="name"
+              id="name"
+              autoComplete="name"
+              className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              placeholder={newCommunity.name}
+              value={newCommunity.name}
+              onChange={handleInputChange}
             />
           </p>
+
+          <dt className="text-sm font-medium leading-6 ">URL - please make sure theres no spaces</dt>
+
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
+
+            <input
+              type="text"
+              name="url"
+              id="url"
+              autoComplete="url"
+              className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              placeholder={newCommunity.url}
+              value={newCommunity.url}
+              onChange={handleInputChange}
+            />
+          </p>
+
+
         </div>
 
         <div className="mt-6 border-t border-white/10">
@@ -121,11 +140,11 @@ export const AdminWalkAdd: FC = () => {
               <dt className="text-sm font-medium leading-6 ">Image</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0">
                 <input
-                    type="text"
-                    name="logo"
-                    id="logo"
-                    autoComplete="logo"
-                    className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  type="text"
+                  name="logo"
+                  id="logo"
+                  autoComplete="logo"
+                  className="px-1 block w-full rounded-md border-0 bg-white/5 py-1.5  shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                     placeholder={newCommunity.logo}
                     defaultValue={newCommunity.logo}
                     onChange={handleInputChange}

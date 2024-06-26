@@ -133,7 +133,7 @@ export const DashboardPage: FC = () => {
                                   <h2 className="min-w-0 text-sm font-semibold leading-6 ">
                                       <a href={`/dashboard/${Community._id}`} className="flex gap-x-2">
                                           <span className="text-gray-400">/</span>
-                                          <span className="whitespace-nowrap">{Community.name} - https://{Community.name}.app.bhivecommunity.co.uk </span>
+                                          <span className="whitespace-nowrap">{Community.name} - https://{Community.url}.app.bhivecommunity.co.uk </span>
                                           <span className="absolute inset-0"/>
                                       </a>
                                   </h2>

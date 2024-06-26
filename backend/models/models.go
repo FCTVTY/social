@@ -24,6 +24,7 @@ type Community struct {
 	Private bool               `json:"private"`
 	OwnerId string             `json:"ownerId"`
 	Create  bool               `json:"create"`
+	Url     string             `json:"url"`
 }
 type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`

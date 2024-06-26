@@ -144,7 +144,7 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 	}
 	var collection models.CommunityCollection
 	// Check if the community exists in the database
-	filter := bson.M{"name": name}
+	filter := bson.M{"url": name}
 	var community models.Community
 	err := communitesCollection.FindOne(context.Background(), filter).Decode(&community)
 	if err != nil {

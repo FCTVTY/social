@@ -90,6 +90,7 @@ export interface Community {
   private: boolean;
   create: boolean
   profiles: Profile[]
+  url:string;
 
 }
 
