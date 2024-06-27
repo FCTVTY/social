@@ -234,9 +234,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             className="hidden h-8 w-auto lg:block"
                                             src={LogoSquare}
                                             alt="b:hive"
-                                        /> <span
-                                        className="inline-flex items-center rounded-md bg-gray-950 px-2 py-1 text-xs font-medium text-orange-300 ring-1 ring-inset ring-gray-500/10 ml-3">UAT</span>
-
+                                        /> 
                                     </div>
 
                                 </div>
