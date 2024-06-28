@@ -96,6 +96,11 @@ export const DashboardPage: FC = () => {
               <div className="px-4 sm:px-0">
                 <h3 className="text-base font-semibold leading-7 ">Community Information </h3>
                 <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">{community.name}</p>
+                 <a href={`http://${ID}.app.bhivecommunity.co.uk`}
+                       className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 text-white"
+                    >
+                     visit Community
+                    </a>
               </div>
               <div className="mt-6 border-t border-white/10">
                 <dl className="divide-y divide-white/10">
