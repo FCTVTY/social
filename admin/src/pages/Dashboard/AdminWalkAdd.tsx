@@ -196,7 +196,7 @@ export const AdminWalkAdd: FC = () => {
           </dl>
         </div>
       </div>
-      <UINotificationSuccess open={message} setOpen={setMessage} message="Walk Added."/>
+      <UINotificationSuccess open={message} setOpen={setMessage} message="Added."/>
     </form>
 
   );
