@@ -1,34 +1,30 @@
-# Fetching the latest node image on Alpine Linux
-FROM node:alpine AS builder
+# Stage 1: Build stage
+FROM node:22-alpine AS builder
 
-# Declaring env
-ENV NODE_ENV production
-
-# Setting up the work directory
+ENV NODE_ENV=production
 WORKDIR /app
 
-# Copying package.json and yarn.lock first
+# Install dependencies
 COPY package.json yarn.lock ./
-
-
-
-# Copying all the files in our project
-COPY . .
-
-
-# Installing dependencies
 RUN yarn install --frozen-lockfile
 
-# Building our application
+# Install Vite and plugins
+RUN yarn add vite @vitejs/plugin-react daisyui
+
+# Copy application code
+COPY . .
+
+# Build the application
 RUN yarn build
 
-# Fetching the latest nginx image
+# Stage 2: Production stage
 FROM nginx
 
-# Copying built assets from builder
+# Copy built assets from the build stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copying our nginx.conf
+# Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Expose port 80
 EXPOSE 80
