@@ -10,14 +10,17 @@ WORKDIR /app
 # Copying package.json and yarn.lock first
 COPY package.json yarn.lock ./
 
-# Installing dependencies
-RUN yarn install --frozen-lockfile
+
 
 # Copying all the files in our project
 COPY . .
 RUN yarn add vite --dev
 RUN yarn add daisyui --dev
 RUN yarn add @vitejs/plugin-react
+
+
+# Installing dependencies
+RUN yarn install --frozen-lockfile
 
 # Building our application
 RUN yarn build
