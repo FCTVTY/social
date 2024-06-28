@@ -21,10 +21,37 @@ import EventPage from "./Pages/home/event";
 import MembersPage from "./Pages/home/members";
 import ProfilePage from "./Pages/home/Profile";
 import Onboarding from "./Pages/auth/Onboarding";
+import RemovePost from "./Pages/home/RemovePost";
+import UserRoles from "supertokens-auth-react/recipe/userroles";
+import {UserRoleClaim, PermissionClaim} from "supertokens-auth-react/recipe/userroles";
+import {SessionContext} from "supertokens-auth-react/recipe/session"
+import Session from 'supertokens-auth-react/recipe/session';
 
 initSuperTokens();
 
+
+if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark')
+} else {
+    document.documentElement.classList.remove('dark')
+}
+
+// Whenever the user explicitly chooses light mode
+localStorage.theme = 'light'
+
+// Whenever the user explicitly chooses dark mode
+localStorage.theme = 'dark'
+
+// Whenever the user explicitly chooses to respect the OS preference
+localStorage.removeItem('theme')
+
+
+
+
 function App() {
+
+
+
 
     const [subdomain, setSubDomain] = useState("null");
     const [communityFound, setCommunity] = useState("null");
@@ -45,7 +72,7 @@ function App() {
         console.log(host)
         if(host === "localhost:5173")
         {
-            setSubDomain("dev")
+            setSubDomain("test")
         }
 
 
@@ -121,6 +148,13 @@ function App() {
 
 
                 <Onboarding host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+
+
+            <Route path="/removepost/:id" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                <RemovePost host={subdomain} profileid={channel}/></ApplicationLayout> </SessionAuth>}/>
+
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
@@ -143,5 +177,6 @@ function App() {
 
     );
 }
-
+window.UserRoleClaim = UserRoles.UserRoleClaim;
+window.PermissionClaim = UserRoles.PermissionClaim;
 export default App;

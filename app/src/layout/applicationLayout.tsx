@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Children, Fragment, useEffect, useState} from 'react';
 import LogoSquare from "../assets/logo-light.svg";
 import LogoSquareDark from "../assets/logo-dark.svg";
 import fk from "../assets/FK.svg";
@@ -23,6 +23,7 @@ import {CommunityCollection, Profile} from "../interfaces/interfaces";
 import Join from "../Pages/home/join";
 import { JSX } from 'react/jsx-runtime';
 import {b} from "vite/dist/node/types.d-aGj9QkWt";
+import { themeChange } from 'theme-change';
 
 interface NavigationItem {
     name: string;
@@ -145,6 +146,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         {name: 'Your profile', href: '#'},
         {name: 'Sign out', href: '#'},
     ];
+    const [roles, setRoles] = useState(null);
 
     useEffect(() => {
         fetchDetails();
@@ -183,6 +185,22 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         }
     }, [community]);
 
+    useEffect(() => {
+        rolesData()
+    }, []);
+
+    const rolesData = async ()=> {
+
+        let response = await axios.get(`${getApiDomain()}/user/roles`);
+        setRoles(response.data)
+    };
+
+
+
+
+    useEffect(() => {
+        themeChange(false);
+    }, []);
     // @ts-ignore
     return (
         <>
@@ -234,19 +252,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             className="hidden h-8 w-auto lg:block"
                                             src={LogoSquare}
                                             alt="b:hive"
-                                        /> 
+                                        />
                                     </div>
 
                                 </div>
                                 <div
                                     className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                                    <button
-                                        type="button"
-                                        className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                    >
-                                        <span className="sr-only">View notifications</span>
-                                        <BellIcon className="h-6 w-6" aria-hidden="true"/>
-                                    </button>
+                                    
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
@@ -302,6 +314,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         </a>
                                                     )}
                                                 </Menu.Item>
+
                                             </Menu.Items>
                                         </Transition>
                                     </Menu>
@@ -592,7 +605,10 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             community?.community?.private && community?.user?.notjoined ? (
                                 <Join text={community.community.desc} logo={community.community.logo}/>
                             ) : (
-                                children
+                                Children.map(children, child => {
+                                        // @ts-ignore
+                                    return React.cloneElement(child, { roles, setRoles });
+                                    })
                             )
                         }
                     </main>

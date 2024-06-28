@@ -62,10 +62,10 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                         <div className="p-4">
                             <div className="flex justify-end">
 
-                                <button
+                                <a href="/onboarding"
                                     className="ml-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300">
                                     Edit Profile
-                                </button>
+                                </a>
                             </div>
                         </div>)}
                     </div>

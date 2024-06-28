@@ -9,7 +9,7 @@ interface PostItemProps {
     lite?: boolean
 }
 
-const PostItem = ({post, profile, lite}) => {
+const PostItem = ({post, profile, lite, roles}) => {
 
     console.log(post._id)
 
@@ -57,6 +57,17 @@ const PostItem = ({post, profile, lite}) => {
         <li key={post._id}
             className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
             <div className="flex flex-1 flex-col p-3">
+                {roles && (roles.includes("admin") || roles.includes("moderator")) && ( <div className="dropdown">
+                    <div tabIndex={0} role="button" className="btn btn-block bg-red-500 text-white btn-xs m-1">Moderator</div>
+                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                        <li><a href={`/removepost/${post._id}`}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                             Remove post</a></li>
+
+                    </ul>
+                </div>)}
+
                 <dl className="mt-1 flex flex-grow flex-col justify-between">
                     <a href={`/profile/${post.profile._id}`} className="group block flex-shrink-0">
                         <div className="flex items-center">
@@ -77,7 +88,7 @@ const PostItem = ({post, profile, lite}) => {
                     <a className='my-3' href={`/feed/${post.channel}/${post._id}`}>
                         <h2 dangerouslySetInnerHTML={{__html: post.desc}}></h2>
 
-                            <YouTubeEmbedsmall url={post.desc}/>
+                        <YouTubeEmbedsmall url={post.desc}/>
 
                     </a>
                     <div className="flex py-4 justify-between">
@@ -92,9 +103,9 @@ const PostItem = ({post, profile, lite}) => {
                 </span>
                                 <span>{post.postComments.length}</span>
                             </div>
-                            {!lite &&(
-                            <div className="flex space-x-1 items-center" onClick={handleLikeClick}
-                                 style={{cursor: 'pointer'}}>
+                            {!lite && (
+                                <div className="flex space-x-1 items-center" onClick={handleLikeClick}
+                                     style={{cursor: 'pointer'}}>
                 <span>
                   {userHasLiked ? (
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -110,9 +121,9 @@ const PostItem = ({post, profile, lite}) => {
                       </svg>
                   )}
                 </span>
-                                <span>{postLikes.length}</span>
-                            </div>
-                                )}
+                                    <span>{postLikes.length}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <dd className="mt-0.5 text-sm text-gray-500">

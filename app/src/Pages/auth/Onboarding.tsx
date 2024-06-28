@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Profile} from "../../interfaces/interfaces";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
+import {LoadingButton} from "../../components/LoadingButton";
+
 interface HomeProps {
     host: string;
     channel?: string;
@@ -17,6 +19,9 @@ function OnboardingPage({ host, channel }: HomeProps) {
         _id: "", email: "", me: true, posts: [], supertokensId: "",
         username: host
     });
+
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         fetchDetails();
@@ -83,7 +88,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData); // Do whatever you need to do with the form data
-
+        setLoading(true)
         var result = await axios.post(`${getApiDomain()}/createProfile`, formData, {
 
 
@@ -157,12 +162,15 @@ function OnboardingPage({ host, channel }: HomeProps) {
 
 
                         <div className="flex items-center justify-between">
-                            <button
+
+                            <LoadingButton
                                 type="submit"
+                                size="lg"
                                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Create Profile
-                            </button>
+                                loading={loading}
+
+                            >Create Profile
+                            </LoadingButton>
                         </div>
                     </form>
                 </div>

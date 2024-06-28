@@ -4,8 +4,12 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {},
   },
-  plugins: [    require('@tailwindcss/aspect-ratio'),],
+  plugins: [  require('daisyui'),  require('@tailwindcss/aspect-ratio'),],
+  daisyui: {
+    themes: ["light"],
+  },
 }

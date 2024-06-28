@@ -629,7 +629,7 @@ func Members(rw http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 	if name != "" {
 
-		data = bson.M{"name": name}
+		data = bson.M{"url": name}
 		// Check if the community exists in the database
 	}
 
@@ -771,5 +771,73 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "failed to update profile: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+	json.NewEncoder(rw).Encode("ok")
+}
 
+func Roles(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	var roles, _ = userroles.GetRolesForUser("public", sessionContainer.GetUserID(), nil)
+
+	json.NewEncoder(rw).Encode(roles.OK.Roles)
+}
+
+func PostDelete(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+	roles, err := userroles.GetRolesForUser("public", userID, nil)
+	if err != nil {
+		http.Error(rw, "failed to get user roles", http.StatusInternalServerError)
+		return
+	}
+
+	hasRole := false
+	for _, role := range roles.OK.Roles {
+		if role == "admin" || role == "moderator" {
+			hasRole = true
+			break
+		}
+	}
+
+	if !hasRole {
+		http.Error(rw, "user does not have the required role", http.StatusForbidden) // 403 Forbidden for insufficient role
+		return
+	}
+
+	name := r.URL.Query().Get("oid")
+	if name == "" {
+		http.Error(rw, "missing object ID", http.StatusBadRequest) // 400 Bad Request for missing ID
+		return
+	}
+
+	objectId, err := primitive.ObjectIDFromHex(name)
+	if err != nil {
+		http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		return
+	}
+
+	data := bson.M{"_id": objectId}
+
+	ctx := context.Background()
+	result, err := postCollection.DeleteOne(ctx, data)
+	if err != nil {
+		http.Error(rw, "failed to delete", http.StatusInternalServerError)
+		return
+	}
+
+	if result.DeletedCount == 0 {
+		http.Error(rw, "post not found", http.StatusNotFound) // 404 Not Found if no document is deleted
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
+	rw.Write([]byte("post deleted successfully"))
 }

@@ -85,6 +85,17 @@ func main() {
 		// The role already exists
 	}
 
+	resp, err = userroles.CreateNewRoleOrAddPermissions("moderator", []string{"read:all", "delete:all", "edit:all"}, nil)
+
+	if err != nil {
+		// TODO: Handle error
+		fmt.Println(err)
+		return
+	}
+	if resp.OK.CreatedNewRole == false {
+		// The role already exists
+	}
+
 	http.Handle("/metrics", promhttp.Handler()) // Expose Prometheus metrics
 
 	http.ListenAndServe(":3001", logMiddleware(corsMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
@@ -118,6 +129,34 @@ func main() {
 
 		}
 
+		if parsedURL.Path == "/internal/moderator" {
+
+			userId := r.URL.Query().Get("userid")
+
+			response, err := userroles.AddRoleToUser("public", userId, "moderator", nil)
+			if err != nil {
+				// TODO: Handle error
+				return
+			}
+
+			if response.UnknownRoleError != nil {
+				fmt.Println("role missing")
+				return
+			}
+
+			if response.OK.DidUserAlreadyHaveRole {
+				// The user already had the role
+				fmt.Println("user has role")
+			}
+
+		}
+
+		if parsedURL.Path == "/v1/user/roles" {
+			session.VerifySession(nil, client.Roles).ServeHTTP(rw, r)
+
+			return
+		}
+
 		if parsedURL.Path == "/v1/sessioninfo" {
 			session.VerifySession(nil, client.Sessioninfo).ServeHTTP(rw, r)
 			return
@@ -142,6 +181,13 @@ func main() {
 
 			return
 		}
+
+		if parsedURL.Path == "/v1/removepost" && r.Method == "GET" {
+			session.VerifySession(nil, client.PostDelete).ServeHTTP(rw, r)
+
+			return
+		}
+
 		if parsedURL.Path == "/v1/community/createpost" && r.Method == "POST" {
 			session.VerifySession(nil, client.CreatePost).ServeHTTP(rw, r)
 
