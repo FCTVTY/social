@@ -10,6 +10,8 @@ WORKDIR /app
 # Copying package.json and yarn.lock first
 COPY package.json yarn.lock ./
 
+RUN npm cache clean --force
+RUN rm -rf node_modules yarn.lock
 
 
 # Copying all the files in our project
