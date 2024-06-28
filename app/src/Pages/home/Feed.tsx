@@ -30,6 +30,14 @@ export default function Feed({host, channel}: HomeProps) {
         const loadMorePosts = async () => {
             try {
                 const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`);
+
+                // Check if response.data is null or empty
+                if (response.data == null || response.data.length === 0) {
+                    // Stop loading if response is null or empty
+                    setLoading(false);
+                    return;
+                }
+
                 const newPosts = response.data.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
                 setPosts(prevPosts => [...prevPosts, ...newPosts]);
                 setLoading(false);
