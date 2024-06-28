@@ -19,6 +19,7 @@ export default function Feed({host, channel}: HomeProps) {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const observer = useRef<IntersectionObserver | null>(null);
+    const [destroyloading, setdestroyloading] = useState(false);
 
     useEffect(() => {
         fetchDetails();
@@ -35,6 +36,7 @@ export default function Feed({host, channel}: HomeProps) {
                 if (response.data == null || response.data.length === 0) {
                     // Stop loading if response is null or empty
                     setLoading(false);
+                    setdestroyloading(true);
                     return;
                 }
 
@@ -86,7 +88,7 @@ export default function Feed({host, channel}: HomeProps) {
 
     const handleObserver = (node: Element | null) => {
         if (loading) return;
-
+        if(destroyloading) return; //hard stop on loading
         if (observer.current) observer.current.disconnect();
 
         observer.current = new IntersectionObserver(entries => {
