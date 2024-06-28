@@ -700,7 +700,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 		v.CoverPicture = webpDataURI
 	}
-	filter := bson.M{"name": v.Username}
+	filter := bson.M{"url": v.Username}
 	var community models.Community
 	err = communitesCollection.FindOne(context.Background(), filter).Decode(&community)
 	if err != nil {
