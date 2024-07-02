@@ -36,7 +36,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
         const loadMorePosts = async () => {
             try {
-                const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`);
+                const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel} v v${page}`);
 
                 // Check if response.data is null or empty
                 if (response.data == null || response.data.length === 0) {
@@ -128,7 +128,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                 <button
                     type="button"
                     onClick={() => setOpen(true)}
-                    className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                    className="hidden relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
                 >
                     Admin Tools
                 </button>
@@ -229,7 +229,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                                 <div ref={handleObserver}>
                                     {loading && (
-                                        <div className="text-center mt-10">
+                                        <div className="text-center my-10">
                                             <div role="status">
                                                 <svg aria-hidden="true"
                                                      className="inline w-8 h-8 text-gray-200 animate-spin  fill-blue-600"

@@ -51,7 +51,7 @@ type Posts struct {
 	Desc            string             `json:"desc"`
 	Channelstring   string             `json:"channelstring"`
 }
-type PPosts []struct {
+type PPosts struct {
 	ID              string    `json:"_id"`
 	Channel         string    `json:"channel"`
 	Channelstring   string    `json:"channelstring"`
@@ -97,4 +97,24 @@ type Comment struct {
 	PostID  string `json:"postId"`
 	UserID  string `json:"userId"`
 	Comment string `json:"comment"`
+}
+type EventPost []struct {
+	ID      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	UserID  string             `json:"userId"`
+	Channel primitive.ObjectID `bson:"channel" json:"channel,omitempty"`
+	Date    time.Time          `json:"date"`
+	Desc    string             `json:"desc"`
+	Locked  bool               `json:"locked"`
+	Media   string             `json:"media"`
+
+	Softdelete   bool   `json:"softdelete"`
+	Userid       string `json:"userid"`
+	Article      string `json:"article,omitempty"`
+	EventDetails struct {
+		AllowSignups bool      `json:"allowSignups"`
+		Date         time.Time `json:"date"`
+		Etype        string    `json:"etype"`
+		Location     string    `json:"location"`
+	} `json:"eventDetails,omitempty"`
+	Type string `json:"type,omitempty"`
 }
