@@ -98,23 +98,22 @@ type Comment struct {
 	UserID  string `json:"userId"`
 	Comment string `json:"comment"`
 }
-type EventPost []struct {
-	ID      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	UserID  string             `json:"userId"`
-	Channel primitive.ObjectID `bson:"channel" json:"channel,omitempty"`
-	Date    time.Time          `json:"date"`
-	Desc    string             `json:"desc"`
-	Locked  bool               `json:"locked"`
-	Media   string             `json:"media"`
-
-	Softdelete   bool   `json:"softdelete"`
-	Userid       string `json:"userid"`
-	Article      string `json:"article,omitempty"`
-	EventDetails struct {
+type EventPost struct {
+	ID            primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Channel       primitive.ObjectID `bson:"channel" json:"channel,omitempty"`
+	Date          time.Time          `json:"date"`
+	Desc          string             `json:"desc"`
+	Locked        bool               `json:"locked"`
+	Media         string             `json:"media"`
+	Channelstring string             `json:"channelString"`
+	Type          string             `json:"type,omitempty"`
+	Softdelete    bool               `json:"softdelete"`
+	Userid        string             `json:"userid"`
+	Article       string             `json:"article,omitempty"`
+	EventDetails  struct {
 		AllowSignups bool      `json:"allowSignups"`
 		Date         time.Time `json:"date"`
 		Etype        string    `json:"etype"`
 		Location     string    `json:"location"`
 	} `json:"eventDetails,omitempty"`
-	Type string `json:"type,omitempty"`
 }

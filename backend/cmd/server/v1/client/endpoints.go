@@ -201,7 +201,6 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
 	v.UserID = sessionContainer.GetUserID()
-
 	if v.Media != "" {
 		img, _, err := decodeDataURI(v.Media)
 		if err != nil {
@@ -229,8 +228,6 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-
-
 func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
@@ -238,26 +235,23 @@ func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "no session found", http.StatusInternalServerError)
 		return
 	}
-	var jsonv models.PPosts
+	var v models.EventPost
 
 	// We decode our body request params
-	err := json.NewDecoder(r.Body).Decode(&jsonv)
+	err := json.NewDecoder(r.Body).Decode(&v)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	var v models.Posts
-
-
 	v.ID = primitive.NewObjectID()
 	v.Date = time.Now()
-	v.Channel, _ = primitive.ObjectIDFromHex(jsonv.Channelstring)
-	v.Tags = []string{}
-	v.UserID = sessionContainer.GetUserID()
+	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
+	//v.Tags = []string{}
+	v.Type = "event"
 
 	if v.Media != "" {
-		img, _, err := decodeDataURI(jsonv.Media)
+		img, _, err := decodeDataURI(v.Media)
 		if err != nil {
 			log.Fatalf("Failed to decode data URI: %v", err)
 		}
@@ -274,7 +268,7 @@ func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 		v.Media = webpDataURI
 	}
 
-	v.
+	v.Userid = sessionContainer.GetUserID()
 
 	result, err := postCollection.InsertOne(context.Background(), v)
 	if err != nil {
@@ -284,7 +278,6 @@ func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(rw).Encode(result.InsertedID)
 
 }
-
 
 func decodeDataURI(dataURI string) (image.Image, string, error) {
 	if !strings.HasPrefix(dataURI, "data:image/") {

@@ -23,6 +23,7 @@ import {
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
+import {date} from "zod";
 
 interface HomeProps {
     host?: string;
@@ -105,15 +106,20 @@ export default function EventsPage({ host, channel }: HomeProps) {
         setPostData({ ...postData, eventDetails: { ...eventData, etype: e.target.value } });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // @ts-ignore
         postData.communites = community?.community;
         // @ts-ignore
         postData.channelstring = community?.channels[0].id;
+        const date = new Date();
+
+        postData.date = date.toISOString()
         // Handle form submission, e.g., send postData to an API
         console.log(postData);
+        await axios.post(`${getApiDomain()}/community/createEvent`, postData, {});
         setOpen(false);
+        //window.location.reload();
     };
 
     return (

@@ -8,7 +8,7 @@ require (
 	github.com/mailjet/mailjet-apiv3-go/v4 v4.0.1
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.19.0
-	github.com/supertokens/supertokens-golang v0.17.4
+	github.com/supertokens/supertokens-golang v0.22.0
 	go.mongodb.org/mongo-driver v1.14.0
 )
 
