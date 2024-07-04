@@ -21,6 +21,9 @@ import EventPage from "./Pages/home/event";
 import MembersPage from "./Pages/home/members";
 import ProfilePage from "./Pages/home/Profile";
 import Onboarding from "./Pages/auth/Onboarding";
+import Onboarding2 from "./Pages/auth/Onboarding2";
+import Onboarding3 from "./Pages/auth/Onboarding3";
+
 import RemovePost from "./Pages/home/RemovePost";
 import UserRoles from "supertokens-auth-react/recipe/userroles";
 import {UserRoleClaim, PermissionClaim} from "supertokens-auth-react/recipe/userroles";
@@ -144,12 +147,19 @@ function App() {
 
                        <ProfilePage host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
-            <Route path="/Onboarding" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+            <Route path="/Onboarding" element={ <SessionAuth>
 
 
-                <Onboarding host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+                <Onboarding host={subdomain}/> </SessionAuth>}/>
+
+            <Route path="/Onboarding-2" element={ <SessionAuth>
 
 
+                <Onboarding2 host={subdomain}/> </SessionAuth>}/>
+            <Route path="/Onboarding-3" element={ <SessionAuth>
+
+
+                <Onboarding3 host={subdomain}/> </SessionAuth>}/>
             <Route path="/removepost/:id" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 

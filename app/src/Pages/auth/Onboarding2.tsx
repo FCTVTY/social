@@ -9,7 +9,7 @@ interface HomeProps {
     host: string;
     channel?: string;
 }
-function OnboardingPage({ host, channel }: HomeProps) {
+function OnboardingPage2({ host, channel }: HomeProps) {
     // @ts-ignore
     const [formData, setFormData] = useState<Profile>({
         coverPicture: "data:image/png;base64,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",
@@ -98,10 +98,10 @@ function OnboardingPage({ host, channel }: HomeProps) {
         console.log(result.data)
         const timer = setTimeout(() => {
             // Redirect to the desired location after 3 seconds
-            window.location.href = '/onboarding-2/';
+            window.location.href = '/onboarding-3/';
         }, 3000);
     };
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(true);
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
@@ -133,7 +133,8 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                     <ul className="relative flex w-full justify-between">
                                         <li className="text-left">
                                             <a
-                                                className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2"
+                                                className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white"
+
                                                 href="#"
                                             >
                                                 1
@@ -141,7 +142,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                         </li>
                                         <li className="text-left">
                                             <a
-                                                className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-300 text-xs font-semibold text-white"
+                                                className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2"
                                                 href="#"
                                             >
                                                 2
@@ -159,7 +160,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                 </div>
                             </div>
                             <h2 className="font-serif text-2xl font-semibold text-gray-700">
-                                Hey 👋 lets get your profile up and running
+                                Awesome, thats saved, lets upload a cover photo
                             </h2>
                             <form className="" onSubmit={handleSubmit}>
                                 <div className="mt-8 flex w-full flex-col pb-8">
@@ -167,14 +168,14 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                     <div className="relative text-center">
 
                                         <div className="relative mb-4"><h2 className=" font-semibold text-gray-700">
-                                            Upload Profile Picture
+                                            Upload Profile Cover
                                         </h2>
                                             <div className="flex items-center text-center">
 
-                                                <label htmlFor="image-upload" className="cursor-pointer mx-auto mt-10">
+                                                <label htmlFor="imagec-upload" className="cursor-pointer mx-auto mt-10">
                                                     <img
-                                                        src={formData.profilePicture}
-                                                        alt="Profile"
+                                                        src={formData.coverPicture}
+                                                        alt="cover"
                                                         className="w-64 border-4 border-white mx-auto"
                                                     /></label>
 
@@ -183,33 +184,12 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                     </div>
 
 
-                                    <div className="my-4 space-y-3">
-                                        <label htmlFor="terms" className="flex space-x-4">
-                                            <input
-                                                id="terms"
-                                                name="terms"
-                                                type="checkbox"
-                                                className="h-6 w-6 shrink-0 accent-gray-900"
-                                                defaultChecked=""
-                                                checked={isChecked}
-                                                onChange={handleCheckboxChange}
-                                            />
-                                            <span id="terms-description" className="text-sm text-gray-600">
-                I agree to the{" "}
-                                                <a className="underline" href="terms.html">
-                  Terms and Conditions
-                </a>
-                . Learn about our Privacy Policy and our measures to keep your
-                data safe and secure.
-              </span>
-                                        </label>
-                                    </div>
                                     <LoadingButton
                                         type="submit"
                                         size="lg"
                                         disabled={!isChecked}
                                         className={`my-2 flex items-center justify-center rounded-md py-3 font-medium text-white ${isChecked ? 'bg-gray-900' : 'bg-gray-400'}`}
-                                    loading={loading}
+                                        loading={loading}
 
                                     > Continue
                                         <svg
@@ -227,12 +207,8 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                             />
                                         </svg>
                                     </LoadingButton>
-
-                                </div>
-                            </form>
+                                </div></form>
                         </div>
-
-
                     </div>
                 </div>
                 <div
@@ -338,4 +314,4 @@ function OnboardingPage({ host, channel }: HomeProps) {
     );
 }
 
-export default OnboardingPage;
+export default OnboardingPage2;
