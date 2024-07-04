@@ -54,6 +54,7 @@ export default function EventPage({host, channel, post}: HomeProps) {
     const [ppost, setPost] = useState<PPosts>();
     const [profile, setProfile] = useState<Profile>();
     const [postLikes, setPostLikes] = useState<PostLike[]>();
+    const [going, setgoing] = useState<boolean>();
 
     useEffect(() => {
         if (post) {
@@ -67,10 +68,12 @@ export default function EventPage({host, channel, post}: HomeProps) {
         let updatedLikes;
         if (userHasLiked) {
             // Remove the like
+            setgoing(false)
             updatedLikes = postLikes?.filter(like => like.userId !== profile?.supertokensId);
         } else {
             // Add the like
             // @ts-ignore
+            setgoing(true)
             updatedLikes = [...postLikes, { _id: new Date().getTime().toString(), postId: ppost, userId: profile?.supertokensId }];
         }
 
@@ -100,6 +103,10 @@ export default function EventPage({host, channel, post}: HomeProps) {
 
             const Presponse = await axios.get(`${getApiDomain()}/profile`);
             const profileData = Presponse.data;
+
+            // @ts-ignore
+            setgoing(response.data.postLikes?.some(like => like.userId === profileData?.supertokensId))
+
             setProfile(profileData);
         } catch (error) {
             console.error('Error fetching community details:', error);
@@ -113,6 +120,9 @@ export default function EventPage({host, channel, post}: HomeProps) {
 
     // @ts-ignore
     // @ts-ignore
+
+    console.log(ppost)
+
     return (
         <>
         {ppost && (
@@ -132,37 +142,46 @@ export default function EventPage({host, channel, post}: HomeProps) {
                         <div className="mt-6 min-w-0 flex-1 sm:hidden md:block">
                             <h1 className="truncate text-2xl font-bold text-gray-900">{ppost?.desc}</h1>
                         </div>
-                                     <div
+                        <div
                             className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0">
 
-                                         {!userHasLiked ? (
-                            <div
+                            {!userHasLiked ? (
+                                <div
+                                    onClick={handleLikeClick}
+                                    className="cursor-pointer inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                >
+                                    <EnvelopeIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true"/>
+                                    <span>RSVP</span>
+                                </div>
+                            ) : (<div
+
                                 onClick={handleLikeClick}
-                                className="cursor-pointer inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                className="cursor-pointer inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-800"
                             >
-                                <EnvelopeIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true"/>
-                                <span>RSVP</span>
-                            </div>
-                                             ) : (<div
+                                <CheckCircleIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-white"
+                                                 aria-hidden="true"/>
+                                <span>Going</span>
+                            </div>)}
 
-                                             onClick={handleLikeClick}
-                                             className="cursor-pointer inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-800"
-                                         >
-                                             <CheckCircleIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-white"
-                                                           aria-hidden="true"/>
-                                             <span>Going</span>
-                                         </div>)}
+                            {ppost.eventDetails?.etype === "Zoom" && going && (
+                                <a
+                                    href={ppost.eventDetails?.location}
 
-                                         {ppost.eventDetails?.etype !== "In-Person" && userHasLiked && (
-                                         <a
-                                            href={ppost.eventDetails?.location}
-
-                                             className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                         >
-                                             <LinkIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-                                                       aria-hidden="true"/>
-                                             <span>Join Online</span>
-                                         </a> )}
+                                    className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                >
+                                    <LinkIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+                                              aria-hidden="true"/>
+                                    <span>Join Online</span>
+                                </a>)}
+                            {ppost.eventDetails?.etype === "In-Person" && going && (
+                                <a
+                                    href={`https://maps.google.com/?q=${ppost.eventDetails?.location}`}  // Adjusted for valid URL
+                                    className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                >
+                                    <LinkIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true"/>
+                                    <span>Event Directions</span>
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -188,11 +207,7 @@ export default function EventPage({host, channel, post}: HomeProps) {
                         <dd className="text-sm text-gray-500"
                             dangerouslySetInnerHTML={{__html: ppost.desc}}></dd>
                     )}
-                    <dd className="text-sm text-gray-500">
-                        {ppost.tags.map(tag => (
-                            <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
-                        ))}
-                    </dd>
+
 
 
                     <div className="divide-x my-4"></div>

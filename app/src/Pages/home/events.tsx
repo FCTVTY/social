@@ -24,6 +24,7 @@ import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
 import {date} from "zod";
+import {TicketPlus} from "lucide-react";
 
 interface HomeProps {
     host?: string;
@@ -94,7 +95,24 @@ export default function EventsPage({ host, channel }: HomeProps) {
         const { name, value } = e.target;
         setPostData({ ...postData, [name]: value });
     };
+    const handleImageCChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
 
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const base64String = event.target?.result as string;
+            setPostData(prevState => ({
+                ...prevState,
+                media: base64String,
+            }));
+            // @ts-ignore
+            setSelectedImage(base64String)
+        };
+
+        reader.readAsDataURL(file);
+    };
     const handleEventChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEventData({ ...eventData, [name]: value });
@@ -105,7 +123,15 @@ export default function EventsPage({ host, channel }: HomeProps) {
         setEventData({ ...eventData, etype: e.target.value });
         setPostData({ ...postData, eventDetails: { ...eventData, etype: e.target.value } });
     };
-
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+    }
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // @ts-ignore
@@ -114,7 +140,11 @@ export default function EventsPage({ host, channel }: HomeProps) {
         postData.channelstring = community?.channels[0].id;
         const date = new Date();
 
-        postData.date = date.toISOString()
+        postData.date = formatDate(date);
+        if (postData.eventDetails?.date) {
+            const eventDate = new Date(postData.eventDetails.date);
+            postData.eventDetails.date = formatDate(eventDate);
+        }
         // Handle form submission, e.g., send postData to an API
         console.log(postData);
         await axios.post(`${getApiDomain()}/community/createEvent`, postData, {});
@@ -376,10 +406,10 @@ export default function EventsPage({ host, channel }: HomeProps) {
 
                                                 {/* Divider container */}
                                                 <div
-                                                  className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                                                    className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
                                                     {/* Event name */}
                                                     <div
-                                                      className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                        className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                         <div>
                                                             <label htmlFor="desc"
                                                                    className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -388,19 +418,19 @@ export default function EventsPage({ host, channel }: HomeProps) {
                                                         </div>
                                                         <div className="sm:col-span-2">
                                                             <input
-                                                              type="text"
-                                                              name="desc"
-                                                              id="desc"
-                                                              value={postData.desc}
-                                                              onChange={handleChange}
-                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                type="text"
+                                                                name="desc"
+                                                                id="desc"
+                                                                value={postData.desc}
+                                                                onChange={handleChange}
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
 
                                                     {/* Event description */}
                                                     <div
-                                                      className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                        className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                         <div>
                                                             <label htmlFor="article"
                                                                    className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -409,38 +439,42 @@ export default function EventsPage({ host, channel }: HomeProps) {
                                                         </div>
                                                         <div className="sm:col-span-2">
                             <textarea
-                              id="article"
-                              name="article"
-                              rows={3}
-                              value={postData.article}
-                              onChange={handleChange}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                id="article"
+                                name="article"
+                                rows={3}
+                                value={postData.article}
+                                onChange={handleChange}
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                                                         </div>
                                                     </div>
 
                                                     {/* Event image */}
-                                                    <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                    <div
+                                                        className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                         <div>
-                                                            <h3 className="text-sm font-medium leading-6 text-gray-900">Image</h3>
+                                                            <h3 className="text-sm font-medium leading-6 text-gray-900">Cover Image</h3>
                                                         </div>
                                                         <div className="sm:col-span-2">
-                                                            <div className="flex space-x-2">
-                                                                <button
-                                                                  type="button"
-                                                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                            <div className="flex space-x-2 mb-2">
+                                                                <label htmlFor="imagec-upload"
+                                                                       className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                                 >
-                                                                    <span className="sr-only">Add Image</span>
-                                                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                                                                </button>
+                                                                    <PlusIcon className="h-5 w-5" aria-hidden="true"/>
+                                                                </label>
+
+
                                                             </div>
+                                                            <img src={postData.media}/>
                                                         </div>
                                                     </div>
 
                                                     {/* Event Type */}
-                                                    <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                    <fieldset
+                                                        className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                         <legend className="sr-only">Event Type</legend>
-                                                        <div className="text-sm font-medium leading-6 text-gray-900" aria-hidden="true">
+                                                        <div className="text-sm font-medium leading-6 text-gray-900"
+                                                             aria-hidden="true">
                                                             Event Type
                                                         </div>
                                                         <div className="space-y-5 sm:col-span-2">
@@ -448,20 +482,22 @@ export default function EventsPage({ host, channel }: HomeProps) {
                                                                 <div className="relative flex items-start">
                                                                     <div className="absolute flex h-6 items-center">
                                                                         <input
-                                                                          id="online-event"
-                                                                          name="etype"
-                                                                          value="online"
-                                                                          onChange={handleRadioChange}
-                                                                          type="radio"
-                                                                          checked={eventData.etype === 'online'}
-                                                                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                                            id="online-event"
+                                                                            name="etype"
+                                                                            value="Zoom"
+                                                                            onChange={handleRadioChange}
+                                                                            type="radio"
+                                                                            checked={eventData.etype === 'Zoom'}
+                                                                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                                                         />
                                                                     </div>
                                                                     <div className="pl-7 text-sm leading-6">
-                                                                        <label htmlFor="online-event" className="font-medium text-gray-900">
+                                                                        <label htmlFor="online-event"
+                                                                               className="font-medium text-gray-900">
                                                                             Online Event
                                                                         </label>
-                                                                        <p id="online-event-description" className="text-gray-500">
+                                                                        <p id="online-event-description"
+                                                                           className="text-gray-500">
                                                                             People join via Zoom or Google Meet
                                                                         </p>
                                                                     </div>
@@ -469,21 +505,24 @@ export default function EventsPage({ host, channel }: HomeProps) {
                                                                 <div className="relative flex items-start">
                                                                     <div className="absolute flex h-6 items-center">
                                                                         <input
-                                                                          id="in-person-event"
-                                                                          name="etype"
-                                                                          value="in-person"
-                                                                          onChange={handleRadioChange}
-                                                                          type="radio"
-                                                                          checked={eventData.etype === 'in-person'}
-                                                                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                                            id="in-person-event"
+                                                                            name="etype"
+                                                                            value="In-Person"
+                                                                            onChange={handleRadioChange}
+                                                                            type="radio"
+                                                                            checked={eventData.etype === 'In-Person'}
+                                                                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                                                         />
                                                                     </div>
                                                                     <div className="pl-7 text-sm leading-6">
-                                                                        <label htmlFor="in-person-event" className="font-medium text-gray-900">
+                                                                        <label htmlFor="in-person-event"
+                                                                               className="font-medium text-gray-900">
                                                                             In-Person
                                                                         </label>
-                                                                        <p id="in-person-event-description" className="text-gray-500">
-                                                                            Meet at a conference center or other location
+                                                                        <p id="in-person-event-description"
+                                                                           className="text-gray-500">
+                                                                            Meet at a conference center or other
+                                                                            location
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -492,39 +531,45 @@ export default function EventsPage({ host, channel }: HomeProps) {
                                                     </fieldset>
 
                                                     {/* Event Date */}
-                                                    <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                    <div
+                                                        className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                         <div>
-                                                            <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                            <label htmlFor="date"
+                                                                   className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                                                                 Date
                                                             </label>
                                                         </div>
                                                         <div className="sm:col-span-2">
                                                             <input
-                                                              type="datetime-local"
-                                                              name="date"
-                                                              id="date"
-                                                              value={eventData.date}
-                                                              onChange={handleEventChange}
-                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                type="datetime-local"
+                                                                name="date"
+                                                                id="date"
+                                                                value={eventData.date}
+                                                                onChange={handleEventChange}
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
-
+                                                    <input type="file" id="imagec-upload" accept="image/*"
+                                                           style={{display: 'none'}}
+                                                           onChange={handleImageCChange}/>
                                                     {/* Event Location */}
-                                                    <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                    <div
+                                                        className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                         <div>
-                                                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                            <label htmlFor="location"
+                                                                   className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
                                                                 Location
                                                             </label>
                                                         </div>
                                                         <div className="sm:col-span-2">
                                                             <input
-                                                              type="text"
-                                                              name="location"
-                                                              id="location"
-                                                              value={eventData.location}
-                                                              onChange={handleEventChange}
-                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                type="text"
+                                                                name="location"
+                                                                id="location"
+                                                                value={eventData.location}
+                                                                onChange={handleEventChange}
+                                                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                             />
                                                         </div>
                                                     </div>
