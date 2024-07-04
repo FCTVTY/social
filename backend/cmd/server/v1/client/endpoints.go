@@ -201,6 +201,54 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
 	v.UserID = sessionContainer.GetUserID()
+	if v.Media != "" {
+		img, _, err := decodeDataURI(v.Media)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		// Encode the image to WebP format
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		// Convert the WebP bytes to a data URI
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		v.Media = webpDataURI
+	}
+
+	result, err := postCollection.InsertOne(context.Background(), v)
+	if err != nil {
+		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(rw).Encode(result.InsertedID)
+
+}
+
+func CreateEvent(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	var v models.EventPost
+
+	// We decode our body request params
+	err := json.NewDecoder(r.Body).Decode(&v)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	v.ID = primitive.NewObjectID()
+	v.Date = time.Now()
+	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
+	//v.Tags = []string{}
+	v.Type = "event"
 
 	if v.Media != "" {
 		img, _, err := decodeDataURI(v.Media)
@@ -219,6 +267,8 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 		v.Media = webpDataURI
 	}
+
+	v.Userid = sessionContainer.GetUserID()
 
 	result, err := postCollection.InsertOne(context.Background(), v)
 	if err != nil {
@@ -296,7 +346,7 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 
 	name = r.URL.Query().Get("host")
 	if name != "" {
-		data = bson.M{"communites.name": name}
+		data = bson.M{"communites.url": name}
 	}
 
 	// Pagination parameters

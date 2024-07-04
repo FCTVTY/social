@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Route, Routes, Navigate} from 'react-router-dom';
+import {Route, Routes, Navigate, useNavigation} from 'react-router-dom';
 import Feed from "./Pages/home/Feed";
 import ApplicationLayout from "./layout/applicationLayout";
 import Join from "./Pages/home/join";
@@ -21,11 +21,16 @@ import EventPage from "./Pages/home/event";
 import MembersPage from "./Pages/home/members";
 import ProfilePage from "./Pages/home/Profile";
 import Onboarding from "./Pages/auth/Onboarding";
+import Onboarding2 from "./Pages/auth/Onboarding2";
+import Onboarding3 from "./Pages/auth/Onboarding3";
+
 import RemovePost from "./Pages/home/RemovePost";
 import UserRoles from "supertokens-auth-react/recipe/userroles";
 import {UserRoleClaim, PermissionClaim} from "supertokens-auth-react/recipe/userroles";
 import {SessionContext} from "supertokens-auth-react/recipe/session"
 import Session from 'supertokens-auth-react/recipe/session';
+import {NavigationLoadingBar} from "./layout/loader";
+import LoadingBar, {LoadingBarRef} from "react-top-loading-bar";
 
 initSuperTokens();
 
@@ -102,6 +107,7 @@ function App() {
 
     }, []);
 
+ 
 
 
   return (
@@ -145,12 +151,19 @@ function App() {
 
                        <ProfilePage host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
-            <Route path="/Onboarding" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+            <Route path="/Onboarding" element={ <SessionAuth>
 
 
-                <Onboarding host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+                <Onboarding host={subdomain}/> </SessionAuth>}/>
+
+            <Route path="/Onboarding-2" element={ <SessionAuth>
 
 
+                <Onboarding2 host={subdomain}/> </SessionAuth>}/>
+            <Route path="/Onboarding-3" element={ <SessionAuth>
+
+
+                <Onboarding3 host={subdomain}/> </SessionAuth>}/>
             <Route path="/removepost/:id" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
