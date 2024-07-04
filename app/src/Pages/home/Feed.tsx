@@ -36,17 +36,17 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
         const loadMorePosts = async () => {
             try {
-                const response = await axios.get(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`);
+                const response = await fetch(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`);
+                const responseData = await response.json();
 
-                // Check if response.data is null or empty
-                if (response.data == null || response.data.length === 0) {
-                    // Stop loading if response is null or empty
+                // Check if responseData is null or empty
+                if (!responseData || responseData.length === 0) {
                     setLoading(false);
                     setdestroyloading(true);
                     return;
                 }
 
-                const newPosts = response.data.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                const newPosts = responseData.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
                 setPosts(prevPosts => [...prevPosts, ...newPosts]);
                 setLoading(false);
             } catch (error) {
@@ -60,8 +60,8 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
     const fetchDetails = async () => {
         try {
-            const communityResponse = await axios.get(`${getApiDomain()}/community?name=${host}`);
-            const communityData: CommunityCollection = communityResponse.data;
+            const communityResponse = await fetch(`${getApiDomain()}/community?name=${host}`);
+            const communityData: CommunityCollection = await communityResponse.json();
             setCommunity(communityData);
 
             if (!channel) {
@@ -70,15 +70,26 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
             }
 
             const [postsResponse, adsResponse, profileResponse] = await Promise.all([
-                axios.get(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`),
-                axios.get(`${getApiDomain()}/ads/get`),
-                axios.get(`${getApiDomain()}/profile`)
+                fetch(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`),
+                fetch(`${getApiDomain()}/ads/get`),
+                fetch(`${getApiDomain()}/profile`)
             ]);
 
-            const sortedPosts = postsResponse.data.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+            const [postsData, adsData, profileData] = await Promise.all([
+                postsResponse.json(),
+                adsResponse.json(),
+                profileResponse.json()
+            ]);
+
+            const sortedPosts = postsData.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
             setPosts(sortedPosts);
-            setAds(adsResponse.data);
-            setProfile(profileResponse.data);
+            setAds(adsData);
+            setProfile(profileData);
+
+            if (profileData == null) {
+                //window.location.href = '/onboarding/';
+            }
+
         } catch (error) {
             console.error('Error fetching community details:', error);
         }

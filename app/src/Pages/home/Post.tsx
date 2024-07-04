@@ -1,6 +1,5 @@
 import {ChatBubbleLeftEllipsisIcon, EnvelopeIcon, PhoneIcon, XMarkIcon} from '@heroicons/react/20/solid';
 import React, {Fragment, useEffect, useState} from "react";
-import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import {CommunityCollection, Post, PostLike, PPosts, Profile} from "../../interfaces/interfaces";
 import {formatDistanceToNow} from 'date-fns';
@@ -18,7 +17,6 @@ interface HomeProps {
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
-
 
 export default function PostView({host, channel, post}: HomeProps) {
     const [ppost, setPost] = useState<PPosts>();
@@ -40,19 +38,28 @@ export default function PostView({host, channel, post}: HomeProps) {
             updatedLikes = postLikes?.filter(like => like.userId !== profile?.supertokensId);
         } else {
             // Add the like
-            // @ts-ignore
-            updatedLikes = [...postLikes, { _id: new Date().getTime().toString(), postId: ppost, userId: profile?.supertokensId }];
+            updatedLikes = [...(postLikes || []), { _id: new Date().getTime().toString(), postId: post, userId: profile?.supertokensId }];
         }
 
         setPostLikes(updatedLikes);
 
         try {
             // Call the API to save the like status
-            await axios.post(`${getApiDomain()}/postLikes`, {
-                postId: post,
-                userId: profile?.supertokensId,
-                liked: !userHasLiked
+            const response = await fetch(`${getApiDomain()}/postLikes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    postId: post,
+                    userId: profile?.supertokensId,
+                    liked: !userHasLiked
+                })
             });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
         } catch (error) {
             console.error('Error saving like status:', error);
             // Revert the like status in case of error
@@ -62,12 +69,12 @@ export default function PostView({host, channel, post}: HomeProps) {
 
     const fetchDetails = async () => {
         try {
-            const Presponse = await axios.get(`${getApiDomain()}/profile`);
-            const profileData = Presponse.data;
+            const Presponse = await fetch(`${getApiDomain()}/profile`);
+            const profileData = await Presponse.json();
             setProfile(profileData);
 
-            const response = await axios.get(`${getApiDomain()}/community/post?oid=${post}`);
-            const postData = response.data;
+            const response = await fetch(`${getApiDomain()}/community/post?oid=${post}`);
+            const postData = await response.json();
             setPost(postData);
             setPostLikes(postData.postLikes);
         } catch (error) {
@@ -80,6 +87,7 @@ export default function PostView({host, channel, post}: HomeProps) {
             fetchDetails();
         }
     };
+
     // @ts-ignore
     // @ts-ignore
     return (

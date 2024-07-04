@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Ads, Post, Profile} from "../../interfaces/interfaces";
-import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import PostItem from "./Feeditem";
 import PostItemLite from "./FeeditemLite";
+
 interface HomeProps {
     host?: string;
     profileid?: string;
@@ -22,14 +22,17 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
 
     const fetchDetails = async () => {
         try {
-            const response = await axios.get(`${getApiDomain()}/profile?oid=${profileid}`);
-
-            setProfile(response.data);
-
+            const response = await fetch(`${getApiDomain()}/profile?oid=${profileid}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setProfile(data);
         } catch (error) {
             console.error('Error fetching profile details:', error);
         }
     };
+
     return (
         <main className="profile-page">
             {profile && (

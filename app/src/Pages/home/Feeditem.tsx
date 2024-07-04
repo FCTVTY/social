@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import axios from 'axios';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {getApiDomain} from "../../lib/auth/supertokens";
 import YouTubeEmbed from "./youtube";
@@ -16,41 +15,48 @@ const PostItem = ({post, profile, lite, roles}) => {
     const [postLikes, setPostLikes] = useState(post.postLikes);
     let userHasLiked = false;
     if (!lite) {
-
-
-
-        let userHasLiked = postLikes.some(like => like.userId === profile?.supertokensId);
+        userHasLiked = postLikes.some(like => like.userId === profile?.supertokensId);
     }
-        const handleLikeClick = async () => {
-            let updatedLikes;
-            if (userHasLiked) {
-                // Remove the like
-                updatedLikes = postLikes.filter(like => like.userId !== profile?.supertokensId);
 
-            } else {
-                // Add the like
-                updatedLikes = [...postLikes, {
-                    _id: new Date().getTime().toString(),
-                    postId: post._id,
-                    userId: profile?.supertokensId
-                }];
-            }
+    const handleLikeClick = async () => {
+        let updatedLikes;
+        if (userHasLiked) {
+            // Remove the like
+            updatedLikes = postLikes.filter(like => like.userId !== profile?.supertokensId);
+        } else {
+            // Add the like
+            updatedLikes = [...postLikes, {
+                _id: new Date().getTime().toString(),
+                postId: post._id,
+                userId: profile?.supertokensId
+            }];
+        }
 
-            setPostLikes(updatedLikes);
+        setPostLikes(updatedLikes);
 
-            try {
-                // Call the API to save the like status
-                await axios.post(`${getApiDomain()}/postLikes`, {
+        try {
+            // Call the API to save the like status
+            const response = await fetch(`${getApiDomain()}/postLikes`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
                     postId: post._id,
                     userId: profile?.supertokensId,
                     liked: !userHasLiked
-                });
-            } catch (error) {
-                console.error('Error saving like status:', error);
-                // Optionally revert the like status in case of error
-                setPostLikes(postLikes);
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
+        } catch (error) {
+            console.error('Error saving like status:', error);
+            // Optionally revert the like status in case of error
+            setPostLikes(postLikes);
+        }
+    };
 
 
     return (
