@@ -24,6 +24,7 @@ import Join from "../Pages/home/join";
 import { JSX } from 'react/jsx-runtime';
 import {b} from "vite/dist/node/types.d-aGj9QkWt";
 import { themeChange } from 'theme-change';
+import {NavigationLoadingBar} from "./loader";
 
 interface NavigationItem {
     name: string;

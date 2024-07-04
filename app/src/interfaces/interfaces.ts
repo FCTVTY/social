@@ -11,7 +11,7 @@ export interface Community {
 
 }
 
-interface Channel {
+export interface Channel {
     id: ObjectId;
     name: string;
     locked: boolean;
@@ -67,6 +67,12 @@ export interface PPosts {
     channels: Channel
     communites: Community
     eventDetails?: EventDetails
+
+}export interface EventDetails {
+    allowSignups: boolean
+    date: string
+    location: string
+    etype: string
 }
 
 export interface Profile {
@@ -88,12 +94,7 @@ export interface PostLike {
     postId: string
     userId: string
 }
-export interface EventDetails {
-    allowSignups: boolean
-    date: string
-    location: string
-    etype: string
-}
+
 export interface Ads {
     _id: string
     ad: string

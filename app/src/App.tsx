@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Route, Routes, Navigate} from 'react-router-dom';
+import {Route, Routes, Navigate, useNavigation} from 'react-router-dom';
 import Feed from "./Pages/home/Feed";
 import ApplicationLayout from "./layout/applicationLayout";
 import Join from "./Pages/home/join";
@@ -29,6 +29,8 @@ import UserRoles from "supertokens-auth-react/recipe/userroles";
 import {UserRoleClaim, PermissionClaim} from "supertokens-auth-react/recipe/userroles";
 import {SessionContext} from "supertokens-auth-react/recipe/session"
 import Session from 'supertokens-auth-react/recipe/session';
+import {NavigationLoadingBar} from "./layout/loader";
+import LoadingBar, {LoadingBarRef} from "react-top-loading-bar";
 
 initSuperTokens();
 
@@ -105,6 +107,7 @@ function App() {
 
     }, []);
 
+ 
 
   return (
       <SuperTokensWrapper>
