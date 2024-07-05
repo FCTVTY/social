@@ -5,12 +5,13 @@ import {
     CheckCircleIcon, MapPinIcon,
 } from "@heroicons/react/16/solid";
 import axios from "axios";
-import { formatDistanceToNow } from "date-fns";
+import {format, formatDistanceToNow} from "date-fns";
 import {EventDetails, PostLike, PPosts, Profile} from "../../interfaces/interfaces";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import Comment from "./comment";
 import {CalendarIcon} from "@heroicons/react/24/outline";
-import {ClockIcon, GlobeIcon} from "lucide-react";
+import {ClockIcon, GlobeIcon, PersonStandingIcon} from "lucide-react";
+import {UserIcon} from "@heroicons/react/20/solid";
 
 interface HomeProps {
     host?: string,
@@ -27,6 +28,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
     const [going, setGoing] = useState<boolean>(false);
 
     const userHasLiked = postLikes.some(like => like.userId === profile?.supertokensId);
+    const userHasLikedCount = postLikes.filter(like => like.userId === profile?.supertokensId).length;
 
     const handleLikeClick = async () => {
         let updatedLikes;
@@ -89,9 +91,13 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                             <div className="flex">
                                 <img className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src={ppost?.profile?.profilePicture} alt="" />
                             </div>
-                            <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-                                <div className="mt-6 min-w-0 flex-1 sm:hidden md:block">
-                                    <h1 className="truncate text-2xl font-bold text-gray-900">{ppost?.desc}</h1>
+                            <div className="mt-10 pt-10 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+                                <div className="mt-15 min-w-0 flex-1 sm:hidden md:block">
+                                    <h1 className="truncate text-2xl font-bold text-gray-900">{ppost?.desc} <br/>
+                                    <span className="text-red-600 text-sm mt-[-10px]">
+                                        {new Date(ev?.date).toLocaleDateString()}  At {new Date(ev?.date).toLocaleTimeString()}
+                                    </span>
+                                    </h1>
                                 </div>
                                 <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-x-4 sm:space-y-0">
                                     {!userHasLiked ? (
@@ -159,18 +165,21 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                                 <dt className="text-sm font-medium text-gray-500">Location</dt>
                                                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                                     {ev?.etype === "In-Person" ? (
-                                                     <>   <MapPinIcon className="h-5 w-5 inline-block mr-2"/>
-                                                      <a href={`https://maps.google.com/?q=${ev?.location}`} target="_blank"
-                                                         rel="noopener noreferrer"
-                                                         className="text-blue-500 hover:text-blue-700">
-                                                          Directions
-                                                      </a></>
+                                                      <>   <MapPinIcon className="h-5 w-5 inline-block mr-2"/>
+                                                          <a href={`https://maps.google.com/?q=${ev?.location}`}
+                                                             target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             className="text-blue-500 hover:text-blue-700">
+                                                              Directions
+                                                          </a></>
                                                     ) : (
-                                                      <>                                                            <GlobeIcon className="h-5 w-5 inline-block mr-2"/>
-                                                          <a href={ev?.location} target="_blank" rel="noopener noreferrer"
-                                                         className="text-blue-500 hover:text-blue-700">
-                                                          Join Online
-                                                      </a></>
+                                                      <>
+                                                          <GlobeIcon className="h-5 w-5 inline-block mr-2"/>
+                                                          <a href={ev?.location} target="_blank"
+                                                             rel="noopener noreferrer"
+                                                             className="text-blue-500 hover:text-blue-700">
+                                                              Join Online
+                                                          </a></>
                                                     )}
                                                 </dd>
                                             </div>
@@ -189,6 +198,15 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                                     {new Date(ev?.date).toLocaleTimeString()} GMT
                                                 </dd>
                                             </div>
+
+                                              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                                <dt className="text-sm font-medium text-gray-500">Going</dt>
+                                                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                                    <UserIcon className="h-5 w-5 inline-block mr-2"/>
+                                                    {userHasLikedCount} Responded
+                                                </dd>
+                                            </div>
+
                                         </dl>
                                     </div>
 
