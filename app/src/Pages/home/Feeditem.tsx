@@ -134,27 +134,11 @@ const PostItem = ({post, profile, lite, roles}) => {
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
                                                     <div>
-                                                        <label htmlFor="price"
-                                                               className="block text-sm font-medium leading-6 text-gray-900">
-                                                            URL
-                                                        </label>
-                                                        <div className="relative mt-2 rounded-md shadow-sm">
-                                                            <div
-                                                                className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                                                <span className="text-gray-500 sm:text-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
-</svg>
-</span>
-                                                            </div>
-                                                            <input
-                                                                id="price"
-                                                                name="price"
-                                                                type="text"
-                                                                placeholder="http://url here to share"
-                                                                className="block w-full rounded-md border-0 py-1.5 pl-20 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            />
+                                                       
 
-                                                        </div>
+                                                            {window.location.origin}/feed/{post._id}
+
+
                                                     </div>
                                                 </p>
                                             </div>
