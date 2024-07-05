@@ -34,7 +34,7 @@ interface HomeProps {
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
-export default function EventsPage({ host, channel }: HomeProps) {
+export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps) {
     const [posts, setPosts] = useState<PPosts[]>([]);
     const [community, setCommunity] = useState<CommunityCollection>();
     const [open, setOpen] = useState(false)
@@ -199,7 +199,17 @@ export default function EventsPage({ host, channel }: HomeProps) {
             Create
         </button>
     )}
-</span>
+              {roles && (roles.includes("admin") || roles.includes("moderator")) && (<button
+                type="button"
+                onClick={() => setOpen(true)}
+
+                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                  <CalendarIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true"/>
+                  Create
+              </button>
+              )}
+                  </span>
 
 
                 </div>
@@ -209,13 +219,13 @@ export default function EventsPage({ host, channel }: HomeProps) {
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 
                 <ul
-                    role="list"
-                    className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+                  role="list"
+                  className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
                 >
                     {
 
                         posts.filter(post => post.type === "event").map(post => (
-                            <li key={post._id}
+                          <li key={post._id}
                                 className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
                                 <div className="flex gap-x-4">
                         <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={post.eventDetails?.logo} alt=""/>
