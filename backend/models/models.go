@@ -105,6 +105,7 @@ type EventPost struct {
 	Desc          string             `json:"desc"`
 	Locked        bool               `json:"locked"`
 	Media         string             `json:"media"`
+	Logo          string             `json:"logo"`
 	Channelstring string             `json:"channelString"`
 	Type          string             `json:"type,omitempty"`
 	Softdelete    bool               `json:"softdelete"`
@@ -115,6 +116,5 @@ type EventPost struct {
 		Date         time.Time `json:"date"`
 		Etype        string    `json:"etype"`
 		Location     string    `json:"location"`
-		Logo         string    `json:"logo"`
 	} `json:"eventDetails,omitempty"`
 }

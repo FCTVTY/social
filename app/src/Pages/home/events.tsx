@@ -18,13 +18,15 @@ import {
     PPosts,
     Profile,
     Channel,
-    EventDetails
+    EventDetails, PEvent
 } from "../../interfaces/interfaces";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
 import {date} from "zod";
 import {TicketPlus} from "lucide-react";
+import {json} from "react-router-dom";
+import EventItem from "./Eventitem";
 
 interface HomeProps {
     host?: string;
@@ -35,7 +37,7 @@ function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
 export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps) {
-    const [posts, setPosts] = useState<PPosts[]>([]);
+    const [posts, setPosts] = useState<PEvent[]>([]);
     const [community, setCommunity] = useState<CommunityCollection>();
     const [open, setOpen] = useState(false)
 
@@ -47,10 +49,19 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
 
     const fetchDetails = async () => {
         try {
-            const Cresponse = await axios.get(`${getApiDomain()}/community?name=${host}`);
-            setCommunity(Cresponse.data)
-            const response = await axios.get(`${getApiDomain()}/community/posts?host=${host}&page=1`);
-            const sortedPosts = response.data.sort((a: Post, b: Post) => {
+            const communityResponse = await fetch(`${getApiDomain()}/community?name=${host}`);
+            if (!communityResponse.ok) {
+                throw new Error('Network response was not ok for community fetch');
+            }
+            const communityData = await communityResponse.json();
+            setCommunity(communityData);
+
+            const postsResponse = await fetch(`${getApiDomain()}/community/posts?host=${host}&page=1`);
+            if (!postsResponse.ok) {
+                throw new Error('Network response was not ok for posts fetch');
+            }
+            const postsData = await postsResponse.json();
+            const sortedPosts = postsData.sort((a: Post, b: Post) => {
                 return new Date(b.date).getTime() - new Date(a.date).getTime();
             });
             setPosts(sortedPosts);
@@ -58,6 +69,7 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
             console.error('Error fetching community details:', error);
         }
     };
+
     const handleRefresh = () => {
         if (channel) {
             fetchDetails();
@@ -67,9 +79,10 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
         allowSignups: false,
         date: '',
         location: '',
-        etype: 'online'
+        etype: 'online',
+        logo: ''
     });
-    const [postData, setPostData] = useState<PPosts>({
+    const [postData, setPostData] = useState<PEvent>({
         postComments: [],
         _id: '',
         channel: '',
@@ -123,10 +136,9 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
             const base64String = event.target?.result as string;
             setPostData(prevState => ({
                 ...prevState,
-                eventDetails: {
-                    ...prevState.eventDetails,
+
                     logo: base64String,
-                },
+
             }));
 
             // @ts-ignore
@@ -225,46 +237,7 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
                     {
 
                         posts.filter(post => post.type === "event").map(post => (
-                          <li key={post._id}
-                                className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
-                                <div className="flex gap-x-4">
-                        <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={post.eventDetails?.logo} alt=""/>
-                        <div className="min-w-0 flex-auto">
-                            <p className="text-sm font-semibold leading-6 text-gray-900">
-                                <a href={`/event/${post._id}`}>
-                                    <span className="absolute inset-x-0 -top-px bottom-0"/>
-                                    {post.desc}
-                                </a>
-                            </p>
-                            <p className="mt-1 flex text-xs leading-5 text-gray-500">
-                                <a href="{}" className="relative truncate hover:underline">
-                                    {post.desc}
-                                </a>
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-x-4">
-                        <div className="hidden sm:flex sm:flex-col sm:items-end">
-                            <p className="text-sm leading-6 text-gray-900">{post.eventDetails?.etype}</p>
-
-                                <p className="mt-1 text-xs leading-5 text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                         className="w-5 h-5 inline-flex ">
-                                        <path
-                                            d="M5.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V12ZM6 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H6ZM7.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H8a.75.75 0 0 1-.75-.75V12ZM8 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H8ZM9.25 10a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H10a.75.75 0 0 1-.75-.75V10ZM10 11.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-.75-.75H10ZM9.25 14a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H10a.75.75 0 0 1-.75-.75V14ZM12 9.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V10a.75.75 0 0 0-.75-.75H12ZM11.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H12a.75.75 0 0 1-.75-.75V12ZM12 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H12ZM13.25 10a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H14a.75.75 0 0 1-.75-.75V10ZM14 11.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-.75-.75H14Z"/>
-                                        <path fillRule="evenodd"
-                                              d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z"
-                                              clipRule="evenodd"/>
-                                    </svg>
-                                    <span>{post.eventDetails && post.eventDetails.date && (
-                                        moment(post.eventDetails.date).format('DD/MM/YYYY @ hh:mm').toString()
-                                    )}</span>
-                                </p>
-
-                        </div>
-                        <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true"/>
-                    </div>
-                </li>
+                          <EventItem post={post} profile="" lite="" jsonpost={JSON.stringify(post, null, 2)}></EventItem>
             ))}
                     {
                         posts.filter(post => post.type === "event").length == 0 && (

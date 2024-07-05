@@ -66,7 +66,6 @@ export interface PPosts {
     type:string
     channels: Channel
     communites: Community
-    eventDetails?: EventDetails
 
 }export interface EventDetails {
     allowSignups: boolean
@@ -74,6 +73,13 @@ export interface PPosts {
     location: string
     etype: string
     logo:string
+}
+
+
+export interface PEvent  extends PPosts {
+    logo : string
+    eventDetails: EventDetails
+
 }
 
 export interface Profile {
