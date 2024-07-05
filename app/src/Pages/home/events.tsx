@@ -491,7 +491,7 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
 
 
                                                             </div>
-                                                            <img src={postData.media}/>
+                                                            <img src={postData.logo}/>
                                                         </div>
                                                     </div>
                                                     {/* Event Type */}
