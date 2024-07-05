@@ -1,11 +1,12 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Button from "../../components/Button";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import {Post} from "../../interfaces/interfaces";
 import {ObjectId} from "mongodb";
 import mongoose from "mongoose";
-import ReactQuill from "react-quill"; // will work
+import ReactQuill from "react-quill";
+import {LoadingButton} from "../../components/LoadingButton"; // will work
 interface CreateProps {
     onSubmit: () => void;
     channel: string;
@@ -40,6 +41,7 @@ export default function Create({ onSubmit, channel }: CreateProps) {
             }));
             // @ts-ignore
             setSelectedImage(base64String)
+            console.log(base64String)
         };
 
         reader.readAsDataURL(file);
@@ -51,12 +53,13 @@ export default function Create({ onSubmit, channel }: CreateProps) {
             [name]: value,
         }));
     };
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
 
-
+            setLoading(true)
 
 
             await axios.post(`${getApiDomain()}/community/createpost`, post, {
@@ -103,9 +106,17 @@ export default function Create({ onSubmit, channel }: CreateProps) {
                         </label>
                     </div>
                     <label htmlFor="image-upload" className="cursor-pointer">
-                        <Button className=" hidden flex items-center mr-2" color="white" type="submit">Create Article</Button>
+                        <LoadingButton
+                            type="submit"
+                            size="sm"
 
-                        <Button className="flex items-center" color="slate" type="submit">Upload</Button>
+                            variant="default"
+                            className={`my-2 flex items-center justify-center rounded-md py-3 font-medium text-white bg-gray-950 hover:bg-gray-800 `}
+                            loading={loading}
+
+                        > Upload
+
+                        </LoadingButton>
                         <input type="file" id="image-upload" accept="image/*" style={{display: 'none'}}
                                onChange={handleImageChange}/>
                     </label>
