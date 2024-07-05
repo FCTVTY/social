@@ -1,12 +1,17 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import {getApiDomain} from "../../lib/auth/supertokens";
+import {getApiDomain, getWebsiteDomain} from "../../lib/auth/supertokens";
 import YouTubeEmbed from "./youtube";
 import YouTubeEmbedsmall from "./youtubesmall";
+import {Dialog, Transition } from '@headlessui/react';
+import {ExclamationTriangleIcon} from "@heroicons/react/16/solid";
+import {XMarkIcon} from "@heroicons/react/20/solid";
 
 interface PostItemProps {
     lite?: boolean
 }
+
+
 
 const PostItem = ({post, profile, lite, roles}) => {
 
@@ -57,22 +62,149 @@ const PostItem = ({post, profile, lite, roles}) => {
             setPostLikes(postLikes);
         }
     };
+    const [isOpen, setIsOpen] = useState(false)
+    const [open, setOpen] = useState(false)
 
+    async function Remove() {
+        try {
+            // Call the API to save the like status
+            const response = await fetch(`${getApiDomain()}/hidepost?oid=${post._id}`, {
+                method: 'GET',
+
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            alert("deleted")
+        } catch (error) {
+            console.error('Error saving like status:', error);
+            // Optionally revert the like status in case of error
+            setPostLikes(postLikes);
+        }
+    }
 
     return (
         <li key={post._id}
             className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
-            <div className="flex flex-1 flex-col p-3">
-                {roles && (roles.includes("admin") || roles.includes("moderator")) && ( <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn btn-block bg-red-500 text-white btn-xs m-1">Moderator</div>
-                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                        <li><a href={`/removepost/${post._id}`}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                             Remove post</a></li>
+            <Transition.Root show={open} as={Fragment}>
+                <Dialog as="div" className="relative z-[999999]" onClose={setOpen}>
 
-                    </ul>
-                </div>)}
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+                    <div className="fixed inset-0 z-10 overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                                    <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
+                                        <button
+                                            type="button"
+                                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            <span className="sr-only">Close</span>
+                                            <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                        </button>
+                                    </div>
+                                    <div className="sm:flex sm:items-start">
+
+                                        <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                            <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                                                Share Post
+                                            </Dialog.Title>
+                                            <div className="mt-2">
+                                                <p className="text-sm text-gray-500">
+                                                    <div>
+                                                        <label htmlFor="price"
+                                                               className="block text-sm font-medium leading-6 text-gray-900">
+                                                            URL
+                                                        </label>
+                                                        <div className="relative mt-2 rounded-md shadow-sm">
+                                                            <div
+                                                                className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                                <span className="text-gray-500 sm:text-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+</svg>
+</span>
+                                                            </div>
+                                                            <input
+                                                                id="price"
+                                                                name="price"
+                                                                type="text"
+                                                                placeholder="http://url here to share"
+                                                                className="block w-full rounded-md border-0 py-1.5 pl-20 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            />
+
+                                                        </div>
+                                                    </div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
+
+            <div className="flex flex-1 flex-col p-3 relative">
+                <div className="absolute top-0 right-[-10px] text-left">
+                    <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md px-4 py-2 text-sm text-gray-700 "
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                             stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"/>
+                        </svg>
+
+                    </button>
+                    {isOpen && (
+                        <div className="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white text-xs">
+                            <div className="py-1" role="menu" aria-orientation="vertical"
+                                 aria-labelledby="options-menu">
+                                <a href="#"
+                                   onClick={() => Remove()}
+                                   className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                   role="menuitem">Delete</a>
+                                <a href="#"
+                                   onClick={() => setOpen(!open)}
+                                   className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                   role="menuitem">Share</a>
+                                <hr/>
+                                <span className="block px-4 py-2 text-xs text-gray-700 opacity-50"
+                                      role="menuitem">MANAGE</span>
+
+                                <a href={`/removepost/${post._id}`}
+                                   className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                   role="menuitem">Remove</a>
+                                <a href="/documentation"
+                                   className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                   role="menuitem">Lock Comments</a></div>
+                        </div>
+                    )}
+                </div>
 
                 <dl className="mt-1 flex flex-grow flex-col justify-between">
                     <a href={`/profile/${post.profile._id}`} className="group block flex-shrink-0">

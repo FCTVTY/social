@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [  require('daisyui'),  require('@tailwindcss/aspect-ratio'),],
+  plugins: [  require('daisyui'),  require('@tailwindcss/aspect-ratio'), require('flowbite/plugin')],
   daisyui: {
     themes: ["light"],
   },

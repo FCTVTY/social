@@ -37,7 +37,7 @@ export interface Post {
     softDelete: boolean
     channel: ObjectId
     channelstring: string
-
+    visability:boolean
     desc: string
 }
 export interface PostComment {
@@ -66,6 +66,8 @@ export interface PPosts {
     type:string
     channels: Channel
     communites: Community
+    visability:boolean
+
 
 }export interface EventDetails {
     allowSignups: boolean

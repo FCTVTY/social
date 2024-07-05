@@ -200,6 +200,7 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Date = time.Now()
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
+	v.Visibility = true
 	v.UserID = sessionContainer.GetUserID()
 	if v.Media != "" {
 		img, _, err := decodeDataURI(v.Media)
@@ -884,6 +885,45 @@ func PostDelete(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	if result.DeletedCount == 0 {
+		http.Error(rw, "post not found", http.StatusNotFound) // 404 Not Found if no document is deleted
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
+	rw.Write([]byte("post deleted successfully"))
+}
+func PostHide(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+
+	name := r.URL.Query().Get("oid")
+	if name == "" {
+		http.Error(rw, "missing object ID", http.StatusBadRequest) // 400 Bad Request for missing ID
+		return
+	}
+
+	objectId, err := primitive.ObjectIDFromHex(name)
+	if err != nil {
+		http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		return
+	}
+
+	data := bson.M{"_id": objectId, "userid": userID}
+	update := bson.M{"$set": bson.M{"visability": false}}
+	ctx := context.Background()
+
+	result2, err := postCollection.UpdateOne(ctx, data, update)
+	if err != nil {
+		http.Error(rw, "failed to soft delete", http.StatusInternalServerError)
+		return
+	}
+
+	if result2.MatchedCount == 0 {
 		http.Error(rw, "post not found", http.StatusNotFound) // 404 Not Found if no document is deleted
 		return
 	}

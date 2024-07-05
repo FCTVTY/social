@@ -50,6 +50,7 @@ type Posts struct {
 	Channel         primitive.ObjectID `bson:"channel" json:"channel,omitempty"`
 	Desc            string             `json:"desc"`
 	Channelstring   string             `json:"channelstring"`
+	Visibility      bool               `json:"visability"`
 }
 type PPosts struct {
 	ID              string    `json:"_id"`
@@ -64,6 +65,7 @@ type PPosts struct {
 	Softdelete      bool      `json:"softdelete"`
 	Tags            []any     `json:"tags"`
 	Userid          string    `json:"userid"`
+	Visibility      bool      `json:"visability"`
 }
 
 type Profile struct {
