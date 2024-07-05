@@ -16,6 +16,7 @@ interface PostItemProps {
 const PostItem = ({post, profile, lite, roles}) => {
 
     console.log(post._id)
+    const [visibility, setVisibility] = useState(false);
 
     const [postLikes, setPostLikes] = useState(post.postLikes);
     let userHasLiked = false;
@@ -76,7 +77,8 @@ const PostItem = ({post, profile, lite, roles}) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            alert("deleted")
+            setVisibility(true)
+            window.location.reload()
         } catch (error) {
             console.error('Error saving like status:', error);
             // Optionally revert the like status in case of error
@@ -86,7 +88,7 @@ const PostItem = ({post, profile, lite, roles}) => {
 
     return (
         <li key={post._id}
-            className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
+            className={`col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl`}>
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-[999999]" onClose={setOpen}>
 
@@ -184,15 +186,16 @@ const PostItem = ({post, profile, lite, roles}) => {
                         <div className="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white text-xs">
                             <div className="py-1" role="menu" aria-orientation="vertical"
                                  aria-labelledby="options-menu">
-                                <a href="#"
+                                {post.deletable && ( <a href="#"
                                    onClick={() => Remove()}
                                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                   role="menuitem">Delete</a>
+                                   role="menuitem">Delete</a>)}
                                 <a href="#"
                                    onClick={() => setOpen(!open)}
                                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                    role="menuitem">Share</a>
-                                <hr/>
+                                {roles && (roles.includes("admin") || roles.includes("moderator")) && (
+                                <>  <hr/>
                                 <span className="block px-4 py-2 text-xs text-gray-700 opacity-50"
                                       role="menuitem">MANAGE</span>
 
@@ -201,7 +204,10 @@ const PostItem = ({post, profile, lite, roles}) => {
                                    role="menuitem">Remove</a>
                                 <a href="/documentation"
                                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                   role="menuitem">Lock Comments</a></div>
+                                   role="menuitem">Lock Comments</a>
+                                </>
+                                )}
+                                </div>
                         </div>
                     )}
                 </div>

@@ -67,7 +67,7 @@ export interface PPosts {
     channels: Channel
     communites: Community
     visability:boolean
-
+    deletable:boolean
 
 }export interface EventDetails {
     allowSignups: boolean

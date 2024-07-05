@@ -200,7 +200,7 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Date = time.Now()
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
-	v.Visibility = true
+	v.Visability = true
 	v.UserID = sessionContainer.GetUserID()
 	if v.Media != "" {
 		img, _, err := decodeDataURI(v.Media)
@@ -342,12 +342,12 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, "invalid object ID", http.StatusBadRequest)
 			return
 		}
-		data = bson.M{"channel": objectId}
+		data = bson.M{"channel": objectId, "visability": true}
 	}
 
 	name = r.URL.Query().Get("host")
 	if name != "" {
-		data = bson.M{"communites.url": name}
+		data = bson.M{"communites.url": name, "visability": true}
 	}
 
 	// Pagination parameters
@@ -392,6 +392,9 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 		if err := cursor.Decode(&post); err != nil {
 			http.Error(rw, "failed to decode post", http.StatusInternalServerError)
 			return
+		}
+		if post["userid"] == sessionContainer.GetUserID() {
+			post["deletable"] = true // Adding delete flag to the post
 		}
 		posts = append(posts, post)
 	}
