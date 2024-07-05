@@ -115,5 +115,6 @@ type EventPost struct {
 		Date         time.Time `json:"date"`
 		Etype        string    `json:"etype"`
 		Location     string    `json:"location"`
+		Logo         string    `json:"logo"`
 	} `json:"eventDetails,omitempty"`
 }

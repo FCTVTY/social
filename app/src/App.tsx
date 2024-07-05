@@ -77,7 +77,7 @@ function App() {
         console.log(host)
         if(host === "localhost:5173")
         {
-            setSubDomain("test")
+            setSubDomain("goodwin")
         }
 
 

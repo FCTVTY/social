@@ -73,6 +73,7 @@ export interface PPosts {
     date: string
     location: string
     etype: string
+    logo:string
 }
 
 export interface Profile {

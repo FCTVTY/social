@@ -119,7 +119,7 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                     <div className="my-auto mx-auto flex flex-col justify-center pt-8 md:justify-start lg:w-[34rem]">
                         <div className="flex w-full flex-col rounded-2xl bg-white px-2 sm:px-14">
                             <div className="mx-auto w-full max-w-md pb-20 px-8 sm:px-0">
-                                <div className="relative">
+                                <div className="relative mt-5">
                                     <div
                                         className="absolute left-0 top-2 h-0.5 w-full bg-gray-200"
                                         aria-hidden="true"
@@ -193,7 +193,10 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                                     <LoadingButton
                                         type="submit"
                                         size="lg"
+                                        variant="ghost"
+
                                         disabled={!isChecked}
+
                                         className={`my-2 flex items-center justify-center rounded-md py-3 font-medium text-white ${isChecked ? 'bg-gray-900' : 'bg-gray-400'}`}
                                         loading={loading}
 

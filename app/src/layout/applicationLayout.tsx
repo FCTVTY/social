@@ -290,7 +290,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         </a>
                                                     )}
                                                 </Menu.Item>
-                                                
+
                                                 <Menu.Item>
                                                     {({active}) => (
                                                         <a
