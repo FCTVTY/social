@@ -7,6 +7,10 @@ import {ObjectId} from "mongodb";
 import mongoose from "mongoose";
 import ReactQuill from "react-quill";
 import {LoadingButton} from "../../components/LoadingButton"; // will work
+import loadImage from 'blueimp-load-image';
+
+
+
 interface CreateProps {
     onSubmit: () => void;
     channel: string;
@@ -31,21 +35,29 @@ export default function Create({ onSubmit, channel }: CreateProps) {
         const file = event.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
-
-        reader.onload = function (event) {
-            const base64String = event.target?.result as string;
-            setPost(prevState => ({
-                ...prevState,
-                media: base64String,
-            }));
-            // @ts-ignore
-            setSelectedImage(base64String)
-            console.log(base64String)
-        };
-
-        reader.readAsDataURL(file);
+        loadImage(
+          file,
+          (img) => {
+              // Convert the image to a base64 string
+              const canvas = document.createElement('canvas');
+              canvas.width = img.width;
+              canvas.height = img.height;
+              const ctx = canvas.getContext('2d');
+              if (ctx) {
+                  ctx.drawImage(img, 0, 0);
+                  const base64String = canvas.toDataURL('image/jpeg');
+                  setPost(prevState => ({
+                      ...prevState,
+                      media: base64String,
+                  }));
+                  setSelectedImage(base64String);
+                  console.log(base64String);
+              }
+          },
+          { orientation: true } // This option ensures the image is correctly oriented
+        );
     };
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
         setPost(prevState => ({

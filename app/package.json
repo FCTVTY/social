@@ -17,6 +17,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",
+    "blueimp-load-image": "^5.16.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",

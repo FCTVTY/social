@@ -134,7 +134,7 @@ const PostItem = ({post, profile, lite, roles}) => {
                                             <div className="mt-2">
                                                 <p className="text-sm text-gray-500">
                                                     <div>
-                                                       
+
 
                                                             {window.location.origin}/feed/{post._id}
 
