@@ -31,14 +31,18 @@ import {SessionContext} from "supertokens-auth-react/recipe/session"
 import Session from 'supertokens-auth-react/recipe/session';
 import {NavigationLoadingBar} from "./layout/loader";
 import LoadingBar, {LoadingBarRef} from "react-top-loading-bar";
+import Courses from './Pages/courses/Courses';
+import Chat from "./Pages/Chat/Chat";
+import Course from './Pages/courses/Course';
 
 initSuperTokens();
 
 
+// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark')
+  document.documentElement.classList.add('dark')
 } else {
-    document.documentElement.classList.remove('dark')
+  document.documentElement.classList.remove('dark')
 }
 
 // Whenever the user explicitly chooses light mode
@@ -49,7 +53,6 @@ localStorage.theme = 'dark'
 
 // Whenever the user explicitly chooses to respect the OS preference
 localStorage.removeItem('theme')
-
 
 
 
@@ -144,7 +147,18 @@ function App() {
                    element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
+
                        <EventPage host={subdomain} post={post}/></ApplicationLayout></SessionAuth>}/>
+
+
+          <Route path="/Chat"
+                 element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                   <Chat host={subdomain}/>
+                 </ApplicationLayout></SessionAuth>}/>
+
+
             <Route path="/profile/:id"
                    element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
@@ -178,6 +192,18 @@ function App() {
 
 
                 <Settings/></ApplicationLayout> </SessionAuth>}/>
+
+
+          <Route path="/courses" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+            <Courses/></ApplicationLayout> </SessionAuth>}/>
+
+          <Route path="/course/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+            <Course/></ApplicationLayout> </SessionAuth>}/>
+
 
             <Route path='/auth' element={<AuthLayout>
                 <Login/>

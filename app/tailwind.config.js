@@ -4,11 +4,12 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
+  darkMode: 'selector',
+
   theme: {
     extend: {},
   },
-  plugins: [  require('daisyui'),  require('@tailwindcss/aspect-ratio'), require('flowbite/plugin')],
+  plugins: [  require('daisyui'),  require('@tailwindcss/aspect-ratio'), require('flowbite/plugin'), require('tailwindcss-font-inter')],
   daisyui: {
     themes: ["light"],
   },

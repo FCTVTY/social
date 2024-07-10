@@ -321,6 +321,8 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                         <div className="lg:col-span-2 lg:col-start-4">
                             <div className="rounded-xl border-2 border-gray-100 bg-white p-3">
                                 <h2 className="text-xl">About</h2>
+                                <img src={community && community.community?.logo} className="sm:mx-auto h-20 py-1"/>
+
                                 <p className={`py-2`}>{community?.community?.desc}</p>
                                 <dl>
                                     <dt className="inline-flex py-2">
@@ -356,7 +358,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                             </div>
 
                             <div className="rounded-xl border-2 border-gray-100 bg-white p-3 mt-4 hidden">
-                                <h2 className="text-xl">Members</h2>
+                            <h2 className="text-xl">Members</h2>
 
 
                                 <dl className="">

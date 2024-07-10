@@ -18,6 +18,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -55,6 +57,7 @@ var (
 	commentCollection    *mongo.Collection
 	membersCollection    *mongo.Collection
 	pprofileCollection   *mongo.Collection
+	minioClient          *minio.Client
 )
 
 func init() {
@@ -90,6 +93,7 @@ func init() {
 	likesCollection = database.Collection("postLikes")
 	commentCollection = database.Collection("postComments")
 	membersCollection = database.Collection("members")
+
 }
 func Communities(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
@@ -218,6 +222,59 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 		// Convert the WebP bytes to a data URI
 		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 		v.Media = webpDataURI
+
+		endpoint := "s3.app.bhivecommunity.co.uk"
+		accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+		secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+		useSSL := true
+
+		// Initialize minio client object.
+		minioClient, err = minio.New(endpoint, &minio.Options{
+			Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
+			Secure: useSSL,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		//uppload media to s3
+		// Make a new bucket called testbucket.
+		bucketName := "media"
+		location := "uk-west-1"
+
+		err = minioClient.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{Region: location})
+		if err != nil {
+			// Check to see if we already own this bucket (which happens if you run this twice)
+			exists, errBucketExists := minioClient.BucketExists(context.Background(), bucketName)
+			if errBucketExists == nil && exists {
+				log.Printf("We already own %s\n", bucketName)
+			} else {
+				log.Fatalln(err)
+			}
+		} else {
+			log.Printf("Successfully created %s\n", bucketName)
+		}
+
+		// Upload the test file
+		// Change the value of filePath if the file is in another location
+		objectName := v.Channelstring + "/" + v.ID.Hex() + ".webp"
+		imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
+		if err != nil {
+			log.Fatalln("Error decoding base64 string:", err)
+		}
+
+		// Upload the test file with FPutObject
+		// Create a reader for the image data
+		imageReader := bytes.NewReader(imageData)
+
+		// Upload the image
+		_, err = minioClient.PutObject(context.Background(), bucketName, objectName, imageReader, imageReader.Size(), minio.PutObjectOptions{
+			ContentType: "image/webp", // Replace with the correct content type
+		})
+		if err != nil {
+			log.Fatalln("Error uploading the image:", err)
+		}
+		v.Media = "https://s3.app.bhivecommunity.co.uk/media/" + v.Channelstring + "/" + v.ID.Hex() + ".webp"
 	}
 
 	result, err := postCollection.InsertOne(context.Background(), v)
@@ -345,9 +402,13 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 		data = bson.M{"channel": objectId, "visability": true}
 	}
 
-	name = r.URL.Query().Get("host")
-	if name != "" {
-		data = bson.M{"communites.url": name, "visability": true}
+	host := r.URL.Query().Get("host")
+	if host != "" {
+		data = bson.M{"communites.url": host, "visability": true}
+	}
+	event := r.URL.Query().Get("event")
+	if event != "" {
+		data = bson.M{"communites.url": host}
 	}
 
 	// Pagination parameters
@@ -720,7 +781,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 
 	v.SupertokensID = sessionContainer.GetUserID()
 
-	if v.ProfilePicture != "" {
+	if v.ProfilePicture != "" && !strings.HasPrefix(v.ProfilePicture, "https") {
 		img, _, err := decodeDataURI(v.ProfilePicture)
 		if err != nil {
 			log.Fatalf("Failed to decode data URI: %v", err)
@@ -736,8 +797,59 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		// Convert the WebP bytes to a data URI
 		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 		v.ProfilePicture = webpDataURI
+
+		endpoint := "s3.app.bhivecommunity.co.uk"
+		accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+		secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+		useSSL := true
+
+		// Initialize minio client object.
+		minioClient, err = minio.New(endpoint, &minio.Options{
+			Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
+			Secure: useSSL,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+		bucketName := "profile"
+		location := "uk-west-1"
+
+		err = minioClient.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{Region: location})
+		if err != nil {
+			// Check to see if we already own this bucket (which happens if you run this twice)
+			exists, errBucketExists := minioClient.BucketExists(context.Background(), bucketName)
+			if errBucketExists == nil && exists {
+				log.Printf("We already own %s\n", bucketName)
+			} else {
+				log.Fatalln(err)
+			}
+		} else {
+			log.Printf("Successfully created %s\n", bucketName)
+		}
+
+		// Upload the test file
+		// Change the value of filePath if the file is in another location
+		objectName := v.SupertokensID + "/profilepic/" + v.SupertokensID + ".webp"
+		imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
+		if err != nil {
+			log.Fatalln("Error decoding base64 string:", err)
+		}
+
+		// Upload the test file with FPutObject
+		// Create a reader for the image data
+		imageReader := bytes.NewReader(imageData)
+
+		// Upload the image
+		_, err = minioClient.PutObject(context.Background(), bucketName, objectName, imageReader, imageReader.Size(), minio.PutObjectOptions{
+			ContentType: "image/webp", // Replace with the correct content type
+		})
+		if err != nil {
+			log.Fatalln("Error uploading the image:", err)
+		}
+		v.ProfilePicture = "https://s3.app.bhivecommunity.co.uk/profile/" + v.SupertokensID + "/profileic/" + v.SupertokensID + ".webp"
+
 	}
-	if v.CoverPicture != "" {
+	if v.CoverPicture != "" && !strings.HasPrefix(v.CoverPicture, "https") {
 		img, _, err := decodeDataURI(v.CoverPicture)
 		if err != nil {
 			log.Fatalf("Failed to decode data URI: %v", err)
@@ -753,6 +865,57 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		// Convert the WebP bytes to a data URI
 		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 		v.CoverPicture = webpDataURI
+
+		endpoint := "s3.app.bhivecommunity.co.uk"
+		accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+		secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+		useSSL := true
+
+		// Initialize minio client object.
+		minioClient, err = minio.New(endpoint, &minio.Options{
+			Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
+			Secure: useSSL,
+		})
+		if err != nil {
+			log.Fatalln(err)
+		}
+		bucketName := "profile"
+		location := "uk-west-1"
+
+		err = minioClient.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{Region: location})
+		if err != nil {
+			// Check to see if we already own this bucket (which happens if you run this twice)
+			exists, errBucketExists := minioClient.BucketExists(context.Background(), bucketName)
+			if errBucketExists == nil && exists {
+				log.Printf("We already own %s\n", bucketName)
+			} else {
+				log.Fatalln(err)
+			}
+		} else {
+			log.Printf("Successfully created %s\n", bucketName)
+		}
+
+		// Upload the test file
+		// Change the value of filePath if the file is in another location
+		objectName := v.SupertokensID + "/" + v.SupertokensID + ".webp"
+		imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
+		if err != nil {
+			log.Fatalln("Error decoding base64 string:", err)
+		}
+
+		// Upload the test file with FPutObject
+		// Create a reader for the image data
+		imageReader := bytes.NewReader(imageData)
+
+		// Upload the image
+		_, err = minioClient.PutObject(context.Background(), bucketName, objectName, imageReader, imageReader.Size(), minio.PutObjectOptions{
+			ContentType: "image/webp", // Replace with the correct content type
+		})
+		if err != nil {
+			log.Fatalln("Error uploading the image:", err)
+		}
+		v.CoverPicture = "https://s3.app.bhivecommunity.co.uk/profile/" + v.SupertokensID + "/" + v.SupertokensID + ".webp"
+
 	}
 	filter := bson.M{"url": v.Username}
 	var community models.Community

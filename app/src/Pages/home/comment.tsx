@@ -64,7 +64,7 @@ export default function Comment({ onSubmit, post, supertokensId }: CreateProps) 
 
                         </div>
                         <label htmlFor="image-upload" className="cursor-pointer">
-                            <Button className="flex items-center mr-2" color="white" type="submit">Leave
+                            <Button className="flex items-center mr-2" color="slate" variant="solid" type="submit">Leave
                                 Comment</Button>
 
 

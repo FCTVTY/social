@@ -25,6 +25,7 @@ import { JSX } from 'react/jsx-runtime';
 import {b} from "vite/dist/node/types.d-aGj9QkWt";
 import { themeChange } from 'theme-change';
 import {NavigationLoadingBar} from "./loader";
+import ThemeSwitch from './themeswitch';
 
 interface NavigationItem {
     name: string;
@@ -133,9 +134,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
             },
         ],
     }
+    const currentUrl = window.location.pathname; // This gives you the path of the current URL
+
     const teams: TeamItem[] = [
-        {id: 1, name: 'Events', href: '/events/upcoming', initial: 'E', current: false},
-        {id: 2, name: 'Members', href: '/members/list', initial: 'M', current: false},
+        {id: 1, name: 'Courses', href: '/Courses', initial: 'C', current: '/Courses' == currentUrl},
+
+        {id: 3, name: 'Events', href: '/events/upcoming', initial: 'E', current: '/events/upcoming' == currentUrl},
+        {id: 4, name: 'Members', href: '/members/list', initial: 'M', current: '/members/list' == currentUrl},
     ];
 
     const userNavigation: UserNavigationItem[] = [
@@ -170,11 +175,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 window.location.assign('/feed/'+ community.channels[0].id);
             }
 
-            const channelNavigation = community.channels.map((channel, index) => ({
+            const currentUrl = window.location.pathname; // This gives you the path of the current URL
+
+            const channelNavigation = community.channels.map((channel) => ({
                 name: channel.name,
                 href: `/feed/${channel.id}`, // Update with appropriate channel ID or URL
                 icon: ChartPieIcon, // Update with appropriate icon
-                //current: index === 0, // Set the first channel as current by default
+                current: `/feed/${channel.id}` === currentUrl, // Set current to true if the URL matches
             }));
 
             setNavigation(prevNavigation => [...prevNavigation, ...channelNavigation]);
@@ -227,7 +234,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 </div>
             </div>
 
-            <Disclosure as="nav" className="sticky top-0 z-50 bg-white border-b border-gray-200">
+            <Disclosure as="nav" className="overscroll-none sticky top-0 z-50 bg-white border-b border-gray-200">
                 {({open}) => (
                     <>
                         <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -254,7 +261,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                 </div>
                                 <div
                                     className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                                    
+                                    <ThemeSwitch />
+
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
@@ -390,7 +398,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                     </Transition.Child>
                                     {/* Sidebar component, swap this element with another sidebar if you like */}
                                     <div
-                                        className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 bg-hive px-6">
+                                        className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 bg-hive pl-6">
 
                                         <nav className="flex flex-1 flex-col mt-2">
                                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -483,13 +491,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     href={item.href}
                                                     className={classNames(
                                                         item.current
-                                                            ? 'bg-gray-800 text-white'
-                                                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                            ? 'bg-[#452c63] text-white'
+                                                            : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                     )}
                                                 >
                                                      <span
-                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {item.name.slice(0, 2)}
                           </span>
                                                     {item.name}
@@ -507,13 +515,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     href={team.href}
                                                     className={classNames(
                                                         team.current
-                                                            ? 'bg-gray-800 text-white'
-                                                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                            ? 'bg-[#452c63] text-white'
+                                                            : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                     )}
                                                 >
                           <span
-                              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#662d91] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {team.initial}
                           </span>
                                                     <span className="truncate">{team.name}</span>
@@ -556,32 +564,16 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             {/* Separator */}
                             <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true"/>
 
-                            <div className="pl-2 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+                            <div className="px-4 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
 
                                 <div className="flex flex-1 items-center gap-x-4 lg:gap-x-6">
                                     <img src={community && community.community?.logo} className="sm:mx-auto h-9 py-1"/>
                                     {/* Separator */}
-                                    <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"/>
 
 
                                 </div>
 
-                                <form className=" relative flex flex-1 hidden md:block" action="#" method="GET">
-                                    <label htmlFor="search-field" className="sr-only">
-                                        Search
-                                    </label>
-                                    <MagnifyingGlassIcon
-                                        className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400 hidden"
-                                        aria-hidden="true"
-                                    />
-                                    <input
-                                        id="search-field"
-                                        className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm hidden"
-                                        placeholder="Search..."
-                                        type="search"
-                                        name="search"
-                                    />
-                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -601,32 +593,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                     </main>
 
 
-                    <footer className="">
-                        <div className=" mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-                            <nav className="hidden -mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"
-                                 aria-label="Footer">
-                                {fnavigation.main.map((item) => (
-                                    <div key={item.name} className="pb-6">
-                                        <a href={item.href}
-                                           className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                                            {item.name}
-                                        </a>
-                                    </div>
-                                ))}
-                            </nav>
-                            <div className="hidden mt-10 flex justify-center space-x-10">
-                                {fnavigation.social.map((item) => (
-                                    <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500 hidden">
-                                        <span className="sr-only">{item.name}</span>
-                                        <item.icon className="h-6 w-6" aria-hidden="true"/>
-                                    </a>
-                                ))}
-                            </div>
-                            <p className="mt-10 text-center text-xs leading-5 text-gray-500">
-                                &copy; 2024 SCC, Inc. All rights reserved.
-                            </p>
-                        </div>
-                    </footer>
+
                 </div>
             </div>
         </>
