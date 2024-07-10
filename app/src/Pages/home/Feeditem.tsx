@@ -85,10 +85,17 @@ const PostItem = ({post, profile, lite, roles}) => {
             setPostLikes(postLikes);
         }
     }
-
+    function getRandomLightColor() {
+        // Generate a random light color
+        const r = Math.floor(Math.random() * 127 + 128); // 128-255 to ensure light colors
+        const g = Math.floor(Math.random() * 127 + 128);
+        const b = Math.floor(Math.random() * 127 + 128);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
     return (
       <li key={post._id}
-          className={`col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl`}>
+          className={`col-span-1 flex flex-col  rounded-2xl bg-white shadow max-w-4xl`}
+          >
           <Transition.Root show={open} as={Fragment}>
               <Dialog as="div" className="relative z-[999999]" onClose={setOpen}>
 
@@ -269,7 +276,7 @@ const PostItem = ({post, profile, lite, roles}) => {
               </dl>
           </div>
           <div></div>
-          <div className="bg-white p-4">
+          <div className=" p-4">
 
               <div className="flow-root mt-3">
                   <ul role="list" className="-mb-8">
@@ -328,9 +335,7 @@ const PostItem = ({post, profile, lite, roles}) => {
               </div>
 
           </div>
-          <div className="divide-x">
 
-          </div>
       </li>
     );
 };

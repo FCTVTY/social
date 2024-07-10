@@ -10,11 +10,12 @@
     background-color: #08090B;
 
 }
+@import url('https://fonts.cdnfonts.com/css/avenir');
 
-html,body,a,p {
-    font-family: "Inter", sans-serif;
+
+html,body,a,p, h1,h2,h3,h4,h5,h6, strong {
+    font-family: 'Avenir', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
     font-style: normal;
     font-variation-settings:
       "slnt" 0;

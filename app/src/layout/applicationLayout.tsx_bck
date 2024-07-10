@@ -136,8 +136,6 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     }
     const currentUrl = window.location.pathname; // This gives you the path of the current URL
 
-
-
     const teams: TeamItem[] = [
         {id: 1, name: 'Courses', href: '/Courses', initial: 'C', current: '/Courses' == currentUrl},
 
@@ -199,11 +197,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         let response = await axios.get(`${getApiDomain()}/user/roles`);
         setRoles(response.data)
     };
-    var home = false;
-    if(currentUrl == '/feed/'+community?.channels[0].id)
-    {
-        home = true;
-    }
+
+
 
 
     useEffect(() => {
@@ -249,91 +244,69 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                                 </div>
                                 <div
-                                  className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
-                                    <div className="flex flex-shrink-0 items-center ">
-
-                                        <button
-                                          type="button"
-                                          className="m-2.5 -ml-2.5 p-2.5 text-gray-700 lg:hidden"
-                                          onClick={() => setSidebarOpen(true)}
-                                        >
-                                            <span className="sr-only">Open sidebar</span>
-                                            <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
-                                        </button>
-
+                                    className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                                    <div className="flex flex-shrink-0 items-center">
                                         <img
-                                          className="block h-8 w-auto lg:hidden"
-                                          src={LogoSquare}
-                                          alt="b:hive"
+                                            className="block h-8 w-auto lg:hidden"
+                                            src={LogoSquare}
+                                            alt="b:hive"
                                         />
                                         <img
-                                          className="hidden h-8 w-auto lg:block"
-                                          src={LogoSquare}
-                                          alt="b:hive"
+                                            className="hidden h-8 w-auto lg:block"
+                                            src={LogoSquare}
+                                            alt="b:hive"
                                         />
-
-
                                     </div>
 
                                 </div>
                                 <div
-                                  className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
-                                    <div className="flex flex-shrink-0 items-center ">
-
-
-                                        <img src={community && community.community?.logo}
-                                             className="sm:mx-auto h-9 py-1"/>
-
-                                    </div>
-
-                                </div>
-                                <div
-                                  className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                    className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                    <ThemeSwitch />
 
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
                                         <div>
                                             <Menu.Button
-                                              className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                 <span className="sr-only">Open user menu</span>
-                                                <img
-                                                  className="h-8 w-8 rounded-full"
-                                                  src={profile?.profilePicture}
-                                                  alt=""
+                                               <img
+                                                    className="h-8 w-8 rounded-full"
+                                                    src={profile?.profilePicture}
+                                                    alt=""
                                                 />
                                             </Menu.Button>
                                         </div>
                                         <Transition
-                                          as={Fragment}
-                                          enter="transition ease-out duration-200"
-                                          enterFrom="transform opacity-0 scale-95"
-                                          enterTo="transform opacity-100 scale-100"
-                                          leave="transition ease-in duration-75"
-                                          leaveFrom="transform opacity-100 scale-100"
-                                          leaveTo="transform opacity-0 scale-95"
+                                            as={Fragment}
+                                            enter="transition ease-out duration-200"
+                                            enterFrom="transform opacity-0 scale-95"
+                                            enterTo="transform opacity-100 scale-100"
+                                            leave="transition ease-in duration-75"
+                                            leaveFrom="transform opacity-100 scale-100"
+                                            leaveTo="transform opacity-0 scale-95"
                                         >
                                             <Menu.Items
-                                              className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 <Menu.Item>
                                                     {({active}) => (
-                                                      <a
-                                                        href={`/profile/${profile?._id}`}
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                      >
-                                                          Your Profile
-                                                      </a>
+                                                        <a
+                                                            href={`/profile/${profile?._id}`}
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        >
+                                                            Your Profile
+                                                        </a>
                                                     )}
                                                 </Menu.Item>
 
                                                 <Menu.Item>
                                                     {({active}) => (
-                                                      <a
-                                                        href="/auth"
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                      >
-                                                          Sign out
-                                                      </a>
+                                                        <a
+                                                            href="/auth"
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        >
+                                                            Sign out
+                                                        </a>
                                                     )}
                                                 </Menu.Item>
 
@@ -348,16 +321,16 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             <div className="space-y-1 pb-4 pt-2">
                                 {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                                 <Disclosure.Button
-                                  as="a"
-                                  href="#"
-                                  className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+                                    as="a"
+                                    href="#"
+                                    className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
                                 >
                                     Dashboard
                                 </Disclosure.Button>
                                 <Disclosure.Button
-                                  as="a"
-                                  href="#"
-                                  className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                    as="a"
+                                    href="#"
+                                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                 >
                                     Team
                                 </Disclosure.Button>
@@ -392,7 +365,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <div className="fixed inset-0 bg-white/80"/>
+                            <div className="fixed inset-0 bg-gray-900/80"/>
                         </Transition.Child>
 
                         <div className="fixed inset-0 flex">
@@ -419,82 +392,81 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             <button type="button" className="-m-2.5 p-2.5"
                                                     onClick={() => setSidebarOpen(false)}>
                                                 <span className="sr-only">Close sidebar</span>
-                                                <XMarkIcon className="h-6 w-6 text-black" aria-hidden="true"/>
+                                                <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true"/>
                                             </button>
                                         </div>
                                     </Transition.Child>
                                     {/* Sidebar component, swap this element with another sidebar if you like */}
                                     <div
-                                      className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white pl-6 lg:mt-[62px]">
+                                        className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 bg-hive pl-6">
 
                                         <nav className="flex flex-1 flex-col mt-2">
                                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                                 <li>
-                                                    <ul role="list" className="-mx-3 space-y-3">
+                                                    <ul role="list" className="-mx-2 space-y-1">
                                                         {navigation.map((item) => (
-                                                          <li key={item.name}>
-                                                              <a
-                                                                href={item.href}
-                                                                className={classNames(
-                                                                  item.current
-                                                                    ? 'text-[#452c63]'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
-                                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                                )}
-                                                              >
-                                                     <span
-                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                                            <li key={item.name}>
+                                                                <a
+                                                                    href={item.href}
+                                                                    className={classNames(
+                                                                        item.current
+                                                                            ? 'bg-gray-800 text-white'
+                                                                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                                    )}
+                                                                >
+                                                                   <span
+                                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {item.name.slice(0, 2)}
                           </span>
-                                                                  <span
-                                                                    className="mt-[2px]">
-                            {item.name}
-                          </span>
-                                                              </a>
-                                                          </li>
+                                                                    {item.name}
+                                                                </a>
+                                                            </li>
                                                         ))}
                                                     </ul>
                                                 </li>
                                                 <li>
-                                                    <div className="text-xs  leading-6 text-gray-400 my-3">General</div>
-                                                    <ul role="list" className="-mx-3 space-y-3">
+                                                    <div
+                                                        className="text-xs font-semibold leading-6 text-gray-400">General
+                                                    </div>
+                                                    <ul role="list" className="-mx-2 mt-2 space-y-1">
                                                         {teams.map((team) => (
-                                                          <li key={team.name}>
-                                                              <a
-                                                                href={team.href}
-                                                                className={classNames(
-                                                                  team.current
-                                                                    ? 'text-[#452c63]'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
-                                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                                )}
-                                                              >
+                                                            <li key={team.name}>
+                                                                <a
+                                                                    href={team.href}
+                                                                    className={classNames(
+                                                                        team.current
+                                                                            ? 'bg-gray-800 text-white'
+                                                                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
+                                                                    )}
+                                                                >
                           <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#662d91] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {team.initial}
                           </span>
-                                                                  <span
-                                                                    className="mt-[2px]">{team.name}</span>
-                                                              </a>
-                                                          </li>
+                                                                    <span className="truncate">{team.name}</span>
+                                                                </a>
+                                                            </li>
                                                         ))}
                                                     </ul>
                                                 </li>
-                                                <li className="-mx-6 mt-auto">
+                                              
+                                               <li className="-mx-6 mt-auto">
                                                     <a
-                                                      href={`/profile/${profile?._id}`}
-                                                      className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
+                                                        href="#"
+                                                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
                                                     >
                                                         <img
-                                                          className="h-8 w-8 rounded-full bg-gray-800"
-                                                          src={profile?.profilePicture}
-                                                          alt=""
+                                                            className="h-8 w-8 rounded-full bg-gray-800"
+                                                            src={profile?.profilePicture}
+                                                            alt=""
                                                         />
                                                         <span className="sr-only">Your profile</span>
-                                                        <span
-                                                          aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
+                                                        <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                                     </a>
                                                 </li>
+                                            
                                             </ul>
                                         </nav>
                                     </div>
@@ -505,68 +477,63 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 </Transition.Root>
 
                 {/* Static sidebar for desktop */}
-                <div
-                  className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100">
+                <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[62px] lg:z-50 lg:flex lg:w-72 lg:flex-col ">
                     {/* Sidebar component, swap this element with another sidebar if you like */}
-                    <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
+                    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 bg-hive px-6">
 
                         <nav className="flex flex-1 flex-col mt-2">
                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                 <li>
-                                    <ul role="list" className="-mx-3 space-y-3">
+                                    <ul role="list" className="-mx-2 space-y-1">
                                         {navigation.map((item) => (
-                                          <li key={item.name}>
-                                              <a
-                                                href={item.href}
-                                                className={classNames(
-                                                  item.current
-                                                    ? 'text-[#452c63]'
-                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
-                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
-                                                )}
-                                              >
+                                            <li key={item.name}>
+                                                <a
+                                                    href={item.href}
+                                                    className={classNames(
+                                                        item.current
+                                                            ? 'bg-[#452c63] text-white'
+                                                            : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                    )}
+                                                >
                                                      <span
-                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {item.name.slice(0, 2)}
                           </span>
-                                                  <span
-                                                    className="mt-[2px]">
-                            {item.name}
-                          </span>
-                                              </a>
-                                          </li>
+                                                    {item.name}
+                                                </a>
+                                            </li>
                                         ))}
                                     </ul>
                                 </li>
                                 <li>
-                                    <div className="text-xs  leading-6 text-gray-400 my-3">General</div>
-                                    <ul role="list" className="-mx-3 space-y-3">
+                                    <div className="text-xs font-semibold leading-6 text-gray-400">General</div>
+                                    <ul role="list" className="-mx-2 mt-2 space-y-1">
                                         {teams.map((team) => (
-                                          <li key={team.name}>
-                                              <a
-                                                href={team.href}
-                                                className={classNames(
-                                                  team.current
-                                                    ? 'text-[#452c63]'
-                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
-                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
-                                                )}
-                                              >
+                                            <li key={team.name}>
+                                                <a
+                                                    href={team.href}
+                                                    className={classNames(
+                                                        team.current
+                                                            ? 'bg-[#452c63] text-white'
+                                                            : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
+                                                    )}
+                                                >
                           <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#662d91] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#662d91] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {team.initial}
                           </span>
-                                                  <span
-                                                    className="mt-[2px]">{team.name}</span>
-                                              </a>
-                                          </li>
+                                                    <span className="truncate">{team.name}</span>
+                                                </a>
+                                            </li>
                                         ))}
                                     </ul>
                                 </li>
-                                <li className="-mx-6 mt-auto">
+                                 <li className="-mx-6 mt-auto">
                                     <a
-                                      href={`/profile/${profile?._id}`}
-                                      className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
+                                        href={`/profile/${profile?._id}`}
+                                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
                                     >
                                         <img
                                             className="h-8 w-8 rounded-full bg-gray-800"
@@ -581,8 +548,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                         </nav>
                     </div>
                 </div>
-                <div className="">
-                    <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
+                <div className="lg:pl-72">
+                    <div className="sticky top-[62px] z-40 lg:mx-auto">
                         <div
                             className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
                             <button
@@ -611,21 +578,20 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                         </div>
                     </div>
 
-                    <main className="lg:ml-72 py-10 bg">
-
-
+                    <main className="py-10 bg">
 
                         {
                             community?.community?.private && community?.user?.notjoined ? (
-                              <Join text={community.community.desc} logo={community.community.logo}/>
+                                <Join text={community.community.desc} logo={community.community.logo}/>
                             ) : (
-                              Children.map(children, child => {
-                                  // @ts-ignore
-                                  return React.cloneElement(child, {roles, setRoles});
-                              })
+                                Children.map(children, child => {
+                                        // @ts-ignore
+                                    return React.cloneElement(child, { roles, setRoles });
+                                    })
                             )
                         }
                     </main>
+
 
 
                 </div>
