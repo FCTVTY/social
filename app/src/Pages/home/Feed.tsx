@@ -184,7 +184,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                 </div>
             )}
             {channel && (
-                <div className="mx-auto max-w-7xl py-0 sm:px-6">
+                <div className="mx-auto max-w-7xl py-0 px-6 ">
 
 
 
