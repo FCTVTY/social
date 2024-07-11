@@ -256,7 +256,7 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
               <div className="min-w-0 flex-1">
 
                   <h2
-                    className="mt-2 text-3xl leading-7 tracking-wider text-[#452c63] sm:truncate sm:text-3xl sm:tracking-tight">
+                    className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight">
                       {community?.community?.name} Events
                   </h2>
 

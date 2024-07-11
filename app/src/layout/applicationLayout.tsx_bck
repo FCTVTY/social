@@ -491,13 +491,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     href={item.href}
                                                     className={classNames(
                                                         item.current
-                                                            ? 'bg-[#452c63] text-white'
-                                                            : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                            ? 'bg-primary text-white'
+                                                            : 'text-gray-400 hover:text-white hover:bg-primary',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                     )}
                                                 >
                                                      <span
-                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-primary text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
                             {item.name.slice(0, 2)}
                           </span>
                                                     {item.name}
@@ -515,8 +515,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     href={team.href}
                                                     className={classNames(
                                                         team.current
-                                                            ? 'bg-[#452c63] text-white'
-                                                            : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                            ? 'bg-primary text-white'
+                                                            : 'text-gray-400 hover:text-white hover:bg-primary',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                     )}
                                                 >

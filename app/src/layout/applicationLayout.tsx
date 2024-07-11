@@ -262,12 +262,12 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         </button>
 
                                         <img
-                                          className="block h-8 w-auto lg:hidden"
+                                          className="block h-7 w-auto lg:hidden"
                                           src={LogoSquare}
                                           alt="b:hive"
                                         />
                                         <img
-                                          className="hidden h-8 w-auto lg:block"
+                                          className="hidden h-7 w-auto lg:block"
                                           src={LogoSquare}
                                           alt="b:hive"
                                         />
@@ -282,7 +282,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
 
                                         <img src={community && community.community?.logo}
-                                             className="sm:mx-auto h-9 py-1"/>
+                                             className="sm:mx-auto h-9"/>
 
                                     </div>
 
@@ -437,13 +437,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                 href={item.href}
                                                                 className={classNames(
                                                                   item.current
-                                                                    ? 'text-[#452c63]'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                                    ? 'text-indigo-600'
+                                                                    : 'text-gray-400 hover:text-white hover:bg-indigo-600',
                                                                   'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                                 )}
                                                               >
                                                      <span
-                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-indigo-600 text-[0.625rem] font-medium text-white group-hover:text-white ">
                             {item.name.slice(0, 2)}
                           </span>
                                                                   <span
@@ -464,13 +464,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                 href={team.href}
                                                                 className={classNames(
                                                                   team.current
-                                                                    ? 'text-[#452c63]'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                                    ? 'text-cyan-500'
+                                                                    : 'text-gray-400 hover:text-white hover:bg-cyan-500',
                                                                   'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                                 )}
                                                               >
                           <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#662d91] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-cyan-500 text-[0.625rem] font-medium text-white group-hover:text-white">
                             {team.initial}
                           </span>
                                                                   <span
@@ -511,6 +511,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                     <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
 
                         <nav className="flex flex-1 flex-col mt-2">
+                            <div className="text-xs  leading-6 text-gray-400 my-3">Channels</div>
+
                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                 <li>
                                     <ul role="list" className="-mx-3 space-y-3">
@@ -520,13 +522,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                 href={item.href}
                                                 className={classNames(
                                                   item.current
-                                                    ? 'text-[#452c63]'
-                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
+                                                    ? 'text-indigo-600'
+                                                    : 'text-gray-400 hover:text-white hover:bg-indigo-600',
                                                   'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                 )}
                                               >
                                                      <span
-                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#452c63] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-indigo-600 text-[0.625rem] font-medium text-white group-hover:text-white">
                             {item.name.slice(0, 2)}
                           </span>
                                                   <span
@@ -547,13 +549,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                 href={team.href}
                                                 className={classNames(
                                                   team.current
-                                                    ? 'text-[#452c63]'
-                                                    : 'text-gray-400 hover:text-white hover:bg-[#452c63]',
-                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
+                                                    ? 'text-cyan-500'
+                                                    : 'text-gray-400 hover:text-white hover:bg-cyan-500',
+                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                 )}
                                               >
                           <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-[#662d91] text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-cyan-500 text-[0.625rem] font-medium text-white group-hover:text-white">
                             {team.initial}
                           </span>
                                                   <span
@@ -569,9 +571,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                       className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
                                     >
                                         <img
-                                            className="h-8 w-8 rounded-full bg-gray-800"
-                                            src={profile?.profilePicture}
-                                            alt=""
+                                          className="h-8 w-8 rounded-full bg-gray-800"
+                                          src={profile?.profilePicture}
+                                          alt=""
                                         />
                                         <span className="sr-only">Your profile</span>
                                         <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
@@ -582,7 +584,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                     </div>
                 </div>
                 <div className="">
-                    <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
+                <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
                         <div
                             className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
                             <button

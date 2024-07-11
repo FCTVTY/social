@@ -86,7 +86,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                     <div>
                         <img className="h-48 w-full object-cover lg:h-64" src={ppost?.media} alt="" />
                     </div>
-                    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                             <div className="flex">
                                 <img className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src={ppost?.logo} alt="" />
@@ -144,9 +144,9 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                     </div>
                 </div>
 
-                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mt-4">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
                     <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
-                        <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
+                        <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-7xl">
                             <div className="flex flex-1 flex-col p-3">
                                 <dl className="mt-1 flex flex-grow flex-col justify-between">
                                     <strong>Event Details</strong>

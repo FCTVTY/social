@@ -6,6 +6,7 @@ import YouTubeEmbedsmall from "./youtubesmall";
 import {Dialog, Transition } from '@headlessui/react';
 import {ExclamationTriangleIcon} from "@heroicons/react/16/solid";
 import {XMarkIcon} from "@heroicons/react/20/solid";
+import axios from "axios";
 
 interface PostItemProps {
     lite?: boolean
@@ -13,7 +14,7 @@ interface PostItemProps {
 
 
 
-const PostItem = ({post, profile, lite, roles}) => {
+const PostItem = ({post, profile, lite, roles, supertokensId}) => {
 
     console.log(post._id)
     const [visibility, setVisibility] = useState(false);
@@ -92,6 +93,45 @@ const PostItem = ({post, profile, lite, roles}) => {
         const b = Math.floor(Math.random() * 127 + 128);
         return `rgb(${r}, ${g}, ${b})`;
     }
+
+
+    const [message, setMessage] = useState("");
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+
+
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const {name, value} = e.target;
+        setMessage(value)
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        try {
+
+
+
+
+            await axios.post(`${getApiDomain()}/comment`, {
+                postId: post._id,
+                userId: supertokensId,
+                comment: message
+            });
+            // Clear form fields after successful submission
+            setMessage("");
+            setSelectedImage(null);
+
+            post.postComments = [...post.postComments, {
+                profile: profile,
+                comment: message
+            }];
+
+        } catch (error) {
+            console.error('Error creating post:', error);
+        }
+    };
+
     return (
       <li key={post._id}
           className={`col-span-1 flex flex-col  rounded-2xl bg-white shadow max-w-4xl`}
@@ -280,7 +320,7 @@ const PostItem = ({post, profile, lite, roles}) => {
 
               <div className="flow-root mt-3">
                   <ul role="list" className="-mb-8">
-                      {post && post.postComments.slice(-1).map((activityItem, activityItemIdx) => (
+                      {post && post.postComments.slice(-2).map((activityItem, activityItemIdx) => (
                         <li key={activityItem._id}>
                             <div className="relative pb-8">
                                 {activityItemIdx !== post.postComments.length - 1 ? (
@@ -324,15 +364,15 @@ const PostItem = ({post, profile, lite, roles}) => {
                   </ul>
               </div>
 
-              <div className=" mt-10 flex items-center mb-4 space-x-3">
-                  <input type="text" placeholder="Write a comment..."
+              <form onSubmit={handleSubmit} className=" mt-10 flex items-center mb-4 space-x-3">
+                  <input type="text" placeholder="Write a comment..."  onChange={handleInputChange}
                          className="flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
                   <button
                     className="bg-primary text-white text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-                    type="button">
+                    type="submit">
                       Comment
                   </button>
-              </div>
+              </form>
 
           </div>
 

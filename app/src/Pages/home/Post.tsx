@@ -94,13 +94,13 @@ export default function PostView({host, channel, post}: HomeProps) {
         <>
             {ppost && (
                 <>
-                    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                         <ul role="list"
                             className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
 
 
-                            <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-4xl">
+                            <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-7xl">
                                 <div className="flex flex-1 flex-col p-3">
                                     <dl className="mt-1 flex flex-grow flex-col justify-between">
                                         <a href="#" className="group block flex-shrink-0">

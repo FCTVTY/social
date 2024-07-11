@@ -82,6 +82,13 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                 profileResponse.json()
             ]);
 
+            // Check if responseData is null or empty
+            if (!postsResponse || postsResponse.length === 0) {
+                setLoading(false);
+                setdestroyloading(true);
+                return;
+            }
+
             const sortedPosts = postsData.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
             setPosts(sortedPosts);
             setAds(adsData);
@@ -231,7 +238,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                                 {!skelloading && posts.filter(post => post.type !== "event").map(post => (
                                   <PostItem key={post._id} post={post} profile={profile} lite={undefined}
-                                            roles={roles}/>
+                                            roles={roles} supertokensId={profile?.supertokensId}/>
                                 ))}
 
                                 {skelloading && (

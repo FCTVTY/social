@@ -567,7 +567,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
 
                   {/* Activity feed */}
                   <aside
-                    className=" p-5 bg-black/10 lg:fixed lg:bottom-0 lg:right-0 lg:top-36 mt-[-18px] lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
+                    className=" p-5 bg-white lg:fixed lg:bottom-0 lg:right-0 lg:top-[64px]  lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
                       <header
                         className="flex items-center justify-between border-b border-white/5 ">
                           <h2 className="text-base font-semibold leading-7 ">All in the Details

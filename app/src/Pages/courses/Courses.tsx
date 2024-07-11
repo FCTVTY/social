@@ -27,6 +27,7 @@ import {date} from "zod";
 import {TicketPlus} from "lucide-react";
 import {json} from "react-router-dom";
 import EventItem from "./Eventitem";
+import Button from "../../components/Button";
 
 interface HomeProps {
     host?: string;
@@ -223,7 +224,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
               <div className="min-w-0 flex-1">
 
                   <h2
-                    className="mt-2 text-3xl leading-7 tracking-wider text-[#452c63] sm:truncate sm:text-3xl sm:tracking-tight">
+                    className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight">
                       {community?.community?.name} Courses
                   </h2>
 
@@ -260,7 +261,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
           </div>
 
 
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
               <div className="bg-white shadow rounded-xl">
                   <section aria-labelledby="features-heading" className="relative">
@@ -278,8 +279,8 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                       <div
                         className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 sm:pb-10 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-15">
                           <div className="lg:col-start-2">
-                              <h2 id="features-heading" className="font-medium text-gray-500">
-                                  Leatherbound Daily Journal
+                              <h2 id="features-heading" className="font-medium text-cyan-900">
+                                  Coruse of the month
                               </h2>
                               <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900">All in the
                                   Details</p>
@@ -294,6 +295,10 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                   <div>
                                       <dt className="font-medium text-gray-900">feature.name</dt>
                                       <dd className="mt-2 text-gray-500">feature.description</dd>
+                                      <dd className="mt-2 text-gray-500">
+                                          <Button variant="solid" type="button">View</Button>
+                                      </dd>
+
                                   </div>
 
                               </dl>
