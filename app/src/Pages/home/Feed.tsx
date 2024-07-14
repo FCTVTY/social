@@ -202,7 +202,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                         <h2
                                           className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
 
-                                            Welcome to the {community?.community?.name} B:Hive Communityty
+                                            Welcome to the {community?.community?.name} B:Hive Community
 
 
                                         </h2>
@@ -301,10 +301,10 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                         </div>
 
                         <div className="lg:col-span-2 lg:col-start-4">
-                            <span className="truncate text-base font-medium leading-7 text-slate-400 py-3 ml-2">About</span>
+                            <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 ml-2">About</span>
 
-                            <div className="rounded-xl border-2 border-gray-100 bg-white p-3 mb-4">
-                                <img src={community && community.community?.logo} className="sm:mx-auto h-20 py-1"/>
+                            <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 p-3 mb-4 dark:text-white ">
+                                <img src={community && community.community?.logo} className="sm:mx-auto h-20 py-1 dark:rounded-2xl dark:bg-white dark:p-10"/>
 
                                 <p className={`py-6`}>{community?.community?.desc}</p>
                                 <dl>
@@ -317,7 +317,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                         </svg>
                                         Public
                                     </dt>
-                                    <dd className="text-sm text-gray-700">Anyone can see who's in the community and what
+                                    <dd className="text-sm ">Anyone can see who's in the community and what
                                         they post.
                                     </dd>
 
@@ -332,7 +332,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                         </svg>
                                         Visible
                                     </dt>
-                                    <dd className="text-sm text-gray-700">Anyone can find this community.
+                                    <dd className="text-sm">Anyone can find this community.
                                     </dd>
 
 
@@ -340,7 +340,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                             </div>
 
-                            <span className="truncate text-base font-medium leading-7 text-slate-400 py-3 mt-4 ml-2">Advert</span>
+                            <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 mt-4 ml-2">Advert</span>
                             {
                               ads && ads.length > 0 && (() => {
                                   const randomIndex = Math.floor(Math.random() * ads.length);
@@ -351,7 +351,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                   return [randomPost].map(post => (
                                     <div key={post._id}
                                          className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl">
-                                        <article className="rounded-xl border-2 border-gray-100 bg-white">
+                                        <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:text-white">
                                             <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                                                 <a href="https://www.fkcreative.co.uk/" className="block shrink-0">
                                                     <img
@@ -389,7 +389,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                                             <div className="flex justify-end">
                                                 <strong
-                                                  className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 px-3 py-1.5 text-white"
+                                                  className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 dark:bg-zinc-600 px-3 py-1.5 text-white"
                                                 >
                                                     <svg
                                                       xmlns="http://www.w3.org/2000/svg"

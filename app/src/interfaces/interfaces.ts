@@ -112,3 +112,30 @@ export interface Ads {
     name: string
     url: string
 }
+
+
+export interface Courses {
+    _id: string
+    name: string
+    community: string
+    desc: string
+    featured: boolean
+    media: string
+    hours :string
+    chapters: Chapter[]
+    files: File[]
+}
+
+export interface Chapter {
+    _id: string
+    name: string,
+    status: string
+    videourl: string
+}
+
+export interface File {
+    url: string
+    name: string
+    logo: string
+    fileExt: string
+}

@@ -239,7 +239,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 </div>
             </div>
 
-            <Disclosure as="nav" className="overscroll-none sticky top-0 z-50 bg-white border-b border-gray-200">
+            <Disclosure as="nav" className="overscroll-none sticky top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-zinc-900">
                 {({open}) => (
                     <>
                         <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -267,11 +267,16 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                           alt="b:hive"
                                         />
                                         <img
-                                          className="hidden h-7 w-auto lg:block"
+                                          className="hidden h-7 w-auto lg:block dark:hidden"
                                           src={LogoSquare}
                                           alt="b:hive"
                                         />
 
+                                        <img
+                                          className="hidden h-7 w-auto dark:lg:block "
+                                          src={LogoSquareDark}
+                                          alt="b:hive"
+                                        />
 
                                     </div>
 
@@ -282,7 +287,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
 
                                         <img src={community && community.community?.logo}
-                                             className="sm:mx-auto h-9"/>
+                                             className="sm:mx-auto h-9 rounded-xs"/>
 
                                     </div>
 
@@ -290,6 +295,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                 <div
                                   className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
+                                    <ThemeSwitch></ThemeSwitch>
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
@@ -325,7 +331,16 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                       </a>
                                                     )}
                                                 </Menu.Item>
-
+                                                <Menu.Item>
+                                                    {({active}) => (
+                                                      <a
+                                                        href={`/settings`}
+                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                      >
+                                                          Settings
+                                                      </a>
+                                                    )}
+                                                </Menu.Item>
                                                 <Menu.Item>
                                                     {({active}) => (
                                                       <a
@@ -425,7 +440,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                     </Transition.Child>
                                     {/* Sidebar component, swap this element with another sidebar if you like */}
                                     <div
-                                      className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white pl-6 lg:mt-[62px]">
+                                      className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white dark:bg-zinc-950 pl-6 lg:mt-[62px]">
 
                                         <nav className="flex flex-1 flex-col mt-2">
                                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -506,7 +521,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                 {/* Static sidebar for desktop */}
                 <div
-                  className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100">
+                  className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:border-zinc-900">
                     {/* Sidebar component, swap this element with another sidebar if you like */}
                     <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
 

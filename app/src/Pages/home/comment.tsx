@@ -50,7 +50,8 @@ export default function Comment({ onSubmit, post, supertokensId }: CreateProps) 
         <>
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-3">
-                <form onSubmit={handleSubmit} className=" bg-white shadow rounded-3xl p-3">
+                <form onSubmit={handleSubmit} className=" bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:text-white dark:border-2
+ shadow rounded-3xl p-3">
 
                 <textarea
                     id="desc"

@@ -1,4 +1,30 @@
+import {useEffect, useState} from "react";
+import {Profile} from "../../interfaces/interfaces";
+import axios from "axios";
+import {getApiDomain} from "../../lib/auth/supertokens";
+
 export default function Settings(){
+
+    const [profile, setProfile] = useState<Profile | null>(null);
+    const fetchDetails = async () => {
+        try {
+
+            const Presponse = await axios.get(`${getApiDomain()}/profile`);
+            const profileData = Presponse.data;
+
+            setProfile(profileData);
+        } catch (error) {
+            console.error('Error fetching community details:', error);
+        }
+    };
+
+    useEffect(() => {
+            fetchDetails();
+
+    }, []);
+
+
+
     return (
         <main>
         <div className="divide-y divide-white/5">
@@ -14,7 +40,7 @@ export default function Settings(){
                     <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
                         <div className="col-span-full flex items-center gap-x-8">
                             <img
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                src={profile?.profilePicture}
                                 alt=""
                                 className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
                             />

@@ -18,7 +18,7 @@ import {
     PPosts,
     Profile,
     Channel,
-    EventDetails, PEvent
+    EventDetails, PEvent, Courses
 } from "../../interfaces/interfaces";
 import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
@@ -38,7 +38,7 @@ function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
 export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps) {
-    const [posts, setPosts] = useState<PEvent[]>([]);
+    const [posts, setPosts] = useState<Courses[]>([]);
     const [community, setCommunity] = useState<CommunityCollection>();
     const [open, setOpen] = useState(false)
 
@@ -57,15 +57,12 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
             const communityData = await communityResponse.json();
             setCommunity(communityData);
 
-            const postsResponse = await fetch(`${getApiDomain()}/community/posts?host=${host}&page=1`);
+            const postsResponse = await fetch(`${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=1`);
             if (!postsResponse.ok) {
-                throw new Error('Network response was not ok for posts fetch');
+                throw new Error('Network response was not ok for courses fetch');
             }
             const postsData = await postsResponse.json();
-            const sortedPosts = postsData.sort((a: Post, b: Post) => {
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-            });
-            setPosts(sortedPosts);
+            setPosts(postsData);
         } catch (error) {
             console.error('Error fetching community details:', error);
         }
@@ -262,7 +259,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
 
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
+              {posts.filter(post => post.featured).map((product) => (
               <div className="bg-white shadow rounded-xl">
                   <section aria-labelledby="features-heading" className="relative">
                       <div
@@ -270,7 +267,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                           <div className="badge badge-neutral absolute top-[10px] left-[10px]">FEATURED</div>
 
                           <img
-                            src="https://images.pexels.com/photos/5428012/pexels-photo-5428012.jpeg?auto=compress&cs=tinysrgb&w=800"
+                            src={product.media}
                             alt="Black leather journal with silver steel disc binding resting on wooden shelf with machined steel pen."
                             className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                           />
@@ -282,21 +279,19 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                               <h2 id="features-heading" className="font-medium text-cyan-900">
                                   Coruse of the month
                               </h2>
-                              <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900">All in the
-                                  Details</p>
+                              <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900">{product.name}</p>
                               <p className="mt-4 text-gray-500">
-                                  We've obsessed over every detail of this handcrafted journal to bring you the best
-                                  materials for daily
-                                  use.
+                                  {product.desc}
                               </p>
 
                               <dl className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 text-sm sm:grid-cols-2">
 
                                   <div>
-                                      <dt className="font-medium text-gray-900">feature.name</dt>
-                                      <dd className="mt-2 text-gray-500">feature.description</dd>
-                                      <dd className="mt-2 text-gray-500">
-                                          <Button variant="solid" type="button">View</Button>
+                                      <dt className="font-medium text-gray-900">Course length: {product.hours}</dt>
+                                      <dd className="mt-4 text-gray-500">
+                                          <a         className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                     href={`/course/${product.name.replace(/ /g,"_")}`}>View</a>
+
                                       </dd>
 
                                   </div>
@@ -306,33 +301,36 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                       </div>
                   </section>
               </div>
+                ))}
 
               <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
-                  {products.map((product) => (
-                    <div key={product.id}
+                  {posts.map((product) => (
+                    <div key={product._id}
                          className="group relative divide-x divide-gray-200 rounded-lg bg-white shadow">
                         <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg ">
-                            <img src={product.imageSrc} alt={product.imageAlt}
+                            <img src={product.media} alt={product.desc}
                                  className="object-cover object-center"/>
                             <div className="flex items-end p-4 opacity-0 group-hover:opacity-100"
                                  aria-hidden="true">
-                                <div
+                                <a
+                                  href={`/course/${product.name.replace(/ /g,"_")}`}
                                   className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter">
                                     View Course
-                                </div>
+                                </a>
                             </div>
                         </div>
                         <div
                           className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900">
                             <h3>
-                                <a href="#">
+                                <a                                   href={`/course/${product.name.replace(/ /g,"_")}`}
+                                >
                                     <span aria-hidden="true" className="absolute inset-0"/>
                                     {product.name}
                                 </a>
                             </h3>
-                            <p className="text-gray-900 text-sm">{product.price}</p>
+                            <p className="text-gray-900 text-sm">{product.hours}</p>
                         </div>
-                        <p className="m-2 text-sm text-gray-500">{product.category}</p>
+                        <p className="m-2 text-sm text-gray-500">{product.desc}</p>
                     </div>
                   ))}
               </div>

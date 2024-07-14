@@ -29,12 +29,12 @@ import UserRoles from "supertokens-auth-react/recipe/userroles";
 import {UserRoleClaim, PermissionClaim} from "supertokens-auth-react/recipe/userroles";
 import {SessionContext} from "supertokens-auth-react/recipe/session"
 import Session from 'supertokens-auth-react/recipe/session';
-import {NavigationLoadingBar} from "./layout/loader";
+import CustomSwitch, {NavigationLoadingBar} from "./layout/loader";
 import LoadingBar, {LoadingBarRef} from "react-top-loading-bar";
 import Courses from './Pages/courses/Courses';
 import Chat from "./Pages/Chat/Chat";
 import Course from './Pages/courses/Course';
-
+import PasswordReset from './Pages/auth/passwordReset'
 initSuperTokens();
 
 
@@ -110,12 +110,13 @@ function App() {
 
     }, []);
 
- 
+
+  const [progress, setProgress] = useState(false)
 
 
   return (
       <SuperTokensWrapper>
-
+        <CustomSwitch>
         <Routes>
             <Route path="/login" element={<AuthLayout>
 <Login/>
@@ -197,22 +198,26 @@ function App() {
           <Route path="/courses" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-            <Courses/></ApplicationLayout> </SessionAuth>}/>
+            <Courses host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
           <Route path="/course/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-            <Course/></ApplicationLayout> </SessionAuth>}/>
+            <Course host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
 
             <Route path='/auth' element={<AuthLayout>
                 <Login/>
             </AuthLayout>}/>
+
+          <Route path='/auth/reset-password' element={<PasswordReset></PasswordReset>}/>
+
             <Route path="*" element={ <SessionAuth><ApplicationLayout host={subdomain}>
                 <Feed host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
 
             </Routes>
+          </CustomSwitch>
       </SuperTokensWrapper>
 
     );

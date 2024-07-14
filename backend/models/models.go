@@ -120,3 +120,25 @@ type EventPost struct {
 		Location     string    `json:"location"`
 	} `json:"eventDetails,omitempty"`
 }
+
+type Courses struct {
+	ID        string `json:"_id"`
+	Name      string `json:"name"`
+	Community string `json:"community"`
+	Desc      string `json:"desc"`
+	Featured  bool   `json:"featured"`
+	Media     string `json:"media"`
+	Hours     string `json:"hours"`
+	Chapters  []struct {
+		ID       string `json:"_id"`
+		Name     string `json:"name"`
+		Videourl string `json:"videourl"`
+	} `json:"chapters"`
+
+	Files []struct {
+		URL     string `json:"url"`
+		Name    string `json:"name"`
+		Logo    string `json:"logo"`
+		FileExt string `json:"fileExt"`
+	} `json:"files"`
+}

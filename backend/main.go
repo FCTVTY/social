@@ -203,6 +203,18 @@ func main() {
 
 			return
 		}
+
+		if parsedURL.Path == "/v1/community/courses" && r.Method == "GET" {
+			session.VerifySession(nil, client.Courses).ServeHTTP(rw, r)
+
+			return
+		}
+		if parsedURL.Path == "/v1/community/course" && r.Method == "GET" {
+			session.VerifySession(nil, client.Course).ServeHTTP(rw, r)
+
+			return
+		}
+
 		if parsedURL.Path == "/v1/ads/get" {
 			session.VerifySession(nil, client.GetAds).ServeHTTP(rw, r)
 		}

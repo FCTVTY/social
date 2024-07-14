@@ -1,53 +1,53 @@
-import { useEffect, useState } from 'react'
-import { Switch } from '@headlessui/react'
-import { SunIcon } from '@heroicons/react/24/solid'
+import { useEffect, useState } from 'react';
+import { Switch } from '@headlessui/react';
+import { SunIcon } from '@heroicons/react/24/solid';
+import Cookies from 'js-cookie';
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
 }
 
-
-function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() => {
+function useCookie(key, initialValue) {
+  const [cookieValue, setCookieValue] = useState(() => {
     try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      const cookie = Cookies.get(key);
+      return cookie ? JSON.parse(cookie) : initialValue;
     } catch (error) {
-      console.error(error);
+      console.error('Error reading cookie:', key, error);
       return initialValue;
     }
   });
 
-  const setValue = value => {
+  const setValue = (value) => {
     try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
+      setCookieValue(value);
+      Cookies.set(key, JSON.stringify(value), { expires: 365 });
     } catch (error) {
-      console.error(error);
+      console.error('Error setting cookie:', key, error);
     }
   };
 
-  return [storedValue, setValue];
+  return [cookieValue, setValue];
 }
-
-
 function ThemeSwitch() {
-  const [theme, setTheme] = useLocalStorage('theme', 'light');
+  const [theme, setTheme] = useCookie('theme', 'light');
   const [enabled, setEnabled] = useState(theme === 'light');
 
   useEffect(() => {
-    let htmlSelector = document.querySelector('html');
+    const htmlSelector = document.querySelector('html');
     if (htmlSelector) {
       htmlSelector.classList.remove('light', 'dark');
       htmlSelector.classList.add(theme);
     }
-    setEnabled(theme === 'light'); // Update enabled state based on theme
+  }, [theme]);
+
+  useEffect(() => {
+    setEnabled(theme === 'light');
   }, [theme]);
 
   const handleThemeChange = (enabled) => {
     setTheme(enabled ? 'light' : 'dark');
   };
-
 
   return (
     <Switch
@@ -67,9 +67,7 @@ function ThemeSwitch() {
       >
         <span
           className={classNames(
-            enabled
-              ? 'opacity-0 duration-100 ease-out'
-              : 'opacity-100 duration-200 ease-in',
+            enabled ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
             'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
           )}
           aria-hidden='true'
@@ -78,9 +76,7 @@ function ThemeSwitch() {
         </span>
         <span
           className={classNames(
-            enabled
-              ? 'opacity-100 duration-200 ease-in'
-              : 'opacity-0 duration-100 ease-out',
+            enabled ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
             'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
           )}
           aria-hidden='true'
@@ -89,7 +85,7 @@ function ThemeSwitch() {
         </span>
       </span>
     </Switch>
-  )
+  );
 }
 
-export default ThemeSwitch
+export default ThemeSwitch;
