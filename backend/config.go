@@ -30,7 +30,7 @@ var SuperTokensConfig = supertokens.TypeInput{
 		ConnectionURI: "https://core.bhivecommunity.co.uk",
 	},
 	AppInfo: supertokens.AppInfo{
-		AppName:       "SuperTokens Demo App",
+		AppName:       "B:Hive Community",
 		APIDomain:     "https://sdk.bhivecommunity.co.uk",
 		WebsiteDomain: "https://app.bhivecommunity.co.uk",
 	},

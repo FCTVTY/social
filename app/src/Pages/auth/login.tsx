@@ -83,7 +83,7 @@ const Login: React.FC = () => {
               >
                 Sign up
               </Link>{' '}
-              for a free trial.
+              for a free account.
             </p>
           </div>
         </div>
@@ -148,6 +148,7 @@ const Login: React.FC = () => {
             </span>
               </Button>
             </div>
+            <a className="mt-2 text-sm text-gray-700" href="/auth/reset-password">Forgotten password?</a>
           </form>
         </Form>
       </>

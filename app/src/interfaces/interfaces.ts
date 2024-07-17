@@ -85,6 +85,7 @@ export interface PEvent  extends PPosts {
 }
 
 export interface Profile {
+    deleted: boolean;
     bio: string;
     _id: string
     email: string

@@ -221,6 +221,9 @@ func main() {
 		if parsedURL.Path == "/v1/profile" {
 			session.VerifySession(nil, client.GetProfile).ServeHTTP(rw, r)
 		}
+		if parsedURL.Path == "/v1/deleteaccount" {
+			session.VerifySession(nil, client.DeleteAccount).ServeHTTP(rw, r)
+		}
 
 		if parsedURL.Path == "/v1/createProfile" && r.Method == "POST" {
 			session.VerifySession(nil, client.CreateProfile).ServeHTTP(rw, r)

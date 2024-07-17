@@ -968,7 +968,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalln("Error uploading the image:", err)
 		}
-		v.ProfilePicture = "https://s3.app.bhivecommunity.co.uk/profile/" + v.SupertokensID + "/profileic/" + v.SupertokensID + ".webp"
+		v.ProfilePicture = "https://s3.app.bhivecommunity.co.uk/profile/" + v.SupertokensID + "/profilepic/" + v.SupertokensID + ".webp"
 
 	}
 	if v.CoverPicture != "" && !strings.HasPrefix(v.CoverPicture, "https") {
@@ -1019,7 +1019,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 
 		// Upload the test file
 		// Change the value of filePath if the file is in another location
-		objectName := v.SupertokensID + "/" + v.SupertokensID + ".webp"
+		objectName := v.SupertokensID + "/cover/" + v.SupertokensID + ".webp"
 		imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
 		if err != nil {
 			log.Fatalln("Error decoding base64 string:", err)
@@ -1036,7 +1036,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalln("Error uploading the image:", err)
 		}
-		v.CoverPicture = "https://s3.app.bhivecommunity.co.uk/profile/" + v.SupertokensID + "/" + v.SupertokensID + ".webp"
+		v.CoverPicture = "https://s3.app.bhivecommunity.co.uk/profile/" + v.SupertokensID + "/cover/" + v.SupertokensID + ".webp"
 
 	}
 	filter := bson.M{"url": v.Username}
@@ -1218,4 +1218,36 @@ func PostHide(rw http.ResponseWriter, r *http.Request) {
 
 	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
 	rw.Write([]byte("post deleted successfully"))
+}
+
+func DeleteAccount(rw http.ResponseWriter, r *http.Request) {
+
+	// Profile already exists, update it
+	updateData := bson.M{
+		"username":       "",
+		"first_name":     "[deleted]",
+		"last_name":      "",
+		"email":          "",
+		"deleted":        true,
+		"profilePicture": "https://s3.app.bhivecommunity.co.uk/profile/blank-profile-picture-png-6.jpg",
+		"coverPicture":   "",
+		"bio":            "",
+	}
+
+	update := bson.M{"$set": updateData}
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	filter := bson.M{"supertokensId": sessionContainer.GetUserID()}
+
+	_, err := profileCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(rw, "failed to update profile: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	supertokens.DeleteUser(sessionContainer.GetUserID())
 }

@@ -35,7 +35,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
 
     return (
         <main className="profile-page">
-            {profile && (
+            {profile && profile.deleted === false && (
 
             <div className=" min-h-screen">
                 <div className="container mx-auto p-4">
