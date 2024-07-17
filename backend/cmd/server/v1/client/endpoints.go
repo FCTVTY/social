@@ -1084,6 +1084,7 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 			"last_name":      metadata["last_name"],
 			"communities":    v.Communities,
 			"email":          id.Email,
+			"deleted":        false,
 		}
 
 		result, err := profileCollection.InsertOne(context.Background(), updateData)
