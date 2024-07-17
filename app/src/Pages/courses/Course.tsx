@@ -485,7 +485,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                                                   <p className="text-base mt-10 mb-36">{posts?.desc}</p>
                                               </Tab.Panel>
 
-                                              
+
                                           </Tab.Panels>
                                       </Tab.Group>
                                   </div>
