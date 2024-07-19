@@ -385,8 +385,9 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                   ))}
 
               {
-                posts && posts.length == 0 || posts == null && ( <div className=" max-w-7xl px-4 sm:px-6 lg:px-8 col-span-3 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl col-span-3">
-                  <div className="text-center my-10 text-sm text-muted text-gray-400">
+                posts && posts.length == 0 || posts == null && (
+                  <div className=" max-w-7xl px-4 sm:px-6 lg:px-8 col-span-3 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl col-span-3">
+                    <div className="text-center my-10 text-sm text-muted text-gray-400">
                       <h2 className="text-4xl m-3"> No Courses added.</h2>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -501,12 +502,15 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                           ></path>
                       </svg>
 
+                    </div>
+                  </div>
 
-                  </div></div>
+
                 )
-              }</div>
-          </div>
+              }
 
+          </div>
+          </div>
           <Transition.Root show={open} as={Fragment}>
               <Dialog as="div" className="relative z-[99999]" onClose={setOpen}>
                   <div className="fixed inset-0"/>
