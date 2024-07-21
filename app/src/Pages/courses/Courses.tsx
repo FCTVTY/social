@@ -28,6 +28,10 @@ import {TicketPlus} from "lucide-react";
 import {json} from "react-router-dom";
 import EventItem from "./Eventitem";
 import Button from "../../components/Button";
+import * as minio from "minio";
+import mc from "../../lib/utils/mc";
+import {Types} from "mongoose";
+
 
 interface HomeProps {
     host?: string;
@@ -83,38 +87,10 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
             fetchDetails();
         }
     };
-    const [eventData, setEventData] = useState<EventDetails>({
-        allowSignups: false,
-        date: '',
-        location: '',
-        etype: 'online',
-        logo: ''
-    });
-    const [postData, setPostData] = useState<PEvent>({
-        postComments: [],
-        _id: '',
-        channel: '',
-        channelstring: '',
-        commentsallowed: true,
-        date: '',
-        desc: '',
-        article: '',
-        locked: false,
-        media: '',
-        profile: {} as Profile,
-        softdelete: false,
-        tags: [],
-        userid: '',
-        postLikes: [],
-        type: 'event',
-        channels: {} as Channel,
-        communites: {} as Community,
-        eventDetails: eventData
-    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setPostData({ ...postData, [name]: value });
+        setCourseData({ ...courseData, [name]: value });
     };
     const handleImageCChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -124,56 +100,19 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
 
         reader.onload = function (event) {
             const base64String = event.target?.result as string;
-            setPostData(prevState => ({
+            setCourseData(prevState => ({
                 ...prevState,
                 media: base64String,
             }));
             // @ts-ignore
-            setSelectedImage(base64String)
+            //setSelectedImage(base64String)
         };
 
         reader.readAsDataURL(file);
     };
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
 
-        const reader = new FileReader();
 
-        reader.onload = function (event) {
-            const base64String = event.target?.result as string;
-            setPostData(prevState => ({
-                ...prevState,
 
-                    logo: base64String,
-
-            }));
-
-            // @ts-ignore
-            setSelectedImage(base64String)
-        };
-
-        reader.readAsDataURL(file);
-    };
-    const handleEventChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setEventData({ ...eventData, [name]: value });
-        setPostData({ ...postData, eventDetails: { ...eventData, [name]: value } });
-    };
-
-    const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEventData({ ...eventData, etype: e.target.value });
-        setPostData({ ...postData, eventDetails: { ...eventData, etype: e.target.value } });
-    };
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
-        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
-    }
 
     const handleAddChapter = () => {
         setCourseData({
@@ -197,12 +136,49 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
         });
     };
 
-    const handleFileChange = (index, e) => {
-        const { name, value } = e.target;
-        const updatedFiles = courseData.files.map((file, idx) =>
-          idx === index ? { ...file, [name]: value } : file
-        );
-        setCourseData({ ...courseData, files: updatedFiles });
+
+
+
+
+
+    const handleFileChange = (index, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const fileName = community?.community.id +'/'+file.name;
+        const bucketName = 'files';
+
+        // Convert the file to a stream
+        var endPoint =  's3.app.bhivecommunity.co.uk';
+        var port =  443; // Change this if you use a different port
+        const reader = new FileReader();
+        const fileStream = file.stream();
+
+
+            // Upload file to MinIO
+            mc.putObject(bucketName, fileName,fileStream.toString(), (err, etag) => {
+                if (err) {
+                    console.error('Error uploading file', err);
+                    return;
+                }
+
+                // Get the file URL
+                const fileUrl = `https://${endPoint}/${bucketName}/${fileName}`;
+
+                // Update the state with the file URL
+                const updatedFiles = courseData.files.map((f, idx) =>
+                  idx === index ? { ...f, url: fileUrl, name: file.name } : f
+                );
+
+                e.target.value = '';
+                e.target.className = "hidden"
+
+                setCourseData({ ...courseData, files: updatedFiles });
+            });
+
+
+        // Update the file name in state
+
     };
 
 
@@ -217,53 +193,15 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
     const chandleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // @ts-ignore
-        postData.communites = community?.community;
+        courseData.community = community?.community.id.toString();
         // @ts-ignore
-        postData.channelstring = community?.channels[0].id;
-        const date = new Date();
 
-        postData.date = formatDate(date);
-        if (postData.eventDetails?.date) {
-            const eventDate = new Date(postData.eventDetails.date);
-            postData.eventDetails.date = formatDate(eventDate);
-        }
         // Handle form submission, e.g., send postData to an API
-        console.log(postData);
-        await axios.post(`${getApiDomain()}/community/createEvent`, postData, {});
+        console.log(courseData);
+        await axios.post(`${getApiDomain()}/community/createcourse`, courseData, {});
         setOpen(false);
-        //window.location.reload();
+        window.location.reload();
     };
-    const products = [
-        {
-            id: 1,
-            name: 'Course title',
-            category: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-            href: '#',
-            price: '4h',
-            imageSrc: 'https://images.pexels.com/photos/5940836/pexels-photo-5940836.jpeg?auto=compress&cs=tinysrgb&w=800',
-            imageAlt:
-              'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-        },{
-            id: 1,
-            name: 'Course title number 2',
-            category: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-            href: '#',
-            price: '1d',
-            imageSrc: 'https://images.pexels.com/photos/5940846/pexels-photo-5940846.jpeg?auto=compress&cs=tinysrgb&w=800',
-            imageAlt:
-              'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-        },{
-            id: 1,
-            name: 'Course title number 3',
-            category: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-            href: '#',
-            price: '20m',
-            imageSrc: 'https://images.pexels.com/photos/5905557/pexels-photo-5905557.jpeg?auto=compress&cs=tinysrgb&w=800',
-            imageAlt:
-              'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-        },
-        // More products...
-    ]
     return (
       <>
           <div
@@ -403,7 +341,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                               >
                                   <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
                                       <form className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
-                                            onSubmit={handleSubmit}>
+                                            onSubmit={chandleSubmit}>
                                           <div className="flex-1">
                                               {/* Header */}
                                               <div className="bg-gray-50 px-4 py-6 sm:px-6">
@@ -516,7 +454,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                   </div>
 
                                                   <input type="file" id="image-upload" accept="image/*"
-                                                         style={{display: 'none'}} onChange={handleImageChange}/>
+                                                         style={{display: 'none'}} onChange={handleImageCChange}/>
 
                                                   {/* Chapters */}
                                                   <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
@@ -541,22 +479,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                 />
                                                             </div>
-                                                            <div>
-                                                                <label htmlFor={`chapter-status-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    Status
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="text"
-                                                                  name="status"
-                                                                  id={`chapter-status-${index}`}
-                                                                  value={chapter.status}
-                                                                  onChange={(e) => handleChapterChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                            </div>
+
                                                             <div>
                                                                 <label htmlFor={`chapter-videourl-${index}`}
                                                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -596,62 +519,15 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                             </div>
                                                             <div className="sm:col-span-2">
                                                                 <input
-                                                                  type="text"
+                                                                  type="file"
                                                                   name="name"
                                                                   id={`file-name-${index}`}
-                                                                  value={file.name}
                                                                   onChange={(e) => handleFileChange(index, e)}
                                                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                                 />
+                                                                <label className="text-sm">{file.url}</label>
                                                             </div>
-                                                            <div>
-                                                                <label htmlFor={`file-url-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    File URL
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="text"
-                                                                  name="url"
-                                                                  id={`file-url-${index}`}
-                                                                  value={file.url}
-                                                                  onChange={(e) => handleFileChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <label htmlFor={`file-logo-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    Logo
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="text"
-                                                                  name="logo"
-                                                                  id={`file-logo-${index}`}
-                                                                  value={file.logo}
-                                                                  onChange={(e) => handleFileChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <label htmlFor={`file-fileExt-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    File Extension
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="text"
-                                                                  name="fileExt"
-                                                                  id={`file-fileExt-${index}`}
-                                                                  value={file.fileExt}
-                                                                  onChange={(e) => handleFileChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                            </div>
+
                                                         </div>
                                                       ))}
                                                       <button type="button" onClick={handleAddFile}

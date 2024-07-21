@@ -122,13 +122,13 @@ type EventPost struct {
 }
 
 type Courses struct {
-	ID        string `json:"_id"`
-	Name      string `json:"name"`
-	Community string `json:"community"`
-	Desc      string `json:"desc"`
-	Featured  bool   `json:"featured"`
-	Media     string `json:"media"`
-	Hours     string `json:"hours"`
+	ID        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Name      string             `json:"name"`
+	Community string             `json:"community"`
+	Desc      string             `json:"desc"`
+	Featured  bool               `json:"featured"`
+	Media     string             `json:"media"`
+	Hours     string             `json:"hours"`
 	Chapters  []struct {
 		ID       string `json:"_id"`
 		Name     string `json:"name"`

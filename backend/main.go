@@ -215,6 +215,12 @@ func main() {
 			return
 		}
 
+		if parsedURL.Path == "/v1/community/createcourse" && r.Method == "POST" {
+			session.VerifySession(nil, client.CreateCourse).ServeHTTP(rw, r)
+
+			return
+		}
+
 		if parsedURL.Path == "/v1/ads/get" {
 			session.VerifySession(nil, client.GetAds).ServeHTTP(rw, r)
 		}

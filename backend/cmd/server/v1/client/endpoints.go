@@ -25,6 +25,7 @@ import (
 	"image/png"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -339,6 +340,99 @@ func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 
 }
 
+func CreateCourse(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	var v models.Courses
+
+	// We decode our body request params
+	err := json.NewDecoder(r.Body).Decode(&v)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	v.ID = primitive.NewObjectID()
+	for i, chapter := range v.Chapters {
+		videoID, err := extractVideoID(chapter.Videourl)
+		if err != nil {
+			fmt.Printf("Failed to extract video ID from URL %s: %v\n", chapter.Videourl, err)
+			continue
+		}
+
+		embedUrl := fmt.Sprintf("https://www.youtube.com/embed/%s", videoID)
+		v.Chapters[i].Videourl = embedUrl
+	}
+
+	if v.Media != "" {
+		img, _, err := decodeDataURI(v.Media)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		// Encode the image to WebP format
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		// Convert the WebP bytes to a data URI
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		v.Media = webpDataURI
+	}
+
+	result, err := coursesCollection.InsertOne(context.Background(), v)
+	if err != nil {
+		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(rw).Encode(result.InsertedID)
+
+}
+
+func convertToEmbedUrls(chapters []string) []string {
+	var embedUrls []string
+
+	for _, chapterUrl := range chapters {
+		videoID, err := extractVideoID(chapterUrl)
+		if err != nil {
+			fmt.Printf("Failed to extract video ID from URL %s: %v\n", chapterUrl, err)
+			continue
+		}
+
+		embedUrl := fmt.Sprintf("https://www.youtube.com/embed/%s", videoID)
+		embedUrls = append(embedUrls, embedUrl)
+	}
+
+	return embedUrls
+}
+
+// Extract YouTube video ID from URL
+func extractVideoID(youtubeUrl string) (string, error) {
+	parsedUrl, err := url.Parse(youtubeUrl)
+	if err != nil {
+		return "", err
+	}
+
+	if parsedUrl.Host == "youtu.be" {
+		// Handle shortened YouTube URL (e.g., https://youtu.be/dQw4w9WgXcQ)
+		return strings.TrimPrefix(parsedUrl.Path, "/"), nil
+	}
+
+	if parsedUrl.Host == "www.youtube.com" || parsedUrl.Host == "youtube.com" {
+		// Handle standard YouTube URL (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+		queryParams := parsedUrl.Query()
+		return queryParams.Get("v"), nil
+	}
+
+	return "", fmt.Errorf("invalid YouTube URL: %s", youtubeUrl)
+}
+
 func decodeDataURI(dataURI string) (image.Image, string, error) {
 	if !strings.HasPrefix(dataURI, "data:image/") {
 		return nil, "", errors.New("invalid data URI")
@@ -535,8 +629,8 @@ func Courses(rw http.ResponseWriter, r *http.Request) {
 	limitStr := r.URL.Query().Get("limit")
 	pageStr := r.URL.Query().Get("page")
 
-	limit := 3 // default limit
-	page := 1  // default page
+	limit := 50 // default limit
+	page := 1   // default page
 
 	if limitStr != "" {
 		l, err := strconv.Atoi(limitStr)
