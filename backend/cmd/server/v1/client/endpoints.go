@@ -504,7 +504,7 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 	}
 	event := r.URL.Query().Get("event")
 	if event != "" {
-		data = bson.M{"communites.url": host}
+		data = bson.M{"communites.url": host, "type": "event"}
 	}
 
 	// Pagination parameters
