@@ -448,13 +448,28 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                                   {/* Product image */}
                                   <div className="lg:col-span-7 lg:row-end-1">
 
-                                      <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-lg bg-gray-100">
-                                          <iframe width="560" height="315"
+                                      <div className=" overflow-hidden rounded-lg">
+
+                                          {posts && posts.chapters[currentChapterIndex].videourl &&(
+                                              <div className="aspect-w-16 aspect-h-9">
+                                                  <iframe
+                                                      className="absolute top-0 left-0 w-full h-full"
                                                   src={posts.chapters[currentChapterIndex].videourl}
                                                   title="YouTube video player" frameBorder="0"
                                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                                   referrerPolicy="strict-origin-when-cross-origin"
-                                                  allowFullScreen></iframe>
+                                                      allowFullScreen></iframe></div>
+                                              )}
+                                          {posts && posts.chapters[currentChapterIndex].image && (
+                                              <img className="h-48 w-full object-cover lg:h-64" src={posts.chapters[currentChapterIndex].image}
+                                                   alt=""/>
+
+                                          )}
+
+                                          {posts && posts.chapters[currentChapterIndex].text && (
+                                              <p className="text-base m-2 ">{posts.chapters[currentChapterIndex].text }</p>
+
+                                          )}
                                       </div>
                                   </div>
 
@@ -499,7 +514,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                     className=" p-5 bg-white lg:fixed lg:bottom-0 lg:right-0 lg:top-[64px]  lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
                       <header
                         className="flex items-center justify-between border-b border-white/5 ">
-                          <h2 className="text-base font-semibold leading-7 ">All in the Details
+                          <h2 className="text-base font-semibold leading-7 "> {posts.name}
                           </h2>
 
                       </header>
@@ -596,6 +611,17 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                                     </a>
                                 </li>
                               ))}
+
+                                  {roles && (roles.includes("admin") || roles.includes("moderator")) && (
+                                      <li className="flex items-center justify-between gap-x-6 py-5">
+                                          <h2 className="text-base font-semibold leading-7 ">Moderator Actions
+                                          </h2>
+                                          <a className="rounded-md bg-red-500 m-3 mt-10 px-1.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                             href={`/removeCourse/${posts._id}`}>Delete Course</a>
+
+                                      </li>
+                                  )}
+
                           </ul>
 
                       </div>

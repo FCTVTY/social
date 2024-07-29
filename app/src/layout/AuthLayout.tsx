@@ -21,7 +21,7 @@ const AuthLayout: React.FC<Props> = ({children}) => {
           <div className="hidden sm:contents lg:relative lg:block lg:flex-1">
             <img
                 className="absolute inset-0 h-full w-full object-cover"
-                src="https://images.unsplash.com/photo-1712212236831-b669001efc59?q=80&w=1635&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg"
                 alt=""
 
             />

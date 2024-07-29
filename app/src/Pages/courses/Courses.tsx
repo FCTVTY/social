@@ -24,14 +24,15 @@ import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
 import {date} from "zod";
-import {TicketPlus} from "lucide-react";
+import {PencilLineIcon, TicketPlus} from "lucide-react";
 import {json} from "react-router-dom";
 import EventItem from "./Eventitem";
 import Button from "../../components/Button";
 import * as minio from "minio";
 import mc from "../../lib/utils/mc";
 import {Types} from "mongoose";
-import { Buffer } from "buffer/"; 
+import { Buffer } from "buffer/";
+import {LoadingButton} from "../../components/LoadingButton";
 
 window.Buffer = Buffer;
 
@@ -63,6 +64,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
             fetchDetails();
         }
     }, [host, channel]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const fetchDetails = async () => {
         try {
@@ -119,7 +121,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
     const handleAddChapter = () => {
         setCourseData({
             ...courseData,
-            chapters: [...courseData.chapters, { _id: '', name: '', status: '', videourl: '' }]
+            chapters: [...courseData.chapters, { _id: '', name: '', status: '', videourl: '', image: '',text:'' }]
         });
     };
 
@@ -130,6 +132,26 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
         );
         setCourseData({ ...courseData, chapters: updatedChapters });
     };
+
+    const handleChapterImageChange = (index, e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const base64String = event.target?.result as string;
+            const updatedChapters = courseData.chapters.map((chapter, idx) =>
+                idx === index ? { ...chapter, image: base64String } : chapter
+            );
+            setCourseData({ ...courseData, chapters: updatedChapters });
+            // @ts-ignore
+            //setSelectedImage(base64String)
+        };
+
+        reader.readAsDataURL(file);
+    };
+
 
     const handleAddFile = () => {
         setCourseData({
@@ -202,7 +224,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
         // @ts-ignore
         courseData.community = community?.community.id.toString();
         // @ts-ignore
-
+        setLoading(true);
         // Handle form submission, e.g., send postData to an API
         console.log(courseData);
         await axios.post(`${getApiDomain()}/community/createcourse`, courseData, {});
@@ -287,6 +309,8 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                           <a         className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                      href={`/course/${product.name.replace(/ /g,"_")}`}>View</a>
 
+
+
                                       </dd>
 
                                   </div>
@@ -296,12 +320,12 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                       </div>
                   </section>
               </div>
-                ))}
+              ))}
 
               <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
                   {posts && posts.map((product) => (
-                    <div key={product._id}
-                         className="group relative divide-x divide-gray-200 rounded-lg bg-white shadow">
+                      <div key={product._id}
+                           className="group relative divide-x divide-gray-200 rounded-lg bg-white shadow">
                         <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg ">
                             <img src={product.media} alt={product.desc}
                                  className="object-cover object-center"/>
@@ -325,13 +349,15 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                             </h3>
                             <p className="text-gray-900 text-sm">{product.hours}</p>
                         </div>
-                        <p className="m-2 text-sm text-gray-500">{product.desc}</p>
-                    </div>
+                        <p className="m-3 text-sm text-gray-500">{product.desc}</p>
+
+                      </div>
                   ))}
 
-              {
-                posts && posts.length == 0 || posts == null && (
-                  <div className=" max-w-7xl px-4 sm:px-6 lg:px-8 col-span-3 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl col-span-3">
+                  {
+                      posts && posts.length == 0 || posts == null && (
+                          <div
+                              className=" max-w-7xl px-4 sm:px-6 lg:px-8 col-span-3 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl col-span-3">
                     <div className="text-center my-10 text-sm text-muted text-gray-400">
                       <h2 className="text-4xl m-3"> No Courses added.</h2>
                       <svg
@@ -500,10 +526,10 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
 
                                               {/* Divider container */}
                                               <div
-                                                className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
+                                                  className="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0">
                                                   {/* Course Name */}
                                                   <div
-                                                    className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                      className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                       <div>
                                                           <label htmlFor="name"
                                                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -512,19 +538,19 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                       </div>
                                                       <div className="sm:col-span-2">
                                                           <input
-                                                            type="text"
-                                                            name="name"
-                                                            id="name"
-                                                            value={courseData.name}
-                                                            onChange={handleChange}
-                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                              type="text"
+                                                              name="name"
+                                                              id="name"
+                                                              value={courseData.name}
+                                                              onChange={handleChange}
+                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                           />
                                                       </div>
                                                   </div>
 
                                                   {/* Course Description */}
                                                   <div
-                                                    className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                      className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                       <div>
                                                           <label htmlFor="desc"
                                                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -533,19 +559,19 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                       </div>
                                                       <div className="sm:col-span-2">
                             <textarea
-                              id="desc"
-                              name="desc"
-                              rows={3}
-                              value={courseData.desc}
-                              onChange={handleChange}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                id="desc"
+                                name="desc"
+                                rows={3}
+                                value={courseData.desc}
+                                onChange={handleChange}
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                                                       </div>
                                                   </div>
 
                                                   {/* Course Hours */}
                                                   <div
-                                                    className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                      className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                       <div>
                                                           <label htmlFor="hours"
                                                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
@@ -554,22 +580,22 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                       </div>
                                                       <div className="sm:col-span-2">
                                                           <input
-                                                            type="text"
-                                                            name="hours"
-                                                            id="hours"
-                                                            value={courseData.hours}
-                                                            onChange={handleChange}
-                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                              type="text"
+                                                              name="hours"
+                                                              id="hours"
+                                                              value={courseData.hours}
+                                                              onChange={handleChange}
+                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                           />
                                                       </div>
                                                   </div>
 
                                                   {/* Course Image */}
                                                   <div
-                                                    className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                                      className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                       <div>
                                                           <h3
-                                                            className="text-sm font-medium leading-6 text-gray-900">Cover
+                                                              className="text-sm font-medium leading-6 text-gray-900">Cover
                                                               Image</h3>
                                                       </div>
                                                       <div className="sm:col-span-2">
@@ -580,8 +606,8 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                               </label>
                                                           </div>
                                                           {courseData.media &&
-                                                            <img src={courseData.media} alt="Course Cover"
-                                                                 className="w-32 h-32 object-cover"/>}
+                                                              <img src={courseData.media} alt="Course Cover"
+                                                                   className="w-32 h-32 object-cover"/>}
                                                       </div>
                                                   </div>
 
@@ -591,62 +617,103 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                   {/* Chapters */}
                                                   <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                       <h3
-                                                        className="text-sm font-medium leading-6 text-gray-900">Chapters</h3>
+                                                          className="text-sm font-medium leading-6 text-gray-900">Chapters</h3>
                                                       {courseData.chapters.map((chapter, index) => (
-                                                        <div key={index}
-                                                             className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
-                                                            <div>
-                                                                <label htmlFor={`chapter-name-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    Chapter Name
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="text"
-                                                                  name="name"
-                                                                  id={`chapter-name-${index}`}
-                                                                  value={chapter.name}
-                                                                  onChange={(e) => handleChapterChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                            </div>
+                                                          <div key={index}
+                                                               className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
+                                                              <div>
+                                                                  <label htmlFor={`chapter-name-${index}`}
+                                                                         className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                                      Chapter Name
+                                                                  </label>
+                                                              </div>
+                                                              <div className="sm:col-span-2">
+                                                                  <input
+                                                                      type="text"
+                                                                      name="name"
+                                                                      id={`chapter-name-${index}`}
+                                                                      value={chapter.name}
+                                                                      onChange={(e) => handleChapterChange(index, e)}
+                                                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                  />
+                                                              </div>
 
-                                                            <div>
-                                                                <label htmlFor={`chapter-videourl-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    Video URL
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="text"
-                                                                  name="videourl"
-                                                                  id={`chapter-videourl-${index}`}
-                                                                  value={chapter.videourl}
-                                                                  onChange={(e) => handleChapterChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                      ))}
-                                                      <button type="button" onClick={handleAddChapter}
-                                                              className="mt-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                                                          Add Chapter
-                                                      </button>
+                                                              <div>
+                                                                  <label htmlFor={`chapter-videourl-${index}`}
+                                                                         className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                                      Video URL
+                                                                  </label>
+                                                              </div>
+                                                              <div className="sm:col-span-2">
+                                                                  <input
+                                                                      type="text"
+                                                                      name="videourl"
+                                                                      id={`chapter-videourl-${index}`}
+                                                                      value={chapter.videourl}
+                                                                      onChange={(e) => handleChapterChange(index, e)}
+                                                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                  />
+                                                              </div>
+
+                                                              <div>
+                                                                  <label htmlFor={`chapter-image-${index}`}
+                                                                         className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                                      Or Image
+                                                                  </label>
+                                                              </div>
+                                                              <div className="sm:col-span-2">
+                                                                  <div className="flex space-x-2 mb-2">
+                                                                      <label htmlFor={`chapter-image-${index}`}
+                                                                             className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                                          <PlusIcon className="h-5 w-5"
+                                                                                    aria-hidden="true"/>
+                                                                      </label>
+                                                                  </div>
+                                                                  {chapter.image &&
+                                                                      <img src={chapter.image} alt="Course Cover"
+                                                                           className="w-32 h-32 object-cover"/>}
+                                                              </div>
+
+
+                                                          <input type="file" id={`chapter-image-${index}`} accept="image/*"
+                                                          style={{display: 'none'}} onChange={(e) => handleChapterImageChange(index, e)}
+                                                          />
+                                                  <div>
+                                                      <label htmlFor={`chapter-text-${index}`}
+                                                             className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                          Text
+                                                      </label>
                                                   </div>
+                                                  <div className="sm:col-span-2">
+                                                                  <textarea
 
-                                                  {/* Files */}
-                                                  <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-                                                      <h3
-                                                        className="text-sm font-medium leading-6 text-gray-900">Files</h3>
-                                                      {courseData.files.map((file, index) => (
-                                                        <div key={index}
-                                                             className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
-                                                            <div>
-                                                                <label htmlFor={`file-name-${index}`}
-                                                                       className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                    File Name
+                                                                      name="text"
+                                                                      id={`chapter-text-${index}`}
+                                                                      value={chapter.text}
+                                                                      onChange={(e) => handleChapterChange(index, e)}
+                                                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                  />
+                                                  </div>
+                                              </div>
+
+                                              ))}
+                                              <button type="button" onClick={handleAddChapter}
+                                                      className="mt-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                                  Add Chapter
+                                              </button>
+                                          </div>
+
+                                          {/* Files */}
+                                          <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                              <h3
+                                                  className="text-sm font-medium leading-6 text-gray-900">Files</h3>
+                                              {courseData.files.map((file, index) => (
+                                                  <div key={index}
+                                                       className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
+                                                      <div>
+                                                          <label htmlFor={`file-name-${index}`}
+                                                                 className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                                  File Name
                                                                 </label>
                                                             </div>
                                                             <div className="sm:col-span-2">
@@ -679,12 +746,18 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                       >
                                                           Cancel
                                                       </button>
-                                                      <button
-                                                        type="submit"
-                                                        className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                      >
-                                                          Create
-                                                      </button>
+                                                      <LoadingButton
+                                                          type="submit"
+
+
+                                                          variant="default"
+                                                          className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                          loading={loading}
+
+                                                      > Create
+
+                                                      </LoadingButton>
+
                                                   </div>
                                               </div>
                                           </div>

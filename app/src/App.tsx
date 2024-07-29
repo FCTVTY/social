@@ -36,6 +36,8 @@ import Chat from "./Pages/Chat/Chat";
 import Course from './Pages/courses/Course';
 import PasswordReset from './Pages/auth/passwordReset'
 import DeleteAccount from "./Pages/auth/DeleteAccount";
+import ResourcesPage from "./Pages/resources/Resources";
+import RemoveCourse from "./Pages/home/RemoveCourse";
 initSuperTokens();
 
 
@@ -178,6 +180,12 @@ function App() {
 
                 <RemovePost host={subdomain} profileid={channel}/></ApplicationLayout> </SessionAuth>}/>
 
+
+            <Route path="/removeCourse/:id" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                <RemoveCourse host={subdomain} profileid={channel}/></ApplicationLayout> </SessionAuth>}/>
+
             <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
@@ -187,6 +195,12 @@ function App() {
 
 
                 <Settings/></ApplicationLayout> </SessionAuth>}/>
+
+
+          <Route path="/resources" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+            <ResourcesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
 
           <Route path="/courses" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
