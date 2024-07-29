@@ -36,6 +36,7 @@ import Chat from "./Pages/Chat/Chat";
 import Course from './Pages/courses/Course';
 import PasswordReset from './Pages/auth/passwordReset'
 import DeleteAccount from "./Pages/auth/DeleteAccount";
+import ResourcesPage from "./Pages/resources/Resources";
 initSuperTokens();
 
 
@@ -67,7 +68,7 @@ function App() {
         console.log(host)
         if(host === "localhost:5173")
         {
-            setSubDomain("sc")
+            setSubDomain("goodwin")
         }
 
 
@@ -187,6 +188,12 @@ function App() {
 
 
                 <Settings/></ApplicationLayout> </SessionAuth>}/>
+
+
+          <Route path="/resources" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+            <ResourcesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
 
           <Route path="/courses" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
