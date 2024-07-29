@@ -31,7 +31,9 @@ import Button from "../../components/Button";
 import * as minio from "minio";
 import mc from "../../lib/utils/mc";
 import {Types} from "mongoose";
+import { Buffer } from "buffer/"; 
 
+window.Buffer = Buffer;
 
 interface HomeProps {
     host?: string;
@@ -140,8 +142,8 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
 
 
 
+    const handleFileChange = async(index, e: React.ChangeEvent<HTMLInputElement>) => {
 
-    const handleFileChange = (index, e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files[0];
         if (!file) return;
 
@@ -155,8 +157,13 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
         const fileStream = file.stream();
 
 
+        const arrayBuffer = await file.arrayBuffer();
+
+        // Convert the array buffer to a buffer
+        const buffer = Buffer.from(arrayBuffer);
+
             // Upload file to MinIO
-            mc.putObject(bucketName, fileName,fileStream.toString(), (err, etag) => {
+            mc.putObject(bucketName, fileName, buffer, file.size, (err, etag) => {
                 if (err) {
                     console.error('Error uploading file', err);
                     return;
