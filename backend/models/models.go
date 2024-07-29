@@ -133,6 +133,8 @@ type Courses struct {
 		ID       string `json:"_id"`
 		Name     string `json:"name"`
 		Videourl string `json:"videourl"`
+		Image    string `json:"image"`
+		Text     string `json:"text"`
 	} `json:"chapters"`
 
 	Files []struct {

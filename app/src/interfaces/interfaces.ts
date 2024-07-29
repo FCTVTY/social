@@ -132,6 +132,8 @@ export interface Chapter {
     name: string,
     status: string
     videourl: string
+    image:string
+    text:string
 }
 
 export interface File {

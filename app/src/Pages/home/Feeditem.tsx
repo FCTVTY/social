@@ -282,9 +282,9 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
                               <span className="dark:text-white">{post.postComments.length}</span>
                           </div>
                           {!lite && (
-                            <div className="flex space-x-1 items-center hover:bg-accent" onClick={handleLikeClick}
+                            <div className="flex space-x-1 items-center " onClick={handleLikeClick}
                                  style={{cursor: 'pointer'}}>
-                <span>
+                <span className="">
                   {userHasLiked ? (
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                          className="w-6 h-6 text-red-500 ">

@@ -358,14 +358,85 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 
 	v.ID = primitive.NewObjectID()
 	for i, chapter := range v.Chapters {
-		videoID, err := extractVideoID(chapter.Videourl)
-		if err != nil {
-			fmt.Printf("Failed to extract video ID from URL %s: %v\n", chapter.Videourl, err)
-			continue
-		}
+		if chapter.Videourl != "" {
+			videoID, err := extractVideoID(chapter.Videourl)
+			if err != nil {
+				fmt.Printf("Failed to extract video ID from URL %s: %v\n", chapter.Videourl, err)
+				continue
+			}
 
-		embedUrl := fmt.Sprintf("https://www.youtube.com/embed/%s", videoID)
-		v.Chapters[i].Videourl = embedUrl
+			embedUrl := fmt.Sprintf("https://www.youtube.com/embed/%s", videoID)
+			v.Chapters[i].Videourl = embedUrl
+		}
+		if chapter.Image != "" {
+
+			img, _, err := decodeDataURI(chapter.Image)
+			if err != nil {
+				log.Fatalf("Failed to decode data URI: %v", err)
+			}
+
+			// Encode the image to WebP format
+			var buf bytes.Buffer
+			err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+			if err != nil {
+				log.Fatalf("Failed to encode image to WebP: %v", err)
+			}
+
+			// Convert the WebP bytes to a data URI
+			//webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+
+			endpoint := "s3.app.bhivecommunity.co.uk"
+			accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+			secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+			useSSL := true
+
+			// Initialize minio client object.
+			minioClient, err = minio.New(endpoint, &minio.Options{
+				Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
+				Secure: useSSL,
+			})
+			if err != nil {
+				log.Fatalln(err)
+			}
+			bucketName := "files"
+			location := "uk-west-1"
+
+			err = minioClient.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{Region: location})
+			if err != nil {
+				// Check to see if we already own this bucket (which happens if you run this twice)
+				exists, errBucketExists := minioClient.BucketExists(context.Background(), bucketName)
+				if errBucketExists == nil && exists {
+					log.Printf("We already own %s\n", bucketName)
+				} else {
+					log.Fatalln(err)
+				}
+			} else {
+				log.Printf("Successfully created %s\n", bucketName)
+			}
+
+			// Upload the test file
+			// Change the value of filePath if the file is in another location
+			objectName := v.Community + "/" + chapter.Name + ".webp"
+			imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
+			if err != nil {
+				log.Fatalln("Error decoding base64 string:", err)
+			}
+
+			// Upload the test file with FPutObject
+			// Create a reader for the image data
+			imageReader := bytes.NewReader(imageData)
+
+			// Upload the image
+			_, err = minioClient.PutObject(context.Background(), bucketName, objectName, imageReader, imageReader.Size(), minio.PutObjectOptions{
+				ContentType: "image/webp", // Replace with the correct content type
+			})
+			if err != nil {
+				log.Fatalln("Error uploading the image:", err)
+			}
+			embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + v.Community + "/" + chapter.Name + ".webp"
+
+			v.Chapters[i].Image = embedUrl
+		}
 	}
 
 	if v.Media != "" {
@@ -1275,6 +1346,64 @@ func PostDelete(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
 	rw.Write([]byte("post deleted successfully"))
 }
+
+func CourseDelete(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+	roles, err := userroles.GetRolesForUser("public", userID, nil)
+	if err != nil {
+		http.Error(rw, "failed to get user roles", http.StatusInternalServerError)
+		return
+	}
+
+	hasRole := false
+	for _, role := range roles.OK.Roles {
+		if role == "admin" || role == "moderator" {
+			hasRole = true
+			break
+		}
+	}
+
+	if !hasRole {
+		http.Error(rw, "user does not have the required role", http.StatusForbidden) // 403 Forbidden for insufficient role
+		return
+	}
+
+	name := r.URL.Query().Get("oid")
+	if name == "" {
+		http.Error(rw, "missing object ID", http.StatusBadRequest) // 400 Bad Request for missing ID
+		return
+	}
+
+	objectId, err := primitive.ObjectIDFromHex(name)
+	if err != nil {
+		http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		return
+	}
+
+	data := bson.M{"_id": objectId}
+
+	ctx := context.Background()
+	result, err := coursesCollection.DeleteOne(ctx, data)
+	if err != nil {
+		http.Error(rw, "failed to delete", http.StatusInternalServerError)
+		return
+	}
+
+	if result.DeletedCount == 0 {
+		http.Error(rw, "Course not found", http.StatusNotFound) // 404 Not Found if no document is deleted
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
+	rw.Write([]byte("Course deleted successfully"))
+}
+
 func PostHide(rw http.ResponseWriter, r *http.Request) {
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {

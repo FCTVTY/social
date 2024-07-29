@@ -187,6 +187,11 @@ func main() {
 
 			return
 		}
+		if parsedURL.Path == "/v1/RemoveCourse" && r.Method == "GET" {
+			session.VerifySession(nil, client.CourseDelete).ServeHTTP(rw, r)
+
+			return
+		}
 		if parsedURL.Path == "/v1/hidepost" && r.Method == "GET" {
 			session.VerifySession(nil, client.PostHide).ServeHTTP(rw, r)
 
