@@ -8,7 +8,7 @@ export interface Community {
     private: boolean;
     create: boolean
     profiles: Profile[]
-
+    access: string;
 }
 
 export interface Channel {
