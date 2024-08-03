@@ -244,7 +244,7 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 		uniqueString = uniqueString[:8]
 	}
 
-	v.Url = v.Url + "-" + uniqueString
+	v.Url = strings.ToLower(v.Url + "-" + uniqueString)
 
 	if len(v.Access) > 0 {
 
@@ -268,6 +268,23 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 	result, err = channelCollection.InsertOne(context.Background(), c)
 	if err != nil {
 		http.Error(rw, "failed to insert Channel: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	//create post
+	var post models.Posts
+
+	post.ID = primitive.NewObjectID()
+	post.Date = time.Now()
+	post.Channel, _ = result.InsertedID.(primitive.ObjectID)
+	post.Tags = []string{}
+	post.Visability = true
+	post.Desc = "Hello Community!"
+	post.UserID = "66ae42a76ec9e6c56d880c9c"
+
+	_, err = postCollection.InsertOne(context.Background(), post)
+	if err != nil {
+		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
