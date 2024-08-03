@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Ads, Post, Profile} from "../../interfaces/interfaces";
+import {Ads, CommunityCollection, Post, Profile} from "../../interfaces/interfaces";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import PostItem from "./Feeditem";
 import PostItemLite from "./FeeditemLite";
@@ -11,6 +11,7 @@ interface HomeProps {
 
 export default function ProfilePage({ host, profileid }: HomeProps) {
     const [profile, setProfile] = useState<Profile>();
+    const [community, setCommunity] = useState<CommunityCollection>();
 
     console.log(profileid)
 
@@ -22,6 +23,13 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
 
     const fetchDetails = async () => {
         try {
+            const communityResponse = await fetch(`${getApiDomain()}/community?name=${host}`);
+            if (!communityResponse.ok) {
+                throw new Error('Network response was not ok for community fetch');
+            }
+            const communityData = await communityResponse.json();
+            setCommunity(communityData);
+
             const response = await fetch(`${getApiDomain()}/profile?oid=${profileid}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');

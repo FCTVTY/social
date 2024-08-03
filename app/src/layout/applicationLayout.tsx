@@ -12,7 +12,6 @@ import {
     DocumentDuplicateIcon,
     FolderIcon,
     HomeIcon,
-    UsersIcon,
     XMarkIcon,
     AcademicCapIcon,
 } from '@heroicons/react/24/outline';
@@ -30,7 +29,7 @@ import ThemeSwitch from './themeswitch';
 import Cookies from 'js-cookie';
 import {LoadingButton} from "../components/LoadingButton";
 import {useLocation} from "react-router-dom";
-import {CalendarDaysIcon} from "lucide-react";
+import {CalendarDaysIcon, GraduationCapIcon, SquareCodeIcon, UsersIcon} from "lucide-react";
 
 interface NavigationItem {
     name: string;
@@ -145,8 +144,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
 
     const teams: TeamItem[] = [
-        {id: 1, name: 'Academy', href: '/Academy', initial: <AcademicCapIcon/>, current: '/Academy' == currentUrl},
-        {id: 2, name: 'Resources', href: '/Resources', initial: <DocumentDuplicateIcon/>, current: '/Resources' == currentUrl},
+        {id: 1, name: 'Academy', href: '/Academy', initial: <GraduationCapIcon/>, current: '/Academy' == currentUrl},
+        {id: 2, name: 'Resources', href: '/Resources', initial: <SquareCodeIcon/>, current: '/Resources' == currentUrl},
 
         {id: 3, name: 'Events', href: '/events/upcoming', initial: <CalendarDaysIcon/>, current: '/events/upcoming' == currentUrl},
         {id: 4, name: 'Members', href: '/members/list', initial: <UsersIcon/>, current: '/members/list' == currentUrl},
@@ -733,7 +732,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         <>
 
             <form name="myForm" id="myForm" className="flex min-h-screen items-center justify-center">
-                <div className="min-h-1/2 bg-gray-900  border border-gray-900 rounded-2xl shadow shadow-lg">
+                <div className="min-h-1/2 bg-gray-900  border border-gray-900 rounded-2xl shadow shadow-lg p-3">
                     <div
                         className="mx-4 sm:mx-24 md:mx-34 lg:mx-56 mx-auto  flex items-center space-y-4 py-16  text-red-500 flex-col">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
