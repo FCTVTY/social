@@ -31,13 +31,14 @@ import {SessionContext} from "supertokens-auth-react/recipe/session"
 import Session from 'supertokens-auth-react/recipe/session';
 import CustomSwitch, {NavigationLoadingBar} from "./layout/loader";
 import LoadingBar, {LoadingBarRef} from "react-top-loading-bar";
-import Courses from './Pages/courses/Courses';
 import Chat from "./Pages/Chat/Chat";
-import Course from './Pages/courses/Course';
 import PasswordReset from './Pages/auth/passwordReset'
 import DeleteAccount from "./Pages/auth/DeleteAccount";
 import ResourcesPage from "./Pages/resources/Resources";
 import RemoveCourse from "./Pages/home/RemoveCourse";
+import AcademiesPage from "./Pages/Academy/Academies";
+import CoursesPage from "./Pages/courses/Courses";
+import CoursePage from "./Pages/courses/Course";
 initSuperTokens();
 
 
@@ -203,15 +204,15 @@ function App() {
             <ResourcesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
 
-          <Route path="/courses" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+          <Route path="/Academy" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-            <Courses host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+            <CoursesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-          <Route path="/course/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+          <Route path="/Course/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-            <Course host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
+            <CoursePage host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
 
             <Route path='/auth' element={<AuthLayout>

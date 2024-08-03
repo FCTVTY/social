@@ -14,6 +14,7 @@ import {
     HomeIcon,
     UsersIcon,
     XMarkIcon,
+    AcademicCapIcon,
 } from '@heroicons/react/24/outline';
 import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/react/20/solid';
 import {getApiDomain} from "../lib/auth/supertokens";
@@ -29,6 +30,7 @@ import ThemeSwitch from './themeswitch';
 import Cookies from 'js-cookie';
 import {LoadingButton} from "../components/LoadingButton";
 import {useLocation} from "react-router-dom";
+import {CalendarDaysIcon} from "lucide-react";
 
 interface NavigationItem {
     name: string;
@@ -143,11 +145,11 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
 
     const teams: TeamItem[] = [
-        {id: 1, name: 'Courses', href: '/Courses', initial: 'C', current: '/Courses' == currentUrl},
-        {id: 2, name: 'Resources', href: '/Resources', initial: 'R', current: '/Resources' == currentUrl},
+        {id: 1, name: 'Academy', href: '/Academy', initial: <AcademicCapIcon/>, current: '/Academy' == currentUrl},
+        {id: 2, name: 'Resources', href: '/Resources', initial: <DocumentDuplicateIcon/>, current: '/Resources' == currentUrl},
 
-        {id: 3, name: 'Events', href: '/events/upcoming', initial: 'E', current: '/events/upcoming' == currentUrl},
-        {id: 4, name: 'Members', href: '/members/list', initial: 'M', current: '/members/list' == currentUrl},
+        {id: 3, name: 'Events', href: '/events/upcoming', initial: <CalendarDaysIcon/>, current: '/events/upcoming' == currentUrl},
+        {id: 4, name: 'Members', href: '/members/list', initial: <UsersIcon/>, current: '/members/list' == currentUrl},
     ];
 
     const userNavigation: UserNavigationItem[] = [
@@ -527,8 +529,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                     )}
                                                                 >
                                                      <span
-                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-indigo-600 text-[0.625rem] font-medium text-white group-hover:text-white ">
-                            {item.name.slice(0, 2)}
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                 stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round"
+        d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+</svg>
+
                           </span>
                                                                     <span
                                                                         className="mt-[2px]">
@@ -554,7 +561,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                     )}
                                                                 >
                           <span
-                              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-cyan-500 text-[0.625rem] font-medium text-white group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium text-white group-hover:text-white">
                             {team.initial}
                           </span>
                                                                     <span
@@ -606,14 +613,19 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     href={item.href}
                                                     className={classNames(
                                                         item.current
-                                                            ? 'text-indigo-600'
+                                                            ? 'text-indigo-600 bg-gray-200'
                                                             : 'text-gray-400 hover:text-white hover:bg-indigo-600',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                     )}
                                                 >
                                                      <span
-                                                         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-indigo-600 text-[0.625rem] font-medium text-white group-hover:text-white">
-                            {item.name.slice(0, 2)}
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round"
+        d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+</svg>
+
                           </span>
                                                     <span
                                                         className="mt-[2px]">
@@ -633,13 +645,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     href={team.href}
                                                     className={classNames(
                                                         team.current
-                                                            ? 'text-cyan-500'
+                                                            ? 'text-cyan-500  bg-gray-200'
                                                             : 'text-gray-400 hover:text-white hover:bg-cyan-500',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                     )}
                                                 >
                           <span
-                              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-cyan-500 text-[0.625rem] font-medium text-white group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
                             {team.initial}
                           </span>
                                                     <span
