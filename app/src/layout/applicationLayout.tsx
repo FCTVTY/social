@@ -1,5 +1,5 @@
 import React, {Children, Fragment, useEffect, useState} from 'react';
-import LogoSquare from "../assets/logo-light-new.svg";
+import LogoSquare from "../assets/logo-light.svg";
 import LogoSquareDark from "../assets/logo-dark.svg";
 import fk from "../assets/FK.svg";
 import {Dialog, Disclosure, Menu, Transition} from '@headlessui/react';
