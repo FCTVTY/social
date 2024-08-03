@@ -789,28 +789,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
             </>
         </>
     )}
-    {!locked && community && community.community?.published !== false && (
-
-        <>
-
-            <form name="myForm" id="myForm" className="flex min-h-screen items-center justify-center">
-                <div className="min-h-1/2 bg-gray-900  border border-gray-900 rounded-2xl shadow shadow-lg p-3">
-                    <div
-                        className="mx-4 sm:mx-24 md:mx-34 lg:mx-56 mx-auto  flex items-center space-y-4 py-16  text-white flex-col">
-                        <PickaxeIcon/>
-
-                        <h1 className="text-white text-2xl">This Community is currently Unpublished</h1>
-
-
-                        <p>
-                            Check back soon
-                        </p>
-                    </div>
-                </div>
-            </form>
-
-
-        </>)}
+    
     {locked && (
         <>
 
