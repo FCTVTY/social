@@ -14,6 +14,7 @@ import {
     HomeIcon,
     UsersIcon,
     XMarkIcon,
+    AcademicCapIcon,
 } from '@heroicons/react/24/outline';
 import {ChevronDownIcon, MagnifyingGlassIcon} from '@heroicons/react/20/solid';
 import {getApiDomain} from "../lib/auth/supertokens";
@@ -26,6 +27,10 @@ import {b} from "vite/dist/node/types.d-aGj9QkWt";
 import { themeChange } from 'theme-change';
 import {NavigationLoadingBar} from "./loader";
 import ThemeSwitch from './themeswitch';
+import Cookies from 'js-cookie';
+import {LoadingButton} from "../components/LoadingButton";
+import {useLocation} from "react-router-dom";
+import {CalendarDaysIcon} from "lucide-react";
 
 interface NavigationItem {
     name: string;
@@ -63,6 +68,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [community, setCommunity] = useState<Partial<CommunityCollection>>();
     const [profile, setProfile] = useState<Partial<Profile>>();
+    const [locked, setLocked] = useState(false);
 
     const [navigation, setNavigation] = useState<NavigationItem[]>([]);
     const fnavigation = {
@@ -139,11 +145,11 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
 
     const teams: TeamItem[] = [
-        {id: 1, name: 'Courses', href: '/Courses', initial: 'C', current: '/Courses' == currentUrl},
-        {id: 2, name: 'Resources', href: '/Resources', initial: 'R', current: '/Resources' == currentUrl},
+        {id: 1, name: 'Academy', href: '/Academy', initial: <AcademicCapIcon/>, current: '/Academy' == currentUrl},
+        {id: 2, name: 'Resources', href: '/Resources', initial: <DocumentDuplicateIcon/>, current: '/Resources' == currentUrl},
 
-        {id: 3, name: 'Events', href: '/events/upcoming', initial: 'E', current: '/events/upcoming' == currentUrl},
-        {id: 4, name: 'Members', href: '/members/list', initial: 'M', current: '/members/list' == currentUrl},
+        {id: 3, name: 'Events', href: '/events/upcoming', initial: <CalendarDaysIcon/>, current: '/events/upcoming' == currentUrl},
+        {id: 4, name: 'Members', href: '/members/list', initial: <UsersIcon/>, current: '/members/list' == currentUrl},
     ];
 
     const userNavigation: UserNavigationItem[] = [
@@ -207,11 +213,74 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     }
 
 
+
     useEffect(() => {
         themeChange(false);
-    }, []);
+
+
+        setLocked(community?.community?.private)
+
+        //check cookie...
+
+        let cookie = Cookies.get(community?.community?.id);
+
+
+        if (cookie == community?.community?.access){
+            setLocked(false)
+        }
+
+    }, [community?.community?.name]);
+
+
+    const location = useLocation();
+
+    // Extract the query string parameters
+    const queryParams = new URLSearchParams(location.search);
+
+    // Get specific values from the query string
+    const code = queryParams.get('code');
+
+    useEffect(() => {
+        themeChange(false);
+
+
+        setLocked(community?.community?.private)
+
+        //check cookie...
+
+        let cookie = Cookies.get(community?.community?.id);
+
+
+        if (cookie == community?.community?.access){
+            setLocked(false)
+            Cookies.set(community?.community?.id, community?.community?.access, { expires: 365 });
+        }
+
+    }, [community?.community?.name]);
+
+
+    useEffect(() => {
+        themeChange(false);
+
+        if(code != null) {
+            setLocked(community?.community?.private)
+
+            //check cookie...
+
+            let cookie = Cookies.get(community?.community?.id);
+
+            if (code == community?.community?.access) {
+                setLocked(false)
+                Cookies.set(community?.community?.id, code, {expires: 365});
+            }
+        }
+    }, [community?.community?.name, code]);
+
     // @ts-ignore
     return (
+<>
+    {!locked && (
+
         <>
             <div
                 className="hidden fixed z-[999] isolate w-full flex items-center gap-x-6 overflow-hidden bg-red-500 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
@@ -240,7 +309,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 </div>
             </div>
 
-            <Disclosure as="nav" className="overscroll-none sticky top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-zinc-900">
+            <Disclosure as="nav"
+                        className="overscroll-none sticky top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-zinc-900">
                 {({open}) => (
                     <>
                         <div className="mx-auto px-2 sm:px-6 lg:px-8">
@@ -250,40 +320,40 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                                 </div>
                                 <div
-                                  className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
+                                    className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
                                     <div className="flex flex-shrink-0 items-center ">
 
                                         <button
-                                          type="button"
-                                          className="m-2.5 -ml-2.5 p-2.5 text-gray-700 lg:hidden"
-                                          onClick={() => setSidebarOpen(true)}
+                                            type="button"
+                                            className="m-2.5 -ml-2.5 p-2.5 text-gray-700 lg:hidden"
+                                            onClick={() => setSidebarOpen(true)}
                                         >
                                             <span className="sr-only">Open sidebar</span>
                                             <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
                                         </button>
 
                                         <img
-                                          className="block h-7 w-auto lg:hidden"
-                                          src={LogoSquare}
-                                          alt="b:hive"
+                                            className="block h-7 w-auto lg:hidden"
+                                            src={LogoSquare}
+                                            alt="b:hive"
                                         />
                                         <img
-                                          className="hidden h-7 w-auto lg:block dark:hidden"
-                                          src={LogoSquare}
-                                          alt="b:hive"
+                                            className="hidden h-7 w-auto lg:block dark:hidden"
+                                            src={LogoSquare}
+                                            alt="b:hive"
                                         />
 
                                         <img
-                                          className="hidden h-7 w-auto dark:lg:block "
-                                          src={LogoSquareDark}
-                                          alt="b:hive"
+                                            className="hidden h-7 w-auto dark:lg:block "
+                                            src={LogoSquareDark}
+                                            alt="b:hive"
                                         />
 
                                     </div>
 
                                 </div>
                                 <div
-                                  className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
+                                    className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
                                     <div className="flex flex-shrink-0 items-center ">
 
 
@@ -294,62 +364,62 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                                 </div>
                                 <div
-                                  className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                    className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
-<ThemeSwitch></ThemeSwitch>
+
 
                                     {/* Profile dropdown */}
                                     <Menu as="div" className="relative ml-3">
                                         <div>
                                             <Menu.Button
-                                              className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                 <span className="sr-only">Open user menu</span>
                                                 <img
-                                                  className="h-8 w-8 rounded-full"
-                                                  src={profile?.profilePicture}
-                                                  alt=""
+                                                    className="h-8 w-8 rounded-full"
+                                                    src={profile?.profilePicture}
+                                                    alt=""
                                                 />
                                             </Menu.Button>
                                         </div>
                                         <Transition
-                                          as={Fragment}
-                                          enter="transition ease-out duration-200"
-                                          enterFrom="transform opacity-0 scale-95"
-                                          enterTo="transform opacity-100 scale-100"
-                                          leave="transition ease-in duration-75"
-                                          leaveFrom="transform opacity-100 scale-100"
-                                          leaveTo="transform opacity-0 scale-95"
+                                            as={Fragment}
+                                            enter="transition ease-out duration-200"
+                                            enterFrom="transform opacity-0 scale-95"
+                                            enterTo="transform opacity-100 scale-100"
+                                            leave="transition ease-in duration-75"
+                                            leaveFrom="transform opacity-100 scale-100"
+                                            leaveTo="transform opacity-0 scale-95"
                                         >
                                             <Menu.Items
-                                              className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 <Menu.Item>
                                                     {({active}) => (
-                                                      <a
-                                                        href={`/profile/${profile?._id}`}
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                      >
-                                                          Your Profile
-                                                      </a>
+                                                        <a
+                                                            href={`/profile/${profile?._id}`}
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        >
+                                                            Your Profile
+                                                        </a>
                                                     )}
                                                 </Menu.Item>
                                                 <Menu.Item>
                                                     {({active}) => (
-                                                      <a
-                                                        href={`/settings`}
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                      >
-                                                          Settings
-                                                      </a>
+                                                        <a
+                                                            href={`/settings`}
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        >
+                                                            Settings
+                                                        </a>
                                                     )}
                                                 </Menu.Item>
                                                 <Menu.Item>
                                                     {({active}) => (
-                                                      <a
-                                                        href="/auth"
-                                                        className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                      >
-                                                          Sign out
-                                                      </a>
+                                                        <a
+                                                            href="/auth"
+                                                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                        >
+                                                            Sign out
+                                                        </a>
                                                     )}
                                                 </Menu.Item>
 
@@ -364,16 +434,16 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             <div className="space-y-1 pb-4 pt-2">
                                 {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                                 <Disclosure.Button
-                                  as="a"
-                                  href="#"
-                                  className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+                                    as="a"
+                                    href="#"
+                                    className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
                                 >
                                     Dashboard
                                 </Disclosure.Button>
                                 <Disclosure.Button
-                                  as="a"
-                                  href="#"
-                                  className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                    as="a"
+                                    href="#"
+                                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                 >
                                     Team
                                 </Disclosure.Button>
@@ -441,33 +511,38 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                     </Transition.Child>
                                     {/* Sidebar component, swap this element with another sidebar if you like */}
                                     <div
-                                      className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white dark:bg-zinc-950 pl-6 lg:mt-[62px]">
+                                        className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white dark:bg-zinc-950 pl-6 lg:mt-[62px]">
 
                                         <nav className="flex flex-1 flex-col mt-2">
                                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                                 <li>
                                                     <ul role="list" className="-mx-3 space-y-3">
                                                         {navigation.map((item) => (
-                                                          <li key={item.name}>
-                                                              <a
-                                                                href={item.href}
-                                                                className={classNames(
-                                                                  item.current
-                                                                    ? 'text-indigo-600'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-indigo-600',
-                                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                                )}
-                                                              >
+                                                            <li key={item.name}>
+                                                                <a
+                                                                    href={item.href}
+                                                                    className={classNames(
+                                                                        item.current
+                                                                            ? 'text-indigo-600'
+                                                                            : 'text-gray-400 hover:text-white hover:bg-indigo-600',
+                                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                                    )}
+                                                                >
                                                      <span
-                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-indigo-600 text-[0.625rem] font-medium text-white group-hover:text-white ">
-                            {item.name.slice(0, 2)}
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                 stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round"
+        d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+</svg>
+
                           </span>
-                                                                  <span
-                                                                    className="mt-[2px]">
+                                                                    <span
+                                                                        className="mt-[2px]">
                             {item.name}
                           </span>
-                                                              </a>
-                                                          </li>
+                                                                </a>
+                                                            </li>
                                                         ))}
                                                     </ul>
                                                 </li>
@@ -475,40 +550,40 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     <div className="text-xs  leading-6 text-gray-400 my-3">General</div>
                                                     <ul role="list" className="-mx-3 space-y-3">
                                                         {teams.map((team) => (
-                                                          <li key={team.name}>
-                                                              <a
-                                                                href={team.href}
-                                                                className={classNames(
-                                                                  team.current
-                                                                    ? 'text-cyan-500'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-cyan-500',
-                                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                                )}
-                                                              >
+                                                            <li key={team.name}>
+                                                                <a
+                                                                    href={team.href}
+                                                                    className={classNames(
+                                                                        team.current
+                                                                            ? 'text-cyan-500'
+                                                                            : 'text-gray-400 hover:text-white hover:bg-cyan-500',
+                                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                                    )}
+                                                                >
                           <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-cyan-500 text-[0.625rem] font-medium text-white group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium text-white group-hover:text-white">
                             {team.initial}
                           </span>
-                                                                  <span
-                                                                    className="mt-[2px]">{team.name}</span>
-                                                              </a>
-                                                          </li>
+                                                                    <span
+                                                                        className="mt-[2px]">{team.name}</span>
+                                                                </a>
+                                                            </li>
                                                         ))}
                                                     </ul>
                                                 </li>
                                                 <li className="-mx-6 mt-auto">
                                                     <a
-                                                      href={`/profile/${profile?._id}`}
-                                                      className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
+                                                        href={`/profile/${profile?._id}`}
+                                                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
                                                     >
                                                         <img
-                                                          className="h-8 w-8 rounded-full bg-gray-800"
-                                                          src={profile?.profilePicture}
-                                                          alt=""
+                                                            className="h-8 w-8 rounded-full bg-gray-800"
+                                                            src={profile?.profilePicture}
+                                                            alt=""
                                                         />
                                                         <span className="sr-only">Your profile</span>
                                                         <span
-                                                          aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
+                                                            aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -522,7 +597,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                 {/* Static sidebar for desktop */}
                 <div
-                  className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:bg-zinc-950 dark:border-zinc-900">
+                    className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:bg-zinc-950 dark:border-zinc-900">
                     {/* Sidebar component, swap this element with another sidebar if you like */}
                     <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
 
@@ -533,26 +608,31 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                 <li>
                                     <ul role="list" className="-mx-3 space-y-3">
                                         {navigation.map((item) => (
-                                          <li key={item.name}>
-                                              <a
-                                                href={item.href}
-                                                className={classNames(
-                                                  item.current
-                                                    ? 'text-indigo-600'
-                                                    : 'text-gray-400 hover:text-white hover:bg-indigo-600',
-                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
-                                                )}
-                                              >
+                                            <li key={item.name}>
+                                                <a
+                                                    href={item.href}
+                                                    className={classNames(
+                                                        item.current
+                                                            ? 'text-indigo-600 bg-gray-200'
+                                                            : 'text-gray-400 hover:text-white hover:bg-indigo-600',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
+                                                    )}
+                                                >
                                                      <span
-                                                       className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-indigo-600 text-[0.625rem] font-medium text-white group-hover:text-white">
-                            {item.name.slice(0, 2)}
+                                                         className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round"
+        d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+</svg>
+
                           </span>
-                                                  <span
-                                                    className="mt-[2px]">
+                                                    <span
+                                                        className="mt-[2px]">
                             {item.name}
                           </span>
-                                              </a>
-                                          </li>
+                                                </a>
+                                            </li>
                                         ))}
                                     </ul>
                                 </li>
@@ -560,36 +640,36 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                     <div className="text-xs  leading-6 text-gray-400 my-3">General</div>
                                     <ul role="list" className="-mx-3 space-y-3">
                                         {teams.map((team) => (
-                                          <li key={team.name}>
-                                              <a
-                                                href={team.href}
-                                                className={classNames(
-                                                  team.current
-                                                    ? 'text-cyan-500'
-                                                    : 'text-gray-400 hover:text-white hover:bg-cyan-500',
-                                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                )}
-                                              >
+                                            <li key={team.name}>
+                                                <a
+                                                    href={team.href}
+                                                    className={classNames(
+                                                        team.current
+                                                            ? 'text-cyan-500  bg-gray-200'
+                                                            : 'text-gray-400 hover:text-white hover:bg-cyan-500',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                    )}
+                                                >
                           <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-cyan-500 text-[0.625rem] font-medium text-white group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
                             {team.initial}
                           </span>
-                                                  <span
-                                                    className="mt-[2px]">{team.name}</span>
-                                              </a>
-                                          </li>
+                                                    <span
+                                                        className="mt-[2px]">{team.name}</span>
+                                                </a>
+                                            </li>
                                         ))}
                                     </ul>
                                 </li>
                                 <li className="-mx-6 mt-auto">
                                     <a
-                                      href={`/profile/${profile?._id}`}
-                                      className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
+                                        href={`/profile/${profile?._id}`}
+                                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
                                     >
                                         <img
-                                          className="h-8 w-8 rounded-full bg-gray-800"
-                                          src={profile?.profilePicture}
-                                          alt=""
+                                            className="h-8 w-8 rounded-full bg-gray-800"
+                                            src={profile?.profilePicture}
+                                            alt=""
                                         />
                                         <span className="sr-only">Your profile</span>
                                         <span aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
@@ -600,7 +680,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                     </div>
                 </div>
                 <div className="">
-                <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
+                    <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
                         <div
                             className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
                             <button
@@ -632,15 +712,14 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                     <main className="lg:ml-72 py-10 bg dark:bg-gray-950">
 
 
-
                         {
                             community?.community?.private && community?.user?.notjoined ? (
-                              <Join text={community.community.desc} logo={community.community.logo}/>
+                                <Join text={community.community.desc} logo={community.community.logo}/>
                             ) : (
-                              Children.map(children, child => {
-                                  // @ts-ignore
-                                  return React.cloneElement(child, {roles, setRoles});
-                              })
+                                Children.map(children, child => {
+                                    // @ts-ignore
+                                    return React.cloneElement(child, {roles, setRoles});
+                                })
                             )
                         }
                     </main>
@@ -649,6 +728,46 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 </div>
             </div>
         </>
+    )}
+    {locked && (
+        <>
+
+            <form name="myForm" id="myForm" className="flex min-h-screen items-center justify-center">
+                <div className="min-h-1/2 bg-gray-900  border border-gray-900 rounded-2xl shadow shadow-lg">
+                    <div
+                        className="mx-4 sm:mx-24 md:mx-34 lg:mx-56 mx-auto  flex items-center space-y-4 py-16  text-red-500 flex-col">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                             stroke="currentColor" className="size-11">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"/>
+                        </svg>
+
+                        <h1 className="text-white text-2xl">Community is protected</h1>
+
+                        <input
+                            className="w-full p-2 bg-gray-900 rounded-md border border-gray-700 text-center"
+                            placeholder="Access Code"
+                            type="password"
+                            name="code"
+                            id=""
+                        />
+                        <button
+                            className="w-full p-2 bg-gray-50 rounded-full text-gray-900 border border-gray-700 "
+                            type="submit"
+
+                        >Unlock</button>
+                        <p>
+
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+
+        </>)}
+</>
+
+
     );
 };
 

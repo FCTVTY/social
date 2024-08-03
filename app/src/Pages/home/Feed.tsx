@@ -301,119 +301,228 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                         </div>
 
                         <div className="lg:col-span-2 lg:col-start-4">
-                            <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 ml-2">About</span>
 
-                            <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 p-3 mb-4 dark:text-white ">
-                                <img src={community && community.community?.logo} className="sm:mx-auto h-20 py-1 dark:rounded-2xl dark:bg-white dark:p-10"/>
+                            <div
+                                className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
+                                <div className="rounded-t-lg h-32 overflow-hidden">
+                                    <img
+                                        className="object-cover object-top w-full"
+                                        src={profile?.coverPicture}
+                                        alt=""
+                                    />
+                                </div>
+                                <div
+                                    className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
+                                    <img
+                                        className="object-cover object-center h-32"
+                                        src={profile?.profilePicture}
+                                        alt=""
+                                    />
+                                </div>
+                                <div className="text-center mt-2">
+                                    <h2 className="font-semibold">{profile?.first_name} {profile?.last_name}</h2>
+                                    <p className="text-gray-500 pb-5">{profile?.bio}</p>
+                                    {roles && roles.length > 0 && (
+                                        <div className="pb-5">
+                                            {roles.map((role) => {
+                                                let roleClasses = '';
+                                                let roleLabel = '';
+
+                                                switch (role) {
+                                                    case 'admin':
+                                                        roleClasses = 'bg-purple-100 text-purple-700';
+                                                        roleLabel = 'Admin';
+                                                        break;
+                                                    case 'moderator':
+                                                        roleClasses = 'bg-green-100 text-green-700';
+                                                        roleLabel = 'Moderator';
+                                                        break;
+                                                    // Add more roles as needed
+                                                    default:
+                                                        roleClasses = 'bg-gray-100 text-gray-700';
+                                                        roleLabel = role.charAt(0).toUpperCase() + role.slice(1); // Capitalize first letter
+                                                        break;
+                                                }
+
+                                                return (
+                                                    <p className="text-gray-500" key={role}>
+          <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ${roleClasses}`}>
+            {roleLabel}
+          </span>
+                                                    </p>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                                <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around hidden">
+                                    <li className="flex flex-col items-center justify-around">
+                                        <svg
+                                            className="w-4 fill-current text-blue-900"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                        </svg>
+                                        <div>2k</div>
+                                    </li>
+                                    <li className="flex flex-col items-center justify-between">
+                                        <svg
+                                            className="w-4 fill-current text-blue-900"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                d="M7 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0 1c2.15 0 4.2.4 6.1 1.09L12 16h-1.25L10 20H4l-.75-4H2L.9 10.09A17.93 17.93 0 0 1 7 9zm8.31.17c1.32.18 2.59.48 3.8.92L18 16h-1.25L16 20h-3.96l.37-2h1.25l1.65-8.83zM13 0a4 4 0 1 1-1.33 7.76 5.96 5.96 0 0 0 0-7.52C12.1.1 12.53 0 13 0z"/>
+                                        </svg>
+                                        <div>10k</div>
+                                    </li>
+                                    <li className="flex flex-col items-center justify-around">
+                                        <svg
+                                            className="w-4 fill-current text-blue-900"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                        >
+                                            <path
+                                                d="M9 12H1v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6h-8v2H9v-2zm0-1H0V5c0-1.1.9-2 2-2h4V2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v6h-9V9H9v2zm3-8V2H8v1h4z"/>
+                                        </svg>
+                                        <div>15</div>
+                                    </li>
+                                </ul>
+                                <div className="p-4 border-t mx-8 mt-2 hidden">
+                                    <button
+                                        className="w-1/2 block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-6 py-2">
+                                        Follow
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <span
+                                className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 ml-2">About</span>
+
+                            <div
+                                className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 p-3 mb-4 dark:text-white ">
+                                <img src={community && community.community?.logo}
+                                     className="sm:mx-auto h-20 py-1 dark:rounded-2xl dark:bg-white dark:p-10"/>
 
                                 <p className={`py-6`}>{community?.community?.desc}</p>
                                 <dl>
-                                    <dt className="inline-flex py-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             strokeWidth={1.5} stroke="currentColor"
-                                             className="inline-block w-5 h-5 mr-1">
-                                            <path strokeLinecap="round" strokeLinejoin="round"
-                                                  d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
-                                        </svg>
-                                        Public
-                                    </dt>
-                                    <dd className="text-sm ">Anyone can see who's in the community and what
-                                        they post.
-                                    </dd>
+                                    {!community?.community?.private && (
+                                        <>
+                                            <dt className="inline-flex py-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                     strokeWidth={1.5} stroke="currentColor"
+                                                     className="inline-block w-5 h-5 mr-1">
+                                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                                          d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+                                                </svg>
+                                                Public
+                                            </dt>
+                                            <dd className="text-sm ">Anyone can see who's in the community and what
+                                                they post.
+                                            </dd>
+                                        </>)}
+                                    {community?.community?.private && (
+                                        <>
+                                            <dt className="inline-flex py-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                     strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                                          d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/>
+                                                </svg>
 
-                                    <dt className="inline-flex py-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             stroke-width="1.5" stroke="currentColor"
-                                             className="inline-block w-5 h-5 mr-1">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                        </svg>
-                                        Visible
-                                    </dt>
-                                    <dd className="text-sm">Anyone can find this community.
-                                    </dd>
+                                                Private
+                                            </dt>
+                                            <dd className="text-sm ">Only community members can see who's in the
+                                                community and what they post.
+
+
+                                            </dd>
+                                        </>)}
 
 
                                 </dl>
 
                             </div>
 
-                            <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 mt-4 ml-2">Advert</span>
+                            <span
+                                className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 mt-4 ml-2">Advert</span>
                             {
-                              ads && ads.length > 0 && (() => {
-                                  const randomIndex = Math.floor(Math.random() * ads.length);
-                                  const randomPost = ads[randomIndex];
-                                  if (!randomPost) {
-                                      return null; // Return null if randomPost is undefined
-                                  }
-                                  return [randomPost].map(post => (
-                                    <div key={post._id}
-                                         className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl">
-                                        <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:text-white">
-                                            <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
-                                                <a href="https://www.fkcreative.co.uk/" className="block shrink-0">
-                                                    <img
-                                                      alt=""
-                                                      src={post.logo}
-                                                      className="size-14 rounded-lg object-contain"
-                                                    />
-                                                </a>
+                                ads && ads.length > 0 && (() => {
+                                    const randomIndex = Math.floor(Math.random() * ads.length);
+                                    const randomPost = ads[randomIndex];
+                                    if (!randomPost) {
+                                        return null; // Return null if randomPost is undefined
+                                    }
+                                    return [randomPost].map(post => (
+                                        <div key={post._id}
+                                             className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl">
+                                            <article
+                                                className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:text-white">
+                                                <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
+                                                    <a href="https://www.fkcreative.co.uk/" className="block shrink-0">
+                                                        <img
+                                                            alt=""
+                                                            src={post.logo}
+                                                            className="size-14 rounded-lg object-contain"
+                                                        />
+                                                    </a>
 
-                                                <div>
-                                                    <h3 className="font-medium sm:text-lg">
-                                                        <a href="https://www.fkcreative.co.uk/"
-                                                           className="hover:underline"> {post.name} </a>
-                                                    </h3>
+                                                    <div>
+                                                        <h3 className="font-medium sm:text-lg">
+                                                            <a href="https://www.fkcreative.co.uk/"
+                                                               className="hover:underline"> {post.name} </a>
+                                                        </h3>
 
-                                                    <p className="line-clamp-2 text-sm text-gray-700">
-                                                        {post.ad}
-                                                    </p>
+                                                        <p className="line-clamp-2 text-sm text-gray-700">
+                                                            {post.ad}
+                                                        </p>
 
-                                                    <div className="mt-2 sm:flex sm:items-center sm:gap-2">
+                                                        <div className="mt-2 sm:flex sm:items-center sm:gap-2">
 
 
                                                                 <span className="hidden sm:block"
                                                                       aria-hidden="true">&middot;</span>
 
-                                                        <p className="sm:block sm:text-xs sm:text-gray-500">
+                                                            <p className="sm:block sm:text-xs sm:text-gray-500">
 
-                                                            <a href={post.url}
-                                                               className="font-medium underline hover:text-gray-700"> Read
-                                                                More </a>
-                                                        </p>
+                                                                <a href={post.url}
+                                                                   className="font-medium underline hover:text-gray-700"> Read
+                                                                    More </a>
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="flex justify-end">
-                                                <strong
-                                                  className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 dark:bg-zinc-600 px-3 py-1.5 text-white"
-                                                >
-                                                    <svg
-                                                      xmlns="http://www.w3.org/2000/svg"
-                                                      className="h-4 w-4"
-                                                      fill="none"
-                                                      viewBox="0 0 24 24"
-                                                      stroke="currentColor"
-                                                      stroke-width="2"
+                                                <div className="flex justify-end">
+                                                    <strong
+                                                        className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 dark:bg-zinc-600 px-3 py-1.5 text-white"
                                                     >
-                                                        <path
-                                                          stroke-linecap="round"
-                                                          stroke-linejoin="round"
-                                                          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                                                        />
-                                                    </svg>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            className="h-4 w-4"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor"
+                                                            stroke-width="2"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                                                            />
+                                                        </svg>
 
-                                                    <span
-                                                      className="text-[10px] font-medium sm:text-xs">Advert</span>
-                                                </strong>
-                                            </div>
-                                        </article>
-                                    </div>
-                                  ));
-                              })()
+                                                        <span
+                                                            className="text-[10px] font-medium sm:text-xs">Advert</span>
+                                                    </strong>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    ));
+                                })()
                             }
                             <div className="rounded-xl border-2 border-gray-100 bg-white p-3 mt-4 hidden">
                                 <h2 className="text-xl">Members</h2>
@@ -429,24 +538,24 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                         <div className="isolate flex -space-x-2 overflow-hidden">
 
                                             <img
-                                              className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                             <img
-                                              className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                             <img
-                                              className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                             <img
-                                              className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                         </div>
                                     </dd>
@@ -466,24 +575,24 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                                         <div className="isolate flex -space-x-2 overflow-hidden">
                                             <img
-                                              className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                             <img
-                                              className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                             <img
-                                              className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                             <img
-                                              className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                                              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                              alt=""
+                                                className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                alt=""
                                             />
                                         </div>
                                     </dd>

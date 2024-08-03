@@ -15,6 +15,7 @@ import (
 	"bhiveserver/models"
 	"bytes"
 	"context"
+	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -173,7 +174,24 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func GenerateUniqueString(length int) (string, error) {
+	if length <= 0 {
+		return "", fmt.Errorf("length must be greater than 0")
+	}
 
+	// Generate random bytes
+	randomBytes := make([]byte, (length*6+7)/8) // length*6/8 rounded up
+	_, err := rand.Read(randomBytes)
+	if err != nil {
+		return "", err
+	}
+
+	// Encode the bytes to a URL-safe base64 string and remove padding
+	uniqueString := base64.URLEncoding.EncodeToString(randomBytes)
+	uniqueString = uniqueString[:length]
+
+	return uniqueString, nil
+}
 func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {
@@ -216,6 +234,22 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "failed to insert Community	: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+	uniquePart, err := GenerateUniqueString(8)
+	if err != nil {
+		fmt.Println("Error generating unique string:", err)
+		return
+	}
+
+	// Add a timestamp to ensure uniqueness
+	timestamp := time.Now().UnixNano()
+	uniqueString := fmt.Sprintf("%s%d", uniquePart, timestamp)
+
+	// Trim the string to 8 characters if needed
+	if len(uniqueString) > 8 {
+		uniqueString = uniqueString[:8]
+	}
+
+	v.Url = v.Url + "-" + uniqueString
 
 	//create default channel
 	var c models.Channel

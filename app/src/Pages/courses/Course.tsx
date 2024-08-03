@@ -473,7 +473,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                                       </div>
                                   </div>
 
-
+                                  {posts.chapters && posts.chapters.length > 1 && (          
                                   <div className="mx-auto mt-16 w-full max-w-2xl lg:col-span-7 lg:mt-0 lg:max-w-none">
                                       <Tab.Group as="div">
                                           <div className="border-b border-gray-200">
@@ -504,6 +504,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                                           </Tab.Panels>
                                       </Tab.Group>
                                   </div>
+                                  )}
                               </div>
                           </div>
                       </div>
