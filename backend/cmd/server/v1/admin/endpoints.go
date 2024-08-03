@@ -229,11 +229,6 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 		v.Logo = webpDataURI
 	}
 
-	result, err := communitesCollection.InsertOne(context.Background(), v)
-	if err != nil {
-		http.Error(rw, "failed to insert Community	: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
 	uniquePart, err := GenerateUniqueString(8)
 	if err != nil {
 		fmt.Println("Error generating unique string:", err)
@@ -250,6 +245,17 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	v.Url = v.Url + "-" + uniqueString
+
+	if len(v.Access) > 0 {
+
+		v.Private = true
+	}
+
+	result, err := communitesCollection.InsertOne(context.Background(), v)
+	if err != nil {
+		http.Error(rw, "failed to insert Community	: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	//create default channel
 	var c models.Channel

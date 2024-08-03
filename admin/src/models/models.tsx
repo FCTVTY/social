@@ -91,7 +91,7 @@ export interface Community {
   create: boolean
   profiles: Profile[]
   url:string;
-
+  access:string;
 }
 
 export interface Channel {

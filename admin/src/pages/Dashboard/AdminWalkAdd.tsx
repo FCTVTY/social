@@ -10,6 +10,7 @@ export const AdminWalkAdd: FC = () => {
     logo: '',
     desc: '',
     url: '',
+    access: '',
   });
 
   const [userData, setUserData] = useState({ first_name: "", last_name: "", fff_tenant: "", gravatar: "", email:"" });
@@ -89,7 +90,8 @@ export const AdminWalkAdd: FC = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="url" className="block text-sm font-medium">URL - please make sure there's no spaces</label>
+              <label htmlFor="url" className="block text-sm font-medium">URL - please make sure there's no
+                spaces</label>
               <div className="flex">
                 <input
                     type="text"
@@ -155,6 +157,17 @@ export const AdminWalkAdd: FC = () => {
                   onChange={handleInputChange}
               />
             </div>
+            <div className="mb-4">
+              <label htmlFor="access" className="block text-sm font-medium">Enter Password to lock Community</label>
+              <input
+                  id="access"
+                  name="access"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  placeholder="Community Paasword"
+                  value={newCommunity.access}
+                  onChange={handleInputChange}
+              />
+            </div>
 
             <div className="flex justify-end">
               <button
@@ -173,7 +186,7 @@ export const AdminWalkAdd: FC = () => {
           </div>
         </form>
 
-        <UINotificationSuccess open={message} setOpen={setMessage} message="Added." />
+        <UINotificationSuccess open={message} setOpen={setMessage} message="Added."/>
       </div>
   );
 };
