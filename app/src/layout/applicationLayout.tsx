@@ -1,5 +1,5 @@
 import React, {Children, Fragment, useEffect, useState} from 'react';
-import LogoSquare from "../assets/logo-light.svg";
+import LogoSquare from "../assets/logo-light-new.svg";
 import LogoSquareDark from "../assets/logo-dark.svg";
 import fk from "../assets/FK.svg";
 import {Dialog, Disclosure, Menu, Transition} from '@headlessui/react';
@@ -29,7 +29,15 @@ import ThemeSwitch from './themeswitch';
 import Cookies from 'js-cookie';
 import {LoadingButton} from "../components/LoadingButton";
 import {useLocation} from "react-router-dom";
-import {CalendarDaysIcon, GraduationCapIcon, SquareCodeIcon, UsersIcon} from "lucide-react";
+import {
+    CalendarDaysIcon,
+    GraduationCapIcon,
+    PickaxeIcon,
+    PlusIcon,
+    SquareCodeIcon,
+    UsersIcon,
+    WrenchIcon
+} from "lucide-react";
 
 interface NavigationItem {
     name: string;
@@ -149,6 +157,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
         {id: 3, name: 'Events', href: '/events/upcoming', initial: <CalendarDaysIcon/>, current: '/events/upcoming' == currentUrl},
         {id: 4, name: 'Members', href: '/members/list', initial: <UsersIcon/>, current: '/members/list' == currentUrl},
+    ];
+    const admin: TeamItem[] = [
+        {id: 1, name: 'Site Settings', href: '/admin/site', initial: <WrenchIcon/>, current: '/Academy' == currentUrl},
     ];
 
     const userNavigation: UserNavigationItem[] = [
@@ -278,7 +289,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     // @ts-ignore
     return (
 <>
-    {!locked && (
+    {!locked && community && community.community?.published !== true && roles && (roles.includes("admin") || roles.includes("moderator")) && (
+
 
         <>
             <div
@@ -660,6 +672,34 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         ))}
                                     </ul>
                                 </li>
+                                {community && community.community?.published !== true && roles && (roles.includes("admin") || roles.includes("moderator")) && (
+
+                                    <li>
+                                    <div className="text-xs  leading-6 text-gray-400 my-3">Admin/Moderator Settings</div>
+                                    <ul role="list" className="-mx-3 space-y-3">
+                                        {admin.map((team) => (
+                                            <li key={team.name}>
+                                                <a
+                                                    href={team.href}
+                                                    className={classNames(
+                                                        team.current
+                                                            ? 'text-gray-900 bg-gray-200'
+                                                            : 'text-gray-400 hover:text-white hover:bg-gray-900',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                    )}
+                                                >
+                          <span
+                              className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
+                            {team.initial}
+                          </span>
+                                                    <span
+                                                        className="mt-[2px]">{team.name}</span>
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                                    )}
                                 <li className="-mx-6 mt-auto">
                                     <a
                                         href={`/profile/${profile?._id}`}
@@ -726,8 +766,51 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                 </div>
             </div>
+            <>
+                {community && community.community?.published !== true && roles && (roles.includes("admin") || roles.includes("moderator")) && (
+                <div className="fixed inset-x-0 bottom-0 z-[100]">
+                    <div className="flex items-center gap-x-6 bg-indigo-700 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+                        <p className="text-sm leading-6 text-white">
+                            <a href="#">
+
+                                Your website is currently unpublished and can only be viewed by administrators.
+
+                            </a>
+                        </p>
+                        <div className="flex flex-1 justify-end">
+                            <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+                                <span className="sr-only">Dismiss</span>
+                                <XMarkIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                )}
+            </>
         </>
     )}
+    {!locked && community && community.community?.published !== false && (
+
+        <>
+
+            <form name="myForm" id="myForm" className="flex min-h-screen items-center justify-center">
+                <div className="min-h-1/2 bg-gray-900  border border-gray-900 rounded-2xl shadow shadow-lg p-3">
+                    <div
+                        className="mx-4 sm:mx-24 md:mx-34 lg:mx-56 mx-auto  flex items-center space-y-4 py-16  text-white flex-col">
+                        <PickaxeIcon/>
+
+                        <h1 className="text-white text-2xl">This Community is currently Unpublished</h1>
+
+
+                        <p>
+                            Check back soon
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+
+        </>)}
     {locked && (
         <>
 

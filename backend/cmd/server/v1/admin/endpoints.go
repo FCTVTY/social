@@ -280,7 +280,7 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 	post.Tags = []string{}
 	post.Visability = true
 	post.Desc = "Hello Community!"
-	post.UserID = "66ae42a76ec9e6c56d880c9c"
+	post.UserID = "01881d11-1faa-4a8b-a3f1-4f49ab30579f"
 
 	_, err = postCollection.InsertOne(context.Background(), post)
 	if err != nil {

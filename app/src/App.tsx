@@ -39,6 +39,7 @@ import RemoveCourse from "./Pages/home/RemoveCourse";
 import AcademiesPage from "./Pages/Academy/Academies";
 import CoursesPage from "./Pages/courses/Courses";
 import CoursePage from "./Pages/courses/Course";
+import Site from "./Pages/admin/site";
 initSuperTokens();
 
 
@@ -197,7 +198,10 @@ function App() {
 
                 <Settings/></ApplicationLayout> </SessionAuth>}/>
 
+            <Route path="/admin/site" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+
+                <Site/></ApplicationLayout> </SessionAuth>}/>
           <Route path="/resources" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 

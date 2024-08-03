@@ -9,6 +9,7 @@ export interface Community {
     create: boolean
     profiles: Profile[]
     access: string;
+    published: boolean;
 }
 
 export interface Channel {
