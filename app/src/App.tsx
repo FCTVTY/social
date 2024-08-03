@@ -201,7 +201,7 @@ function App() {
             <Route path="/admin/site" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-                <Site/></ApplicationLayout> </SessionAuth>}/>
+                <Site host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
           <Route path="/resources" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 

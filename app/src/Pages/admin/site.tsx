@@ -30,27 +30,28 @@ import EventItem from "./Eventitem";
 
 interface HomeProps {
     host?: string;
-    channel?: string;
+    channel?:string;
 }
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
-export default function Site({ host, channel ,roles, setRoles}: HomeProps) {
+export default function Site({ host, channel,roles, setRoles}: HomeProps) {
 
-    const [posts, setPosts] = useState<Courses[]>([]);
-    const [community, setCommunity] = useState<CommunityCollection>();
-    const [selectedCategory, setSelectedCategory] = useState('All');
-    const [categories, setCategories] = useState<string[]>(['All']);
+    const [community, setCommunity] = useState<Partial<CommunityCollection>>();
 
     useEffect(() => {
         if (host) {
             fetchDetails();
+        } else {
+            console.warn('Host is undefined');
         }
     }, [host, channel]);
 
+
     const fetchDetails = async () => {
         try {
+
             const communityResponse = await fetch(`${getApiDomain()}/community?name=${host}`);
             if (!communityResponse.ok) {
                 throw new Error('Network response was not ok for community fetch');
@@ -58,20 +59,17 @@ export default function Site({ host, channel ,roles, setRoles}: HomeProps) {
             const communityData = await communityResponse.json();
             setCommunity(communityData);
 
-            const postsResponse = await fetch(`${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=1`);
-            if (!postsResponse.ok) {
-                throw new Error('Network response was not ok for Academy fetch');
-            }
-            const postsData = await postsResponse.json();
-            setPosts(postsData);
+
         } catch (error) {
             console.error('Error fetching community details:', error);
         }
     };
 
+    // @ts-ignore
     return (
-        <>
 
+        <>
+            {community  && (
             <div className="container mx-auto p-6 h-auto">
                 <div className="bg-white rounded-lg shadow-lg p-6">
                     <h2 className="text-2xl font-bold mb-6">General Settings</h2>
@@ -127,49 +125,8 @@ export default function Site({ host, channel ,roles, setRoles}: HomeProps) {
                         </button>
                     </div>
                 </div>
-                <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
-                    <h2 className="text-2xl font-bold mb-6">Domain Settings</h2>
-                    <div className="mb-4">
-                        <label
-                            htmlFor="current-address"
-                            className="block text-sm font-medium text-gray-700"
-                        >
-                            Current Address of Your Site
-                        </label>
-                        <input
-                            type="text"
-                            id="current-address"
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                            readOnly=""
-                            defaultValue="currentaddress.bettermode.io"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <p className="block text-sm font-medium text-gray-700">
-                            Want to use a different address for your site?
-                        </p>
-                        <p className="text-gray-600 mb-2">
-                            Choose a subdomain under .bettermode.io
-                        </p>
-                        <input
-                            type="text"
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                            placeholder="yoursubdomain.bettermode.io"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <p className="text-sm text-gray-600">
-                            You can freely choose any subdomain under .bettermode.io, as long as
-                            it’s not taken by another site. However, to use a custom domain, you
-                            need to upgrade your plan.{" "}
-                            <a href="#" className="text-blue-500">
-                                View available plans
-                            </a>
-                            .
-                        </p>
-                    </div>
-                </div>
-            </div>
+
+            </div> )}
         </>
 
     )
