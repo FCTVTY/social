@@ -108,7 +108,7 @@ func Communities(rw http.ResponseWriter, r *http.Request) {
 
 	var collection []bson.M
 	// Check if the community exists in the database
-	cursor, err := communitesCollection.Find(context.Background())
+	cursor, err := communitesCollection.Find(context.Background(), bson.M{})
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			http.Error(rw, "community not found", http.StatusNotFound)
