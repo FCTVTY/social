@@ -161,7 +161,13 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
     };
 
 
-
+    const handleFileCatChange = (index, e) => {
+        const { name, value } = e.target;
+        const updatedfile = courseData.files.map((file, idx) =>
+            idx === index ? { ...file, [name]: value } : file
+        );
+        setCourseData({ ...courseData, files: updatedfile });
+    };
 
 
     const handleFileChange = async(index, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -713,36 +719,52 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                                                       <div>
                                                           <label htmlFor={`file-name-${index}`}
                                                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
-                                                                  File Name
-                                                                </label>
-                                                            </div>
-                                                            <div className="sm:col-span-2">
-                                                                <input
-                                                                  type="file"
-                                                                  name="name"
-                                                                  id={`file-name-${index}`}
-                                                                  onChange={(e) => handleFileChange(index, e)}
-                                                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                />
-                                                                <label className="text-sm">{file.url}</label>
-                                                            </div>
+                                                              File Name
+                                                          </label>
+                                                      </div>
+                                                      <div className="sm:col-span-2">
+                                                          <input
+                                                              type="file"
+                                                              name="name"
+                                                              id={`file-name-${index}`}
+                                                              onChange={(e) => handleFileChange(index, e)}
+                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                          />
+                                                          <label className="text-sm">{file.url}</label>
+                                                      </div>
+                                                      <div>
+                                                          <label htmlFor={`file-name-${index}`}
+                                                                 className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5">
+                                                              File Category
+                                                          </label>
+                                                      </div>
+                                                      <div className="sm:col-span-2">
+                                                          <input
+                                                              type="text"
+                                                              name="fileext"
+                                                              id={`file-fileext-${index}`}
+                                                              onChange={(e) => handleFileCatChange(index, e)}
+                                                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                          />
+                                                          <label className="text-sm">{file.url}</label>
+                                                      </div>
 
-                                                        </div>
-                                                      ))}
-                                                      <button type="button" onClick={handleAddFile}
-                                                              className="mt-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                                                          Add File
-                                                      </button>
                                                   </div>
+                                              ))}
+                                              <button type="button" onClick={handleAddFile}
+                                                      className="mt-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                                  Add File
+                                              </button>
+                                          </div>
                                               </div>
 
                                               {/* Action buttons */}
                                               <div className="flex-shrink-0 border-t border-gray-200 px-4 py-5 sm:px-6">
                                                   <div className="flex justify-end space-x-3">
                                                       <button
-                                                        type="button"
-                                                        className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                                                        onClick={() => setOpen(false)}
+                                                          type="button"
+                                                          className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                                          onClick={() => setOpen(false)}
                                                       >
                                                           Cancel
                                                       </button>

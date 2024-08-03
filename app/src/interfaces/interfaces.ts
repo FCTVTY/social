@@ -140,5 +140,5 @@ export interface File {
     url: string
     name: string
     logo: string
-    fileExt: string
+    fileext: string
 }

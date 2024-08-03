@@ -19,6 +19,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
     const [posts, setPosts] = useState<Courses[]>([]);
     const [community, setCommunity] = useState<CommunityCollection>();
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [categories, setCategories] = useState<string[]>(['All']);
 
     useEffect(() => {
         if (host) {
@@ -51,16 +52,29 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
     };
 
     const filteredPosts = posts.flatMap(post =>
-        post.files.filter(file =>
-            selectedCategory === 'All' || file.name.includes(selectedCategory)
-        ).map(file => ({
+        post.files.filter(file => {
+            const fileExt = file.fileext || ''; // Default to an empty string if undefined
+            return selectedCategory === 'All' || fileExt.includes(selectedCategory);
+        }).map(file => ({
             ...file,
-            courseName: post.name
+            courseName: post.name,
+            image : post.media
         }))
     );
 
-    const categories = ['All', 'PDF', 'Images', 'Documents', 'Videos'];
-
+    useEffect(() => {
+        // Extract unique file extensions from posts when posts are updated
+        const uniqueExtensions = new Set<string>();
+        posts.forEach(post => {
+            post.files.forEach(file => {
+                if (file.fileext) {
+                    uniqueExtensions.add(file.fileext);
+                }
+            });
+        });
+        // Update categories with unique extensions
+        setCategories(prevCategories => ['All', ...Array.from(uniqueExtensions)]);
+    }, [posts]);
     return (
         <>
             <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
@@ -117,16 +131,26 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                             {filteredPosts && filteredPosts.map((file, index) => (
                                 <div key={index} className="group relative bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                                     <div className="aspect-w-1 aspect-h-1 bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-56">
-                                        <DocumentIcon
-                                            className="w-full h-full object-center object-cover sm:w-full sm:h-full"
-                                        />
+                                        {file.image ? (
+                                            <img
+                                                src={file.image}
+                                                alt={`Preview of ${file.name}`} // Providing an alt text is good for accessibility
+                                                className="w-full h-full object-center object-cover sm:w-full sm:h-full"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-gray-500">
+                                                No Image Available
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="px-4 py-2">
-                                        <h3 className="text-sm text-gray-700">
-                                            <span aria-hidden="true" className="absolute inset-0" />
-                                            {file.name}
-                                        </h3>
-                                        <p className="mt-1 text-sm text-gray-500">{file.courseName}</p>
+
+                                        <p className=" mt-1 text-sm text-gray-500">{file.name}
+                                        </p><h3 className="flex text-sm text-gray-700">
+                                        <span aria-hidden="true" className=""/>
+                                        <a className=" text-center rounded w-full bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                           href={file.url} target="_blank">Download file</a>
+                                    </h3>
                                     </div>
                                 </div>
                             ))}

@@ -522,7 +522,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                     href={item.href}
                                                                     className={classNames(
                                                                         item.current
-                                                                            ? 'text-indigo-600'
+                                                                            ? 'text-indigo-600 bg-gray-200'
                                                                             : 'text-gray-400 hover:text-white hover:bg-indigo-600',
                                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                                     )}
@@ -554,13 +554,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                     href={team.href}
                                                                     className={classNames(
                                                                         team.current
-                                                                            ? 'text-cyan-500'
+                                                                            ? 'text-cyan-500 bg-gray-200'
                                                                             : 'text-gray-400 hover:text-white hover:bg-cyan-500',
                                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                                     )}
                                                                 >
                           <span
-                              className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium text-white group-hover:text-white">
+                              className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium group-hover:text-white">
                             {team.initial}
                           </span>
                                                                     <span
