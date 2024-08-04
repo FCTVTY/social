@@ -76,14 +76,6 @@ func (rw *responseWriter) WriteHeader(code int) {
 
 func main() {
 
-	fig := figlet4go.New()
-
-	// Convert text to ASCII art
-	asciiArt, _ := fig.Render("Hello, World!")
-
-	// Print the ASCII art
-	fmt.Println(asciiArt)
-
 	err := supertokens.Init(SuperTokensConfig)
 	if err != nil {
 		fmt.Println(err)
