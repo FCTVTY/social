@@ -11,9 +11,9 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Install Vite and plugins
-RUN yarn add vite @vitejs/plugin-react daisyui vite-plugin-node-stdlib-browser
+RUN yarn add vite @vitejs/plugin-react daisyui@latest vite-plugin-node-stdlib-browser
 # Copy application code
-RUN yarn add daisyui@latest
+
 # Build the application
 RUN yarn build
 
