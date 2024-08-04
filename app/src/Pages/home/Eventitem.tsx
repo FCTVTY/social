@@ -14,11 +14,11 @@ const EventItem = ({post, profile, lite}) => {
     // @ts-ignore
     return (
       <li key={post._id}
-          className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
+          className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 dark:hover:bg-zinc-900 sm:px-6">
           <div className="flex gap-x-4">
               <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={post.logo} alt=""/>
               <div className="min-w-0 flex-auto">
-                  <p className="text-sm font-semibold leading-6 text-gray-900">
+                  <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                       <a href={`/event/${post._id}`}>
                           <span className="absolute inset-x-0 -top-px bottom-0"/>
                           {post.desc}
@@ -35,7 +35,7 @@ const EventItem = ({post, profile, lite}) => {
           </div>
           <div className="flex items-center gap-x-4">
               <div className="hidden sm:flex sm:flex-col sm:items-end">
-                  <p className="text-sm leading-6 text-gray-900">{post.eventDetails?.etype}</p>
+                  <p className="text-sm leading-6 text-gray-900 dark:text-white">{post.eventDetails?.etype}</p>
 
                   <p className="mt-1 text-xs leading-5 text-gray-500">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"

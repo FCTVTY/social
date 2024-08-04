@@ -58,7 +58,7 @@ export default function Comment({ onSubmit, post, supertokensId }: CreateProps) 
                     name="desc"
                     placeholder="Type something..."
                     onChange={handleInputChange}
-                    className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400"
+                    className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
                 />
                     <footer className="flex justify-between mt-2">
                         <div className="flex gap-2">

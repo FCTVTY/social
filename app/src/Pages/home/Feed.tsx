@@ -231,7 +231,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
 
                             <ul role="list"
-                                className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
+                                className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y dark:divide-amber-500">
                                 <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
                                     <Create channel={channel} onSubmit={handleRefresh}/>
                                 </li>
@@ -312,7 +312,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                     />
                                 </div>
                                 <div
-                                    className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden">
+                                    className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
                                     <img
                                         className="object-cover object-center h-32"
                                         src={profile?.profilePicture}
@@ -329,6 +329,10 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                                 let roleLabel = '';
 
                                                 switch (role) {
+                                                    case 'god':
+                                                        roleClasses = 'bg-rose-100 text-rose-700';
+                                                        roleLabel = 'GOD';
+                                                        break;
                                                     case 'admin':
                                                         roleClasses = 'bg-purple-100 text-purple-700';
                                                         roleLabel = 'Admin';
@@ -405,7 +409,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                             <div
                                 className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 p-3 mb-4 dark:text-white ">
                                 <img src={community && community.community?.logo}
-                                     className="sm:mx-auto h-20 py-1 dark:rounded-2xl dark:bg-white dark:p-10"/>
+                                     className="sm:mx-auto h-20 py-1 dark:invert"/>
 
                                 <p className={`py-6`}>{community?.community?.desc}</p>
                                 <dl>

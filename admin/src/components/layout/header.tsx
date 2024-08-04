@@ -58,7 +58,7 @@ export const Header = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-950 flex h-[56px] items-center gap-x-2 border-b border-b-border">
+    <nav className="bg-white dark:bg-zinc-950 flex h-[56px] items-center gap-x-2 border-b border-b-border">
       <div className={("mx-auto ml-2 h-10 w-10 p-2")}>
         <img src={LogoSquare} alt="footfallfit"/>
       </div>

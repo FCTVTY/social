@@ -50,15 +50,15 @@ export default function MembersPage({ host, channel }: HomeProps) {
     };
 
     return (
-        <>
+        <div className="h-[100vh]">
 
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-                <div className="bg-white py-32">
+                <div className="bg-white dark:bg-zinc-950 py-32">
                     <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
                         <div className="mx-auto max-w-2xl">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Meet <strong>{community?.name}</strong> members</h2>
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Meet <strong>{community?.name}</strong> members</h2>
                             <p className="mt-4 text-lg leading-8 text-gray-600">
                                 We’re a dynamic group of individuals who are passionate about what we do.
                             </p>
@@ -71,7 +71,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                                 <li key={person._id}>
                                     <a href={`/profile/${person._id}`} >
                                     <img className="mx-auto h-56 w-56 rounded-full" src={person.profilePicture} alt=""/>
-                                    <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{person.first_name} {person.last_name} </h3>
+                                    <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white ">{person.first_name} {person.last_name} </h3>
                                     <p className="text-sm leading-6 text-gray-600 truncate">{person.bio}</p>
                                     </a>
                                 </li>
@@ -81,7 +81,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                 </div>
 
             </div>
-        </>
+        </div>
     )
         ;
 };

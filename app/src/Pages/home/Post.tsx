@@ -91,7 +91,7 @@ export default function PostView({host, channel, post}: HomeProps) {
     // @ts-ignore
     // @ts-ignore
     return (
-        <>
+        <div className="h-[100vh]">
             {ppost && (
                 <>
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -100,7 +100,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                             className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
 
 
-                            <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-7xl">
+                            <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow max-w-7xl">
                                 <div className="flex flex-1 flex-col p-3">
                                     <dl className="mt-1 flex flex-grow flex-col justify-between">
                                         <a href="#" className="group block flex-shrink-0">
@@ -110,7 +110,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                          src={ppost.profile.profilePicture} alt=""/>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{ppost.profile.first_name} {ppost.profile.last_name} -
+                                                    <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900">{ppost.profile.first_name} {ppost.profile.last_name} -
                                                         Published {formatDistanceToNow(new Date(ppost.date), {addSuffix: true})} </p>
                                                     <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                                         profile</p>
@@ -193,7 +193,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                                 <>
                                                                     <div className="relative">
                                                                         <img
-                                                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
+                                                                            className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white dark:ring-zinc-950"
                                                                             src={activityItem.profile.profilePicture}
                                                                             alt=""
                                                                         />
@@ -204,13 +204,13 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                                         <div>
                                                                             <div className="text-sm">
                                                                                 <a href={activityItem._id}
-                                                                                   className="font-medium text-gray-900">
+                                                                                   className="font-medium text-gray-900 dark:text-white">
                                                                                     {activityItem.profile.first_name} {activityItem.profile.last_name}
                                                                                 </a>
                                                                             </div>
                                                                             <p className="mt-0.5 text-sm text-gray-500">Commented {formatDistanceToNow(new Date(activityItem.date), {addSuffix: true})}</p>
                                                                         </div>
-                                                                        <div className="mt-2 text-sm text-gray-700">
+                                                                        <div className="mt-2 text-sm text-gray-700 dark:text-white ">
                                                                             <p>{activityItem.comment}</p>
                                                                         </div>
                                                                     </div>
@@ -242,6 +242,6 @@ export default function PostView({host, channel, post}: HomeProps) {
 
     </a>
 </div>
-        </>
+        </div>
     );
 }

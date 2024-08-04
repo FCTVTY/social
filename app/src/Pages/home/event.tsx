@@ -93,7 +93,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                             </div>
                             <div className="mt-10 pt-10 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                                 <div className="mt-15 min-w-0 flex-1 sm:hidden md:block">
-                                    <h1 className="truncate text-2xl font-bold text-gray-900">{ppost?.desc} <br/>
+                                    <h1 className="truncate text-2xl font-bold text-gray-900 dark:text-white">{ppost?.desc} <br/>
                                     <span className="text-red-600 text-sm mt-[-10px]">
                                         {new Date(ev?.date).toLocaleDateString()}  At {new Date(ev?.date).toLocaleTimeString()}
                                     </span>
@@ -146,7 +146,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
 
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-4">
                     <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
-                        <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow max-w-7xl">
+                        <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow max-w-7xl">
                             <div className="flex flex-1 flex-col p-3">
                                 <dl className="mt-1 flex flex-grow flex-col justify-between">
                                     <strong>Event Details</strong>
@@ -161,7 +161,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                     <div className="border-t border-gray-200">
                                         <dl>
 
-                                            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                            <div className="bg-white dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                 <dt className="text-sm font-medium text-gray-500">Location</dt>
                                                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                                     {ev?.etype === "In-Person" ? (
@@ -184,24 +184,24 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                                 </dd>
                                             </div>
                                             <div
-                                              className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                              className="bg-gray-50 dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                 <dt className="text-sm font-medium text-gray-500">Date</dt>
-                                                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                                <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                                     <CalendarIcon className="h-5 w-5 inline-block mr-2"/>
                                                     {new Date(ev?.date).toLocaleDateString()}
                                                 </dd>
                                             </div>
-                                            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                            <div className="bg-white dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                 <dt className="text-sm font-medium text-gray-500">Time</dt>
-                                                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                                <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                                     <ClockIcon className="h-5 w-5 inline-block mr-2"/>
                                                     {new Date(ev?.date).toLocaleTimeString()} GMT
                                                 </dd>
                                             </div>
 
-                                              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                              <div className="bg-white dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                                 <dt className="text-sm font-medium text-gray-500">Going</dt>
-                                                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                                <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
                                                     <UserIcon className="h-5 w-5 inline-block mr-2"/>
                                                     {userHasLikedCount} Responded
                                                 </dd>
@@ -227,7 +227,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                                           <>
                                                               <div className="relative">
                                                                   <img
-                                                                    className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
+                                                                    className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white dark:ring-zinc-950"
                                                                     src={activityItem.profile.profilePicture}
                                                                     alt=""
                                                                   />
@@ -236,14 +236,14 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                                                   <div>
                                                                       <div className="text-sm">
                                                                           <a href={activityItem._id}
-                                                                             className="font-medium text-gray-900">
+                                                                             className="font-medium text-gray-900 dark:text-white">
                                                                               {activityItem.profile.first_name} {activityItem.profile.last_name}
                                                                           </a>
                                                                       </div>
                                                                       <p
                                                                         className="mt-0.5 text-sm text-gray-500">Commented {formatDistanceToNow(new Date(activityItem.date), {addSuffix: true})}</p>
                                                                   </div>
-                                                                  <div className="mt-2 text-sm text-gray-700">
+                                                                  <div className="mt-2 text-sm text-gray-700 dark:text-white">
                                                                       <p>{activityItem.comment}</p>
                                                                   </div>
                                                               </div>

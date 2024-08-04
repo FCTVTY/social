@@ -54,7 +54,7 @@ export const Sidebar = () => {
       onMouseOver={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
       className={cn(
-        "z-50 flex h-full grow flex-col gap-y-4 overflow-y-auto overflow-x-hidden border-r border-border bg-white dark:bg-gray-950 px-3 pt-2"
+        "z-50 flex h-full grow flex-col gap-y-4 overflow-y-auto overflow-x-hidden border-r border-border bg-white dark:bg-zinc-950 px-3 pt-2"
       )}
     >
       <nav className="flex flex-1 flex-col">

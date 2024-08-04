@@ -17,15 +17,16 @@ import (
 )
 
 type Community struct {
-	ID      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Name    string             `json:"name"`
-	Logo    string             `json:"logo"`
-	Desc    string             `json:"desc"`
-	Private bool               `json:"private"`
-	OwnerId string             `json:"ownerId"`
-	Create  bool               `json:"create"`
-	Url     string             `json:"url"`
-	Access  string             `json:"access"`
+	ID        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Name      string             `json:"name"`
+	Logo      string             `json:"logo"`
+	Desc      string             `json:"desc"`
+	Private   bool               `json:"private"`
+	OwnerId   string             `json:"ownerId"`
+	Create    bool               `json:"create"`
+	Url       string             `json:"url"`
+	Access    string             `json:"access"`
+	Published bool               `json:"published"`
 }
 type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`

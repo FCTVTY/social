@@ -38,6 +38,15 @@ function ThemeSwitch() {
     if (htmlSelector) {
       htmlSelector.classList.remove('light', 'dark');
       htmlSelector.classList.add(theme);
+      if(theme === "dark") {
+
+        htmlSelector.setAttribute('data-theme', "night");
+      }
+      else
+      {
+        htmlSelector.setAttribute('data-theme', "cupcake");
+
+      }
     }
   }, [theme]);
 

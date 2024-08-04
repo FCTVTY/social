@@ -1,14 +1,3 @@
-/*
- * Copyright (c) 2024.  Footfallfit & FICTIVITY. All rights reserved.
- * This code is confidential and proprietary to Footfallfit & FICTIVITY.
- * Unauthorized copying, modification, or distribution of this code is strictly prohibited.
- *
- * Authors:
- *
- * [@sam1f100](https://www.github.com/sam1f100)
- *
- */
-
 package main
 
 import (
@@ -16,6 +5,7 @@ import (
 	"bhiveserver/cmd/server/v1/client"
 	_ "bhiveserver/models"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"net/url"
@@ -24,7 +14,6 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/supertokens"
@@ -52,20 +41,48 @@ func init() {
 	prometheus.MustRegister(requestCount)
 }
 
-// Middleware to log each request
+// Middleware to log each request and capture metrics
 func logMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(response http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
+		// Create a custom response writer to capture the status code
+		rw := &responseWriter{ResponseWriter: w, statusCode: http.StatusOK}
+
 		// Serve the request
-		next.ServeHTTP(response, r)
+		next.ServeHTTP(rw, r)
 
 		duration := time.Since(start)
-		log.Printf("%s %s %s %s", r.Method, r.RequestURI, r.Proto, duration)
+		method := r.Method
+		path := r.URL.Path
+		status := fmt.Sprintf("%d", rw.statusCode)
+
+		requestCount.WithLabelValues(method, path, status).Inc()
+
+		log.Printf("%s %s %s %s %d", r.Method, r.RequestURI, r.Proto, duration, rw.statusCode)
 	})
 }
 
+// responseWriter is a custom wrapper to capture the HTTP status code
+type responseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func (rw *responseWriter) WriteHeader(code int) {
+	rw.statusCode = code
+	rw.ResponseWriter.WriteHeader(code)
+}
+
 func main() {
+
+	fig := figlet4go.New()
+
+	// Convert text to ASCII art
+	asciiArt, _ := fig.Render("Hello, World!")
+
+	// Print the ASCII art
+	fmt.Println(asciiArt)
 
 	err := supertokens.Init(SuperTokensConfig)
 	if err != nil {
@@ -75,9 +92,7 @@ func main() {
 	fmt.Println("supertokens init done..")
 
 	resp, err := userroles.CreateNewRoleOrAddPermissions("admin", []string{"read:all", "delete:all", "edit:all"}, nil)
-
 	if err != nil {
-		// TODO: Handle error
 		fmt.Println(err)
 		return
 	}
@@ -86,9 +101,7 @@ func main() {
 	}
 
 	resp, err = userroles.CreateNewRoleOrAddPermissions("moderator", []string{"read:all", "delete:all", "edit:all"}, nil)
-
 	if err != nil {
-		// TODO: Handle error
 		fmt.Println(err)
 		return
 	}
@@ -96,7 +109,16 @@ func main() {
 		// The role already exists
 	}
 
-	http.Handle("/metrics", promhttp.Handler()) // Expose Prometheus metrics
+	resp, err = userroles.CreateNewRoleOrAddPermissions("god", []string{"read:all", "delete:all", "edit:all"}, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if resp.OK.CreatedNewRole == false {
+		// The role already exists
+	}
+
+	http.Handle("/metrics", promhttp.Handler())
 
 	http.ListenAndServe(":3001", logMiddleware(corsMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 
@@ -106,126 +128,107 @@ func main() {
 		}
 
 		// Prefix all requests with "v1/"
-
 		if parsedURL.Path == "/internal/admin" {
-
 			userId := r.URL.Query().Get("userid")
-
 			response, err := userroles.AddRoleToUser("public", userId, "admin", nil)
 			if err != nil {
 				// TODO: Handle error
 				return
 			}
-
 			if response.UnknownRoleError != nil {
 				fmt.Println("role missing")
 				return
 			}
-
 			if response.OK.DidUserAlreadyHaveRole {
-				// The user already had the role
 				fmt.Println("user has role")
 			}
-
 		}
-
-		if parsedURL.Path == "/internal/moderator" {
-
+		if parsedURL.Path == "/internal/god" {
 			userId := r.URL.Query().Get("userid")
-
+			response, err := userroles.AddRoleToUser("public", userId, "god", nil)
+			if err != nil {
+				// TODO: Handle error
+				return
+			}
+			if response.UnknownRoleError != nil {
+				fmt.Println("role missing")
+				return
+			}
+			if response.OK.DidUserAlreadyHaveRole {
+				fmt.Println("user has role")
+			}
+		}
+		if parsedURL.Path == "/internal/moderator" {
+			userId := r.URL.Query().Get("userid")
 			response, err := userroles.AddRoleToUser("public", userId, "moderator", nil)
 			if err != nil {
 				// TODO: Handle error
 				return
 			}
-
 			if response.UnknownRoleError != nil {
 				fmt.Println("role missing")
 				return
 			}
-
 			if response.OK.DidUserAlreadyHaveRole {
-				// The user already had the role
 				fmt.Println("user has role")
 			}
-
 		}
-
 		if parsedURL.Path == "/v1/user/roles" {
 			session.VerifySession(nil, client.Roles).ServeHTTP(rw, r)
-
 			return
 		}
-
 		if parsedURL.Path == "/v1/sessioninfo" {
 			session.VerifySession(nil, client.Sessioninfo).ServeHTTP(rw, r)
 			return
 		}
 		if parsedURL.Path == "/v1/communities" && r.Method == "GET" {
 			session.VerifySession(nil, client.Communities).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/community" && r.Method == "GET" {
 			session.VerifySession(nil, client.Community).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/community/posts" && r.Method == "GET" {
 			session.VerifySession(nil, client.Posts).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/community/post" && r.Method == "GET" {
 			session.VerifySession(nil, client.Post).ServeHTTP(rw, r)
-
 			return
 		}
-
 		if parsedURL.Path == "/v1/removepost" && r.Method == "GET" {
 			session.VerifySession(nil, client.PostDelete).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/RemoveCourse" && r.Method == "GET" {
 			session.VerifySession(nil, client.CourseDelete).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/hidepost" && r.Method == "GET" {
 			session.VerifySession(nil, client.PostHide).ServeHTTP(rw, r)
-
 			return
 		}
-
 		if parsedURL.Path == "/v1/community/createpost" && r.Method == "POST" {
 			session.VerifySession(nil, client.CreatePost).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/community/createEvent" && r.Method == "POST" {
 			session.VerifySession(nil, client.CreateEvent).ServeHTTP(rw, r)
-
 			return
 		}
-
 		if parsedURL.Path == "/v1/community/courses" && r.Method == "GET" {
 			session.VerifySession(nil, client.Courses).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/community/course" && r.Method == "GET" {
 			session.VerifySession(nil, client.Course).ServeHTTP(rw, r)
-
 			return
 		}
-
 		if parsedURL.Path == "/v1/community/createcourse" && r.Method == "POST" {
 			session.VerifySession(nil, client.CreateCourse).ServeHTTP(rw, r)
-
 			return
 		}
-
 		if parsedURL.Path == "/v1/ads/get" {
 			session.VerifySession(nil, client.GetAds).ServeHTTP(rw, r)
 		}
@@ -235,46 +238,41 @@ func main() {
 		if parsedURL.Path == "/v1/deleteaccount" {
 			session.VerifySession(nil, client.DeleteAccount).ServeHTTP(rw, r)
 		}
-
 		if parsedURL.Path == "/v1/createProfile" && r.Method == "POST" {
 			session.VerifySession(nil, client.CreateProfile).ServeHTTP(rw, r)
 		}
-
 		if parsedURL.Path == "/v1/postLikes" && r.Method == "POST" {
 			session.VerifySession(nil, client.PostLikes).ServeHTTP(rw, r)
 		}
-
 		if parsedURL.Path == "/v1/comment" && r.Method == "POST" {
 			session.VerifySession(nil, client.Comment).ServeHTTP(rw, r)
 		}
 		if parsedURL.Path == "/v1/members" && r.Method == "GET" {
 			session.VerifySession(nil, client.Members).ServeHTTP(rw, r)
 		}
-
-		//admin sections
+		// admin sections
 		if parsedURL.Path == "/v1/admin/community" && r.Method == "GET" {
 			session.VerifySession(nil, admin.Community).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/admin/community" && r.Method == "POST" {
 			session.VerifySession(nil, admin.CreateCommunity).ServeHTTP(rw, r)
-
+			return
+		}
+		if parsedURL.Path == "/v1/admin/community" && r.Method == "PUT" {
+			session.VerifySession(nil, admin.UpdateCommunity).ServeHTTP(rw, r)
 			return
 		}
 		if parsedURL.Path == "/v1/admin/channel" && r.Method == "GET" {
 			session.VerifySession(nil, admin.Channels).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/admin/channel" && r.Method == "POST" {
 			session.VerifySession(nil, admin.CreateChannel).ServeHTTP(rw, r)
-
 			return
 		}
 		if parsedURL.Path == "/v1/admin/addAd" && r.Method == "POST" {
 			session.VerifySession(nil, admin.CreatePost).ServeHTTP(rw, r)
-
 			return
 		}
 		rw.WriteHeader(404)
@@ -297,7 +295,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 		if r.Method == "OPTIONS" {
 			// For preflight requests, set additional headers
 			response.Header().Set("Access-Control-Allow-Headers", strings.Join(append([]string{"Content-Type"}, supertokens.GetAllCORSHeaders()...), ","))
-			response.Header().Set("Access-Control-Allow-Methods", "*")
+			response.Header().Set("Access-Control-Allow-Methods", strings.Join(append([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}), ","))
 			response.Write([]byte(""))
 		} else {
 			// Call the next handler in the chain

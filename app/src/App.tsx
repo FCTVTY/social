@@ -71,7 +71,7 @@ function App() {
         console.log(host)
         if(host === "localhost:5173")
         {
-            setSubDomain("sc")
+            setSubDomain("neo-egvzkmsh")
         }
 
 

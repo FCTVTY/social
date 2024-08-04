@@ -400,7 +400,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
       {posts && (
 
 
-          <div>
+          <div className="h-[100vh]">
 
 
 
@@ -408,14 +408,14 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                   {/* Sticky search header */}
 
 
-                  <main className="lg:pr-96 mt-[-10px]">
+                  <main className="lg:pr-96 mt-[-10px] dark:bg-zinc-950">
                       <header
                         className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
                           <div><h1 className="text-xl">{posts?.name}</h1>
 
                           </div>
                           {/* Sort dropdown */}
-                          <div className="flex place-items-center"><p className="text-sm text-gray-700 mr-5">
+                          <div className="flex place-items-center"><p className="text-sm text-gray-700 mr-5 dark:text-white">
                               Chapter <span className="font-medium">{currentChapterIndex + 1}</span> / <span
                             className="font-medium">{posts.chapters.length}</span>
                           </p>
@@ -512,7 +512,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
 
                   {/* Activity feed */}
                   <aside
-                    className=" p-5 bg-white lg:fixed lg:bottom-0 lg:right-0 lg:top-[64px]  lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
+                    className=" p-5 bg-white dark:bg-zinc-950 lg:fixed lg:bottom-0 lg:right-0 lg:top-[64px]  lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
                       <header
                         className="flex items-center justify-between border-b border-white/5 ">
                           <h2 className="text-base font-semibold leading-7 "> {posts.name}
@@ -521,10 +521,10 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                       </header>
                       <div>
                           <h4 className="sr-only">Status</h4>
-                          <p className="text-sm font-medium text-gray-900">{currentChapterIndex + 1}/{posts.chapters.length} Completed</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">{currentChapterIndex + 1}/{posts.chapters.length} Completed</p>
                           <div className="mt-6" aria-hidden="true">
-                              <div className="overflow-hidden rounded-full bg-gray-200">
-                                  <div className="h-2 rounded-full bg-gray-900" style={{width: `${((currentChapterIndex + 1) / posts.chapters.length) * 100}%`}}/>
+                              <div className="overflow-hidden rounded-full bg-gray-200 dark:bg-gray-400">
+                                  <div className="h-2 rounded-full bg-gray-900 dark:bg-gray-50" style={{width: `${((currentChapterIndex + 1) / posts.chapters.length) * 100}%`}}/>
                               </div>
                               <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
 
@@ -545,7 +545,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                         aria-hidden="true"
                       />
                     </span>
-                    <span className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                    <span className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900 dark:text-white">
                       {step.name}
                     </span>
                   </span>
@@ -569,7 +569,7 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
                                                         className="h-2 w-2 rounded-full bg-gray-300 group-hover:bg-gray-400"/>
                                                   </div>
                                                   <p
-                                                    className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">{step.name}</p>
+                                                    className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900 dark:text-white">{step.name}</p>
                                               </div>
                                           </div>
                                         )}
@@ -594,9 +594,9 @@ export default function CoursePage({ host, channel ,roles, setRoles}: HomeProps)
 
                                         <div className="min-w-0 flex-auto">
                                             <p
-                                              className="text-sm font-semibold leading-6 text-gray-900">{file.name}</p>
+                                              className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">{file.name}</p>
                                             <p
-                                              className="mt-1 truncate text-xs leading-5 text-gray-500">{file.fileExt}</p>
+                                              className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-white">{file.fileExt}</p>
                                         </div>
                                     </div>
                                     <a

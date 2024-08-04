@@ -238,13 +238,13 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
         window.location.reload();
     };
     return (
-      <>
+      <div className="h-[100vh]">
           <div
             className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
               <div className="min-w-0 flex-1">
 
                   <h2
-                    className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight">
+                    className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
                       {community?.community?.name} Courses
                   </h2>
 
@@ -283,7 +283,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               {posts && posts.filter(post => post.featured).map((product) => (
-              <div className="bg-white shadow rounded-xl">
+              <div className="bg-white dark:bg-zinc-900 shadow rounded-xl">
                   <section aria-labelledby="features-heading" className="relative">
                       <div
                         className="overflow-hidden aspect-square	 rounded-l-lg  lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-16">
@@ -299,10 +299,10 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                       <div
                         className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 sm:pb-10 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-15">
                           <div className="lg:col-start-2">
-                              <h2 id="features-heading" className="font-medium text-cyan-900">
+                              <h2 id="features-heading" className="font-medium text-cyan-900 dark:text-white">
                                   Coruse of the month
                               </h2>
-                              <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900">{product.name}</p>
+                              <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{product.name}</p>
                               <p className="mt-4 text-gray-500">
                                   {product.desc}
                               </p>
@@ -310,7 +310,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                               <dl className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 text-sm sm:grid-cols-2">
 
                                   <div>
-                                      <dt className="font-medium text-gray-900">Course length: {product.hours}</dt>
+                                      <dt className="font-medium text-gray-900 dark:text-white">Course length: {product.hours}</dt>
                                       <dd className="mt-4 text-gray-500">
                                           <a         className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                                      href={`/course/${product.name.replace(/ /g,"_")}`}>View</a>
@@ -331,7 +331,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
               <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
                   {posts && posts.map((product) => (
                       <div key={product._id}
-                           className="group relative divide-x divide-gray-200 rounded-lg bg-white shadow">
+                           className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow">
                         <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg ">
                             <img src={product.media} alt={product.desc}
                                  className="object-cover object-center"/>
@@ -345,148 +345,32 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                             </div>
                         </div>
                         <div
-                          className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900">
+                          className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
                             <h3>
                                 <a                                   href={`/course/${product.name.replace(/ /g,"_")}`}
                                 >
-                                    <span aria-hidden="true" className="absolute inset-0"/>
+                                    <span aria-hidden="true" className="absolute inset-0 dark:text-white"/>
                                     {product.name}
                                 </a>
                             </h3>
-                            <p className="text-gray-900 text-sm">{product.hours}</p>
+                            <p className="text-gray-900 text-sm dark:text-white">{product.hours}</p>
                         </div>
-                        <p className="m-3 text-sm text-gray-500">{product.desc}</p>
+                        <p className="m-3 text-sm text-gray-500 dark:text-white">{product.desc}</p>
 
                       </div>
                   ))}
 
                   {
                       posts && posts.length == 0 || posts == null && (
-                          <div
-                              className=" max-w-7xl px-4 sm:px-6 lg:px-8 col-span-3 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl col-span-3">
-                    <div className="text-center my-10 text-sm text-muted text-gray-400">
-                      <h2 className="text-4xl m-3"> No Courses added.</h2>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        data-name="Layer 1"
-                        className="text-center h-[320] w-[320px] p-3 mx-auto"
-                        viewBox="0 0 579.232 563.506"
-                      >
-                          <path
-                            fill="#f2f2f2"
-                            d="M223.642 513.249l-15.084 13.886 11.988-20.114c-9.445-17.127-24.89-31.929-24.89-31.929s-32.047 30.703-32.047 54.837 14.348 32.56 32.046 32.56 32.046-8.426 32.046-32.56c0-5.372-1.59-11.069-4.059-16.68z"
-                          ></path>
-                          <path
-                            fill="#fff"
-                            d="M204.68 527.887v1.19c-.072 13.828-2.404 24.616-6.98 32.213-.064.112-.135.218-.2.33l-.512-.312-.489-.306c5.077-8.204 6.873-19.8 6.938-31.86.005-.39.011-.784.005-1.178-.017-5.106-.33-10.27-.83-15.289a88.313 88.313 0 00-.118-1.177c-.695-6.62-1.696-12.945-2.72-18.44a67.34 67.34 0 00-.224-1.16c-1.773-9.293-3.58-16.024-3.993-17.514-.047-.182-.077-.282-.083-.306l.56-.159.006-.006.565-.159c.006.024.106.36.271.984.63 2.332 2.267 8.663 3.875 17.013.07.377.147.766.218 1.155.836 4.458 1.655 9.44 2.303 14.67q.247 1.97.441 3.886c.047.395.089.79.124 1.178q.813 8.136.842 15.247z"
-                          ></path>
-                          <path
-                            fill="#fff"
-                            d="M200.751 491.751c-.394.053-.795.106-1.201.148a32.49 32.49 0 01-3.322.17 31.603 31.603 0 01-13.663-3.086c-.247.313-.494.625-.748.943a32.774 32.774 0 0014.411 3.321 33.616 33.616 0 003.545-.188c.4-.042.801-.095 1.196-.153a32.497 32.497 0 009.393-2.845q-.38-.486-.742-.954a31.495 31.495 0 01-8.869 2.644zM203.713 511.462q-.61.036-1.219.036c-.123.006-.253.006-.377.006a31.771 31.771 0 01-26.077-13.622c-.235.347-.471.695-.7 1.048a32.95 32.95 0 0026.777 13.751c.165 0 .33 0 .495-.006.412-.005.819-.017 1.225-.035a32.776 32.776 0 0017.461-6.125c-.188-.347-.377-.695-.57-1.042a31.553 31.553 0 01-17.015 5.99z"
-                          ></path>
-                          <path
-                            fill="#fff"
-                            d="M204.68 527.887a33.187 33.187 0 01-2.562.106 31.857 31.857 0 01-30.542-22.92c-.265.477-.53.948-.783 1.425a33.024 33.024 0 0031.324 22.673c.442 0 .884-.006 1.32-.03.418-.011.83-.035 1.242-.064a32.927 32.927 0 0021.731-10.607c-.124-.435-.265-.865-.406-1.301a31.754 31.754 0 01-21.325 10.718z"
-                          ></path>
-                          <path
-                            fill="#cacaca"
-                            d="M578.394 30.177H.838a.838.838 0 010-1.676h577.556a.838.838 0 010 1.676z"
-                          ></path>
-                          <circle cx="19.706" cy="9.221" r="9.221" fill="#3f3d56"></circle>
-                          <circle cx="51.559" cy="9.221" r="9.221" fill="#3f3d56"></circle>
-                          <circle cx="83.413" cy="9.221" r="9.221" fill="#3f3d56"></circle>
-                          <path
-                            fill="#3f3d56"
-                            d="M559.309 5.64h-22.633a1.677 1.677 0 010-3.353h22.633a1.677 1.677 0 110 3.353zM559.309 11.927h-22.633a1.677 1.677 0 010-3.353h22.633a1.677 1.677 0 110 3.353zM559.309 18.214h-22.633a1.677 1.677 0 010-3.353h22.633a1.677 1.677 0 110 3.353z"
-                          ></path>
-                          <path
-                            fill="#f0f0f0"
-                            d="M17.399 68.086H546.679V348.50600000000003H17.399z"
-                          ></path>
-                          <path
-                            fill="#fff"
-                            d="M546.68 120.576v-2.75H443.65v-49.74h-2.75v49.74H337.87v-49.74h-2.75v49.74H232.09v-49.74h-2.75v49.74H126.308v-49.74h-2.75v49.74H17.399v2.75h106.16v54.95H17.399v2.75h106.16v54.95H17.399v2.75h106.16v54.94H17.399v2.75h106.16v54.84h2.75v-54.84h103.03v54.84h2.75v-54.84h103.03v54.84h2.75v-54.84H440.9v54.84h2.75v-54.84h103.03v-2.75H443.65v-54.94h103.03v-2.75H443.65v-54.95h103.03v-2.75H443.65v-54.95zm-317.34 170.34H126.308v-54.94h103.03zm0-57.69H126.308v-54.95h103.03zm0-57.7H126.308v-54.95h103.03zm105.78 115.39H232.09v-54.94h103.03zm0-57.69H232.09v-54.95h103.03zm0-57.7H232.09v-54.95h103.03zm105.78 115.39H337.87v-54.94H440.9zm0-57.69H337.87v-54.95H440.9zm0-57.7H337.87v-54.95H440.9z"
-                          ></path>
-                          <path fill="#cacaca" d="M146.805 133.939H182.214V168.219H146.805z"></path>
-                          <path fill="#cacaca" d="M472.805 244.939H508.214V279.219H472.805z"></path>
-                          <path
-                            fill="#cacaca"
-                            d="M157.805 301.939H193.214V336.21900000000005H157.805z"
-                          ></path>
-                          <path
-                            fill="#6c63ff"
-                            d="M168.27 127.579H203.679V161.85899999999998H168.27z"
-                          ></path>
-                          <path
-                            fill="#ffb6b6"
-                            d="M370.13 270.076L412.149 232.639 424.545 238.781 374.149 291.639 370.13 270.076z"
-                          ></path>
-                          <circle cx="417.679" cy="235.506" r="10" fill="#ffb6b6"></circle>
-                          <path
-                            fill="#ffb6b6"
-                            d="M330.799 551.856L320.856 551.856 316.126 513.506 330.8 513.507 330.799 551.856z"
-                          ></path>
-                          <path
-                            fill="#2f2e41"
-                            d="M333.334 561.494l-32.058-.001v-.406a12.479 12.479 0 0112.478-12.478h19.58z"
-                          ></path>
-                          <path
-                            fill="#ffb6b6"
-                            d="M294.799 551.856L284.856 551.856 280.126 513.506 294.8 513.507 294.799 551.856z"
-                          ></path>
-                          <path
-                            fill="#2f2e41"
-                            d="M297.334 561.494l-32.058-.001v-.406a12.479 12.479 0 0112.478-12.478h19.58zM339.15 332.64s25-2 17 42S331.577 539 331.577 539l-15.023 2.065-8.876-160.56-6.715 160.56L281.857 539 263.15 366.64s-6.007-13.86-.003-23.43 76.003-10.57 76.003-10.57z"
-                          ></path>
-                          <path
-                            fill="#3f3d56"
-                            d="M323.15 223.64l6.94-3.72s17.101-1.458 24.08 18.63l18.51 27.956 30-26 13 9-37.81 45.124-15.72 2.01-34-44z"
-                          ></path>
-                          <path
-                            fill="#2f2e41"
-                            d="M297.963 142.506c-28.518 0-36.5 31.327-36.5 49s16.341 15 36.5 15c8.652 0 16.596.488 22.852-.347l3.009-7.347 2.42 6.088c5.136-1.887 8.219-5.722 8.219-13.394 0-17.673-7-49-36.5-49z"
-                          ></path>
-                          <circle cx="297.841" cy="181.915" r="24.561" fill="#ffb6b6"></circle>
-                          <path
-                            fill="#2f2e41"
-                            d="M269.463 179.506h9.714l4.286-12 .857 12h4.643l2.5-7 .5 7h34.5a26 26 0 00-26-26h-5a26 26 0 00-26 26z"
-                          ></path>
-                          <path fill="#6c63ff" d="M398.27 197.579H433.679V231.859H398.27z"></path>
-                          <path
-                            fill="#3f3d56"
-                            d="M346.92 323.59c-3.77.049-15.13-67.35-15.13-67.35l-1.7-36.32-12.41-.417v-.816a6.181 6.181 0 00-6.182-6.181H287.86a6.176 6.176 0 00-6.16 5.788l-9.734-.327-16.856 53.553s15.532 49.76 8.036 71.69c0 0 73.038 6.272 87.02-7.65 0 0 .525-12.018-3.246-11.97z"
-                          ></path>
-                          <path
-                            fill="#3f3d56"
-                            d="M276.15 224.64l-4.184-6.673s-13.61-3.365-19.213 5.653-22.074 57.886-22.074 57.886l17 6 19.291-27.046z"
-                          ></path>
-                          <path
-                            fill="#6c63ff"
-                            d="M283.27 259.579H318.679V293.85900000000004H283.27z"
-                          ></path>
-                          <path
-                            fill="#ffb6b6"
-                            d="M256.103 271.97l-12.32-1.304a12.085 12.085 0 008.578 16.98l48.744 9.729-5.085-15.66z"
-                          ></path>
-                          <circle cx="301.251" cy="287.555" r="10" fill="#ffb6b6"></circle>
-                          <path
-                            fill="#3f3d56"
-                            d="M288.768 297.86l-37.135-8.486a16.043 16.043 0 01-11.632-10.64l-1.5-4.629 9.637-7.584 44.152 12.341z"
-                          ></path>
-                          <path
-                            fill="#cacaca"
-                            d="M497.439 563.506h-381a1 1 0 110-2h381a1 1 0 010 2z"
-                          ></path>
-                      </svg>
-
-                    </div>
-                  </div>
+                          <div className="p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400">
+                              No Courses available.
+                          </div>
 
 
-                )
-              }
+                      )
+                  }
 
-          </div>
+              </div>
           </div>
           <Transition.Root show={open} as={Fragment}>
               <Dialog as="div" className="relative z-[99999]" onClose={setOpen}>
@@ -792,7 +676,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
               </Dialog>
           </Transition.Root>
 
-      </>
+      </div>
     )
 
 };

@@ -290,6 +290,92 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(rw).Encode(result.InsertedID)
 }
+
+func UpdateCommunity(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+
+	// Retrieve session from request context
+	var v models.Community
+
+	// We decode our body request params
+	err := json.NewDecoder(r.Body).Decode(&v)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println(r.Body)
+
+	// Check if the community ID or name is provided for updating
+	if v.ID.IsZero() && v.Name == "" {
+		http.Error(rw, "community ID or name is required", http.StatusBadRequest)
+		return
+	}
+
+	// Find the existing community record
+	var existingCommunity models.Community
+	filter := bson.M{}
+	if !v.ID.IsZero() {
+		filter["_id"] = v.ID
+	} else {
+		filter["name"] = v.Name
+	}
+
+	err = communitesCollection.FindOne(context.Background(), filter).Decode(&existingCommunity)
+	if err != nil {
+		http.Error(rw, "community not found: "+err.Error(), http.StatusNotFound)
+		return
+	}
+
+	// Update the community fields
+	if v.Name != "" {
+		existingCommunity.Name = v.Name
+	}
+	if v.Desc != "" {
+		existingCommunity.Desc = v.Desc
+	}
+
+	existingCommunity.Published = v.Published
+
+	if v.Logo != "" && strings.Contains(v.Logo, "data") {
+		img, _, err := decodeDataURI(v.Logo)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		// Encode the image to WebP format
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		// Convert the WebP bytes to a data URI
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		existingCommunity.Logo = webpDataURI
+	}
+
+	if len(v.Access) > 0 {
+		existingCommunity.Private = true
+	}
+
+	// Update the community in the database
+	update := bson.M{
+		"$set": existingCommunity,
+	}
+	_, err = communitesCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(rw, "failed to update community: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(existingCommunity)
+}
+
 func CreateChannel(rw http.ResponseWriter, r *http.Request) {
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {
