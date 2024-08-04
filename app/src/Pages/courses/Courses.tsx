@@ -362,7 +362,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
 
                   {
                       posts && posts.length == 0 || posts == null && (
-                          <div className="p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400">
+                          <div className="bg-white shadow rounded-xl dark:bg-zinc-950 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
                               No Courses available.
                           </div>
 
