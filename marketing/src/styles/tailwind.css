@@ -5,3 +5,7 @@
 #__next {
   min-height: 100%;
 }
+
+.__hero_bg {
+  background-image: url("https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+}
