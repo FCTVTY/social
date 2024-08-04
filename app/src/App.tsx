@@ -40,11 +40,9 @@ import AcademiesPage from "./Pages/Academy/Academies";
 import CoursesPage from "./Pages/courses/Courses";
 import CoursePage from "./Pages/courses/Course";
 import Site from "./Pages/admin/site";
+import ChangeLogPage from "./Pages/ChangeLog/ChangeLogPage";
+
 initSuperTokens();
-
-
-
-
 
 
 function App() {
@@ -218,6 +216,11 @@ function App() {
 
             <CoursePage host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
+
+            <Route path="/changelog" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+                       <ChangeLogPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
             <Route path='/auth' element={<AuthLayout>
                 <Login/>

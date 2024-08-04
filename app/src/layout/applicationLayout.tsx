@@ -36,7 +36,8 @@ import {
     PlusIcon,
     SquareCodeIcon,
     UsersIcon,
-    WrenchIcon
+    WrenchIcon,
+    LogsIcon
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 
@@ -159,9 +160,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     const teams: TeamItem[] = [
         {id: 1, name: 'Academy', href: '/Academy', initial: <GraduationCapIcon/>, current: '/Academy' == currentUrl},
         {id: 2, name: 'Resources', href: '/Resources', initial: <SquareCodeIcon/>, current: '/Resources' == currentUrl},
-
         {id: 3, name: 'Events', href: '/events/upcoming', initial: <CalendarDaysIcon/>, current: '/events/upcoming' == currentUrl},
         {id: 4, name: 'Members', href: '/members/list', initial: <UsersIcon/>, current: '/members/list' == currentUrl},
+        {id: 5, name: 'Changelog', href: '/changelog',initial: <LogsIcon/> , current: '/changelog' == currentUrl },
     ];
     const admin: TeamItem[] = [
         {id: 1, name: 'Site Settings', href: '/admin/site', initial: <WrenchIcon/>, current: '/admin/site' == currentUrl},

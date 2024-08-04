@@ -341,7 +341,7 @@ func UpdateCommunity(rw http.ResponseWriter, r *http.Request) {
 
 	existingCommunity.Published = v.Published
 
-	if v.Logo != "" && strings.Contains(v.Logo, "data") {
+	if v.Logo != "" && (strings.Contains(v.Logo, "data:image/png") || strings.Contains(v.Logo, "image/gif") || strings.Contains(v.Logo, "image/jpg")) {
 		img, _, err := decodeDataURI(v.Logo)
 		if err != nil {
 			log.Fatalf("Failed to decode data URI: %v", err)
