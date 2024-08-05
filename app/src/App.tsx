@@ -41,6 +41,7 @@ import CoursesPage from "./Pages/courses/Courses";
 import CoursePage from "./Pages/courses/Course";
 import Site from "./Pages/admin/site";
 import ChangeLogPage from "./Pages/ChangeLog/ChangeLogPage";
+import FAQ from "./Pages/home/FAQ";
 
 initSuperTokens();
 
@@ -69,7 +70,8 @@ function App() {
         console.log(host)
         if(host === "localhost:5173")
         {
-            setSubDomain("neo-egvzkmsh")
+           // setSubDomain("neo-egvzkmsh")
+          setSubDomain("sc")
         }
 
 
@@ -221,6 +223,11 @@ function App() {
 
 
                        <ChangeLogPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+
+          <Route path="/FAQ" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+
+
+            <FAQ host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
             <Route path='/auth' element={<AuthLayout>
                 <Login/>

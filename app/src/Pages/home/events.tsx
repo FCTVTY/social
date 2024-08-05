@@ -257,7 +257,7 @@ export default function EventsPage({ host, channel ,roles, setRoles}: HomeProps)
 
                   <h2
                     className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
-                      {community?.community?.name} Events
+                      <span className="hidden lg:inline"> {community?.community?.name}</span> Events
                   </h2>
 
               </div>

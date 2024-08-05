@@ -37,7 +37,7 @@ import {
     SquareCodeIcon,
     UsersIcon,
     WrenchIcon,
-    LogsIcon
+    LogsIcon, MessageCircleQuestionIcon
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 
@@ -163,6 +163,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
         {id: 3, name: 'Events', href: '/events/upcoming', initial: <CalendarDaysIcon/>, current: '/events/upcoming' == currentUrl},
         {id: 4, name: 'Members', href: '/members/list', initial: <UsersIcon/>, current: '/members/list' == currentUrl},
         {id: 5, name: 'Changelog', href: '/changelog',initial: <LogsIcon/> , current: '/changelog' == currentUrl },
+        {id: 6, name: 'FAQ', href: '/FAQ',initial: <MessageCircleQuestionIcon/> , current: '/FAQ' == currentUrl },
+
     ];
     const admin: TeamItem[] = [
         {id: 1, name: 'Site Settings', href: '/admin/site', initial: <WrenchIcon/>, current: '/admin/site' == currentUrl},
@@ -422,7 +424,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
 
                                                 <img src={community && community.community?.logo}
-                                                     className="sm:mx-auto h-9 rounded-xs dark:invert"/>
+                                                     className="sm:mx-auto hidden md:block h-9 rounded-xs dark:invert"/>
 
                                             </div>
 
@@ -837,18 +839,21 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             </div>
 
                             <main className="lg:ml-72 py-10 bg dark:bg-zinc-950">
-
-
-                                {
-                                    community?.community?.private && community?.user?.notjoined ? (
-                                        <Join text={community.community.desc} logo={community.community.logo}/>
-                                    ) : (
-                                        Children.map(children, child => {
-                                            // @ts-ignore
-                                            return React.cloneElement(child, {roles, setRoles});
-                                        })
-                                    )
-                                }
+                                <div className="w-full ">
+                                    <div className="flex justify-center -mt-8 mb-10">
+                                        <img src={community && community.community?.logo}
+                                             className="sm:mx-auto md:hidden sm:block h-9 rounded-xs dark:invert"/>
+                                    </div></div>
+                                        {
+                                            community?.community?.private && community?.user?.notjoined ? (
+                                              <Join text={community.community.desc} logo={community.community.logo}/>
+                                            ) : (
+                                              Children.map(children, child => {
+                                                  // @ts-ignore
+                                                  return React.cloneElement(child, {roles, setRoles});
+                                              })
+                                            )
+                                        }
                             </main>
 
 
