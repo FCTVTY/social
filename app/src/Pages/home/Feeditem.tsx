@@ -258,7 +258,7 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
                               {post.profile.verified && (
                               <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip" data-tip="Verfied User">
                                   {post.profile.first_name} {post.profile.last_name}
-                                <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2 tooltip" data-tip="Verfied User"></BadgeCheck>
+                                <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2 tooltip" data-tip="Verified User"></BadgeCheck>
                               </p>)}
                               {!post.profile.verified && (
                                   <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
