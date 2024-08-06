@@ -96,7 +96,7 @@ export interface Profile {
     last_name: string
     profilePicture: string
     coverPicture: string
-
+    verified :boolean
     supertokensId: string
     username: string
     me :boolean

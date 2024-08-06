@@ -444,18 +444,200 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         <div
                                           className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                             <Themeswitch></Themeswitch>
-                                            <button
-                                              type="button"
-                                              className="mx-2 rounded-full bg-white dark:bg-zinc-950 p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                            >
-                                                <span className="sr-only">View notifications</span>
-                                                <BellIcon className="h-6 w-6" aria-hidden="true"/>
-                                            </button>
-
+                                            <div className="mx-2">
+                                                <div className="dropdown dropdown-bottom dropdown-end">
+                                                    <label tabIndex={0} className="btn btn-circle btn-ghost btn-sm">
+                                                        <svg
+                                                          xmlns="http://www.w3.org/2000/svg"
+                                                          xmlnsXlink="http://www.w3.org/1999/xlink"
+                                                          aria-hidden="true"
+                                                          role="img"
+                                                          fontSize={20}
+                                                          width="1em"
+                                                          height="1em"
+                                                          viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                              fill="none"
+                                                              stroke="currentColor"
+                                                              strokeLinecap="round"
+                                                              strokeLinejoin="round"
+                                                              strokeWidth={2}
+                                                              d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9m4.3 13a1.94 1.94 0 0 0 3.4 0"
+                                                            />
+                                                        </svg>
+                                                    </label>
+                                                    <ul
+                                                      tabIndex={0}
+                                                      className="dropdown-content menu bg-white dark:bg-zinc-950 rounded-box card card-compact m-1 w-96 p-3 shadow-xl"
+                                                      role="menu"
+                                                    >
+                                                        <div className="flex items-center justify-between px-2">
+                                                            <p className="text-base font-medium">Notification</p>
+                                                            <button className="btn gap-2 btn-sm btn-circle btn-ghost">
+                                                                <svg
+                                                                  xmlns="http://www.w3.org/2000/svg"
+                                                                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                                                                  aria-hidden="true"
+                                                                  role="img"
+                                                                  fontSize={16}
+                                                                  width="1em"
+                                                                  height="1em"
+                                                                  viewBox="0 0 24 24"
+                                                                >
+                                                                    <path
+                                                                      fill="none"
+                                                                      stroke="currentColor"
+                                                                      strokeLinecap="round"
+                                                                      strokeLinejoin="round"
+                                                                      strokeWidth={2}
+                                                                      d="M18 6L6 18M6 6l12 12"
+                                                                    />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                        <div className="flex items-center justify-center">
+                                                            <div
+                                                              className=" rounded-full border  border-base-content/10 px-3 text-center">
+                                                                <p className="text-xs  text-base-content/80">Today</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-3">
+                                                            <div
+                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
+                                                                <img
+                                                                  alt=""
+                                                                  loading="lazy"
+                                                                  width={128}
+                                                                  height={128}
+                                                                  decoding="async"
+                                                                  data-nimg={1}
+                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
+                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F4.339fc62d.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F4.339fc62d.png&w=256&q=75 2x"
+                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F4.339fc62d.png&w=256&q=75"
+                                                                  style={{color: "transparent"}}
+                                                                />
+                                                                <div className="grow">
+                                                                    <p className="text-sm">Customer has requested a
+                                                                        return for item</p>
+                                                                    <p className="text-xs text-base-content/60">1 Hour
+                                                                        ago</p>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
+                                                                <img
+                                                                  alt=""
+                                                                  loading="lazy"
+                                                                  width={128}
+                                                                  height={128}
+                                                                  decoding="async"
+                                                                  data-nimg={1}
+                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
+                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F5.715b949f.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F5.715b949f.png&w=256&q=75 2x"
+                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F5.715b949f.png&w=256&q=75"
+                                                                  style={{color: "transparent"}}
+                                                                />
+                                                                <div className="grow">
+                                                                    <p className="text-sm">
+                                                                        A new review has been submitted for product
+                                                                    </p>
+                                                                    <p className="text-xs text-base-content/60">1 Hour
+                                                                        ago</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-2 flex items-center justify-center">
+                                                            <div
+                                                              className="rounded-full border  border-base-content/10 px-3 text-center">
+                                                                <p
+                                                                  className="text-xs  text-base-content/80">Yesterday</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-3">
+                                                            <div
+                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
+                                                                <img
+                                                                  alt=""
+                                                                  loading="lazy"
+                                                                  width={128}
+                                                                  height={128}
+                                                                  decoding="async"
+                                                                  data-nimg={1}
+                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
+                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.68eaacb8.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.68eaacb8.png&w=256&q=75 2x"
+                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.68eaacb8.png&w=256&q=75"
+                                                                  style={{color: "transparent"}}
+                                                                />
+                                                                <div className="grow">
+                                                                    <p className="text-sm">
+                                                                        Prepare for the upcoming weekend promotion{" "}
+                                                                    </p>
+                                                                    <p className="text-xs text-base-content/60">1 Hour
+                                                                        ago</p>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
+                                                                <img
+                                                                  alt=""
+                                                                  loading="lazy"
+                                                                  width={128}
+                                                                  height={128}
+                                                                  decoding="async"
+                                                                  data-nimg={1}
+                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
+                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.cef77693.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.cef77693.png&w=256&q=75 2x"
+                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.cef77693.png&w=256&q=75"
+                                                                  style={{color: "transparent"}}
+                                                                />
+                                                                <div className="grow">
+                                                                    <p className="text-sm">Product 'ABC123' is running
+                                                                        low in stock.</p>
+                                                                    <p className="text-xs text-base-content/60">1 Hour
+                                                                        ago</p>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
+                                                                <img
+                                                                  alt=""
+                                                                  loading="lazy"
+                                                                  width={128}
+                                                                  height={128}
+                                                                  decoding="async"
+                                                                  data-nimg={1}
+                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
+                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F3.5ae9a296.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F3.5ae9a296.png&w=256&q=75 2x"
+                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F3.5ae9a296.png&w=256&q=75"
+                                                                  style={{color: "transparent"}}
+                                                                />
+                                                                <div className="grow">
+                                                                    <p className="text-sm">Payment received for Order
+                                                                        ID: #67890</p>
+                                                                    <p className="text-xs text-base-content/60">1 Hour
+                                                                        ago</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr className="-mx-2 mt-2 border-base-content/10"/>
+                                                        <div className="flex items-center justify-between pt-2">
+                                                            <button
+                                                              className="btn text-primary hover:bg-primary/10 btn-sm btn-ghost">
+                                                                View All
+                                                            </button>
+                                                            <button
+                                                              className="btn text-base-content/80 hover:bg-base-content/10 btn-sm btn-ghost">
+                                                                Mark as read
+                                                            </button>
+                                                        </div>
+                                                    </ul>
+                                                </div>
+                                            </div>
 
 
                                             {/* Profile dropdown */}
-                                            <Menu as="div" className="relative ml-3">
+                                            <Menu as="div" className="relative">
                                                 <div>
                                                     <Menu.Button
                                                       className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -523,29 +705,29 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                                         <Disclosure.Button
                                           as="a"
-                                            href="#"
-                                            className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+                                          href="#"
+                                          className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
                                         >
                                             Dashboard
                                         </Disclosure.Button>
                                         <Disclosure.Button
-                                            as="a"
-                                            href="#"
-                                            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                          as="a"
+                                          href="#"
+                                          className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             Team
                                         </Disclosure.Button>
                                         <Disclosure.Button
-                                            as="a"
-                                            href="#"
-                                            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                          as="a"
+                                          href="#"
+                                          className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             Projects
                                         </Disclosure.Button>
                                         <Disclosure.Button
-                                            as="a"
-                                            href="#"
-                                            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                          as="a"
+                                          href="#"
+                                          className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             Calendar
                                         </Disclosure.Button>
@@ -684,7 +866,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                             {hiddenTeams.length > 0 && (
                                                               <button
                                                                 onClick={() => setIsOpen(!isOpen)}
-                                                                className="mt-4 text-gray-400  "
+                                                                className="mt-4 text-gray-400  text-[0.625rem] font-medium"
                                                               >
                                                                   {!isOpen ? (
                                                                     <span>Show More</span>
@@ -802,7 +984,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             {hiddenTeams.length > 0 && (
                                               <button
                                                 onClick={() => setIsOpen(!isOpen)}
-                                                className="mt-4 text-gray-400  "
+                                                className="mt-4 text-gray-400  text-[0.625rem] font-medium"
                                               >
                                                   {!isOpen ? (
                                                     <span>Show More</span>

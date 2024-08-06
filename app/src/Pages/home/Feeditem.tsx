@@ -7,6 +7,7 @@ import {Dialog, Transition } from '@headlessui/react';
 import {ExclamationTriangleIcon} from "@heroicons/react/16/solid";
 import {XMarkIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
+import {BadgeCheck} from "lucide-react";
 
 interface PostItemProps {
     lite?: boolean
@@ -254,8 +255,9 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
                                    alt=""/>
                           </div>
                           <div className="ml-3">
-                              <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900">
-                                  {post.profile.first_name} {post.profile.last_name}
+                              <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
+                                  {post.profile.first_name} {post.profile.last_name}  {post.profile.verified && (
+                                <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2 tooltip" data-tip="Verfied User"></BadgeCheck>)}
                               </p>
                               <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                   profile</p>

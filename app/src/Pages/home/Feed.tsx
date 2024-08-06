@@ -383,8 +383,12 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                       alt=""
                                     />
                                 </div>
-                                <div className="text-center mt-2">
-                                    <h2 className="font-semibold flex flex-auto">{profile?.first_name} {profile?.last_name} <BadgeCheck className="text-indigo-400"></BadgeCheck></h2>
+                                <div className="text-center mt-2 mx-auto">
+                                    <h2 className="font-semibold">
+                                        <span className="inline-flex">{profile?.first_name} {profile?.last_name}
+                                            {profile?.verified && (
+                                            <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2"></BadgeCheck>)}
+                                        </span></h2>
                                     <p className="text-gray-500 pb-5">{profile?.bio}</p>
                                     {roles && roles.length > 0 && (
                                       <div className="pb-5">
