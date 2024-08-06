@@ -297,10 +297,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     }, [community?.community?.name, code]);
 
 
-    const [menu, Setmenu] = useState('bg-indigo-600');
-    const [menu2, Setmenu2] = useState('bg-cyan-500');
-    const [menuText, SetmenuText] = useState('text-indigo-600');
-    const [menuText2, SetmenuText2] = useState('text-cyan-500');
+
 
 
     useEffect(() => {
@@ -502,7 +499,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                 <p className="text-xs  text-base-content/80">Today</p>
                                                             </div>
                                                         </div>
-                                                        <div className="mt-3">
+                                                        <div className="mt-3 hidden">
                                                             <div
                                                               className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
                                                                 <img
@@ -549,15 +546,20 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         </div>
                                                         <div className="mt-2 flex items-center justify-center">
                                                             <div
-                                                              className="rounded-full border  border-base-content/10 px-3 text-center">
+                                                                className="hidden rounded-full border  border-base-content/10 px-3 text-center">
                                                                 <p
-                                                                  className="text-xs  text-base-content/80">Yesterday</p>
+                                                                    className="text-xs  text-base-content/80">Yesterday</p>
+                                                            </div>
+                                                            <div
+                                                                className=" px-3 text-center">
+                                                                <p
+                                                                    className="text-xs  text-base-content/80">No New Notifications</p>
                                                             </div>
                                                         </div>
-                                                        <div className="mt-3">
+                                                        <div className="mt-3 hidden">
                                                             <div
-                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
-                                                                <img
+                                                                className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
+                                                            <img
                                                                   alt=""
                                                                   loading="lazy"
                                                                   width={128}
@@ -621,7 +623,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                             </div>
                                                         </div>
                                                         <hr className="-mx-2 mt-2 border-base-content/10"/>
-                                                        <div className="flex items-center justify-between pt-2">
+                                                        <div className="hidden flex items-center justify-between pt-2">
                                                             <button
                                                               className="btn text-primary hover:bg-primary/10 btn-sm btn-ghost">
                                                                 View All
@@ -830,8 +832,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                         href={team.href}
                                                                         className={classNames(
                                                                           team.current
-                                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
-                                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                                            ? `text-cyan-500 bg-gray-200 dark:bg-zinc-800`
+                                                                            : `text-gray-400 hover:text-white hover:bg-cyan-500`,
                                                                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                                         )}
                                                                       >
@@ -849,8 +851,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                                         href={team.href}
                                                                         className={classNames(
                                                                           team.current
-                                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
-                                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                                            ? `text-cyan-500 bg-gray-200 dark:bg-zinc-800`
+                                                                            : `text-gray-400 hover:text-white hover:bg-cyan-500`,
                                                                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                                         )}
                                                                       >
@@ -918,8 +920,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         href={item.href}
                                                         className={classNames(
                                                           item.current
-                                                            ? `${menuText} bg-gray-200 dark:bg-zinc-800`
-                                                            : `text-gray-400 hover:text-white hover:${menu}`,
+                                                            ? `text-indigo-600 bg-gray-200 dark:bg-zinc-800`
+                                                            : `text-gray-400 hover:text-white hover:text-indigo-600`,
                                                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                         )}
                                                       >
@@ -950,8 +952,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         href={team.href}
                                                         className={classNames(
                                                           team.current
-                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
-                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                            ? `text-cyan-500 bg-gray-200 dark:bg-zinc-800`
+                                                            : `text-gray-400 hover:text-white hover:bg-cyan-500`,
                                                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                         )}
                                                       >
@@ -968,8 +970,8 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         href={team.href}
                                                         className={classNames(
                                                           team.current
-                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
-                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                            ? `text-cyan-500 bg-gray-200 dark:bg-zinc-800`
+                                                            : `text-gray-400 hover:text-white hover:bg-cyan-500`,
                                                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
                                                         )}
                                                       >

@@ -90,13 +90,21 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                 return;
             }
 
-            const sortedPosts = postsData.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            setPosts(sortedPosts);
-            setAds(adsData);
-            setProfile(profileData);
-            setskelloading(false);
-            if (profileData == null) {
-                //window.location.href = '/onboarding/';
+            try {
+                const sortedPosts = postsData.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                setPosts(sortedPosts);
+                setAds(adsData);
+                setProfile(profileData);
+                setskelloading(false);
+                if (profileData == null) {
+                    //window.location.href = '/onboarding/';
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+                setAds(adsData);
+                setProfile(profileData);
+                setskelloading(false);
+
             }
 
         } catch (error) {

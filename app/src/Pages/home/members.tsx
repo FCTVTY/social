@@ -70,7 +70,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                             {community && community.profiles.map((person) => (
                                 <li key={person._id}>
                                     <a href={`/profile/${person._id}`} >
-                                    <img className="mx-auto h-56 w-56 rounded-full" src={person.profilePicture} alt=""/>
+                                    <img className="mx-auto h-56 w-56 rounded-full object-cover " src={person.profilePicture} alt=""/>
                                     <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white ">{person.first_name} {person.last_name} </h3>
                                     <p className="text-sm leading-6 text-gray-600 truncate">{person.bio}</p>
                                     </a>

@@ -60,7 +60,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                                     <img
                                         src={profile.profilePicture}
                                         alt="Profile"
-                                        className="w-32 h-32 rounded-full border-4 border-white -mt-16"
+                                        className="object-cover  w-32 h-32 rounded-full border-4 border-white -mt-16"
                                     />
                                     <div className="ml-4">
                                         <h1 className="text-2xl font-bold text-white">{profile.first_name} {profile.last_name}</h1>
