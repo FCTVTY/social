@@ -45,7 +45,6 @@ import FAQ from "./Pages/home/FAQ";
 
 initSuperTokens();
 
-
 function App() {
 
 
@@ -71,8 +70,9 @@ function App() {
         if(host === "localhost:5173")
         {
            // setSubDomain("neo-egvzkmsh")
-          setSubDomain("sc")
+          setSubDomain("dev")
         }
+
 
 
         // Parse the URL

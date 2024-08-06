@@ -339,6 +339,9 @@ func UpdateCommunity(rw http.ResponseWriter, r *http.Request) {
 		existingCommunity.Desc = v.Desc
 	}
 
+	existingCommunity.Menu = v.Menu
+	existingCommunity.MenuText = v.MenuText
+
 	existingCommunity.Published = v.Published
 
 	if v.Logo != "" && (strings.Contains(v.Logo, "data:image/png") || strings.Contains(v.Logo, "image/gif") || strings.Contains(v.Logo, "image/jpg")) {

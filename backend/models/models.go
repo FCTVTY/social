@@ -27,6 +27,8 @@ type Community struct {
 	Url       string             `json:"url"`
 	Access    string             `json:"access"`
 	Published bool               `json:"published"`
+	Menu      string             `json:"menu"`
+	MenuText  string             `json:"menutext"`
 }
 type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`

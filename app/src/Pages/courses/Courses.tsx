@@ -8,7 +8,7 @@ import {
     MapPinIcon,
     PencilIcon, PlusIcon, QuestionMarkCircleIcon
 } from "@heroicons/react/16/solid";
-import {Dialog, Menu, Transition} from "@headlessui/react";
+import {Dialog, Disclosure, Menu, Transition} from "@headlessui/react";
 import {ChevronDownIcon, XMarkIcon} from "@heroicons/react/20/solid";
 import {CalendarIcon} from "@heroicons/react/24/outline";
 import {
@@ -24,7 +24,7 @@ import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
 import {date} from "zod";
-import {PencilLineIcon, TicketPlus} from "lucide-react";
+import {ChevronUpIcon, PencilLineIcon, TicketPlus} from "lucide-react";
 import {json} from "react-router-dom";
 import EventItem from "./Eventitem";
 import Button from "../../components/Button";
@@ -48,6 +48,8 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
     const [posts, setPosts] = useState<Courses[]>([]);
     const [community, setCommunity] = useState<CommunityCollection>();
     const [open, setOpen] = useState(false)
+    const [groupedCourses, setGroupedCourses] = useState<{ [key: string]: Courses[] }>({});
+
     const [courseData, setCourseData] = useState<Courses>({
         _id: '',
         name: '',
@@ -81,9 +83,23 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
             }
             const postsData = await postsResponse.json();
             setPosts(postsData);
+            groupCoursesByCategory(postsData);
         } catch (error) {
             console.error('Error fetching community details:', error);
         }
+    };
+
+    const groupCoursesByCategory = (courses: Courses[]) => {
+        const grouped = courses.reduce((acc, course) => {
+            const category = course.category || 'Uncategorized';
+            if (!acc[category]) {
+                acc[category] = [];
+            }
+            acc[category].push(course);
+            return acc;
+        }, {} as { [key: string]: Courses[] });
+
+        setGroupedCourses(grouped);
     };
 
     const handleRefresh = () => {
@@ -237,8 +253,13 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
         setOpen(false);
         window.location.reload();
     };
+
+    const [openIndex, setOpenIndex] = useState(groupedCourses[0]);
+
+
     return (
       <div className="h-[100vh]">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
             className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
               <div className="min-w-0 flex-1">
@@ -280,97 +301,113 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
               </div>
           </div>
 
+          {posts && posts.filter(post => post.featured).map((product) => (
+            <div className="bg-white dark:bg-zinc-900 shadow rounded-xl">
+                <section aria-labelledby="features-heading" className="relative">
+                    <div
+                      className="overflow-hidden aspect-square	 rounded-l-lg  lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-16">
+                        <div className="badge badge-neutral absolute top-[10px] left-[10px]">FEATURED</div>
 
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {posts && posts.filter(post => post.featured).map((product) => (
-              <div className="bg-white dark:bg-zinc-900 shadow rounded-xl">
-                  <section aria-labelledby="features-heading" className="relative">
-                      <div
-                        className="overflow-hidden aspect-square	 rounded-l-lg  lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-16">
-                          <div className="badge badge-neutral absolute top-[10px] left-[10px]">FEATURED</div>
+                        <img
+                          src={product.media}
+                          alt="Black leather journal with silver steel disc binding resting on wooden shelf with machined steel pen."
+                          className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                        />
+                    </div>
 
-                          <img
-                            src={product.media}
-                            alt="Black leather journal with silver steel disc binding resting on wooden shelf with machined steel pen."
-                            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                          />
-                      </div>
+                    <div
+                      className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 sm:pb-10 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-15">
+                        <div className="lg:col-start-2">
+                            <h2 id="features-heading" className="font-medium text-cyan-900 dark:text-white">
+                                Course of the month
+                            </h2>
+                            <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{product.name}</p>
+                            <p className="mt-4 text-gray-500">
+                                {product.desc}
+                            </p>
 
-                      <div
-                        className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 sm:pb-10 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-15">
-                          <div className="lg:col-start-2">
-                              <h2 id="features-heading" className="font-medium text-cyan-900 dark:text-white">
-                                  Coruse of the month
-                              </h2>
-                              <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{product.name}</p>
-                              <p className="mt-4 text-gray-500">
-                                  {product.desc}
-                              </p>
+                            <dl className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 text-sm sm:grid-cols-2">
 
-                              <dl className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 text-sm sm:grid-cols-2">
-
-                                  <div>
-                                      <dt className="font-medium text-gray-900 dark:text-white">Course length: {product.hours}</dt>
-                                      <dd className="mt-4 text-gray-500">
-                                          <a         className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                     href={`/course/${product.name.replace(/ /g,"_")}`}>View</a>
+                                <div>
+                                    <dt className="font-medium text-gray-900 dark:text-white">Course length: {product.hours}</dt>
+                                    <dd className="mt-4 text-gray-500">
+                                        <a         className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                   href={`/course/${product.name.replace(/ /g,"_")}`}>View</a>
 
 
 
-                                      </dd>
+                                    </dd>
 
+                                </div>
+
+                            </dl>
+                        </div>
+                    </div>
+                </section>
+            </div>
+          ))}
+
+          <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl bg-white dark:bg-zinc-950 shadow rounded-xl mt-10">
+              {Object.keys(groupedCourses).map(category => (
+                <div key={category} className="mb-10">
+                    <Disclosure as="div" key={category} defaultOpen={category === openIndex} className="p-6">
+                        {({open}) => (
+                          <>
+                          <dt>
+                              <Disclosure.Button
+                                className="flex w-full items-start justify-between text-left text-gray-900 dark:text-white">
+                                  <span className="text-base font-semibold leading-7">{category || 'All'} </span>
+                                  <span className="flex h-7 items-center"><span
+                                    className=" indicator-item badge badge-primary text-white">
+        {groupedCourses[category].length}
+      </span>
+                                      {open ? (
+                                        <ChevronUpIcon className="h-6 w-6" aria-hidden="true"/>
+                                      ) : (
+                                        <ChevronDownIcon className="h-6 w-6" aria-hidden="true"/>
+                                      )}
+                        </span>
+                              </Disclosure.Button>
+                          </dt>
+                          <Disclosure.Panel as="dd" className="mt-2 ">
+
+                          <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
+                        {groupedCourses[category].map(product => (
+                          <div key={product._id} className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow">
+                              <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg">
+                                  <img src={product.media} alt={product.desc} className="object-cover object-center" />
+                                  <div className="flex items-end p-4 opacity-0 group-hover:opacity-100" aria-hidden="true">
+                                      <a href={`/course/${product.name.replace(/ /g, "_")}`} className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter">
+                                          View Course
+                                      </a>
                                   </div>
-
-                              </dl>
+                              </div>
+                              <div className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
+                                  <h3>
+                                      <a href={`/course/${product.name.replace(/ /g, "_")}`}>
+                                          <span aria-hidden="true" className="absolute inset-0 dark:text-white" />
+                                          {product.name}
+                                      </a>
+                                  </h3>
+                                  <p className="text-gray-900 text-sm dark:text-white">{product.hours}</p>
+                              </div>
+                              <p className="m-3 text-sm text-gray-500 dark:text-white">{product.desc}</p>
                           </div>
-                      </div>
-                  </section>
-              </div>
+                        ))}
+                    </div>
+                          </Disclosure.Panel>
+                          </>
+                        )}
+                    </Disclosure>
+
+                </div>
               ))}
+              {posts.length === 0 && (
+                <div className="bg-white shadow rounded-xl dark:bg-zinc-950 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
+                    No Courses available.
+                </div>
+              )}
 
-              <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
-                  {posts && posts.map((product) => (
-                      <div key={product._id}
-                           className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow">
-                        <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg ">
-                            <img src={product.media} alt={product.desc}
-                                 className="object-cover object-center"/>
-                            <div className="flex items-end p-4 opacity-0 group-hover:opacity-100"
-                                 aria-hidden="true">
-                                <a
-                                  href={`/course/${product.name.replace(/ /g,"_")}`}
-                                  className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter">
-                                    View Course
-                                </a>
-                            </div>
-                        </div>
-                        <div
-                          className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
-                            <h3>
-                                <a                                   href={`/course/${product.name.replace(/ /g,"_")}`}
-                                >
-                                    <span aria-hidden="true" className="absolute inset-0 dark:text-white"/>
-                                    {product.name}
-                                </a>
-                            </h3>
-                            <p className="text-gray-900 text-sm dark:text-white">{product.hours}</p>
-                        </div>
-                        <p className="m-3 text-sm text-gray-500 dark:text-white">{product.desc}</p>
-
-                      </div>
-                  ))}
-
-                  {
-                      posts && posts.length == 0 || posts == null && (
-                          <div className="bg-white shadow rounded-xl dark:bg-zinc-950 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
-                              No Courses available.
-                          </div>
-
-
-                      )
-                  }
-
-              </div>
           </div>
           <Transition.Root show={open} as={Fragment}>
               <Dialog as="div" className="relative z-[99999]" onClose={setOpen}>
@@ -675,7 +712,7 @@ export default function CoursesPage({ host, channel ,roles, setRoles}: HomeProps
                   </div>
               </Dialog>
           </Transition.Root>
-
+          </div>
       </div>
     )
 

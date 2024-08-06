@@ -25,7 +25,20 @@ export function getWebsiteDomain() {
   console.log(websiteUrl);
   return websiteUrl;
 }
+const host = window.location.host; // gets the full domain of the app
 
+const arr = host
+  .split(".")
+  .slice(0, host.includes("local") ? -1 : -2);
+if (arr.length > 0) {
+  console.log(arr[0])
+  console.log("using:"+host)
+}
+console.log(host)
+if(host === "localhost:5173")
+{
+  host == "sc"
+}
 export const SuperTokensConfig = {
   appInfo: {
     appName: "bhive",

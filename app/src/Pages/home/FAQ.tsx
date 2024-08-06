@@ -17,40 +17,21 @@ function classNames(...classes: any[]) {
 export default function FAQ({ host, channel }: HomeProps) {
   const faqs = [
     {
-      question: "What's the best thing about Switzerland?",
+      question: "How to contact the B:Hive Team\n",
       answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
+        "Do you need assistance? This article explains how to contact the B:hive Team based on the type of inquiry that you have.\n" +
+        "\n" +
+        "Note: If you have a Community Success Manager please contact them directly for assistance." +
+      "\n"+
+      "<h2 class='text-2xl py-10'>Contact Support<h2>"+
+      "If you need assistance with issues relating to your site or need to share sensitive information with the B:hive Team (for example: need to share app credentials or personal information), please contact the Support Team directly through the Contact B:hive modal or email us directly at support@bhivecommunity.co.uk."
     },
-    {
-      question: "What's the best thing about Switzerland?",
-      answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
-    {
-      question: "What's the best thing about Switzerland?",
-      answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
-    {
-      question: "What's the best thing about Switzerland?",
-      answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
-    {
-      question: "What's the best thing about Switzerland?",
-      answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
-    {
-      question: "What's the best thing about Switzerland?",
-      answer:
-        "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
+
     // More questions...
   ]
 
   return (
-    <>
+    <div className="h-[100vh]">
 
     <div
       className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
@@ -62,7 +43,7 @@ export default function FAQ({ host, channel }: HomeProps) {
         </h2>
 
       </div>
-    </div><div className="mx-auto max-w-3xl">
+    </div><div className="mx-auto max-w-4xl">
           <dl className="mt-10 space-y-6 divide-y divide-gray-900/10 dark:divide-white/10">
             {faqs.map((faq) => (
               <Disclosure as="div" key={faq.question} className="pt-6">
@@ -82,13 +63,13 @@ export default function FAQ({ host, channel }: HomeProps) {
                       </Disclosure.Button>
                     </dt>
                     <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                      <p className="text-base leading-7 text-gray-600 dark:text-gray-300">{faq.answer}</p>
+                      <p className="text-base leading-7 text-gray-600 dark:text-gray-300" dangerouslySetInnerHTML={{__html: faq.answer}}></p>
                     </Disclosure.Panel>
                   </>
                 )}
               </Disclosure>
             ))}
           </dl></div>
-        </>
+        </div>
   )
 }

@@ -10,6 +10,8 @@ export interface Community {
     profiles: Profile[]
     access: string;
     published: boolean;
+    menu : string
+    menutext:string
 }
 
 export interface Channel {
@@ -126,6 +128,7 @@ export interface Courses {
     hours :string
     chapters: Chapter[]
     files: File[]
+    category: string
 }
 
 export interface Chapter {

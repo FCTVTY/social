@@ -83,7 +83,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
     }, {});
 
     return (
-      <div className="h-[100vh]">
+      <div className="h-[100] dark:bg-zinc-950">
           <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
               <div className="min-w-0 flex-1">
                   <h2 className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
@@ -137,14 +137,14 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                       {Object.keys(groupedFiles).length > 0 ? (
                         Object.entries(groupedFiles).map(([fileext, files]) => (
                           <div key={fileext}>
-                              <Disclosure as="div" key={fileext} className="pt-6" defaultOpen={true}>
+                              <Disclosure as="div" key={fileext} className="p-6">
                                   {({open}) => (
                                     <>
                                     <dt>
                                         <Disclosure.Button
                                           className="flex w-full items-start justify-between text-left text-gray-900 dark:text-white">
-                                            <span className="m-2 text-base font-semibold leading-7">{fileext || 'All'} </span>
-                                            <span className="ml-6 mr-2 flex h-7 items-center"><span
+                                            <span className="text-base font-semibold leading-7">{fileext || 'All'} </span>
+                                            <span className="flex h-7 items-center"><span
                                               className=" indicator-item badge badge-primary text-white">
         {files.length}
       </span>
@@ -156,7 +156,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                         </span>
                                         </Disclosure.Button>
                                     </dt>
-                                        <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                                        <Disclosure.Panel as="dd" className="mt-2 ">
                                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
                                   {files.map((file, index) => (
                                     <div key={index} className="group relative bg-white dark:bg-zinc-950 dark:border-gray-800 border border-gray-200 rounded-lg shadow-sm overflow-hidden">

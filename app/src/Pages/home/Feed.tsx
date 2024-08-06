@@ -8,6 +8,7 @@ import PostItem from "./Feeditem";
 import {Dialog, DialogBackdrop, DialogPanel, DialogTitle, Menu, Transition, TransitionChild} from "@headlessui/react";
 import {ChevronDownIcon, XMarkIcon} from "@heroicons/react/20/solid";
 import {LinkIcon, PlusIcon, QuestionMarkCircleIcon} from "@heroicons/react/16/solid";
+import {BadgeCheck} from "lucide-react";
 
 interface HomeProps {
     host?: string;
@@ -232,6 +233,69 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                             <ul role="list"
                                 className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y dark:divide-amber-500">
+
+                                <li className="hidden">
+                                    <div className="flex space-x-2 items-center justify-center flex-wrap grid grid-cols-4 divide-x">
+                                        <div
+                                          className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out"
+
+                                        >
+                                            <img src="https://picsum.photos/id/23/200/300" className="rounded-xl"/>
+                                            <div
+                                              className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
+                                                <img
+                                                  src="https://picsum.photos/id/237/50/50"
+                                                  className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
+                                                />
+                                                <div className="text-center text-white">John Doe</div>
+                                            </div>
+                                        </div>
+                                        <div
+                                          className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out"
+
+                                        >
+                                            <img src="https://picsum.photos/id/29/200/300" className="rounded-xl"/>
+                                            <div
+                                              className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
+                                                <img
+                                                  src="https://picsum.photos/id/237/50/50"
+                                                  className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
+                                                />
+                                                <div className="text-center text-white">John Doe</div>
+                                            </div>
+                                        </div>
+                                        <div
+                                          className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out"
+
+                                        >
+                                            <img src="https://picsum.photos/id/230/200/300" className="rounded-xl"/>
+                                            <div
+                                              className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
+                                                <img
+                                                  src="https://picsum.photos/id/237/50/50"
+                                                  className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
+                                                />
+                                                <div className="text-center text-white">John Doe</div>
+                                            </div>
+                                        </div>
+                                        <div
+                                          className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out"
+
+                                        >
+                                            <img src="https://picsum.photos//id/63/200/300" className="rounded-xl"/>
+                                            <div
+                                              className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
+                                                <img
+                                                  src="https://picsum.photos/id/237/50/50"
+                                                  className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
+                                                />
+                                                <div className="text-center text-white">John Doe</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+
                                 <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
                                     <Create channel={channel} onSubmit={handleRefresh}/>
                                 </li>
@@ -303,38 +367,38 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                         <div className="lg:col-span-2 lg:col-start-4">
 
                             <div
-                                className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
+                              className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
                                 <div className="rounded-t-lg h-32 overflow-hidden">
                                     <img
-                                        className="object-cover object-top w-full"
-                                        src={profile?.coverPicture}
-                                        alt=""
+                                      className="object-cover object-top w-full"
+                                      src={profile?.coverPicture}
+                                      alt=""
                                     />
                                 </div>
                                 <div
-                                    className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
+                                  className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
                                     <img
-                                        className="object-cover object-center h-32"
-                                        src={profile?.profilePicture}
-                                        alt=""
+                                      className="object-cover object-center h-32"
+                                      src={profile?.profilePicture}
+                                      alt=""
                                     />
                                 </div>
                                 <div className="text-center mt-2">
-                                    <h2 className="font-semibold">{profile?.first_name} {profile?.last_name}</h2>
+                                    <h2 className="font-semibold flex flex-auto">{profile?.first_name} {profile?.last_name} <BadgeCheck className="text-indigo-400"></BadgeCheck></h2>
                                     <p className="text-gray-500 pb-5">{profile?.bio}</p>
                                     {roles && roles.length > 0 && (
-                                        <div className="pb-5">
-                                            {roles.map((role) => {
-                                                let roleClasses = '';
-                                                let roleLabel = '';
+                                      <div className="pb-5">
+                                          {roles.map((role) => {
+                                              let roleClasses = '';
+                                              let roleLabel = '';
 
-                                                switch (role) {
-                                                    case 'god':
-                                                        roleClasses = 'bg-rose-100 text-rose-700';
-                                                        roleLabel = 'GOD';
-                                                        break;
-                                                    case 'admin':
-                                                        roleClasses = 'bg-purple-100 text-purple-700';
+                                              switch (role) {
+                                                  case 'god':
+                                                      roleClasses = 'bg-rose-100 text-rose-700';
+                                                      roleLabel = 'GOD';
+                                                      break;
+                                                  case 'admin':
+                                                      roleClasses = 'bg-purple-100 text-purple-700';
                                                         roleLabel = 'Admin';
                                                         break;
                                                     case 'moderator':
@@ -520,7 +584,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                                                         </svg>
 
                                                         <span
-                                                            className="text-[10px] font-medium sm:text-xs">Advert</span>
+                                                            className="text-[10px] font-medium sm:text-xs">Sponsor</span>
                                                     </strong>
                                                 </div>
                                             </article>

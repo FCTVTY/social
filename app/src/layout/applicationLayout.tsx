@@ -37,7 +37,7 @@ import {
     SquareCodeIcon,
     UsersIcon,
     WrenchIcon,
-    LogsIcon, MessageCircleQuestionIcon
+    LogsIcon, MessageCircleQuestionIcon, ChevronUpIcon
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 
@@ -213,7 +213,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                 current: `/feed/${channel.id}` === currentUrl, // Set current to true if the URL matches
             }));
 
-            setNavigation(prevNavigation => [...prevNavigation, ...channelNavigation]);
+            setNavigation(prevNavigation => [ ...channelNavigation]);
         }
     }, [community]);
 
@@ -297,7 +297,17 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
     }, [community?.community?.name, code]);
 
 
+    const [menu, Setmenu] = useState('bg-indigo-600');
+    const [menu2, Setmenu2] = useState('bg-cyan-500');
+    const [menuText, SetmenuText] = useState('text-indigo-600');
+    const [menuText2, SetmenuText2] = useState('text-cyan-500');
+
+
     useEffect(() => {
+
+
+
+
 
             setAdmin(roles.includes("admin") || roles.includes("moderator"))
         }, [roles]);
@@ -339,6 +349,11 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
             htmlSelector.setAttribute('data-theme', event.target.value);
         };
+    const visibleTeams = teams.slice(0, 4);
+    const hiddenTeams = teams.slice(4);
+    const [isOpen, setIsOpen] = useState(false);
+
+
 
     // @ts-ignore
     return (
@@ -347,7 +362,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                 <>
                     <div
-                        className="hidden fixed z-[999] isolate w-full flex items-center gap-x-6 overflow-hidden bg-red-500 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+                        className="hidden fixed bottom-0 z-[999] isolate w-full flex items-center gap-x-6 overflow-hidden bg-red-500 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
                         <div
                             className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
                             aria-hidden="true"
@@ -355,14 +370,14 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                         </div>
 
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <div className="hidden  flex flex-wrap items-center gap-x-4 gap-y-2">
                             <p className="text-sm leading-6 text-white">
-                                <strong className="font-semibold">Maintenance Window</strong>
+                                <strong className="font-semibold">Planned Maintenance Window</strong>
                                 <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current"
                                      aria-hidden="true">
                                     <circle cx={1} cy={1} r={1}/>
                                 </svg>
-                                Offline during...
+                                23:00 GTM 06/07/2024
                             </p>
 
                         </div>
@@ -397,20 +412,17 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                     <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
                                                 </button>
 
+
+
+
                                                 <img
-                                                    className="block h-7 w-auto lg:hidden dark:hidden"
+                                                    className=" h-7 w-auto dark:hidden"
                                                     src={LogoSquare}
                                                     alt="b:hive"
                                                 />
 
                                                 <img
-                                                    className="hidden h-7 w-auto lg:block dark:hidden"
-                                                    src={LogoSquare}
-                                                    alt="b:hive"
-                                                />
-
-                                                <img
-                                                    className="hidden h-7 w-auto dark:lg:block "
+                                                    className="hidden h-7 w-auto dark:block"
                                                     src={LogoSquareDark}
                                                     alt="b:hive"
                                                 />
@@ -430,61 +442,72 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                                         </div>
                                         <div
-                                            className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-    <Themeswitch></Themeswitch>
+                                          className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                            <Themeswitch></Themeswitch>
+                                            <button
+                                              type="button"
+                                              className="mx-2 rounded-full bg-white dark:bg-zinc-950 p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                            >
+                                                <span className="sr-only">View notifications</span>
+                                                <BellIcon className="h-6 w-6" aria-hidden="true"/>
+                                            </button>
+
+
 
                                             {/* Profile dropdown */}
                                             <Menu as="div" className="relative ml-3">
                                                 <div>
                                                     <Menu.Button
-                                                        className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                      className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                         <span className="sr-only">Open user menu</span>
                                                         <img
-                                                            className="h-8 w-8 rounded-full"
-                                                            src={profile?.profilePicture}
-                                                            alt=""
+                                                          className="h-8 w-8 rounded-full"
+                                                          src={profile?.profilePicture}
+                                                          alt=""
                                                         />
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
-                                                    as={Fragment}
-                                                    enter="transition ease-out duration-200"
-                                                    enterFrom="transform opacity-0 scale-95"
-                                                    enterTo="transform opacity-100 scale-100"
-                                                    leave="transition ease-in duration-75"
-                                                    leaveFrom="transform opacity-100 scale-100"
-                                                    leaveTo="transform opacity-0 scale-95"
+                                                  as={Fragment}
+                                                  enter="transition ease-out duration-200"
+                                                  enterFrom="transform opacity-0 scale-95"
+                                                  enterTo="transform opacity-100 scale-100"
+                                                  leave="transition ease-in duration-75"
+                                                  leaveFrom="transform opacity-100 scale-100"
+                                                  leaveTo="transform opacity-0 scale-95"
                                                 >
                                                     <Menu.Items
-                                                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+
+
                                                         <Menu.Item>
                                                             {({active}) => (
-                                                                <a
-                                                                    href={`/profile/${profile?._id}`}
-                                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                >
-                                                                    Your Profile
-                                                                </a>
+                                                              <a
+                                                                href={`/profile/${profile?._id}`}
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                              >
+                                                                  Your Profile
+                                                              </a>
                                                             )}
                                                         </Menu.Item>
                                                         <Menu.Item>
                                                             {({active}) => (
-                                                                <a
-                                                                    href={`/settings`}
-                                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                >
-                                                                    Settings
-                                                                </a>
+                                                              <a
+                                                                href={`/settings`}
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                              >
+                                                                  Settings
+                                                              </a>
                                                             )}
                                                         </Menu.Item>
                                                         <Menu.Item>
                                                             {({active}) => (
-                                                                <a
-                                                                    href="/auth"
-                                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                                >
-                                                                    Sign out
-                                                                </a>
+                                                              <a
+                                                                href="/auth"
+                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                              >
+                                                                  Sign out
+                                                              </a>
                                                             )}
                                                         </Menu.Item>
 
@@ -499,7 +522,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                     <div className="space-y-1 pb-4 pt-2">
                                         {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                                         <Disclosure.Button
-                                            as="a"
+                                          as="a"
                                             href="#"
                                             className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
                                         >
@@ -583,6 +606,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         <li>
                                                             <ul role="list" className="-mx-3 space-y-3">
                                                                 {navigation.map((item) => (
+
+
+
                                                                     <li key={item.name}>
                                                                         <a
                                                                             href={item.href}
@@ -613,44 +639,74 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         </li>
                                                         <li>
                                                             <div
-                                                                className="text-xs  leading-6 text-gray-400 my-3">General
+                                                              className="text-xs  leading-6 text-gray-400 my-3">General
                                                             </div>
                                                             <ul role="list" className="-mx-3 space-y-3">
-                                                                {teams.map((team) => (
-                                                                    <li key={team.name}>
-                                                                        <a
-                                                                            href={team.href}
-                                                                            className={classNames(
-                                                                                team.current
-                                                                                    ? 'text-cyan-500 bg-gray-200 dark:bg-zinc-800'
-                                                                                    : 'text-gray-400 hover:text-white hover:bg-cyan-500',
-                                                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                                            )}
-                                                                        >
-                          <span
-                              className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium group-hover:text-white">
-                            {team.initial}
-                          </span>
-                                                                            <span
-                                                                                className="mt-[2px]">{team.name}</span>
-                                                                        </a>
-                                                                    </li>
+                                                                {visibleTeams.map((team) => (
+                                                                  <li key={team.name}>
+                                                                      <a
+                                                                        href={team.href}
+                                                                        className={classNames(
+                                                                          team.current
+                                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
+                                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                                        )}
+                                                                      >
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
+                {team.initial}
+              </span>
+                                                                          <span className="mt-[2px]">{team.name}</span>
+                                                                      </a>
+                                                                  </li>
+                                                                ))}
+                                                                {isOpen && hiddenTeams.map((team) => (
+                                                                  <li key={team.name}>
+                                                                      <a
+                                                                        href={team.href}
+                                                                        className={classNames(
+                                                                          team.current
+                                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
+                                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                                        )}
+                                                                      >
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
+                {team.initial}
+              </span>
+                                                                          <span className="mt-[2px]">{team.name}</span>
+                                                                      </a>
+                                                                  </li>
                                                                 ))}
                                                             </ul>
+                                                            {hiddenTeams.length > 0 && (
+                                                              <button
+                                                                onClick={() => setIsOpen(!isOpen)}
+                                                                className="mt-4 text-gray-400  "
+                                                              >
+                                                                  {!isOpen ? (
+                                                                    <span>Show More</span>
+                                                                  ) : (
+                                                                    <span>Show Less</span>
+                                                                  )}
+                                                              </button>
+                                                            )}
                                                         </li>
                                                         <li className="-mx-6 mt-auto">
                                                             <a
-                                                                href={`/profile/${profile?._id}`}
-                                                                className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
+                                                              href={`/profile/${profile?._id}`}
+                                                              className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
                                                             >
                                                                 <img
-                                                                    className="h-8 w-8 rounded-full bg-gray-800"
-                                                                    src={profile?.profilePicture}
-                                                                    alt=""
+                                                                  className="h-8 w-8 rounded-full bg-gray-800"
+                                                                  src={profile?.profilePicture}
+                                                                  alt=""
                                                                 />
                                                                 <span className="sr-only">Your profile</span>
                                                                 <span
-                                                                    aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
+                                                                  aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -664,7 +720,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                         {/* Static sidebar for desktop */}
                         <div
-                            className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:bg-zinc-950 dark:border-zinc-900">
+                          className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:bg-zinc-950 dark:border-zinc-900">
                             {/* Sidebar component, swap this element with another sidebar if you like */}
                             <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
 
@@ -675,18 +731,18 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         <li>
                                             <ul role="list" className="-mx-3 space-y-3">
                                                 {navigation.map((item) => (
-                                                    <li key={item.name}>
-                                                        <a
-                                                            href={item.href}
-                                                            className={classNames(
-                                                                item.current
-                                                                    ? 'text-indigo-600 bg-gray-200 dark:bg-zinc-800'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-indigo-600',
-                                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
-                                                            )}
-                                                        >
+                                                  <li key={item.name}>
+                                                      <a
+                                                        href={item.href}
+                                                        className={classNames(
+                                                          item.current
+                                                            ? `${menuText} bg-gray-200 dark:bg-zinc-800`
+                                                            : `text-gray-400 hover:text-white hover:${menu}`,
+                                                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
+                                                        )}
+                                                      >
                                                      <span
-                                                         className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
+                                                       className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                                 stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round"
@@ -706,27 +762,55 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                         <li>
                                             <div className="text-xs  leading-6 text-gray-400 my-3">General</div>
                                             <ul role="list" className="-mx-3 space-y-3">
-                                                {teams.map((team) => (
-                                                    <li key={team.name}>
-                                                        <a
-                                                            href={team.href}
-                                                            className={classNames(
-                                                                team.current
-                                                                    ? 'text-cyan-500  bg-gray-200 dark:bg-zinc-800'
-                                                                    : 'text-gray-400 hover:text-white hover:bg-cyan-500',
-                                                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
-                                                            )}
-                                                        >
-                          <span
-                              className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
-                            {team.initial}
-                          </span>
-                                                            <span
-                                                                className="mt-[2px]">{team.name}</span>
-                                                        </a>
-                                                    </li>
+                                                {visibleTeams.map((team) => (
+                                                  <li key={team.name}>
+                                                      <a
+                                                        href={team.href}
+                                                        className={classNames(
+                                                          team.current
+                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
+                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                        )}
+                                                      >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
+                {team.initial}
+              </span>
+                                                          <span className="mt-[2px]">{team.name}</span>
+                                                      </a>
+                                                  </li>
+                                                ))}
+                                                {isOpen && hiddenTeams.map((team) => (
+                                                  <li key={team.name}>
+                                                      <a
+                                                        href={team.href}
+                                                        className={classNames(
+                                                          team.current
+                                                            ? `${menuText2} bg-gray-200 dark:bg-zinc-800`
+                                                            : `text-gray-400 hover:text-white hover:${menu2}`,
+                                                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]'
+                                                        )}
+                                                      >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
+                {team.initial}
+              </span>
+                                                          <span className="mt-[2px]">{team.name}</span>
+                                                      </a>
+                                                  </li>
                                                 ))}
                                             </ul>
+                                            {hiddenTeams.length > 0 && (
+                                              <button
+                                                onClick={() => setIsOpen(!isOpen)}
+                                                className="mt-4 text-gray-400  "
+                                              >
+                                                  {!isOpen ? (
+                                                    <span>Show More</span>
+                                                  ) : (
+                                                    <span>Show Less</span>
+                                                  )}
+                                              </button>
+                                            )}
                                         </li>
                                         {roles && (roles.includes("admin") || roles.includes("moderator")) && (
 
@@ -789,19 +873,13 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                             </li>
                                         )}
                                         <li className="-mx-6 mt-auto">
-                                            <a
-                                                href={`/profile/${profile?._id}`}
-                                                className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
-                                            >
-                                                <img
-                                                    className="h-8 w-8 rounded-full bg-gray-800"
-                                                    src={profile?.profilePicture}
-                                                    alt=""
-                                                />
-                                                <span className="sr-only">Your profile</span>
-                                                <span
-                                                    aria-hidden="true">{profile?.first_name} {profile?.last_name}</span>
-                                            </a>
+                                            <div className="mt-auto p-6 text-sm text-gray-500 dark:text-dark-txt">
+
+                                                <a href="/terms.html">Terms</a>
+
+                                               <br/>
+                                                <span>Bhive © 2024</span>
+                                            </div>
                                         </li>
                                     </ul>
                                 </nav>
@@ -810,9 +888,9 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                         <div className="">
                             <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
                                 <div
-                                    className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-50 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
+                                  className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-50 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
                                     <button
-                                        type="button"
+                                      type="button"
                                         className="-m-2.5 p-2.5 text-gray-700 dark:text-white lg:hidden"
                                         onClick={() => setSidebarOpen(true)}
                                     >
