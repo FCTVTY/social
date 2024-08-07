@@ -42,6 +42,7 @@ import CoursePage from "./Pages/courses/Course";
 import Site from "./Pages/admin/site";
 import ChangeLogPage from "./Pages/ChangeLog/ChangeLogPage";
 import FAQ from "./Pages/home/FAQ";
+import PostBox from "./Pages/home/PostBox";
 
 initSuperTokens();
 
@@ -112,6 +113,9 @@ function App() {
             <Route path="/login" element={<AuthLayout>
 <Login/>
                 </AuthLayout>}/>
+
+          <Route path="/test" element={<PostBox/>}></Route>
+
             <Route path="/register" element={<AuthLayout>
                 <Register/>
             </AuthLayout>}/>
