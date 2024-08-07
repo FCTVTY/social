@@ -71,35 +71,35 @@ const PostBox = () => {
   };
 
   return (
-    <div className="p-6 bg-red-500">
-      <div
-        ref={contentEditableRef}
-        contentEditable
-        onInput={handleInputChange}
-        onKeyDown={handleKeyDown}
-        placeholder="What's on your mind?"
-        className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
-        style={{ minHeight: '4rem', whiteSpace: 'pre-wrap' }}
-      ></div>
-      {showSuggestions && (
-        <ul className="border border-gray-300 rounded mt-2 bg-white shadow-md max-h-40 overflow-y-auto">
-          {filteredSuggestions.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleSuggestionClick(suggestion)}
-              className="p-2 hover:bg-gray-200 cursor-pointer"
-            >
-              {suggestion.name}
-            </li>
-          ))}
-        </ul>
-      )}
-      <input
-        type="text"
-        value={JSON.stringify(taggedUsers)}
-        name="taggedUsers"
-      />
-    </div>
+      <div className="p-10">
+        <div
+            ref={contentEditableRef}
+            contentEditable
+            onInput={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="What's on your mind?"
+            className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
+            style={{minHeight: '4rem', whiteSpace: 'pre-wrap'}}
+        ></div>
+        {showSuggestions && (
+            <ul className="border border-gray-300 rounded mt-2 bg-white shadow-md max-h-40 overflow-y-auto">
+              {filteredSuggestions.map((suggestion, index) => (
+                  <li
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="p-2 hover:bg-gray-200 cursor-pointer"
+                  >
+                    {suggestion.name}
+                  </li>
+              ))}
+            </ul>
+        )}
+        {JSON.stringify(taggedUsers)}
+
+        <br/><br/><br/>
+        <code>{contentEditableRef.current.innerHTML}</code>
+
+      </div>
   );
 };
 

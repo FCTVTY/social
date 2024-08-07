@@ -22,6 +22,7 @@ export default function PostView({host, channel, post}: HomeProps) {
     const [ppost, setPost] = useState<PPosts>();
     const [postLikes, setPostLikes] = useState<PostLike[]>();
     const [profile, setProfile] = useState<Profile>();
+    const [community, setCommunity] = useState<Partial<CommunityCollection>>();
 
     useEffect(() => {
         if (post) {
@@ -72,6 +73,10 @@ export default function PostView({host, channel, post}: HomeProps) {
             const Presponse = await fetch(`${getApiDomain()}/profile`);
             const profileData = await Presponse.json();
             setProfile(profileData);
+
+            const communityResponse = await fetch(`${getApiDomain()}/community?name=${host}`);
+            const communityData: CommunityCollection = await communityResponse.json();
+            setCommunity(communityData);
 
             const response = await fetch(`${getApiDomain()}/community/post?oid=${post}`);
             const postData = await response.json();
@@ -211,7 +216,7 @@ export default function PostView({host, channel, post}: HomeProps) {
                                                                             <p className="mt-0.5 text-sm text-gray-500">Commented {formatDistanceToNow(new Date(activityItem.date), {addSuffix: true})}</p>
                                                                         </div>
                                                                         <div className="mt-2 text-sm text-gray-700 dark:text-white ">
-                                                                            <p>{activityItem.comment}</p>
+                                                                            <p dangerouslySetInnerHTML={{__html: activityItem.comment}}></p>
                                                                         </div>
                                                                     </div>
                                                                 </>
@@ -231,8 +236,10 @@ export default function PostView({host, channel, post}: HomeProps) {
                     </div>
                 </>
             )}
-<Comment onSubmit={handleRefresh} post={post} supertokensId={profile?.supertokensId}/>
-<div className="fixed bottom-2 left-2 w-[20vw] lg:hidden">
+            {ppost && (
+<Comment onSubmit={handleRefresh} post={post} supertokensId={profile?.supertokensId} profiles={community?.profiles} channel={ppost?.channel}/>
+            )}
+                <div className="fixed bottom-2 left-2 w-[20vw] lg:hidden">
     <a href="/"  className="w-full flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
              className="w-6 h-6">

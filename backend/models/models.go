@@ -38,8 +38,9 @@ type Channel struct {
 }
 
 type CommunityCollection struct {
-	Community Community `json:"community"`
-	Channels  []Channel `json:"channels"`
+	Community Community      `json:"community"`
+	Channels  []Channel      `json:"channels"`
+	Profiles  []BasicProfile `json:"profiles"`
 }
 type Posts struct {
 	ID primitive.ObjectID `bson:"_id" json:"id,omitempty"`
@@ -55,6 +56,7 @@ type Posts struct {
 	Desc            string             `json:"desc"`
 	Channelstring   string             `json:"channelstring"`
 	Visability      bool               `json:"visability"`
+	TaggedUsers     []BasicProfile     `json:"taggedUsers"`
 }
 type PPosts struct {
 	ID              string    `json:"_id"`
@@ -85,7 +87,13 @@ type Profile struct {
 	Communities    []any              `json:"communities"`
 	Bio            string             `json:"bio"`
 }
-
+type BasicProfile struct {
+	ID             primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	FirstName      string             `bson:"first_name" json:"first_name"`
+	ProfilePicture string             `json:"profilePicture"`
+	LastName       string             `bson:"last_name" json:"last_name"`
+	Communities    []any              `json:"communities"`
+}
 type Ads struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Name   string             `json:"name"`
@@ -99,10 +107,21 @@ type PostLike struct {
 	UserID string `json:"userId"`
 	Liked  bool   `json:"liked"`
 }
-type Comment struct {
+
+type Notfication struct {
 	PostID  string `json:"postId"`
 	UserID  string `json:"userId"`
-	Comment string `json:"comment"`
+	Viewed  bool   `json:"viewed"`
+	Channel string `json:"channel"`
+	Comment bool   `json:"comment"`
+}
+
+type Comment struct {
+	PostID        string         `json:"postId"`
+	UserID        string         `json:"userId"`
+	Comment       string         `json:"comment"`
+	TaggedUsers   []BasicProfile `json:"taggedUsers"`
+	Channelstring string         `json:"channelstring"`
 }
 type EventPost struct {
 	ID            primitive.ObjectID `bson:"_id" json:"id,omitempty"`

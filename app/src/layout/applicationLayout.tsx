@@ -19,7 +19,7 @@ import {ChevronDownIcon, ExclamationTriangleIcon, MagnifyingGlassIcon} from '@he
 import {getApiDomain} from "../lib/auth/supertokens";
 import axios from 'axios';
 import {any} from "zod";
-import {CommunityCollection, Profile} from "../interfaces/interfaces";
+import {BNotfications, CommunityCollection, Profile} from "../interfaces/interfaces";
 import Join from "../Pages/home/join";
 import { JSX } from 'react/jsx-runtime';
 import {b} from "vite/dist/node/types.d-aGj9QkWt";
@@ -37,7 +37,7 @@ import {
     SquareCodeIcon,
     UsersIcon,
     WrenchIcon,
-    LogsIcon, MessageCircleQuestionIcon, ChevronUpIcon
+    LogsIcon, MessageCircleQuestionIcon, ChevronUpIcon, Bell, BellRing
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 
@@ -72,6 +72,119 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
+
+function Notfications() {
+    const [notifications, setNotifications] = useState<BNotfications[]>();
+
+    //get all notifications
+    useEffect(() => {
+        fetchDetails();
+    }, []);
+
+    const fetchDetails = async () => {
+        try {
+            const response = await axios.get(`${getApiDomain()}/notifications`);
+            setNotifications(response.data);
+            const profileresponse = await axios.get(`${getApiDomain()}/profile`);
+
+
+        } catch (error) {
+            console.error('Error fetching community details:', error);
+        }
+    };
+    return <div className="mx-2">
+        <div className="dropdown dropdown-bottom dropdown-end">
+            <div className="indicator">
+                {notifications && notifications.some(notification => !notification.viewed) && (
+                    <span className="indicator-item badge badge-primary"></span>
+                    )}
+            <label tabIndex={0} className="btn btn-circle btn-ghost btn-sm">
+
+                {/* Render Bell if there are any notifications */}
+
+                    <Bell />
+
+            </label></div>
+            <ul
+                tabIndex={0}
+                className="dropdown-content menu bg-white dark:bg-zinc-950 rounded-box card card-compact m-1 w-96 p-3 shadow-xl"
+                role="menu"
+            >
+                <div className="flex items-center justify-between px-2">
+                    <p className="text-base font-medium">Notifications</p>
+                    <button className="btn gap-2 btn-sm btn-circle btn-ghost">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            aria-hidden="true"
+                            role="img"
+                            fontSize={16}
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M18 6L6 18M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
+                </div>
+
+                <div className="mt-3 ">
+                    {notifications && notifications.map(notification => (
+
+                        <a href={`/feed/${notification.channel}/${notification.postid}`}
+                           key={notification._id}
+                            className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]"
+                        >
+                            <div className="grow">
+                                <p className="text-sm">
+                                    {notification.viewed == false && (
+                                        <span className="text-red-500">New </span>
+                                    )}
+                                    You have been tagged in a {notification.comment == true && (
+                                    <>comment</>
+                                )}{notification.comment == false && (
+                                    <>post</>
+                                )}</p>
+                                <span
+                                    className="text-xs text-base-content/60"
+                                    // You may want to customize this href
+                                >
+                                    Click to view
+                                </span>
+                            </div>
+                        </a>
+                    ))}
+                    {notifications === null && (
+                        <div
+                            className=" px-3 text-center">
+                            <p
+                                className="text-xs  text-base-content/80">No New Notifications</p>
+                        </div>
+                    )}
+                </div>
+
+                <hr className="-mx-2 mt-2 border-base-content/10"/>
+                <div className="hidden flex items-center justify-between pt-2">
+                    <button
+                        className="btn text-primary hover:bg-primary/10 btn-sm btn-ghost">
+                        View All
+                    </button>
+                    <button
+                        className="btn text-base-content/80 hover:bg-base-content/10 btn-sm btn-ghost">
+                        Mark as read
+                    </button>
+                </div>
+            </ul>
+        </div>
+    </div>;
+}
 
 const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPage =false}) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -410,8 +523,6 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                 </button>
 
 
-
-
                                                 <img
                                                     className=" h-7 w-auto dark:hidden"
                                                     src={LogoSquare}
@@ -439,259 +550,65 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
 
                                         </div>
                                         <div
-                                          className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                                            className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                                             <Themeswitch></Themeswitch>
-                                            <div className="mx-2">
-                                                <div className="dropdown dropdown-bottom dropdown-end">
-                                                    <label tabIndex={0} className="btn btn-circle btn-ghost btn-sm">
-                                                        <svg
-                                                          xmlns="http://www.w3.org/2000/svg"
-                                                          xmlnsXlink="http://www.w3.org/1999/xlink"
-                                                          aria-hidden="true"
-                                                          role="img"
-                                                          fontSize={20}
-                                                          width="1em"
-                                                          height="1em"
-                                                          viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                              fill="none"
-                                                              stroke="currentColor"
-                                                              strokeLinecap="round"
-                                                              strokeLinejoin="round"
-                                                              strokeWidth={2}
-                                                              d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9m4.3 13a1.94 1.94 0 0 0 3.4 0"
-                                                            />
-                                                        </svg>
-                                                    </label>
-                                                    <ul
-                                                      tabIndex={0}
-                                                      className="dropdown-content menu bg-white dark:bg-zinc-950 rounded-box card card-compact m-1 w-96 p-3 shadow-xl"
-                                                      role="menu"
-                                                    >
-                                                        <div className="flex items-center justify-between px-2">
-                                                            <p className="text-base font-medium">Notification</p>
-                                                            <button className="btn gap-2 btn-sm btn-circle btn-ghost">
-                                                                <svg
-                                                                  xmlns="http://www.w3.org/2000/svg"
-                                                                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                                                                  aria-hidden="true"
-                                                                  role="img"
-                                                                  fontSize={16}
-                                                                  width="1em"
-                                                                  height="1em"
-                                                                  viewBox="0 0 24 24"
-                                                                >
-                                                                    <path
-                                                                      fill="none"
-                                                                      stroke="currentColor"
-                                                                      strokeLinecap="round"
-                                                                      strokeLinejoin="round"
-                                                                      strokeWidth={2}
-                                                                      d="M18 6L6 18M6 6l12 12"
-                                                                    />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                        <div className="flex items-center justify-center">
-                                                            <div
-                                                              className=" rounded-full border  border-base-content/10 px-3 text-center">
-                                                                <p className="text-xs  text-base-content/80">Today</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-3 hidden">
-                                                            <div
-                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
-                                                                <img
-                                                                  alt=""
-                                                                  loading="lazy"
-                                                                  width={128}
-                                                                  height={128}
-                                                                  decoding="async"
-                                                                  data-nimg={1}
-                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
-                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F4.339fc62d.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F4.339fc62d.png&w=256&q=75 2x"
-                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F4.339fc62d.png&w=256&q=75"
-                                                                  style={{color: "transparent"}}
-                                                                />
-                                                                <div className="grow">
-                                                                    <p className="text-sm">Customer has requested a
-                                                                        return for item</p>
-                                                                    <p className="text-xs text-base-content/60">1 Hour
-                                                                        ago</p>
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
-                                                                <img
-                                                                  alt=""
-                                                                  loading="lazy"
-                                                                  width={128}
-                                                                  height={128}
-                                                                  decoding="async"
-                                                                  data-nimg={1}
-                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
-                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F5.715b949f.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F5.715b949f.png&w=256&q=75 2x"
-                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F5.715b949f.png&w=256&q=75"
-                                                                  style={{color: "transparent"}}
-                                                                />
-                                                                <div className="grow">
-                                                                    <p className="text-sm">
-                                                                        A new review has been submitted for product
-                                                                    </p>
-                                                                    <p className="text-xs text-base-content/60">1 Hour
-                                                                        ago</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-2 flex items-center justify-center">
-                                                            <div
-                                                                className="hidden rounded-full border  border-base-content/10 px-3 text-center">
-                                                                <p
-                                                                    className="text-xs  text-base-content/80">Yesterday</p>
-                                                            </div>
-                                                            <div
-                                                                className=" px-3 text-center">
-                                                                <p
-                                                                    className="text-xs  text-base-content/80">No New Notifications</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="mt-3 hidden">
-                                                            <div
-                                                                className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
-                                                            <img
-                                                                  alt=""
-                                                                  loading="lazy"
-                                                                  width={128}
-                                                                  height={128}
-                                                                  decoding="async"
-                                                                  data-nimg={1}
-                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
-                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.68eaacb8.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.68eaacb8.png&w=256&q=75 2x"
-                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F1.68eaacb8.png&w=256&q=75"
-                                                                  style={{color: "transparent"}}
-                                                                />
-                                                                <div className="grow">
-                                                                    <p className="text-sm">
-                                                                        Prepare for the upcoming weekend promotion{" "}
-                                                                    </p>
-                                                                    <p className="text-xs text-base-content/60">1 Hour
-                                                                        ago</p>
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
-                                                                <img
-                                                                  alt=""
-                                                                  loading="lazy"
-                                                                  width={128}
-                                                                  height={128}
-                                                                  decoding="async"
-                                                                  data-nimg={1}
-                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
-                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.cef77693.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.cef77693.png&w=256&q=75 2x"
-                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F2.cef77693.png&w=256&q=75"
-                                                                  style={{color: "transparent"}}
-                                                                />
-                                                                <div className="grow">
-                                                                    <p className="text-sm">Product 'ABC123' is running
-                                                                        low in stock.</p>
-                                                                    <p className="text-xs text-base-content/60">1 Hour
-                                                                        ago</p>
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                              className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]">
-                                                                <img
-                                                                  alt=""
-                                                                  loading="lazy"
-                                                                  width={128}
-                                                                  height={128}
-                                                                  decoding="async"
-                                                                  data-nimg={1}
-                                                                  className="size-9 bg-base-content/10 p-0.5 mask mask-circle"
-                                                                  srcSet="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F3.5ae9a296.png&w=128&q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fmedia%2F3.5ae9a296.png&w=256&q=75 2x"
-                                                                  src="/_next/image?url=%2F_next%2Fstatic%2Fmedia%2F3.5ae9a296.png&w=256&q=75"
-                                                                  style={{color: "transparent"}}
-                                                                />
-                                                                <div className="grow">
-                                                                    <p className="text-sm">Payment received for Order
-                                                                        ID: #67890</p>
-                                                                    <p className="text-xs text-base-content/60">1 Hour
-                                                                        ago</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr className="-mx-2 mt-2 border-base-content/10"/>
-                                                        <div className="hidden flex items-center justify-between pt-2">
-                                                            <button
-                                                              className="btn text-primary hover:bg-primary/10 btn-sm btn-ghost">
-                                                                View All
-                                                            </button>
-                                                            <button
-                                                              className="btn text-base-content/80 hover:bg-base-content/10 btn-sm btn-ghost">
-                                                                Mark as read
-                                                            </button>
-                                                        </div>
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                            <Notfications/>
 
 
                                             {/* Profile dropdown */}
                                             <Menu as="div" className="relative">
                                                 <div>
                                                     <Menu.Button
-                                                      className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                        className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                         <span className="sr-only">Open user menu</span>
                                                         <img
-                                                          className="h-8 w-8 rounded-full"
-                                                          src={profile?.profilePicture}
-                                                          alt=""
+                                                            className="h-8 w-8 rounded-full"
+                                                            src={profile?.profilePicture}
+                                                            alt=""
                                                         />
                                                     </Menu.Button>
                                                 </div>
                                                 <Transition
-                                                  as={Fragment}
-                                                  enter="transition ease-out duration-200"
-                                                  enterFrom="transform opacity-0 scale-95"
-                                                  enterTo="transform opacity-100 scale-100"
-                                                  leave="transition ease-in duration-75"
-                                                  leaveFrom="transform opacity-100 scale-100"
-                                                  leaveTo="transform opacity-0 scale-95"
+                                                    as={Fragment}
+                                                    enter="transition ease-out duration-200"
+                                                    enterFrom="transform opacity-0 scale-95"
+                                                    enterTo="transform opacity-100 scale-100"
+                                                    leave="transition ease-in duration-75"
+                                                    leaveFrom="transform opacity-100 scale-100"
+                                                    leaveTo="transform opacity-0 scale-95"
                                                 >
                                                     <Menu.Items
-                                                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-zinc-950 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
 
 
                                                         <Menu.Item>
                                                             {({active}) => (
-                                                              <a
-                                                                href={`/profile/${profile?._id}`}
-                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                              >
-                                                                  Your Profile
-                                                              </a>
+                                                                <a
+                                                                    href={`/profile/${profile?._id}`}
+                                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                >
+                                                                    Your Profile
+                                                                </a>
                                                             )}
                                                         </Menu.Item>
                                                         <Menu.Item>
                                                             {({active}) => (
-                                                              <a
-                                                                href={`/settings`}
-                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                              >
-                                                                  Settings
-                                                              </a>
+                                                                <a
+                                                                    href={`/settings`}
+                                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                >
+                                                                    Settings
+                                                                </a>
                                                             )}
                                                         </Menu.Item>
                                                         <Menu.Item>
                                                             {({active}) => (
-                                                              <a
-                                                                href="/auth"
-                                                                className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                                                              >
-                                                                  Sign out
-                                                              </a>
+                                                                <a
+                                                                    href="/auth"
+                                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                                >
+                                                                    Sign out
+                                                                </a>
                                                             )}
                                                         </Menu.Item>
 
@@ -706,30 +623,30 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                     <div className="space-y-1 pb-4 pt-2">
                                         {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                                         <Disclosure.Button
-                                          as="a"
-                                          href="#"
-                                          className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+                                            as="a"
+                                            href="#"
+                                            className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
                                         >
                                             Dashboard
                                         </Disclosure.Button>
                                         <Disclosure.Button
-                                          as="a"
-                                          href="#"
-                                          className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                            as="a"
+                                            href="#"
+                                            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             Team
                                         </Disclosure.Button>
                                         <Disclosure.Button
-                                          as="a"
-                                          href="#"
-                                          className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                            as="a"
+                                            href="#"
+                                            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             Projects
                                         </Disclosure.Button>
                                         <Disclosure.Button
-                                          as="a"
-                                          href="#"
-                                          className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                                            as="a"
+                                            href="#"
+                                            className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                                         >
                                             Calendar
                                         </Disclosure.Button>

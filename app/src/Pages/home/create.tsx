@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import Button from "../../components/Button";
-import { getApiDomain } from "../../lib/auth/supertokens";
-import {Post} from "../../interfaces/interfaces";
+import {getApiDomain} from "../../lib/auth/supertokens";
+import {Post, Profile} from "../../interfaces/interfaces";
 import {ObjectId} from "mongodb";
 import mongoose from "mongoose";
 import ReactQuill from "react-quill";
@@ -10,16 +10,22 @@ import {LoadingButton} from "../../components/LoadingButton"; // will work
 import loadImage from 'blueimp-load-image';
 
 
-
 interface CreateProps {
-    onSubmit: () => void;
-    channel: string;
+    onSubmit: () => void,
+    channel: string,
+    profiles: Profile[]
 }
 
-export default function Create({ onSubmit, channel }: CreateProps) {
+export default function Create({onSubmit, channel, profiles}: CreateProps) {
     const [message, setMessage] = useState("");
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [post, setPost] = useState<Partial<Post>>({});
+    const [content, setContent] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [taggedUsers, setTaggedUsers] = useState([]);
+    const contentEditableRef = useRef(null);
 
     useEffect(() => {
         if (channel) {
@@ -36,29 +42,29 @@ export default function Create({ onSubmit, channel }: CreateProps) {
         if (!file) return;
 
         loadImage(
-          file,
-          (img) => {
-              // Convert the image to a base64 string
-              const canvas = document.createElement('canvas');
-              canvas.width = img.width;
-              canvas.height = img.height;
-              const ctx = canvas.getContext('2d');
-              if (ctx) {
-                  ctx.drawImage(img, 0, 0);
-                  const base64String = canvas.toDataURL('image/jpeg');
-                  setPost(prevState => ({
-                      ...prevState,
-                      media: base64String,
-                  }));
-                  setSelectedImage(base64String);
-                  console.log(base64String);
-              }
-          },
-          { orientation: true } // This option ensures the image is correctly oriented
+            file,
+            (img) => {
+                // Convert the image to a base64 string
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.drawImage(img, 0, 0);
+                    const base64String = canvas.toDataURL('image/jpeg');
+                    setPost(prevState => ({
+                        ...prevState,
+                        media: base64String,
+                    }));
+                    setSelectedImage(base64String);
+                    console.log(base64String);
+                }
+            },
+            {orientation: true} // This option ensures the image is correctly oriented
         );
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange2 = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
         setPost(prevState => ({
             ...prevState,
@@ -74,9 +80,7 @@ export default function Create({ onSubmit, channel }: CreateProps) {
             setLoading(true)
 
 
-            await axios.post(`${getApiDomain()}/community/createpost`, post, {
-
-            });
+            await axios.post(`${getApiDomain()}/community/createpost`, post, {});
             // Clear form fields after successful submission
             setMessage("");
             setSelectedImage(null);
@@ -86,10 +90,72 @@ export default function Create({ onSubmit, channel }: CreateProps) {
             console.error('Error creating post:', error);
         }
     };
+    useEffect(() => {
+        setSuggestions(profiles);
+    }, [profiles]);
 
+    const handleInputChange = () => {
+        const text = contentEditableRef.current.innerHTML;
+        setContent(text);
+        setPost(prevState => ({
+            ...prevState,
+            desc: text,
+        }));
+        const lastWord = text.split(' ').pop().replace(/<[^>]*>?/gm, '');
+        if (lastWord.startsWith('@')) {
+            const query = lastWord.slice(1).toLowerCase();
+            const filtered = suggestions.filter(suggestion =>
+                suggestion.first_name.toLowerCase().includes(query)
+            );
+            setFilteredSuggestions(filtered);
+            setShowSuggestions(true);
+        } else {
+            setShowSuggestions(false);
+        }
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        const text = contentEditableRef.current.innerHTML;
+        const words = text.split(' ');
+        words.pop();
+        const newText = `${words.join(' ')} <span class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-gray-600">@${suggestion.first_name} ${suggestion.last_name}</span> `;
+        setContent(newText);
+        setPost(prevState => ({
+            ...prevState,
+            desc: newText,
+            taggedUsers: Array.isArray(prevState.taggedUsers)
+                ? [...prevState.taggedUsers, suggestion]
+                : [suggestion] // Fallback to a new array if prevState.taggedUsers is not an array
+        }));
+        setShowSuggestions(false);
+        setTaggedUsers([...taggedUsers, suggestion]);
+
+        setTimeout(() => {
+            contentEditableRef.current.innerHTML = newText;
+            placeCaretAtEnd(contentEditableRef.current);
+        }, 0);
+    };
+
+    const placeCaretAtEnd = (element) => {
+        element.focus();
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && showSuggestions) {
+            e.preventDefault();
+            handleSuggestionClick(filteredSuggestions[0]);
+        }
+    };
     return (
         <>
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:border-2 dark:text-white shadow rounded-lg mb-6 p-2 ">
+            <form onSubmit={handleSubmit}
+                  className="bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:border-2 dark:text-white shadow rounded-lg mb-6 p-2 ">
                 {selectedImage && (
                     <div className="mt-4 mx-auto">
                         <img src={post.media} alt="Selected" className="max-w-full rounded-lg mx-auto"/>
@@ -101,8 +167,40 @@ export default function Create({ onSubmit, channel }: CreateProps) {
                     placeholder="Type something..."
                     value={post.desc}
                     onChange={handleInputChange}
-                    className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
+                    className="hidden w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
                 />
+
+                <div
+                    ref={contentEditableRef}
+                    contentEditable
+                    onInput={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    placeholder="What's on your mind?"
+                    className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
+                    style={{minHeight: '4rem', whiteSpace: 'pre-wrap'}}
+                ></div>
+                {showSuggestions && (
+                    <ul className="border border-gray-300 rounded mt-2 bg-white shadow-md max-h-40 overflow-y-auto">
+                        {filteredSuggestions.map((suggestion, index) => (
+                            <li
+                                key={index}
+                                onClick={() => handleSuggestionClick(suggestion)}
+                                className="p-2 hover:bg-gray-200 cursor-pointer"
+                            ><span className="inline-flex">
+                                <div className="avatar mr-2">
+                                    <div className="w-8 rounded-full">
+                                        <img
+                                            src={suggestion.profilePicture}
+                                            alt="Tailwind-CSS-Avatar-component"/>
+                                    </div>
+                                </div>
+                                {suggestion.first_name} {suggestion.last_name}</span>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+
                 <footer className="flex justify-between mt-2">
                     <div className="flex gap-2">
                         <label htmlFor="image-upload" className="cursor-pointer">

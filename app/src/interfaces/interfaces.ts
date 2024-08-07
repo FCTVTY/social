@@ -27,6 +27,7 @@ export interface CommunityCollection {
     community: Community;
     channels: Channel[];
     user:User;
+    profiles: Profile[]
 }
 
 export interface Post {
@@ -42,6 +43,7 @@ export interface Post {
     channelstring: string
     visability:boolean
     desc: string
+    taggedUsers: Profile[]
 }
 export interface PostComment {
     _id: string
@@ -106,6 +108,15 @@ export interface PostLike {
     _id: string
     postId: string
     userId: string
+}
+
+export interface BNotfications {
+    _id: string
+    postid: string
+    userid: string
+    viewed:boolean
+    channel:string
+    comment:boolean
 }
 
 export interface Ads {

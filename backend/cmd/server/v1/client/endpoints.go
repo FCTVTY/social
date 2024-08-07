@@ -47,20 +47,20 @@ import (
 )
 
 var (
-	client               *mongo.Client
-	communitesCollection *mongo.Collection
-	channelCollection    *mongo.Collection
-	postCollection       *mongo.Collection
-	ppostCollection      *mongo.Collection
-	adsCollection        *mongo.Collection
-	profileCollection    *mongo.Collection
-	likesCollection      *mongo.Collection
-	commentCollection    *mongo.Collection
-	membersCollection    *mongo.Collection
-	pprofileCollection   *mongo.Collection
-	coursesCollection    *mongo.Collection
-
-	minioClient *minio.Client
+	client                 *mongo.Client
+	communitesCollection   *mongo.Collection
+	channelCollection      *mongo.Collection
+	postCollection         *mongo.Collection
+	ppostCollection        *mongo.Collection
+	adsCollection          *mongo.Collection
+	profileCollection      *mongo.Collection
+	likesCollection        *mongo.Collection
+	commentCollection      *mongo.Collection
+	membersCollection      *mongo.Collection
+	pprofileCollection     *mongo.Collection
+	coursesCollection      *mongo.Collection
+	notficationsCollection *mongo.Collection
+	minioClient            *minio.Client
 )
 
 func init() {
@@ -92,7 +92,7 @@ func init() {
 	adsCollection = database.Collection("ads")
 	pprofileCollection = database.Collection("pprofile")
 	profileCollection = database.Collection("profile")
-
+	notficationsCollection = database.Collection("notifications")
 	likesCollection = database.Collection("postLikes")
 	commentCollection = database.Collection("postComments")
 	membersCollection = database.Collection("members")
@@ -179,6 +179,26 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 		}
 		collection.Channels = append(collection.Channels, result)
 	}
+
+	stringObjectID := community.ID.Hex()
+
+	cursor, err = pprofileCollection.Find(context.Background(), bson.M{
+		"communities": bson.M{
+			"$in": []interface{}{stringObjectID},
+		},
+	})
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var result models.BasicProfile
+		err := cursor.Decode(&result)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		collection.Profiles = append(collection.Profiles, result)
+	}
+
 	// Encode and send community details in the response
 	rw.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(rw).Encode(collection); err != nil {
@@ -287,6 +307,19 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(rw).Encode(result.InsertedID)
 
+	//notify every tagged user...
+	for _, element := range v.TaggedUsers {
+		var n models.Notfication
+		n.PostID = result.InsertedID.(primitive.ObjectID).Hex()
+		n.UserID = element.ID.Hex()
+		n.Viewed = false
+		n.Channel = v.Channelstring
+		_, err := notficationsCollection.InsertOne(context.Background(), n)
+		if err != nil {
+			http.Error(rw, "failed to insert notfication: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 }
 
 func CreateEvent(rw http.ResponseWriter, r *http.Request) {
@@ -645,7 +678,7 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "no session found", http.StatusInternalServerError)
 		return
 	}
-
+	var userid = sessionContainer.GetUserID()
 	// Validate and retrieve post ID from URL query parameters
 	postID := r.URL.Query().Get("oid")
 	if postID == "" {
@@ -663,6 +696,40 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 	err = ppostCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&post)
 	if err != nil {
 		http.Error(rw, "failed to fetch post", http.StatusInternalServerError)
+		return
+	}
+
+	var profile models.Profile
+
+	// Fetch the user's profile
+	err = pprofileCollection.FindOne(context.Background(), bson.M{"supertokensId": userid}).Decode(&profile)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "User not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "Failed to fetch user details", http.StatusInternalServerError)
+		return
+	}
+
+	// Update the 'viewed' status of notifications for the specific postID
+	filter := bson.M{
+		"userid": profile.ID.Hex(),
+		"postid": postID, // Add this filter to target notifications related to the specific postID
+	}
+
+	update := bson.M{
+		"$set": bson.M{"viewed": true},
+	}
+
+	result, err := notficationsCollection.UpdateMany(context.Background(), filter, update)
+	if err != nil {
+		http.Error(rw, "Failed to update notifications", http.StatusInternalServerError)
+		return
+	}
+
+	if result.MatchedCount == 0 {
+		http.Error(rw, "No notifications found to update", http.StatusNotFound)
 		return
 	}
 
@@ -1011,6 +1078,20 @@ func Comment(rw http.ResponseWriter, r *http.Request) {
 		"comment": comment.Comment,
 		"date":    time.Now(),
 	})
+
+	for _, element := range comment.TaggedUsers {
+		var n models.Notfication
+		n.PostID = oid.Hex()
+		n.UserID = element.ID.Hex()
+		n.Viewed = false
+		n.Channel = comment.Channelstring
+		n.Comment = true
+		_, err := notficationsCollection.InsertOne(context.Background(), n)
+		if err != nil {
+			http.Error(rw, "failed to insert notfication: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 
 	rw.WriteHeader(http.StatusOK)
 	rw.Write([]byte("Success"))
@@ -1474,4 +1555,47 @@ func DeleteAccount(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	supertokens.DeleteUser(sessionContainer.GetUserID())
+}
+
+func Notifications(rw http.ResponseWriter, r *http.Request) {
+
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+
+	var profile models.Profile
+	err := pprofileCollection.FindOne(context.Background(), bson.M{"supertokensId": userID}).Decode(&profile)
+
+	var collection []bson.M
+	// Check if the community exists in the database
+	cursor, err := notficationsCollection.Find(context.Background(), bson.M{"userid": profile.ID.Hex(), "viewed": false})
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "notfications not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "failed to fetch notfications details", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	for cursor.Next(context.Background()) {
+		var result bson.M
+		err := cursor.Decode(&result)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		collection = append(collection, result)
+	}
+	// Encode and send community details in the response
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(collection); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
 }

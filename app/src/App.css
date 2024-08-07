@@ -23,3 +23,9 @@ html,body,a,p, h1,h2,h3,h4,h5,h6, strong {
 }
 
 
+[contenteditable=true]:empty:before{
+    content: attr(placeholder);
+    color: #5c636a;
+    pointer-events: none;
+    display: block; /* For Firefox */
+}
