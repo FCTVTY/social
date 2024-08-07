@@ -453,7 +453,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                         </button>
                     </div>
 
-                    <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
+                    <div className="hidden bg-white rounded-lg shadow-lg p-6 mt-6">
                         <h2 className="text-2xl font-bold mb-6">Theme Settings</h2>
 
                         <div className="w-full max-w-xs mx-auto">
