@@ -311,7 +311,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
                                 {!skelloading && posts.filter(post => post.type !== "event").map(post => (
                                   <PostItem key={post._id} post={post} profile={profile} lite={undefined}
-                                            roles={roles} supertokensId={profile?.supertokensId}/>
+                                            roles={roles} supertokensId={profile?.supertokensId} profiles={community?.profiles}/>
                                 ))}
 
                                 {skelloading && (

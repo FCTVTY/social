@@ -167,6 +167,28 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 	}
 	collection.Community = community
 
+	//lets make sure user is part of the community .. if not lets join them
+	filter = bson.M{
+		"supertokensid": sessionContainer.GetUserID(),
+		"communities": bson.M{
+			"$ne": community.ID.Hex(), // $ne: not equal to stringObjectID
+		},
+	}
+
+	// Define the update operation
+	update := bson.M{
+		"$addToSet": bson.M{
+			"communities": community.ID.Hex(), // Add stringObjectID to the communities array
+		},
+	}
+
+	// Update the document
+	_, err = profileCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	cursor, err := channelCollection.Find(context.Background(), bson.M{"parent": community.ID})
 	defer cursor.Close(context.Background())
 

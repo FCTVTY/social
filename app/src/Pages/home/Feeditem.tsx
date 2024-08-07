@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useRef, useState} from 'react';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import {getApiDomain, getWebsiteDomain} from "../../lib/auth/supertokens";
 import YouTubeEmbed from "./youtube";
@@ -8,6 +8,7 @@ import {ExclamationTriangleIcon} from "@heroicons/react/16/solid";
 import {XMarkIcon} from "@heroicons/react/20/solid";
 import axios from "axios";
 import {BadgeCheck} from "lucide-react";
+import Comment from "./comment";
 
 interface PostItemProps {
     lite?: boolean
@@ -15,10 +16,15 @@ interface PostItemProps {
 
 
 
-const PostItem = ({post, profile, lite, roles, supertokensId}) => {
+const PostItem = ({post, profile, lite, roles, supertokensId, profiles}) => {
 
     console.log(post._id)
     const [visibility, setVisibility] = useState(false);
+    const [suggestions, setSuggestions] = useState([]);
+    const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [taggedUsers, setTaggedUsers] = useState([]);
+    const contentEditableRef = useRef(null);
 
     const [postLikes, setPostLikes] = useState(post.postLikes);
     let userHasLiked = false;
@@ -99,12 +105,31 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
     const [message, setMessage] = useState("");
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
+    useEffect(() => {
+        setSuggestions(profiles);
+    }, [profiles]);
 
 
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange2 = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
         setMessage(value)
+    };
+
+    const handleInputChange = () => {
+        const text = contentEditableRef.current.innerHTML;
+        setMessage(text);
+
+        const lastWord = text.split(' ').pop().replace(/<[^>]*>?/gm, '');
+        if (lastWord.startsWith('@')) {
+            const query = lastWord.slice(1).toLowerCase();
+            const filtered = suggestions.filter(suggestion =>
+                suggestion.first_name.toLowerCase().includes(query)
+            );
+            setFilteredSuggestions(filtered);
+            setShowSuggestions(true);
+        } else {
+            setShowSuggestions(false);
+        }
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -117,7 +142,9 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
             await axios.post(`${getApiDomain()}/comment`, {
                 postId: post._id,
                 userId: supertokensId,
-                comment: message
+                comment: message,
+                taggedUsers: taggedUsers,
+                channelstring:post.channelstring
             });
             // Clear form fields after successful submission
             setMessage("");
@@ -133,6 +160,38 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
         }
     };
 
+    const handleSuggestionClick = (suggestion) => {
+        const text = contentEditableRef.current.innerHTML;
+        const words = text.split(' ');
+        words.pop();
+        const newText = `${words.join(' ')} <span class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-gray-600">@${suggestion.first_name} ${suggestion.last_name}</span> `;
+        setMessage(newText);
+
+        setShowSuggestions(false);
+        setTaggedUsers([...taggedUsers, suggestion]);
+
+        setTimeout(() => {
+            contentEditableRef.current.innerHTML = newText;
+            placeCaretAtEnd(contentEditableRef.current);
+        }, 0);
+    };
+
+    const placeCaretAtEnd = (element) => {
+        element.focus();
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && showSuggestions) {
+            e.preventDefault();
+            handleSuggestionClick(filteredSuggestions[0]);
+        }
+    };
     return (
       <li key={post._id}
           className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-zinc-950 shadow max-w-4xl`}
@@ -356,10 +415,10 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
                                                     </a>
                                                 </div>
                                                 <div className="mt-2 text-sm text-gray-700 dark:text-white">
-                                                    <p
-                                                      className="">{activityItem.comment}</p>
+                                                    <p dangerouslySetInnerHTML={{__html: activityItem.comment}}></p>
+
                                                 </div>
-                                                </div>
+                                            </div>
 
                                         </div>
                                     </>
@@ -372,9 +431,38 @@ const PostItem = ({post, profile, lite, roles, supertokensId}) => {
               </div>
 
               <form onSubmit={handleSubmit} className=" mt-10 flex items-center mb-4 space-x-3">
-                  <input type="text" placeholder="Write a comment..."  onChange={handleInputChange}
-                         className=" dark:bg-zinc-800 flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
-                  <button
+<>
+                  <div
+                      ref={contentEditableRef}
+                      contentEditable
+                      onInput={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      placeholder="What's on your mind?"
+                      className="a dark:bg-zinc-800 flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"
+                      style={{minHeight: '2rem', whiteSpace: 'pre-wrap'}}
+                  ></div>
+                  {showSuggestions && (
+                      <ul className="absolute border border-gray-300 rounded mt-[13rem] z-[100] bg-white shadow-md h-40 overflow-y-auto">
+                          {filteredSuggestions.map((suggestion, index) => (
+                              <li
+                                  key={index}
+                                  onClick={() => handleSuggestionClick(suggestion)}
+                                  className="p-2 hover:bg-gray-200 cursor-pointer"
+                              ><span className="inline-flex">
+                                <div className="avatar mr-2">
+                                    <div className="w-8 rounded-full">
+                                        <img
+                                            src={suggestion.profilePicture}
+                                            alt="Tailwind-CSS-Avatar-component"/>
+                                    </div>
+                                </div>
+                                  {suggestion.first_name} {suggestion.last_name}</span>
+                              </li>
+                          ))}
+                      </ul>
+                  )}
+</>
+                   <button
                     className="bg-primary text-white text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
                     type="submit">
                       Comment
