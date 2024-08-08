@@ -322,6 +322,9 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 		v.Media = "https://s3.app.bhivecommunity.co.uk/media/" + v.Channelstring + "/" + v.ID.Hex() + ".webp"
 	}
 
+	//clean up post
+	v.Desc = strings.ReplaceAll(v.Desc, "inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-gray-600", "text-primary")
+
 	result, err := postCollection.InsertOne(context.Background(), v)
 	if err != nil {
 		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
@@ -336,6 +339,7 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 		n.UserID = element.ID.Hex()
 		n.Viewed = false
 		n.Channel = v.Channelstring
+		n.Date = time.Now()
 		_, err := notficationsCollection.InsertOne(context.Background(), n)
 		if err != nil {
 			http.Error(rw, "failed to insert notfication: "+err.Error(), http.StatusInternalServerError)
