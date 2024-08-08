@@ -838,7 +838,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                                                         className={classNames(
                                                           item.current
                                                             ? `text-indigo-600 bg-gray-200 dark:bg-zinc-800`
-                                                            : `text-gray-400 hover:text-white hover:text-indigo-600`,
+                                                            : `text-gray-400 hover:text-white hover:bg-indigo-600`,
                                                           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 '
                                                         )}
                                                       >

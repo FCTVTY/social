@@ -486,7 +486,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                             <div
                                 className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 p-3 mb-4 dark:text-white ">
                                 <img src={community && community.community?.logo}
-                                     className="sm:mx-auto h-20 py-1 dark:invert"/>
+                                     className="mx-auto h-20 py-1 dark:invert"/>
 
                                 <p className={`py-6`}>{community?.community?.desc}</p>
                                 <dl>

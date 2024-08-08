@@ -1020,16 +1020,23 @@ func GetProfile(rw http.ResponseWriter, r *http.Request) {
 	var profile bson.M
 
 	if !self {
+		var filter bson.M
+
 		objectID, err := primitive.ObjectIDFromHex(oid)
 		if err != nil {
-			http.Error(rw, "invalid post ID", http.StatusBadRequest)
-			return
+			// If it's not a valid ObjectID, use it as a handle
+			filter = bson.M{"handle": oid}
+		} else {
+			// If it's a valid ObjectID, use it as _id
+			filter = bson.M{"_id": objectID}
 		}
-		err = pprofileCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&profile)
+
+		err = pprofileCollection.FindOne(context.Background(), filter).Decode(&profile)
 		if err != nil {
 			http.Error(rw, "failed to fetch profile "+err.Error(), http.StatusInternalServerError)
 			return
 		}
+
 	}
 	if self {
 		err := pprofileCollection.FindOne(context.Background(), bson.M{"supertokensId": oid}).Decode(&profile)
