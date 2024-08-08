@@ -109,11 +109,12 @@ type PostLike struct {
 }
 
 type Notfication struct {
-	PostID  string `json:"postId"`
-	UserID  string `json:"userId"`
-	Viewed  bool   `json:"viewed"`
-	Channel string `json:"channel"`
-	Comment bool   `json:"comment"`
+	PostID  string    `json:"postId"`
+	UserID  string    `json:"userId"`
+	Viewed  bool      `json:"viewed"`
+	Channel string    `json:"channel"`
+	Comment bool      `json:"comment"`
+	Date    time.Time `json:"date"`
 }
 
 type Comment struct {

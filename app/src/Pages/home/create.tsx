@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import ReactQuill from "react-quill";
 import {LoadingButton} from "../../components/LoadingButton"; // will work
 import loadImage from 'blueimp-load-image';
+import {json} from "react-router-dom";
 
 
 interface CreateProps {
@@ -118,7 +119,7 @@ export default function Create({onSubmit, channel, profiles}: CreateProps) {
         const text = contentEditableRef.current.innerHTML;
         const words = text.split(' ');
         words.pop();
-        const newText = `${words.join(' ')} <span class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-gray-600">@${suggestion.first_name} ${suggestion.last_name}</span> `;
+        const newText = `${words.join(' ')} <a href="/profile/${suggestion.id}" class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-gray-600">${suggestion.first_name} ${suggestion.last_name}</span> `;
         setContent(newText);
         setPost(prevState => ({
             ...prevState,
@@ -152,6 +153,9 @@ export default function Create({onSubmit, channel, profiles}: CreateProps) {
             handleSuggestionClick(filteredSuggestions[0]);
         }
     };
+
+
+
     return (
         <>
             <form onSubmit={handleSubmit}
