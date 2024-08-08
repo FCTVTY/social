@@ -826,7 +826,7 @@ const ApplicationLayout: React.FC<Props> = ({children, host, channel, isChanelPa
                             <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
 
                                 <nav className="flex flex-1 flex-col mt-2">
-                                    <div className="text-xs  leading-6 text-gray-400 my-3">Channels</div>
+                                    <div className="text-xs  leading-6 text-gray-400 my-3">Spaces</div>
 
                                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                         <li>

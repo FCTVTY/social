@@ -207,7 +207,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                               'mb-5')}>
                                 <div className="mx-auto max-w-7xl py-0 sm:px-2">
                                     <div
-                                      className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl rounded-2xl sm:px-16">
+                                      className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl rounded-2xl sm:px-16 __welcome">
                                         <h2
                                           className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
 

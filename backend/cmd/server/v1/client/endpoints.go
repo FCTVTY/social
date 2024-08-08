@@ -748,14 +748,9 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 		"$set": bson.M{"viewed": true},
 	}
 
-	result, err := notficationsCollection.UpdateMany(context.Background(), filter, update)
+	_, err = notficationsCollection.UpdateMany(context.Background(), filter, update)
 	if err != nil {
 		http.Error(rw, "Failed to update notifications", http.StatusInternalServerError)
-		return
-	}
-
-	if result.MatchedCount == 0 {
-		http.Error(rw, "No notifications found to update", http.StatusNotFound)
 		return
 	}
 

@@ -156,7 +156,8 @@ export default function Comment({ onSubmit, post, supertokensId, profiles, chann
 
                         </div>
                         <label htmlFor="image-upload" className="cursor-pointer">
-                            <Button className="flex items-center mr-2" color="slate" variant="solid" type="submit">Leave
+                            <Button                             className={`my-2 flex items-center justify-center rounded-md py-3 font-medium text-white bg-primary hover:bg-gray-800 `}
+                                                                color="blue" variant="solid" type="submit">Leave
                                 Comment</Button>
 
 
