@@ -28,6 +28,7 @@ import (
 var SuperTokensConfig = supertokens.TypeInput{
 	Supertokens: &supertokens.ConnectionInfo{
 		ConnectionURI: "https://core.bhivecommunity.co.uk",
+		APIKey:        "813c8221ba50ceccb85bcab2e96cd0c4",
 	},
 	AppInfo: supertokens.AppInfo{
 		AppName:       "B:Hive Community",
