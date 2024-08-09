@@ -31,10 +31,11 @@ const PostItemLite = ({post, profile, lite}) => {
                             </div>
                         </div>
                     </a>
-                    <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
                     <a className='my-3' href={`/feed/${post.channel}/${post._id}`}>
                         <h2 dangerouslySetInnerHTML={{__html: post.desc}}></h2>
                     </a>
+                    <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
+
                     <div className="flex py-4 justify-between">
                         <div className="flex space-x-2">
                             <div className="flex space-x-1 items-center">
@@ -46,12 +47,13 @@ const PostItemLite = ({post, profile, lite}) => {
                     </div>
                     <dd className="mt-0.5 text-sm text-gray-500">
                         {post.tags.map(tag => (
-                            <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
+                          <a key={tag} href={`#${tag}`} className="mr-2">#{tag} </a>
                         ))}
                     </dd>
                     <a className="mt-0.5 text-sm text-gray-500" href={`/feed/${post.channel}/${post._id}`}>View all
                         comments</a>
-                    <dd className="mt-0.5 text-sm text-gray-500 ">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
+                    <dd
+                      className="mt-0.5 text-sm text-gray-500 ">{formatDistanceToNow(new Date(post.date), {addSuffix: true})}</dd>
                 </dl>
             </div>
             <div></div>

@@ -315,26 +315,31 @@ const PostItem = ({post, profile, lite, roles, supertokensId, profiles}) => {
                           </div>
                           <div className="ml-3">
                               {post.profile.verified && (
-                              <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip" data-tip="Verfied User">
-                                  {post.profile.first_name} {post.profile.last_name}
-                                <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2 tooltip" data-tip="Verified User"></BadgeCheck>
-                              </p>)}
+                                <p
+                                  className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip"
+                                  data-tip="Verfied User">
+                                    {post.profile.first_name} {post.profile.last_name}
+                                    <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2 tooltip"
+                                                data-tip="Verified User"></BadgeCheck>
+                                </p>)}
                               {!post.profile.verified && (
-                                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
-                                      {post.profile.first_name} {post.profile.last_name}
-                                  </p>)}
+                                <p
+                                  className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
+                                    {post.profile.first_name} {post.profile.last_name}
+                                </p>)}
                               <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View
                                   profile</p>
                           </div>
                       </div>
                   </a>
-                  <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
                   <a className='my-3 dark:text-white' href={`/feed/${post.channel}/${post._id}`}>
                       <h2 dangerouslySetInnerHTML={{__html: post.desc}}></h2>
 
                       <YouTubeEmbedsmall url={post.desc}/>
 
                   </a>
+                  <img className="mx-auto mt-2 rounded-md" src={post.media} alt=""/>
+
                   <div className="flex py-4 justify-between">
                       <div className="flex space-x-2">
                           <div className="flex space-x-1 items-center">
@@ -384,7 +389,7 @@ const PostItem = ({post, profile, lite, roles, supertokensId, profiles}) => {
           <div></div>
           <div className=" p-4">
 
-              <div className="flow-root mt-3">
+          <div className="flow-root mt-3">
                   <ul role="list" className="-mb-8">
                       {post && post.postComments.slice(-2).map((activityItem, activityItemIdx) => (
                         <li key={activityItem._id}>

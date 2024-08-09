@@ -124,7 +124,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
 
                         <div className="w-full mx-auto">
                             <img src={profile.coverPicture} alt="User Cover"
-                                 className="w-full object-cover  xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] xs:h-[9.5rem]"/>
+                                 className="w-full object-cover object-top  xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] xs:h-[9.5rem]"/>
 
                             <div className="w-full mx-auto flex justify-center">
                                 <img src={profile.profilePicture} alt="User Profile"
@@ -188,7 +188,8 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                         <div className="lg:w-1/2 sm:w-full ">
                             <div
                                 className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y">
-                                {profile.posts && profile.posts.filter(post => post.type !== "event").map(post => (
+                                {profile.posts && profile.posts.filter(post => post.type !== "event").sort((a, b) => new Date(b.date) - new Date(a.date))
+                                  .map(post => (
                                     <PostItemLite key={post._id} post={post} profile={profile} lite={true}/>
                                 ))}
                                 {
