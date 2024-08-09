@@ -73,7 +73,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
 
             const [postsResponse, adsResponse, profileResponse] = await Promise.all([
                 fetch(`${getApiDomain()}/community/posts?oid=${channel}&page=${page}`),
-                fetch(`${getApiDomain()}/ads/get`),
+                fetch(`${getApiDomain()}/data/get`),
                 fetch(`${getApiDomain()}/profile`)
             ]);
 
