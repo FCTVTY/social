@@ -159,12 +159,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
         security(community);
     }, [host, channel, community?.channels]);
 
-    const security = (community) => {
-        if(community?.channels?.length > 0){
-        if (!community?.channels?.some(ch => ch.id === channel)) {
-            window.location.href = '/error?code=10013&message=Looks like your trying to access a space thats not part of this community'
-            return;        }
-    }}
+    
     return (
 
         <>{isLoading && (
