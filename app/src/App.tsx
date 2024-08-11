@@ -244,7 +244,7 @@ function App() {
                     <Route path='/auth/reset-password' element={<PasswordReset></PasswordReset>}/>
 
                     <Route path="*" element={<SessionAuth><ApplicationLayout host={subdomain}>
-                        <Locked host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+                        <Feed host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
 
                 </Routes>
