@@ -12,7 +12,7 @@ export const VoucherPage: FC = () => {
 
   const fetchData = async () => {
     try {
-      const vouchersResponse = await axios.get<Ads[]>(`${getApiDomain()}/v1/ads/get`);
+      const vouchersResponse = await axios.get<Ads[]>(`${getApiDomain()}/v1/data/get`);
       setVouchers(vouchersResponse.data);
     } catch (error) {
       console.error(error);
