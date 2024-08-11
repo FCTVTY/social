@@ -155,11 +155,8 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
     {
         home = true;
     }
-    useEffect(() => {
-        security(community);
-    }, [host, channel, community?.channels]);
 
-    
+
     return (
 
         <>{isLoading && (
