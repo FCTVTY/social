@@ -11,6 +11,8 @@
     "i": "yarn install"
   },
   "dependencies": {
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/ios": "^6.1.2",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@headlessui/react": "^2.1.1",
     "@heroicons/react": "^2.1.3",

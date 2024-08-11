@@ -155,7 +155,16 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
     {
         home = true;
     }
+    useEffect(() => {
+        security(community);
+    }, [host, channel, community?.channels]);
 
+    const security = (community) => {
+        if(community?.channels?.length > 0){
+        if (!community?.channels?.some(ch => ch.id === channel)) {
+            window.location.href = '/error?code=10013&message=Looks like your trying to access a space thats not part of this community'
+            return;        }
+    }}
     return (
 
         <>{isLoading && (
@@ -373,7 +382,7 @@ export default function Feed({host, channel, roles, setRoles}: HomeProps) {
                             </ul>
                         </div>
 
-                        <div className="lg:col-span-2 lg:col-start-4">
+                        <div className="lg:col-span-2 lg:col-start-4 ">
 
                             <div
                               className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">

@@ -43,12 +43,11 @@ import Site from "./Pages/admin/site";
 import ChangeLogPage from "./Pages/ChangeLog/ChangeLogPage";
 import FAQ from "./Pages/home/FAQ";
 import PostBox from "./Pages/home/PostBox";
+import Locked from "./Pages/Chat/Chat";
 
 initSuperTokens();
 
 function App() {
-
-
 
 
     const [subdomain, setSubDomain] = useState("null");
@@ -65,15 +64,13 @@ function App() {
         if (arr.length > 0) {
             setSubDomain(arr[0]);
             console.log(arr[0])
-            console.log("using:"+host)
+            console.log("using:" + host)
         }
         console.log(host)
-        if(host === "localhost:5173")
-        {
-           // setSubDomain("neo-egvzkmsh")
-          setSubDomain("dev")
+        if (host === "localhost:5173") {
+            // setSubDomain("neo-egvzkmsh")
+            setSubDomain("dev")
         }
-
 
 
         // Parse the URL
@@ -92,8 +89,7 @@ function App() {
         setChannel(channelID)
         setPost(postID)
 
-        if(url.pathname.includes("event"))
-        {
+        if (url.pathname.includes("event")) {
             console.log("event page")
             const postID = pathnameParts[2];
             console.log('Post ID:', postID);
@@ -103,152 +99,161 @@ function App() {
     }, []);
 
 
-  const [progress, setProgress] = useState(false)
+    const [progress, setProgress] = useState(false)
 
 
-  return (
-      <SuperTokensWrapper>
-        <CustomSwitch>
-        <Routes>
-            <Route path="/login" element={<AuthLayout>
-<Login/>
-                </AuthLayout>}/>
+    return (
+        <SuperTokensWrapper>
+            <CustomSwitch>
+                <Routes>
+                    <Route path="/login" element={<AuthLayout>
+                        <Login/>
+                    </AuthLayout>}/>
 
-          <Route path="/test" element={<PostBox/>}></Route>
 
-            <Route path="/register" element={<AuthLayout>
-                <Register/>
-            </AuthLayout>}/>
+                    <Route path="/register" element={<AuthLayout>
+                        <Register/>
+                    </AuthLayout>}/>
 
-            <Route path="/feed/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel} isChanelPage={true}>
+                    <Route path="/feed/:ID" element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}
+                                                                                     isChanelPage={true}>
 
 
-                <Feed host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
+                        <Feed host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
-            <Route path="/feed/:ID/:post" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+                    <Route path="/feed/:ID/:post"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-                <PostView host={subdomain} post={post} /></ApplicationLayout> </SessionAuth>}/>
-            <Route path="/members/:ID"
-                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+                               <PostView host={subdomain} post={post}/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/members/:ID"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-                       <MembersPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
-            <Route path="/events/:ID"
-                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+                               <MembersPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
+                    <Route path="/events/:ID"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
-                       <EventsPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
-            <Route path="/event/:ID"
-                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
+                               <EventsPage host={subdomain}/></ApplicationLayout></SessionAuth>}/>
+                    <Route path="/event/:ID"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
 
+                               <EventPage host={subdomain} post={post}/></ApplicationLayout></SessionAuth>}/>
 
-                       <EventPage host={subdomain} post={post}/></ApplicationLayout></SessionAuth>}/>
 
+                    <Route path="/error"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-          <Route path="/Chat"
-                 element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <Locked host={subdomain}/>
+                           </ApplicationLayout></SessionAuth>}/>
 
-                   <Chat host={subdomain}/>
-                 </ApplicationLayout></SessionAuth>}/>
 
+                    <Route path="/profile/:id"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-            <Route path="/profile/:id"
-                   element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <ProfilePage host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
-                       <ProfilePage host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
+                    <Route path="/auth/deleteAccount"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-          <Route path="/auth/deleteAccount"
-                 element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <DeleteAccount host={subdomain}
+                                              profileid={channel}/></ApplicationLayout></SessionAuth>}/>
 
-                   <DeleteAccount host={subdomain} profileid={channel}/></ApplicationLayout></SessionAuth>}/>
+                    <Route path="/Onboarding" element={<SessionAuth>
 
-            <Route path="/Onboarding" element={ <SessionAuth>
 
+                        <Onboarding host={subdomain}/> </SessionAuth>}/>
 
-                <Onboarding host={subdomain}/> </SessionAuth>}/>
+                    <Route path="/Onboarding-2" element={<SessionAuth>
 
-            <Route path="/Onboarding-2" element={ <SessionAuth>
 
+                        <Onboarding2 host={subdomain}/> </SessionAuth>}/>
+                    <Route path="/Onboarding-3" element={<SessionAuth>
 
-                <Onboarding2 host={subdomain}/> </SessionAuth>}/>
-            <Route path="/Onboarding-3" element={ <SessionAuth>
 
+                        <Onboarding3 host={subdomain}/> </SessionAuth>}/>
+                    <Route path="/removepost/:id"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-                <Onboarding3 host={subdomain}/> </SessionAuth>}/>
-            <Route path="/removepost/:id" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <RemovePost host={subdomain} profileid={channel}/></ApplicationLayout> </SessionAuth>}/>
 
-                <RemovePost host={subdomain} profileid={channel}/></ApplicationLayout> </SessionAuth>}/>
 
+                    <Route path="/removeCourse/:id"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-            <Route path="/removeCourse/:id" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <RemoveCourse host={subdomain} profileid={channel}/></ApplicationLayout>
+                           </SessionAuth>}/>
 
-                <RemoveCourse host={subdomain} profileid={channel}/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/home" element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-            <Route path="/home" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                        <Home/></ApplicationLayout> </SessionAuth>}/>
 
-                <Home/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/settings" element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-            <Route path="/settings" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                        <Settings/></ApplicationLayout> </SessionAuth>}/>
 
-                <Settings/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/admin/site"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-            <Route path="/admin/site" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <Site host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/resources"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-                <Site host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
-          <Route path="/resources" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <ResourcesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-            <ResourcesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
+                    <Route path="/Academy" element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-          <Route path="/Academy" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                        <CoursesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-            <CoursesPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/Course/:ID"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-          <Route path="/Course/:ID" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <CoursePage host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
-            <CoursePage host={subdomain} channel={channel}/></ApplicationLayout> </SessionAuth>}/>
 
+                    <Route path="/changelog"
+                           element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-            <Route path="/changelog" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                               <ChangeLogPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-                       <ChangeLogPage host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path="/FAQ" element={<SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
-          <Route path="/FAQ" element={ <SessionAuth><ApplicationLayout host={subdomain} channel={channel}>
 
+                        <FAQ host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-            <FAQ host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
+                    <Route path='/auth' element={<AuthLayout>
+                        <Login/>
+                    </AuthLayout>}/>
 
-            <Route path='/auth' element={<AuthLayout>
-                <Login/>
-            </AuthLayout>}/>
+                    <Route path='/auth/reset-password' element={<PasswordReset></PasswordReset>}/>
 
-          <Route path='/auth/reset-password' element={<PasswordReset></PasswordReset>}/>
+                    <Route path="*" element={<SessionAuth><ApplicationLayout host={subdomain}>
+                        <Locked host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-            <Route path="*" element={ <SessionAuth><ApplicationLayout host={subdomain}>
-                <Feed host={subdomain}/></ApplicationLayout> </SessionAuth>}/>
 
-
-            </Routes>
-          </CustomSwitch>
-      </SuperTokensWrapper>
+                </Routes>
+            </CustomSwitch>
+        </SuperTokensWrapper>
 
     );
 }
+
 window.UserRoleClaim = UserRoles.UserRoleClaim;
 window.PermissionClaim = UserRoles.PermissionClaim;
 export default App;

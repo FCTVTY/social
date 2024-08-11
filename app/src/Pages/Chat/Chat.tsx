@@ -24,8 +24,8 @@ import axios from "axios";
 import {getApiDomain} from "../../lib/auth/supertokens";
 import moment from 'moment';
 import {date} from "zod";
-import {TicketPlus} from "lucide-react";
-import {json} from "react-router-dom";
+import {PickaxeIcon, ShieldX, TicketPlus} from "lucide-react";
+import {json, useSearchParams} from "react-router-dom";
 import EventItem from "./Eventitem";
 
 interface HomeProps {
@@ -36,288 +36,39 @@ interface HomeProps {
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
-export default function Chat({ host, channel ,roles, setRoles}: HomeProps) {
+export default function Locked({ host, channel ,roles, setRoles}: HomeProps) {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+
   return (
     <>
-      <div
-        className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 bg-white border-b bg-gray-200 mb-3">
-        <div className="min-w-0 flex-1">
 
-          <h2 className="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-            Chatroom
-          </h2>
+      <form name="myForm" id="myForm" className="flex min-h-screen items-center justify-center">
+        <div className="min-h-[20px] bg-gray-900  border border-gray-900 rounded-2xl shadow shadow-lg p-3 -mt-12">
+          <div
+            className="mx-4 sm:mx-24 md:mx-34 lg:mx-56 mx-auto  flex items-center space-y-4 py-16  text-white flex-col">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 className="lucide lucide-shield-x text-red-600">
+              <path
+                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+              <path d="m14.5 9.5-5 5"/>
+              <path d="m9.5 9.5 5 5"/>
+            </svg>
 
-        </div>
-        <div className="mt-5 flex lg:ml-4 lg:mt-0">
+            <h1 className="text-white text-2xl">Whoops.</h1>
 
 
-          <span className="sm:ml-3">
+            <p>
+              {searchParams.get("message")}            </p>
+            <code>Error: {searchParams.get("code")}
+            </code>
+          </div>
+        </div>
+      </form>
 
-                  </span>
 
-
-        </div>
-      </div>
-
-  <div className="h-dvh flex flex-col mt-[-0.8rem] w-full">
-    <div className="bg-gray-200 flex-1 max-h-[40vh] overflow-y-scroll">
-      <div className="px-4 py-2">
-        <div className="flex items-center mb-2">
-          <img
-            className="w-8 h-8 rounded-full mr-2"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-          <div className="font-medium">John Doe</div>
-        </div>
-        <div className="bg-white rounded-lg p-2 shadow mb-2 max-w-sm">
-          Hi, how can I help you?
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-sm">
-            Sure, I can help with that.
-          </div>
-          <img
-            className="w-8 h-8 rounded-full"
-            src="https://picsum.photos/50/50"
-            alt="User Avatar"
-          />
-        </div>
-      </div>
-    </div>
-    <div className="bg-gray-100 px-4 py-2 fixed bottom-0 w-full	">
-      <div className="flex items-center">
-        <input
-          className="w-full border rounded-full py-2 px-4 mr-2"
-          type="text"
-          placeholder="Type your message..."
-        />
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-full">
-          Send
-        </button>
-      </div>
-    </div>
-  </div>
     </>
-)
+  )
 };

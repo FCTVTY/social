@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "heroicons": "^2.1.5"
+    "heroicons": "^2.1.5",
+    "prettier": "^3.3.3"
   }
 }
