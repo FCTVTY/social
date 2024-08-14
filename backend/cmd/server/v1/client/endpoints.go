@@ -617,19 +617,16 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 
 	// Validate and retrieve community name from URL query parameters
 	data := bson.M{}
+	url := r.URL.Query().Get("name")
 
 	name := r.URL.Query().Get("oid")
 	if name != "" {
-		objectId, err := primitive.ObjectIDFromHex(name)
-		if err != nil {
-			http.Error(rw, "invalid object ID", http.StatusBadRequest)
-			return
-		}
-		data = bson.M{"channel": objectId, "visability": true}
+
+		data = bson.M{"channels.name": url, "communites.url": name, "visability": true}
 	}
 
 	host := r.URL.Query().Get("host")
-	if host != "" {
+	if host != "" && name == "" {
 		data = bson.M{"communites.url": host, "visability": true}
 	}
 	event := r.URL.Query().Get("event")
