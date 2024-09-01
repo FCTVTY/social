@@ -230,34 +230,40 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
             <div className="lg:col-span-3">
               <div className={classNames(home ? "" : "hidden", "mb-5")}>
                 <div className="mx-auto max-w-7xl py-0 sm:px-2">
-                  <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl rounded-2xl sm:px-16 __welcome">
-                    <h2 className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
-                      Welcome to the {community?.community?.name} B:Hive
-                      Community
-                    </h2>
-                    <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-                      {community?.community?.desc}
-                    </p>
-
-                    <svg
-                      viewBox="0 0 1024 1024"
-                      className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
-                      aria-hidden="true"
-                    >
-                      <circle
-                        cx={512}
-                        cy={512}
-                        r={512}
-                        fill="url(#827591b1-ce8c-4110-b064-7cb85a0b1217)"
-                        fillOpacity="0.7"
-                      />
-                      <defs>
-                        <radialGradient id="827591b1-ce8c-4110-b064-7cb85a0b1217">
-                          <stop stopColor="#7775D6" />
-                          <stop offset={1} stopColor="#E935C1" />
-                        </radialGradient>
-                      </defs>
-                    </svg>
+                  <div
+                    tabIndex={0}
+                    className="collapse collapse-arrow relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl rounded-2xl sm:px-16 __welcome"
+                  >
+                    <div className="collapse-title text-xl font-medium text-white">
+                      <h2 className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
+                        Welcome to the {community?.community?.name} B:Hive
+                        Community
+                      </h2>
+                    </div>
+                    <div className="collapse-content">
+                      <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
+                        {community?.community?.desc}
+                      </p>
+                      <svg
+                        viewBox="0 0 1024 1024"
+                        className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx={512}
+                          cy={512}
+                          r={512}
+                          fill="url(#827591b1-ce8c-4110-b064-7cb85a0b1217)"
+                          fillOpacity="0.7"
+                        />
+                        <defs>
+                          <radialGradient id="827591b1-ce8c-4110-b064-7cb85a0b1217">
+                            <stop stopColor="#7775D6" />
+                            <stop offset={1} stopColor="#E935C1" />
+                          </radialGradient>
+                        </defs>
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -326,7 +332,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                 <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
                   <Create
                     channel={
-                      community?.channels?.find((ch) => ch.name === channel).id
+                      community?.channels?.find(
+                        (ch) => ch.name === decodeURI(channel),
+                      ).id
                     }
                     profiles={community?.profiles}
                     onSubmit={handleRefresh}
@@ -353,20 +361,20 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     <dl className="mt-1 flex flex-grow flex-col justify-between">
                       <div className="group block flex-shrink-0">
                         <div className="flex items-center">
-                          <div className="rounded-full h-9 w-9 bg-gray-200" />
-                          <div className="ml-3 h-6 w-32 bg-gray-200 rounded-full" />
+                          <div className="rounded-full h-9 w-9 bg-gray-200 dark:bg-slate-800" />
+                          <div className="ml-3 h-6 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
                         </div>
-                        <div className="mx-auto mt-2 rounded-md h-48 w-full bg-gray-200" />
-                        <div className="my-3 h-48 w-full bg-gray-200" />
+                        <div className="mx-auto mt-2 rounded-md h-48 w-full bg-gray-200 dark:bg-slate-800" />
+                        <div className="my-3 h-48 w-full bg-gray-200 dark:bg-slate-800" />
                         <div className="flex py-4 justify-between">
                           <div className="flex space-x-2">
-                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 rounded-full"></div>
-                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 rounded-full"></div>
+                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-slate-800 rounded-full"></div>
+                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-slate-800 rounded-full"></div>
                           </div>
                         </div>
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
                       </div>
                     </dl>
                   </div>

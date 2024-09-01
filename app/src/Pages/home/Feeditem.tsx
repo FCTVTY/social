@@ -384,11 +384,10 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             className="my-3 dark:text-white"
             href={`/s/${post.channels.name}/${post._id}`}
           >
+            <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
             <h2 dangerouslySetInnerHTML={{ __html: post.desc }}></h2>
-
             <YouTubeEmbedsmall url={post.desc} />
           </a>
-          <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
 
           <div className="flex py-4 justify-between">
             <div className="flex space-x-2">

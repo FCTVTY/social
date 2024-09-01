@@ -19,14 +19,34 @@ export interface Channel {
   id: ObjectId;
   name: string;
   locked: boolean;
+  // Getter for the URLFriendly property
+  get URLFriendly(): string;
+  // Replace spaces with hyphens or any other preferred URL-friendly character
 }
+// Channel class implementing the interface with an additional getter for URLFriendly
+export class ChannelClass implements Channel {
+  id: ObjectId;
+  name: string;
+  locked: boolean;
+
+  // Getter for the URLFriendly property
+
+  url: string;
+
+  constructor(id: ObjectId, name: string, locked: boolean) {
+    this.id = id;
+    this.name = name;
+    this.locked = locked;
+  }
+}
+
 interface User {
   notjoined: boolean;
 }
 
 export interface CommunityCollection {
   community: Community;
-  channels: Channel[];
+  channels: ChannelClass[];
   user: User;
   profiles: Profile[];
 }
