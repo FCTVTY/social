@@ -135,6 +135,23 @@ func Communities(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func CommunityJoin(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+
+	// Validate and retrieve community name from URL query parameters
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(rw, "community name is required", http.StatusBadRequest)
+		return
+	}
+}
+
 func Community(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
@@ -167,11 +184,10 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 	}
 	collection.Community = community
 
-	//lets make sure user is part of the community .. if not lets join them
 	filter = bson.M{
-		"supertokensid": sessionContainer.GetUserID(),
+		"supertokensId": sessionContainer.GetUserID(),
 		"communities": bson.M{
-			"$ne": community.ID.Hex(), // $ne: not equal to stringObjectID
+			"$nin": []string{community.ID.Hex()}, // Use $nin (not in array) to check community membership
 		},
 	}
 
@@ -182,11 +198,21 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// Update the document
-	_, err = profileCollection.UpdateOne(context.Background(), filter, update)
+	// Perform the update operation
+	result, err := profileCollection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		log.Printf("Error updating user community: %v", err)
 		return
+	}
+
+	if result.MatchedCount == 0 {
+		log.Printf("No matching user found with supertokensid: %s or user already in the community.", sessionContainer.GetUserID())
+	} else {
+		log.Printf("User successfully added to the community: %s", community.ID.Hex())
+	}
+
+	if result.ModifiedCount == 0 {
+		log.Printf("User was already a member of the community or no modification needed.")
 	}
 
 	cursor, err := channelCollection.Find(context.Background(), bson.M{"parent": community.ID})

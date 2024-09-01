@@ -413,9 +413,13 @@ const ApplicationLayout: React.FC<Props> = ({
     if (community && community.channels) {
       console.log("loading" + channel);
       if (channel === undefined && isChanelPage) {
-        window.location.assign(
-          "/s/" + community.channels[0].id + "?loggedin=true",
-        );
+        axios
+          .post(`${getApiDomain()}/join?id=` + community.community?.id)
+          .then(
+            window.location.assign(
+              "/s/" + community.channels[0].id + "?loggedin=true",
+            ),
+          );
       }
 
       const currentUrl = window.location.pathname; // This gives you the path of the current URL
@@ -466,7 +470,6 @@ const ApplicationLayout: React.FC<Props> = ({
   // Get specific values from the query string
   const code = queryParams.get("code");
   const loggedin = queryParams.get("loggedin");
-
   useEffect(() => {
     themeChange(false);
 
@@ -790,7 +793,7 @@ const ApplicationLayout: React.FC<Props> = ({
         <>
           <div
             id="toast-loggedin"
-            className={`${loggedin == "true" ? "" : ""} fixed flex items-center max-w-xs p-4 z-[999999999] space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow top-5 right-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800`}
+            className={`${loggedin == "true" ? "" : "hidden"} fixed flex items-center max-w-xs p-4 z-[999999999] space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow top-5 right-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800`}
             role="alert"
           >
             <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">

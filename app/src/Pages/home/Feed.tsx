@@ -325,7 +325,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
                 <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
                   <Create
-                    channel={channel}
+                    channel={
+                      community?.channels?.find((ch) => ch.name === channel).id
+                    }
                     profiles={community?.profiles}
                     onSubmit={handleRefresh}
                   />
