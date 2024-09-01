@@ -90,7 +90,8 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
       setCommunity(communityData);
 
       if (!channel) {
-        window.location.href = "/s/" + communityData.channels[0].name;
+        window.location.href =
+          "/s/" + communityData.channels[0].name + "?loggedin=true";
         return;
       }
 

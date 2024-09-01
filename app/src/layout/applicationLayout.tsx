@@ -1,8 +1,21 @@
-import React, { Children, Fragment, useEffect, useRef, useState } from "react";
+import React, {
+  Children,
+  Component,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import LogoSquare from "../assets/logo-light.svg";
 import LogoSquareDark from "../assets/logo-dark.svg";
 import fk from "../assets/FK.svg";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import {
+  Combobox,
+  Dialog,
+  Disclosure,
+  Menu,
+  Transition,
+} from "@headlessui/react";
 import {
   Bars3Icon,
   BellIcon,
@@ -17,6 +30,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
+  ExclamationCircleIcon,
   ExclamationTriangleIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
@@ -52,6 +66,26 @@ import {
   BellRing,
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
+import {
+  Dismiss,
+  DismissInterface,
+  DismissOptions,
+  InstanceOptions,
+} from "flowbite";
+import {
+  ActionId,
+  ActionImpl,
+  KBarAnimator,
+  KBarPortal,
+  KBarPositioner,
+  KBarProvider,
+  KBarResults,
+  KBarSearch,
+  useKBar,
+  useMatches,
+} from "kbar";
+import KeyboardShortcut from "../hooks/keyboard";
+import { LifebuoyIcon, PencilSquareIcon } from "@heroicons/react/16/solid";
 
 interface NavigationItem {
   name: string;
@@ -379,7 +413,9 @@ const ApplicationLayout: React.FC<Props> = ({
     if (community && community.channels) {
       console.log("loading" + channel);
       if (channel === undefined && isChanelPage) {
-        window.location.assign("/s/" + community.channels[0].id);
+        window.location.assign(
+          "/s/" + community.channels[0].id + "?loggedin=true",
+        );
       }
 
       const currentUrl = window.location.pathname; // This gives you the path of the current URL
@@ -429,6 +465,7 @@ const ApplicationLayout: React.FC<Props> = ({
 
   // Get specific values from the query string
   const code = queryParams.get("code");
+  const loggedin = queryParams.get("loggedin");
 
   useEffect(() => {
     themeChange(false);
@@ -511,50 +548,301 @@ const ApplicationLayout: React.FC<Props> = ({
   const visibleTeams = teams.slice(0, 4);
   const hiddenTeams = teams.slice(4);
   const [isOpen, setIsOpen] = useState(false);
+  // target element that will be dismissed
+  const $targetEl: HTMLElement = document.getElementById("toast-loggedin");
 
+  // optional trigger element
+  const $triggerEl: HTMLElement = document.getElementById("toast-loggedin");
+
+  // options object
+  const options: DismissOptions = {
+    transition: "transition-opacity",
+    duration: 1000,
+    timing: "ease-out",
+
+    // callback functions
+    onHide: (context, targetEl) => {
+      console.log("element has been dismissed");
+      console.log(targetEl);
+    },
+  };
+
+  // instance options object
+  const instanceOptions: InstanceOptions = {
+    id: "targetElement",
+    override: true,
+  };
+
+  /*
+   * $targetEl (required)
+   * $triggerEl (optional)
+   * options (optional)
+   * instanceOptions (optional)
+   */
+  const dismiss: DismissInterface = new Dismiss(
+    $targetEl,
+    $triggerEl,
+    options,
+    instanceOptions,
+  );
+  //dismiss.hide();
+  function delayedGreeting() {
+    dismiss.hide();
+  }
+
+  // Set a timer to execute the delayedGreeting function after 2000 milliseconds
+  setTimeout(delayedGreeting, 2000);
+
+  const [query, setQuery] = useState("");
+  const [kopen, setKOpen] = useState(false);
+
+  const actions = [
+    {
+      id: 1,
+      name: "Text",
+      description: "Add freeform text with basic formatting options.",
+      url: "#",
+      color: "bg-indigo-500",
+      icon: PencilSquareIcon,
+    },
+  ];
+
+  const filteredItems =
+    query === ""
+      ? []
+      : navigation.filter((item) => {
+          return item.name.toLowerCase().includes(query.toLowerCase());
+        });
+  const handleShortcutTrigger = () => {
+    setKOpen(true);
+  };
   // @ts-ignore
   return (
     <>
+      <KeyboardShortcut onTrigger={handleShortcutTrigger} />
+      <Transition.Root
+        show={kopen}
+        as={Fragment}
+        afterLeave={() => setQuery("")}
+        appear
+      >
+        <Dialog as="div" className="relative z-[999999999]" onClose={setKOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+                <Combobox onChange={(item) => (window.location = item.url)}>
+                  <div className="relative">
+                    <MagnifyingGlassIcon
+                      className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                    <Combobox.Input
+                      className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                      placeholder="Search..."
+                      onChange={(event) => setQuery(event.target.value)}
+                    />
+                  </div>
+
+                  {filteredItems.length > 0 && (
+                    <Combobox.Options
+                      static
+                      className="max-h-96 scroll-py-3 overflow-y-auto p-3"
+                    >
+                      {filteredItems.map((item) => (
+                        <Combobox.Option
+                          key={item.id}
+                          value={item}
+                          className={({ active }) =>
+                            classNames(
+                              "flex cursor-default select-none rounded-xl p-3",
+                              active && "bg-gray-100",
+                            )
+                          }
+                        >
+                          {({ active }) => (
+                            <>
+                              <div
+                                className={classNames(
+                                  "flex h-10 w-10 flex-none items-center justify-center rounded-lg",
+                                  item.color,
+                                )}
+                              >
+                                <item.icon
+                                  className="h-6 w-6 text-white"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <div className="ml-4 flex-auto">
+                                <p
+                                  className={classNames(
+                                    "text-sm font-medium",
+                                    active ? "text-gray-900" : "text-gray-700",
+                                  )}
+                                >
+                                  {item.name}
+                                </p>
+                              </div>
+                            </>
+                          )}
+                        </Combobox.Option>
+                      ))}
+                    </Combobox.Options>
+                  )}
+                  {query === "?" && (
+                    <div className="px-6 py-14 text-center text-sm sm:px-14">
+                      <LifebuoyIcon
+                        className="mx-auto h-6 w-6 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <p className="mt-4 font-semibold text-gray-900">
+                        Help with searching
+                      </p>
+                      <p className="mt-2 text-gray-500">
+                        Use this tool to quickly search for users and projects
+                        across our entire platform. You can also use the search
+                        modifiers found in the footer below to limit the results
+                        to just users or projects.
+                      </p>
+                    </div>
+                  )}
+
+                  {query !== "" && filteredItems.length === 0 && (
+                    <div className="px-6 py-14 text-center text-sm sm:px-14">
+                      <ExclamationTriangleIcon
+                        className="mx-auto h-6 w-6 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <p className="mt-4 font-semibold text-gray-900">
+                        No results found
+                      </p>
+                      <p className="mt-2 text-gray-500">
+                        We couldn’t find anything with that term. Please try
+                        again.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap items-center bg-gray-50 px-4 py-2.5 text-xs text-gray-700">
+                    Type{" "}
+                    <kbd
+                      className={classNames(
+                        "mx-1 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold sm:mx-2",
+                        query.startsWith("#")
+                          ? "border-indigo-600 text-indigo-600"
+                          : "border-gray-400 text-gray-900",
+                      )}
+                    >
+                      #
+                    </kbd>{" "}
+                    <span className="sm:hidden">for spaces,</span>
+                    <span className="hidden sm:inline">to access spaces,</span>
+                    <kbd
+                      className={classNames(
+                        "mx-1 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold sm:mx-2",
+                        query.startsWith(">")
+                          ? "border-indigo-600 text-indigo-600"
+                          : "border-gray-400 text-gray-900",
+                      )}
+                    >
+                      &gt;
+                    </kbd>{" "}
+                    for users, and{" "}
+                    <kbd
+                      className={classNames(
+                        "mx-1 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold sm:mx-2",
+                        query === "?"
+                          ? "border-indigo-600 text-indigo-600"
+                          : "border-gray-400 text-gray-900",
+                      )}
+                    >
+                      ?
+                    </kbd>{" "}
+                    for help.
+                  </div>
+                </Combobox>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition.Root>
+
       {shouldRender && (
         <>
-          <div className="hidden fixed bottom-0 z-[999] isolate w-full flex items-center gap-x-6 overflow-hidden bg-red-500 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
-            <div
-              className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
-              aria-hidden="true"
-            ></div>
-
-            <div className="hidden  flex flex-wrap items-center gap-x-4 gap-y-2">
-              <p className="text-sm leading-6 text-white">
-                <strong className="font-semibold">
-                  Planned Maintenance Window
-                </strong>
-                <svg
-                  viewBox="0 0 2 2"
-                  className="mx-2 inline h-0.5 w-0.5 fill-current"
-                  aria-hidden="true"
-                >
-                  <circle cx={1} cy={1} r={1} />
-                </svg>
-                23:00 GTM 06/07/2024
-              </p>
-            </div>
-            <div className="flex flex-1 justify-end">
-              <button
-                type="button"
-                className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
+          <div
+            id="toast-loggedin"
+            className={`${loggedin == "true" ? "" : ""} fixed flex items-center max-w-xs p-4 z-[999999999] space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow top-5 right-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800`}
+            role="alert"
+          >
+            <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200">
+              <svg
+                className="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
               >
-                <span className="sr-only">Dismiss</span>
-                <XMarkIcon
-                  className="h-5 w-5 text-gray-900"
-                  aria-hidden="true"
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 11.917 9.724 16.5 19 7.5"
                 />
-              </button>
+              </svg>
+
+              <span className="sr-only">Check icon</span>
             </div>
+            <div className="ms-3 text-sm font-normal">Logged in</div>
+            <button
+              type="button"
+              className="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+              data-dismiss-target="#toast-loggedin"
+              aria-label="Close"
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
           </div>
 
           <Disclosure
             as="nav"
-            className="overscroll-none sticky top-0 z-50 bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-900"
+            className={`overscroll-none sticky top-0 z-50  ${community && community.community?.published ? "bg-white dark:bg-zinc-950" : "bg-white dark:bg-zinc-950"} border-b border-gray-200 dark:border-zinc-900`}
           >
             {({ open }) => (
               <>
@@ -1207,7 +1495,6 @@ const ApplicationLayout: React.FC<Props> = ({
           </form>
         </>
       )}
-
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
@@ -1331,5 +1618,133 @@ const ApplicationLayout: React.FC<Props> = ({
     </>
   );
 };
+function CommandBar() {
+  return (
+    <KBarPortal>
+      <KBarPositioner className="p-2 bg-gray-900/80 flex items-center">
+        <KBarAnimator className=" w-full w-max-[600px] overflow-hidden p-2 bg-white rounded-xl z-[999999999999]">
+          <KBarSearch className="flex px-4 w-full h-16 outline-none" />
+          <RenderResults />
+        </KBarAnimator>
+      </KBarPositioner>
+    </KBarPortal>
+  );
+}
+
+function CommandButton() {
+  const { query } = useKBar();
+  return (
+    <button
+      onClick={query.toggle}
+      className="flex items-center justify-center w-12 h-12 mr-4 bg-white border border-gray-200 rounded-lg dark:border dark:border-gray-700 dark:bg-gray-800 general-ring-state"
+    >
+      <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+          d="M14.333 1a2.667 2.667 0 0 0-2.666 2.667v10.666a2.667 2.667 0 1 0 2.666-2.666H3.667a2.667 2.667 0 1 0 2.666 2.666V3.667a2.667 2.667 0 1 0-2.666 2.666h10.666a2.667 2.667 0 0 0 0-5.333Z"
+        />
+      </svg>
+    </button>
+  );
+}
+
+function RenderResults() {
+  const { results, rootActionId } = useMatches();
+
+  return (
+    <KBarResults
+      items={results}
+      onRender={({ item, active }) =>
+        typeof item === "string" ? (
+          <div className="px-4 pt-4 pb-2 font-medium text-gray-400 uppercase ">
+            {item}
+          </div>
+        ) : (
+          <ResultItem
+            action={item}
+            active={active}
+            currentRootActionId={rootActionId}
+          />
+        )
+      }
+    />
+  );
+}
+
+const ResultItem = React.forwardRef(
+  (
+    {
+      action,
+      active,
+      currentRootActionId,
+    }: {
+      action: ActionImpl;
+      active: boolean;
+      currentRootActionId: ActionId;
+    },
+    ref: React.Ref<HTMLDivElement>,
+  ) => {
+    const ancestors = React.useMemo(() => {
+      if (!currentRootActionId) return action.ancestors;
+      const index = action.ancestors.findIndex(
+        (ancestor) => ancestor.id === currentRootActionId,
+      );
+      // +1 removes the currentRootAction; e.g.
+      // if we are on the "Set theme" parent action,
+      // the UI should not display "Set theme… > Dark"
+      // but rather just "Dark"
+      return action.ancestors.slice(index + 1);
+    }, [action.ancestors, currentRootActionId]);
+
+    return (
+      <div
+        ref={ref}
+        className={`${
+          active
+            ? "bg-blue-400  rounded-lg text-gray-100 "
+            : "transparent text-gray-500"
+        } 'rounded-lg px-4 py-2 flex items-center cursor-pointer justify-between `}
+      >
+        <div className="flex items-center gap-2 text-base">
+          {action.icon && action.icon}
+          <div className="flex flex-col">
+            <div>
+              {ancestors.length > 0 &&
+                ancestors.map((ancestor) => (
+                  <React.Fragment key={ancestor.id}>
+                    <span className="mr-4 opacity-50">{ancestor.name}</span>
+                    <span className="mr-4">&rsaquo;</span>
+                  </React.Fragment>
+                ))}
+              <span>{action.name}</span>
+            </div>
+            {action.subtitle && (
+              <span className="text-sm">{action.subtitle}</span>
+            )}
+          </div>
+        </div>
+        {action.shortcut?.length ? (
+          <div aria-hidden className="grid grid-flow-col gap-2">
+            {action.shortcut.map((sc) => (
+              <kbd
+                key={sc}
+                className={`${
+                  active
+                    ? "bg-white text-blue-400 "
+                    : "bg-gray-200 text-gray-500"
+                } ' px-3 py-2 flex rounded-md items-center cursor-pointer justify-between `}
+              >
+                {sc}
+              </kbd>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    );
+  },
+);
 
 export default ApplicationLayout;

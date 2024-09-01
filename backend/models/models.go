@@ -29,6 +29,7 @@ type Community struct {
 	Published bool               `json:"published"`
 	Menu      string             `json:"menu"`
 	MenuText  string             `json:"menutext"`
+	LandingBg string             `json:"landingBg"`
 }
 type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`

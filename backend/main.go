@@ -132,7 +132,15 @@ func main() {
 				return
 			}
 			if response.OK.DidUserAlreadyHaveRole {
-				fmt.Println("user has role")
+				response, err := userroles.RemoveUserRole("public", userId, "admin", nil)
+				if err != nil {
+					// TODO: Handle error
+					return
+				}
+				if response.UnknownRoleError != nil {
+					fmt.Println("role missing")
+					return
+				}
 			}
 		}
 		if parsedURL.Path == "/internal/god" {
@@ -162,7 +170,15 @@ func main() {
 				return
 			}
 			if response.OK.DidUserAlreadyHaveRole {
-				fmt.Println("user has role")
+				response, err := userroles.RemoveUserRole("public", userId, "moderator", nil)
+				if err != nil {
+					// TODO: Handle error
+					return
+				}
+				if response.UnknownRoleError != nil {
+					fmt.Println("role missing")
+					return
+				}
 			}
 		}
 		if parsedURL.Path == "/v1/user/roles" {

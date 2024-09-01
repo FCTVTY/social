@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import { SelectField, TextField } from "../../components/Fields";
 import { Link } from "react-router-dom";
-import logo from "../../assets/logo-light.svg";
+import logo from "../../assets/bob-badge.svg";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
@@ -10,12 +10,35 @@ import { Form, FormField, FormItem, FormMessage } from "../../components/form";
 import { Input } from "../../components/input";
 import { Alert, AlertDescription, AlertTitle } from "../../components/alert";
 import { emailPasswordSignIn } from "supertokens-web-js/lib/build/recipe/thirdpartyemailpassword";
+import { CommunityCollection } from "../../interfaces/interfaces";
+import axios from "axios";
+import { getApiDomain } from "../../lib/auth/supertokens";
 
-const Login: React.FC = () => {
+interface LoginProps {
+  host?: string;
+}
+export default function Login({ host }: LoginProps) {
   const [error, setError] = useState<string | undefined>(undefined);
   const [mode, setMode] = useState<"signin" | "signup" | "forgot_password">(
     "signin",
   );
+
+  const [community, setCommunity] = useState<Partial<CommunityCollection>>();
+
+  useEffect(() => {
+    fetchDetails();
+  }, [host]);
+
+  const fetchDetails = async () => {
+    try {
+      const response = await axios.get(
+        `${getApiDomain()}/community?name=${host}`,
+      );
+      setCommunity(response.data);
+    } catch (error) {
+      console.error("Error fetching community details:", error);
+    }
+  };
 
   const handleSetMode = (mode: "signin" | "signup" | "forgot_password") => {
     setMode(mode);
@@ -69,8 +92,12 @@ const Login: React.FC = () => {
   return (
     <>
       <div className="flex flex-col">
-        <Link to="/" aria-label="Feed">
-          <img src={logo} className="h-10 w-auto" alt="Logo" />
+        <Link to="https://bhivecommunity.co.uk" aria-label="Feed">
+          <img
+            src={community?.community?.logo}
+            className="h-10 w-auto"
+            alt="Logo"
+          />
         </Link>
         <div className="mt-20">
           <h2 className="text-lg font-semibold text-gray-900">
@@ -142,6 +169,4 @@ const Login: React.FC = () => {
       </Form>
     </>
   );
-};
-
-export default Login;
+}

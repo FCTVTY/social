@@ -55,10 +55,9 @@ function App() {
   const [communityFound, setCommunity] = useState("null");
   const [channel, setChannel] = useState("null");
   const [post, setPost] = useState("null");
+  const [host, setHost] = useState(window.location.host); // Use state for host
 
   useEffect(() => {
-    const host = window.location.host; // gets the full domain of the app
-
     const arr = host.split(".").slice(0, host.includes("local") ? -1 : -2);
     if (arr.length > 0) {
       setSubDomain(arr[0]);
@@ -69,6 +68,7 @@ function App() {
     if (host === "localhost:5173") {
       // setSubDomain("neo-egvzkmsh")
       setSubDomain("dev");
+      setHost("dev");
     }
 
     // Parse the URL
@@ -80,6 +80,7 @@ function App() {
     const channelID = pathnameParts[2];
     const postID = pathnameParts[3]; // This may be undefined if the URL structure changes
 
+    console.info("host:", host);
     console.log("Channel ID:", channelID);
     console.log("Post ID:", postID);
 
@@ -103,17 +104,24 @@ function App() {
           <Route
             path="/login"
             element={
-              <AuthLayout>
-                <Login />
+              <AuthLayout host={subdomain}>
+                <Login host={subdomain} />
               </AuthLayout>
             }
           />
-
+          <Route
+            path="/auth"
+            element={
+              <AuthLayout host={subdomain}>
+                <Login host={subdomain} />
+              </AuthLayout>
+            }
+          />
           <Route
             path="/register"
             element={
-              <AuthLayout>
-                <Register />
+              <AuthLayout host={subdomain}>
+                <Register host={subdomain} />
               </AuthLayout>
             }
           />
@@ -338,15 +346,6 @@ function App() {
                   <FAQ host={subdomain} />
                 </ApplicationLayout>{" "}
               </SessionAuth>
-            }
-          />
-
-          <Route
-            path="/auth"
-            element={
-              <AuthLayout>
-                <Login />
-              </AuthLayout>
             }
           />
 
