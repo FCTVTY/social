@@ -3,6 +3,8 @@ import Button from "../../components/Button";
 import { SelectField, TextField } from "../../components/Fields";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo-light.svg";
+import mlogo from '../../assets/logo-light.svg';
+
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
@@ -113,7 +115,7 @@ const Register: React.FC = ({ host }: RegisterProps) => {
       <div className="flex flex-col">
         <Link to="/" aria-label="Feed">
           <img
-            src={community?.community?.logo}
+            src={community?.community?.logo || mlogo}
             className="h-10 w-auto"
             alt="Logo"
           />

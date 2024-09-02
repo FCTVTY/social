@@ -3,6 +3,8 @@ import Button from "../../components/Button";
 import { SelectField, TextField } from "../../components/Fields";
 import { Link } from "react-router-dom";
 import logo from "../../assets/bob-badge.svg";
+import mlogo from '../../assets/logo-light.svg';
+
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
@@ -94,7 +96,7 @@ export default function Login({ host }: LoginProps) {
       <div className="flex flex-col">
         <Link to="https://bhivecommunity.co.uk" aria-label="Feed">
           <img
-            src={community?.community?.logo}
+            src={community?.community?.logo || mlogo}
             className="h-10 w-auto"
             alt="Logo"
           />
