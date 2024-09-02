@@ -1,4 +1,4 @@
-name: Deploy to Custom Docker Registry
+name: Deploy to Docker Hub and Server
 
 on:
   push:
@@ -14,24 +14,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Login to Custom Docker Registry
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          registry: http://51.68.205.123:33102
-          username: ${{ secrets.CUSTOM_REGISTRY_USERNAME }}
-          password: ${{ secrets.CUSTOM_REGISTRY_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push app Docker image
         run: |
-          cd app && docker build -t 51.68.205.123:33102/bhive-app .
-          docker push 51.68.205.123:33102/bhive-app
-
+          cd app && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-app .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bhive-app
       - name: Build and push backend Docker image
         run: |
-          cd backend && docker build -t 51.68.205.123:33102/bhive-backend .
-          docker push 51.68.205.123:33102/bhive-backend
-
+          cd backend && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-backend .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bhive-backend
       - name: Build and push admin Docker image
         run: |
-          cd admin && docker build -t 51.68.205.123:33102/bhive-admin .
-          docker push 51.68.205.123:33102/bhive-admin
+          cd admin && docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bhive-admin .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/bhive-admin
