@@ -395,7 +395,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 {!post.profile.verified && (
                   <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip">
                     {post.profile.first_name} {post.profile.last_name}{" "}
-                    {!isCakeDay && (
+                    {isCakeDay && (
                       <CakeSlice
                         className="h-5 mx-1 dark:text-yellow-300 text-indigo-400 tooltip"
                         data-tip="Community Anniversary"
