@@ -144,7 +144,10 @@ export default function PostView({ host, channel, post }: HomeProps) {
                   <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow max-w-7xl">
                     <div className="flex flex-1 flex-col p-3">
                       <dl className="mt-1 flex flex-grow flex-col justify-between">
-                        <a href="#" className="group block flex-shrink-0">
+                        <a
+                          href={`/profile/${ppost.profile.handle || ppost.profile._id}`}
+                          className="group block flex-shrink-0"
+                        >
                           <div className="flex items-center">
                             <div>
                               <img

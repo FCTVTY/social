@@ -7,7 +7,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/16/solid";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, CakeSlice } from "lucide-react";
 import Comment from "./comment";
 
 interface PostItemProps {
@@ -199,6 +199,23 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
       handleSuggestionClick(filteredSuggestions[0]);
     }
   };
+
+  const checkCakeDay = (timeJoined: string): boolean => {
+    const joinDate = new Date(timeJoined);
+    const today = new Date();
+
+    // Create a date object for today with the same month and day as joinDate
+    const cakeDayDate = new Date(
+      today.getFullYear(),
+      joinDate.getMonth(),
+      joinDate.getDate(),
+    );
+
+    // Check if the cake day date is today
+    return today.toDateString() === cakeDayDate.toDateString();
+  };
+  const isCakeDay = checkCakeDay(profile?.timeJoined);
+
   return (
     <li
       key={post._id}
@@ -363,6 +380,12 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                     data-tip="Verfied User"
                   >
                     {post.profile.first_name} {post.profile.last_name}
+                    {isCakeDay && (
+                      <CakeSlice
+                        className="h-5 mx-1 dark:text-yellow-300 text-indigo-400 tooltip"
+                        data-tip="Community Anniversary"
+                      />
+                    )}
                     <BadgeCheck
                       className="text-indigo-400 h-5 w-5 ml-2 tooltip"
                       data-tip="Verified User"
@@ -370,8 +393,14 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   </p>
                 )}
                 {!post.profile.verified && (
-                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
-                    {post.profile.first_name} {post.profile.last_name}
+                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip">
+                    {post.profile.first_name} {post.profile.last_name}{" "}
+                    {!isCakeDay && (
+                      <CakeSlice
+                        className="h-5 mx-1 dark:text-yellow-300 text-indigo-400 tooltip"
+                        data-tip="Community Anniversary"
+                      />
+                    )}
                   </p>
                 )}
                 <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">

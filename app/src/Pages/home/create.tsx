@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Button from "../../components/Button";
 import { getApiDomain } from "../../lib/auth/supertokens";
@@ -9,6 +9,13 @@ import ReactQuill from "react-quill";
 import { LoadingButton } from "../../components/LoadingButton"; // will work
 import loadImage from "blueimp-load-image";
 import { json } from "react-router-dom";
+import { Editor } from "@tiptap/core";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import { PlusIcon } from "lucide-react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 interface CreateProps {
   onSubmit: () => void;
@@ -155,6 +162,29 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
     }
   };
 
+  const HandleBG = (colour, custom) => {
+    var newText =
+      '<div  class="flex h-[200px] sm:h-[50vh] rounded-xl items-center justify-center ' +
+      colour +
+      '" style="' +
+      custom +
+      '">\n' +
+      '      <div class="text-3xl text-white/50 text-center">Whats on your mind?</div>\n' +
+      "  </div>";
+    setContent(newText);
+    setPost((prevState) => ({
+      ...prevState,
+      desc: newText,
+    }));
+    setTimeout(() => {
+      contentEditableRef.current.innerHTML = newText;
+      //placeCaretAtEnd(contentEditableRef.current);
+    }, 0);
+  };
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
   return (
     <>
       <form
@@ -232,27 +262,120 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
                   <polyline points="21 15 16 10 5 21"></polyline>
                 </svg>
               </span>
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
             </label>
           </div>
-          <label htmlFor="image-upload" className="cursor-pointer">
+          <div className="inline-flex rounded-md shadow-sm">
             <LoadingButton
               type="submit"
-              size="sm"
-              variant="default"
-              className={`my-2 flex items-center justify-center rounded-md py-3 font-medium text-white bg-gray-950 hover:bg-gray-800 `}
+              variant="ghost"
+              className=" py-3 font-medium rounded-r-none text-white bg-gray-950 hover:bg-gray-800 bg-primary"
               loading={loading}
             >
               {" "}
-              Upload
+              Create
             </LoadingButton>
-            <input
-              type="file"
-              id="image-upload"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={handleImageChange}
-            />
-          </label>
+            <Menu as="div" className="relative -ml-px block">
+              <Menu.Button className="relative inline-flex items-center rounded-r-md bg-primary px-2 py-2 text-white   hover:bg-gray-50 hover:text-black focus:z-10">
+                <span className="sr-only">Open options</span>
+                <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+              </Menu.Button>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute right-0 z-10 -mr-1 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    <Menu.Item>
+                      <a
+                        href="#"
+                        onClick={() => HandleBG("bg-gray-800", "")}
+                        className={classNames(
+                          "text-gray-700 hover:bg-gray-200",
+                          "block px-4 py-2 text-sm inline-flex w-full",
+                        )}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="size-6 text-gray-800"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm14.25 6a.75.75 0 0 1-.22.53l-2.25 2.25a.75.75 0 1 1-1.06-1.06L15.44 12l-1.72-1.72a.75.75 0 1 1 1.06-1.06l2.25 2.25c.141.14.22.331.22.53Zm-10.28-.53a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 1 0 1.06-1.06L8.56 12l1.72-1.72a.75.75 0 1 0-1.06-1.06l-2.25 2.25Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Dark Background
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <a
+                        href="#"
+                        onClick={() => HandleBG("bg-indigo-800", "")}
+                        className={classNames(
+                          "text-gray-700",
+                          "text-gray-700 hover:bg-gray-200",
+                          "block px-4 py-2 text-sm inline-flex w-full",
+                        )}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="size-6 text-indigo-800"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm14.25 6a.75.75 0 0 1-.22.53l-2.25 2.25a.75.75 0 1 1-1.06-1.06L15.44 12l-1.72-1.72a.75.75 0 1 1 1.06-1.06l2.25 2.25c.141.14.22.331.22.53Zm-10.28-.53a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 1 0 1.06-1.06L8.56 12l1.72-1.72a.75.75 0 1 0-1.06-1.06l-2.25 2.25Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Blue Background
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <a
+                        href="#"
+                        onClick={() => HandleBG("bg-pink-400", "")}
+                        className={classNames(
+                          "text-gray-700",
+                          "text-gray-700 hover:bg-gray-200",
+                          "block px-4 py-2 text-sm inline-flex w-full",
+                        )}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="size-6 text-pink-400"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm14.25 6a.75.75 0 0 1-.22.53l-2.25 2.25a.75.75 0 1 1-1.06-1.06L15.44 12l-1.72-1.72a.75.75 0 1 1 1.06-1.06l2.25 2.25c.141.14.22.331.22.53Zm-10.28-.53a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 1 0 1.06-1.06L8.56 12l1.72-1.72a.75.75 0 1 0-1.06-1.06l-2.25 2.25Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Pink Background
+                      </a>
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
         </footer>
       </form>
 

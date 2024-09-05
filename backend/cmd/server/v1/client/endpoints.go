@@ -1081,7 +1081,7 @@ func GetProfile(rw http.ResponseWriter, r *http.Request) {
 
 	// The creationTime is in milliseconds since epoch, you may need to convert it to a readable date format
 	profile["timeJoined"] = userInfo.TimeJoined
-
+	profile["commentCount"], _ = commentCollection.CountDocuments(context.Background(), bson.M{"userId": profile["supertokensId"]})
 	// Encode post as JSON and write response
 	rw.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(rw).Encode(profile)
