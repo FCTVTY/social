@@ -109,6 +109,7 @@ export interface PEvent extends PPosts {
 }
 
 export interface Profile {
+  timeJoined: string;
   status: string;
   deleted: boolean;
   bio: string;

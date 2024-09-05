@@ -1074,9 +1074,17 @@ func GetProfile(rw http.ResponseWriter, r *http.Request) {
 		profile["me"] = true
 	}
 
+	userInfo, err := emailpassword.GetUserByID(profile["supertokensId"].(string))
+	if err != nil {
+		fmt.Errorf(err.Error())
+	}
+
+	// The creationTime is in milliseconds since epoch, you may need to convert it to a readable date format
+	profile["timeJoined"] = userInfo.TimeJoined
+
 	// Encode post as JSON and write response
 	rw.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(rw).Encode(profile)
+	err = json.NewEncoder(rw).Encode(profile)
 	if err != nil {
 		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
 		return

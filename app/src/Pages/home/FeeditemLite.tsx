@@ -12,7 +12,7 @@ const PostItemLite = ({ post, profile, lite }) => {
   return (
     <li
       key={post._id}
-      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white shadow shadow-2xl max-w-4xl"
+      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow shadow-2xl max-w-4xl"
     >
       <div className="flex flex-1 flex-col p-3">
         <dl className="mt-1 flex flex-grow flex-col justify-between">
@@ -29,7 +29,7 @@ const PostItemLite = ({ post, profile, lite }) => {
                 />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
                   {profile.first_name} {profile.last_name}
                 </p>
                 <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
@@ -39,9 +39,12 @@ const PostItemLite = ({ post, profile, lite }) => {
             </div>
           </a>
           <a className="my-3" href={`/s/${post.channel}/${post._id}`}>
-            <h2 dangerouslySetInnerHTML={{ __html: post.desc }}></h2>
+            <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
+            <h2
+              className="dark:!text-white"
+              dangerouslySetInnerHTML={{ __html: post.desc }}
+            ></h2>
           </a>
-          <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
 
           <div className="flex py-4 justify-between">
             <div className="flex space-x-2">
