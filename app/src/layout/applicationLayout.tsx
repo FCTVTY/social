@@ -183,7 +183,7 @@ function Notfications() {
             {notifications &&
               notifications.map((notification) => (
                 <a
-                  href={`/feed/${notification.channel}/${notification.postid}`}
+                  href={`/s/${notification.channel}/${notification.postid}`}
                   key={notification._id}
                   className="my-0.5 flex cursor-pointer items-center gap-3 rounded-box p-1.5 transition-all hover:bg-base-content/5 active:scale-[.98]"
                 >
