@@ -125,6 +125,7 @@ export interface Profile {
   username: string;
   me: boolean;
   posts: PPosts[];
+  communitesFull: Community[];
 }
 export interface PostLike {
   _id: string;

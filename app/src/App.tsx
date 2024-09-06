@@ -67,8 +67,8 @@ function App() {
     console.log(host);
     if (host === "localhost:5173") {
       // setSubDomain("neo-egvzkmsh")
-      setSubDomain("dev");
-      setHost("dev");
+      setSubDomain("kraken");
+      setHost("kraken");
     }
 
     // Parse the URL

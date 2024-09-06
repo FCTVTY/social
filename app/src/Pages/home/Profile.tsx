@@ -256,20 +256,24 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
               <div className="lg:w-1/2 sm:w-full">
                 <div className="bg-white dark:bg-zinc-900 dark:border-zinc-800 shadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">About</h2>
-                  <p className="text-gray-700 dark:text-white">{profile.bio}</p>
+                  <p
+                    className="text-gray-700 dark:text-white"
+                    dangerouslySetInnerHTML={{ __html: profile.bio }}
+                  ></p>
                 </div>
-                <div className="hidden bg-white shadow-md rounded-lg p-4 mb-4">
+                <div className=" bg-white dark:bg-zinc-900  shadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">Communities</h2>
                   <div className="flex flex-wrap">
                     {/* Example Friends */}
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <img
-                        key={i}
-                        src={`https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&h=130`}
-                        alt={`COMMUNITY ${i + 1}`}
-                        className="w-12 h-12 rounded-full border-2 border-white m-1"
-                      />
-                    ))}
+                    {profile.communitesFull &&
+                      profile.communitesFull.map((c) => (
+                        <img
+                          key={c.id}
+                          src={c.logo}
+                          alt={`COMMUNITY`}
+                          className=" h-16 rounded-xl border-2 border-white dark:border-zinc-900 m-2 p-2 object-contain"
+                        />
+                      ))}
                   </div>
                 </div>
               </div>
