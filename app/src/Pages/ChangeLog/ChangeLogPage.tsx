@@ -31,19 +31,15 @@ export default function ChangeLogPage({ host, channel }: HomeProps) {
       <div className=" px-6 lg:px-8 pb-10 dark:text-white">
         <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700 dark:text-white">
           <p className="text-base font-semibold leading-7 text-indigo-600 dark:text-white">
-            B:Hive v1.0.3 <div className="badge badge-accent">Improvements</div>
-            <div className="badge badge-secondary">Wednesday 14th Aug</div>
+            B:Hive v1.0.3
+            <div className="ml-2 badge badge-secondary">Friday 6th Sep</div>
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
             General Improvements{" "}
           </h1>
           <br />
           <p>
-            <p className="text-2xl mt-2 text-primary">
-              Friday, 6th September , 2024
-              <br />
-              <br /> New ✨
-            </p>
+            <p className="text-2xl mt-2 text-primary">New ✨</p>
             <ul>
               <li>
                 Count on Profiles &amp; Levels - Profiles now show what level
