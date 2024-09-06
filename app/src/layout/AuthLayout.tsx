@@ -69,7 +69,7 @@ const AuthLayout: React.FC<Props> = ({ children, host }) => {
             <img
               className="absolute inset-0 h-full w-full object-cover"
               src={
-                community.community?.landingBg ||
+                community?.community?.landingBg ||
                 "https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg"
               }
               alt="Community Background"
