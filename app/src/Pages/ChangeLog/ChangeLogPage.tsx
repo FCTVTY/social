@@ -27,6 +27,67 @@ export default function ChangeLogPage({ host, channel }: HomeProps) {
           </h2>
         </div>
       </div>
+
+      <div className=" px-6 lg:px-8 pb-10 dark:text-white">
+        <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700 dark:text-white">
+          <p className="text-base font-semibold leading-7 text-indigo-600 dark:text-white">
+            B:Hive v1.0.3 <div className="badge badge-accent">Improvements</div>
+            <div className="badge badge-secondary">Wednesday 14th Aug</div>
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+            General Improvements{" "}
+          </h1>
+          <br />
+          <p>
+            <p className="text-2xl mt-2 text-primary">
+              Friday, 6th September , 2024
+              <br />
+              <br /> New ✨
+            </p>
+            <ul>
+              <li>
+                Count on Profiles &amp; Levels - Profiles now show what level
+                your at based on comments/post creations
+              </li>
+              <li>
+                Cake day - Shows your birthday on the community (when you
+                joined)
+              </li>
+              <li>
+                Joined date - Shows how long users has been a part of the
+                communtiy
+              </li>
+              <li>ability to crop your cover photo on the onboarding page</li>
+              <li>
+                ctrl/cmd + k - this will open a dialog to allow you to search
+                for spaces
+              </li>
+              <li>
+                posts can have a custom background (black,blue,pink - more to
+                come) to allow some posts to stand out&nbsp;
+              </li>
+            </ul>
+            <h2 className="text-2xl mt-2 text-primary">Improvements 🙌</h2>
+            <ul>
+              <li>
+                Member page has had an improvement to show whos a moderator
+                &amp; also a list of all members
+              </li>
+              <li>General speed improvements</li>
+              <li>communites now have logos/backdrops on the login page</li>
+            </ul>
+            <p>&nbsp;</p>
+            <p className="text-2xl mt-2 text-primary">Bug Fixes 🐛</p>
+            <ul>
+              <li>
+                Fixed bug issue on events page not showing up correctly on a few
+                communities
+              </li>
+            </ul>
+          </p>
+        </div>
+      </div>
+
       <div className=" px-6 lg:px-8 pb-10 dark:text-white">
         <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700 dark:text-white">
           <p className="text-base font-semibold leading-7 text-indigo-600 dark:text-white">
