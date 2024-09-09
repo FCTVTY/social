@@ -182,10 +182,12 @@ func UpdateMeta(rw http.ResponseWriter, r *http.Request) {
 		"supertokensId": sessionContainer.GetUserID(),
 	}
 
-	// Define the update operation
+	// Define the update operation with $set
 	update := bson.M{
-		"first_name": v.FirstName,
-		"last_name":  v.LastName,
+		"$set": bson.M{
+			"first_name": v.FirstName,
+			"last_name":  v.LastName,
+		},
 	}
 
 	// Perform the update operation
