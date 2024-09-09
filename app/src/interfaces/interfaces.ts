@@ -108,7 +108,12 @@ export interface PEvent extends PPosts {
   logo: string;
   eventDetails: EventDetails;
 }
+export interface Meta {
 
+  first_name: string;
+  last_name: string;
+
+}
 export interface Profile {
   location: any;
   commentCount: any;

@@ -12,8 +12,9 @@
 package models
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Community struct {
@@ -74,7 +75,10 @@ type PPosts struct {
 	Userid          string    `json:"userid"`
 	Visability      bool      `json:"visability"`
 }
-
+type Meta struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+}
 type Profile struct {
 	ID             primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Email          string             `json:"email"`

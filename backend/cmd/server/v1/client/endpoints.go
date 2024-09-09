@@ -18,8 +18,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/credentials"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -30,6 +28,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 
 	"github.com/chai2010/webp"
 	"github.com/pkg/errors"
@@ -148,6 +149,54 @@ func CommunityJoin(rw http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
 		http.Error(rw, "community name is required", http.StatusBadRequest)
+		return
+	}
+}
+
+func UpdateMeta(rw http.ResponseWriter, r *http.Request) {
+
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+	var v models.Meta
+
+	// We decode our body request params
+	err := json.NewDecoder(r.Body).Decode(&v)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+	_, err = usermetadata.UpdateUserMetadata(sessionContainer.GetUserID(), map[string]interface{}{
+		"first_name": v.FirstName,
+		"last_name":  v.LastName,
+		"roles":      []string{"user"},
+	})
+	if err != nil {
+		log.Printf("Error updating user meta: %v", err)
+		return
+	}
+
+	filter := bson.M{
+		"supertokensId": sessionContainer.GetUserID(),
+	}
+
+	// Define the update operation
+	update := bson.M{
+		"first_name": v.FirstName,
+		"last_name":  v.LastName,
+	}
+
+	// Perform the update operation
+	result, err := profileCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		log.Printf("Error updating user Profile: %v", err)
+		return
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(result); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
 		return
 	}
 }
