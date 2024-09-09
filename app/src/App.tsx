@@ -47,6 +47,8 @@ import ChangeLogPage from "./Pages/ChangeLog/ChangeLogPage";
 import FAQ from "./Pages/home/FAQ";
 import PostBox from "./Pages/home/PostBox";
 import Locked from "./Pages/Chat/Chat";
+import Recover from "./Pages/auth/Recover";
+import Landing from "./Pages/home/Landing";
 
 initSuperTokens();
 
@@ -67,8 +69,8 @@ function App() {
     console.log(host);
     if (host === "localhost:5173") {
       // setSubDomain("neo-egvzkmsh")
-      setSubDomain("kraken");
-      setHost("kraken");
+      setSubDomain("sc");
+      setHost("sc");
     }
 
     // Parse the URL
@@ -122,6 +124,22 @@ function App() {
             element={
               <AuthLayout host={subdomain}>
                 <Register host={subdomain} />
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/auth/recover"
+            element={
+              <AuthLayout host={subdomain}>
+                <Recover host={subdomain} />{" "}
+              </AuthLayout>
+            }
+          />
+          <Route
+            path="/auth/reset-password"
+            element={
+              <AuthLayout host={subdomain}>
+                <PasswordReset host={subdomain} />{" "}
               </AuthLayout>
             }
           />
@@ -283,7 +301,14 @@ function App() {
               </SessionAuth>
             }
           />
-
+          <Route
+            path="/Landing"
+            element={
+              <SessionAuth>
+                <Landing />
+              </SessionAuth>
+            }
+          />
           <Route
             path="/admin/site"
             element={
@@ -347,11 +372,6 @@ function App() {
                 </ApplicationLayout>{" "}
               </SessionAuth>
             }
-          />
-
-          <Route
-            path="/auth/reset-password"
-            element={<PasswordReset></PasswordReset>}
           />
 
           <Route

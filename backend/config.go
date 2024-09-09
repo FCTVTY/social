@@ -33,7 +33,7 @@ var SuperTokensConfig = supertokens.TypeInput{
 	AppInfo: supertokens.AppInfo{
 		AppName:       "B:Hive Community",
 		APIDomain:     "https://sdk.bhivecommunity.co.uk",
-		WebsiteDomain: "https://app.bhivecommunity.co.uk",
+		WebsiteDomain: "https://auth.app.bhivecommunity.co.uk",
 	},
 	RecipeList: []supertokens.Recipe{
 		userroles.Init(nil),

@@ -11,6 +11,7 @@ import PostItemLite from "./FeeditemLite";
 import {
   BadgeCheck,
   CakeIcon,
+  LockIcon,
   MessageCircle,
   PenTool,
   ScrollText,
@@ -190,7 +191,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                   </h1>
 
                   <p className="w-full text-gray-700 dark:text-gray-400 text-md text-pretty sm:text-center xs:text-justify">
-                    {profile.status} {isCakeDay && <p>🎂 Happy Cake Day! 🎂</p>}
+                    {profile.status} {isCakeDay && <p>🎂 Happy Cake Day! 🎂</p>}{" "}
                     <div className="bg-white dark:bg-zinc-900 mt-6 -mb-20">
                       <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-4">

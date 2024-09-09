@@ -107,7 +107,7 @@ export default function CoursesPage({
   const groupCoursesByCategory = (courses: Courses[]) => {
     const grouped = courses.reduce(
       (acc, course) => {
-        const category = course.category || "Uncategorized";
+        const category = course.category || "Uncategorised";
         if (!acc[category]) {
           acc[category] = [];
         }
@@ -280,7 +280,7 @@ export default function CoursesPage({
   const [openIndex, setOpenIndex] = useState(groupedCourses[0]);
 
   return (
-    <div className="h-[100vh]">
+    <div className="">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
           <div className="min-w-0 flex-1">

@@ -1,54 +1,214 @@
-import {useEffect, useState} from "react";
-import {Profile} from "../../interfaces/interfaces";
+import { useEffect, useState } from "react";
+import { Profile } from "../../interfaces/interfaces";
 import axios from "axios";
-import {getApiDomain} from "../../lib/auth/supertokens";
+import { getApiDomain } from "../../lib/auth/supertokens";
+import { sendPasswordResetEmail } from "supertokens-auth-react/recipe/emailpassword";
 
-export default function Settings(){
+export default function Settings() {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const fetchDetails = async () => {
+    try {
+      const Presponse = await axios.get(`${getApiDomain()}/profile`);
+      const profileData = Presponse.data;
 
-    const [profile, setProfile] = useState<Profile | null>(null);
-    const fetchDetails = async () => {
-        try {
+      setProfile(profileData);
+    } catch (error) {
+      console.error("Error fetching community details:", error);
+    }
+  };
 
-            const Presponse = await axios.get(`${getApiDomain()}/profile`);
-            const profileData = Presponse.data;
+  useEffect(() => {
+    fetchDetails();
+  }, []);
 
-            setProfile(profileData);
-        } catch (error) {
-            console.error('Error fetching community details:', error);
-        }
-    };
+  async function PasswordChange(): void {
+    try {
+      // @ts-ignore
+      let response = await sendPasswordResetEmail({
+        formFields: [
+          {
+            id: "email",
+            value: profile.email,
+          },
+        ],
+      });
 
-    useEffect(() => {
-            fetchDetails();
+      if (response.status === "FIELD_ERROR") {
+        // one of the input formFields failed validation
+        response.formFields.forEach((formField) => {
+          if (formField.id === "email") {
+            // Email validation failed (for example incorrect email syntax).
+            window.alert(formField.error);
+          }
+        });
+      } else if (response.status === "PASSWORD_RESET_NOT_ALLOWED") {
+        // this can happen due to automatic account linking. Please read our account linking docs
+      } else {
+        // reset password email sent.
+        window.alert("Please check your email for the password reset link");
+      }
+    } catch (err: any) {
+      if (err.isSuperTokensGeneralError === true) {
+        // this may be a custom error message sent from the API by you.
+        window.alert(err.message);
+      } else {
+        window.alert("Oops! Something went wrong.");
+      }
+    }
+  }
 
-    }, []);
+  return (
+    <main>
+      <div className="divide-y divide-white/5 max-w-7xl mx-auto">
+        <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+          <div>
+            <h2 className="text-base font-semibold leading-7 text-grey-900">
+              Personal Information
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-400">
+              Use a permanent email address where you can receive mail.
+            </p>
+          </div>
 
-
-
-    return (
-        <main>
-        <div className="divide-y divide-white/5">
-
-            <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+          <form className="md:col-span-2">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+              <div className="col-span-full flex items-center gap-x-8">
+                <img
+                  src={profile?.profilePicture}
+                  alt=""
+                  className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
+                />
                 <div>
-                    <h2 className="text-base font-semibold leading-7 ">Delete account</h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-400">
-                        No longer want to use our service? You can delete your account here. This action is not
-                        reversible.
-                        All information related to this account will be deleted permanently.
-                    </p>
+                  <a
+                    href="/onboarding"
+                    type="button"
+                    className="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-grey-900 shadow-sm hover:bg-white/20"
+                  >
+                    Change avatar
+                  </a>
+                  <p className="mt-2 text-xs leading-5 text-gray-400">
+                    JPG, GIF or PNG. 1MB max.
+                  </p>
                 </div>
+              </div>
 
-                <form className="flex items-start md:col-span-2">
-                    <a
-                        href="/auth/deleteAccount"
-                        className="rounded-md bg-red-500 text-white px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-red-400"
-                    >
-                        Yes, delete my account
-                    </a>
-                </form>
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="first-name"
+                  className="block text-sm font-medium leading-6 text-grey-900"
+                >
+                  First name
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="first-name"
+                    id="first-name"
+                    value={profile?.first_name}
+                    autoComplete="given-name"
+                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-grey-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="last-name"
+                  className="block text-sm font-medium leading-6 text-grey-900"
+                >
+                  Last name
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="last-name"
+                    id="last-name"
+                    value={profile?.last_name}
+                    autoComplete="family-name"
+                    className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-grey-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div className="col-span-full">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 text-grey-900"
+                >
+                  Email address
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={profile?.email}
+                    autoComplete="email"
+                    readOnly="true"
+                    className="block w-full rounded-md border-0 bg-gray-400/5 py-1.5 text-grey-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
             </div>
+
+            <div className="mt-8 flex">
+              <button
+                type="submit"
+                className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              >
+                Save
+              </button>
+            </div>
+          </form>
         </div>
-        </main>
-    )
+
+        <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+          <div>
+            <h2 className="text-base font-semibold leading-7 text-grey-900">
+              Change password
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-400">
+              Update your password associated with your account.
+            </p>
+          </div>
+
+          <form className="md:col-span-2">
+            <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6"></div>
+
+            <div className="mt-8 flex">
+              <a
+                href="#"
+                onClick={() => PasswordChange()}
+                className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              >
+                Change Password
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+          <div>
+            <h2 className="text-base font-semibold leading-7 text-grey-900">
+              Delete account
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-400">
+              No longer want to use our service? You can delete your account
+              here. This action is not reversible. All information related to
+              this account will be deleted permanently.
+            </p>
+          </div>
+
+          <form className="flex items-start md:col-span-2">
+            <a
+              href="/auth/deleteAccount"
+              className="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400"
+            >
+              Yes, delete my account
+            </a>
+          </form>
+        </div>
+      </div>
+    </main>
+  );
 }

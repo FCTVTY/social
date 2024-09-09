@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 
 export interface Community {
+  url: string;
   id: ObjectId;
   name: string;
   logo: string;
@@ -109,6 +110,7 @@ export interface PEvent extends PPosts {
 }
 
 export interface Profile {
+  location: any;
   commentCount: any;
   timeJoined: string;
   status: string;

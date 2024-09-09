@@ -3,15 +3,22 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "node_modules/preline/dist/*.js",
   ],
-  darkMode: ['class', '[data-theme="night"]'],
+  darkMode: ["class", '[data-theme="night"]'],
 
   theme: {
     extend: {},
   },
-  plugins: [  require('daisyui'),  require('@tailwindcss/aspect-ratio'), require('flowbite/plugin'), ],
+  plugins: [
+    require("daisyui"),
+    require("@tailwindcss/aspect-ratio"),
+    require("flowbite/plugin"),
+    require("preline/plugin"),
+  ],
   daisyui: {
-    themes: [     "light",
+    themes: [
+      "light",
       "dark",
       "cupcake",
       "bumblebee",
@@ -42,6 +49,7 @@ export default {
       "winter",
       "dim",
       "nord",
-      "sunset",],
+      "sunset",
+    ],
   },
-}
+};

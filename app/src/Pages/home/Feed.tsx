@@ -45,6 +45,11 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    if (channel === "Landing" && host === "auth") {
+      window.location.href = "/Landing";
+      return;
+    }
+
     fetchDetails();
   }, [host, channel]);
 

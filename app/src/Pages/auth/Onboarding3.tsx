@@ -20,6 +20,7 @@ function OnboardingPage3({ host, channel }: HomeProps) {
     _id: "",
     email: "",
     me: true,
+    location: "",
     posts: [],
     supertokensId: "",
     username: host,
@@ -74,53 +75,101 @@ function OnboardingPage3({ host, channel }: HomeProps) {
       {formData && (
         <>
           <div className="flex w-screen flex-wrap text-slate-800">
-            <div className="flex w-full flex-col md:w-1/2">
-              <div className="flex justify-center py-12 md:justify-start md:pl-12">
+            <div
+              className="relative hidden h-screen select-none flex-col justify-center bg-gray-200
+ bg-gradient-to-br md:flex md:w-1/3 "
+            >
+              <div className="py-16 px-8  text-gray-700 xl:w-[40rem]">
                 <a href="#" className="text-2xl font-bold text-blue-600">
                   <img src={logo} className="h-10 w-auto" alt="Logo" />
                 </a>
-              </div>
-              <div className="my-auto mx-auto flex flex-col justify-center pt-8 md:justify-start lg:w-[34rem]">
-                <div className="flex w-full flex-col rounded-2xl bg-white px-2 sm:px-14">
-                  <div className="mx-auto w-full max-w-md pb-20 px-8 sm:px-0">
-                    <div className="relative mt-5">
-                      <div
-                        className="absolute left-0 top-2 h-0.5 w-full bg-gray-200"
+                <ol className="relative text-gray-500  mt-10 ml-5">
+                  <li className="mb-10 ms-10">
+                    <span className="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
+                      <svg
+                        className="w-3.5 h-3.5 text-green-500 dark:text-green-400"
                         aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 16 12"
                       >
-                        <div className="absolute h-full w-2/3 bg-gray-900" />
-                        {/* change to w-2/3 for next step */}
-                        <div className="absolute h-full w-full bg-gray-900" />
-                        {/* change to left-1/2 for next step */}
-                      </div>
-                      <ul className="relative flex w-full justify-between">
-                        <li className="text-left">
-                          <a
-                            className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white"
-                            href="#"
-                          >
-                            1
-                          </a>
-                        </li>
-                        <li className="text-left">
-                          <a
-                            className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white"
-                            href="#"
-                          >
-                            2
-                          </a>
-                        </li>
-                        <li className="text-left">
-                          <a
-                            className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-600 text-xs font-semibold text-white ring ring-gray-600 ring-offset-2"
-                            href="#"
-                          >
-                            3
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5.917 5.724 10.5 15 1.5"
+                        />
+                      </svg>
+                    </span>
+                    <h3 className="font-medium leading-tight">Profile Image</h3>
+                    <p className="text-sm">Lets upload a awesome picture</p>
+                  </li>
+                  <li className="mb-10 ms-10">
+                    <span className="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
+                      <svg
+                        className="w-3.5 h-3.5 text-green-500 dark:text-green-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 16 12"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5.917 5.724 10.5 15 1.5"
+                        />
+                      </svg>
+                    </span>
+                    <h3 className="font-medium leading-tight">Cover Photo</h3>
+                    <p className="text-sm">Lets make your profile pop!</p>
+                  </li>
+                  <li className="mb-10 ms-10">
+                    <span className="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
+                      <svg
+                        className="w-3.5 h-3.5 text-green-500 dark:text-green-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 16 12"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5.917 5.724 10.5 15 1.5"
+                        />
+                      </svg>
+                    </span>
+                    <h3 className="font-medium leading-tight">Bio</h3>
+                    <p className="text-sm">Let people know who you are!</p>
+                  </li>
+                  <li className="ms-10">
+                    <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
+                      <svg
+                        className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 18 20"
+                      >
+                        <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
+                      </svg>
+                    </span>
+                    <h3 className="font-medium leading-tight">Finished</h3>
+                    <p className="text-sm">Lets get going</p>
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <div className="flex w-full flex-col md:w-2/3">
+              <div className="flex justify-center py-12 md:justify-start md:pl-12"></div>
+              <div className="my-auto mx-auto flex flex-col justify-center pt-8 md:justify-start lg:w-[34rem]">
+                <div className="flex w-full flex-col  sm:px-14">
+                  <div className="mx-auto w-full max-w-md pb-20 px-8 sm:px-0"></div>
                   <h2 className="font-serif text-2xl font-semibold text-gray-700">
                     One final thing, lets set a bio
                   </h2>
@@ -175,24 +224,6 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                     </div>
                   </form>
                 </div>
-              </div>
-            </div>
-            <div className="relative hidden h-screen select-none flex-col justify-center bg-yellow-500 bg-gradient-to-br md:flex md:w-1/2 ">
-              <div className="py-16 px-8  text-gray-700 xl:w-[40rem]">
-                <span className="rounded-full bg-white px-3 py-1 font-medium text-black">
-                  New Feature
-                </span>
-                <p className="my-6 text-3xl font-semibold leading-10 text-gray-700">
-                  Channel Support within{" "}
-                  <span className="whitespace-nowrap py-2 text-gray-800">
-                    Communities
-                  </span>
-                  .
-                </p>
-                <p className="mb-4">
-                  Split out the feed into Channels to declutter your viewing
-                  experiance
-                </p>
               </div>
             </div>
           </div>

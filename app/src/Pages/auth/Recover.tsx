@@ -7,7 +7,9 @@ import mlogo from "../../assets/logo-light.svg";
 
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
+import EmailPassword, {
+  sendPasswordResetEmail,
+} from "supertokens-auth-react/recipe/emailpassword";
 import { Form, FormField, FormItem, FormMessage } from "../../components/form";
 import { Input } from "../../components/input";
 import { Alert, AlertDescription, AlertTitle } from "../../components/alert";
@@ -15,14 +17,16 @@ import { emailPasswordSignIn } from "supertokens-web-js/lib/build/recipe/thirdpa
 import { CommunityCollection } from "../../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
-
+import { Icon } from "react-icons-kit";
+import { eyeOff } from "react-icons-kit/feather/eyeOff";
+import { eye } from "react-icons-kit/feather/eye";
 interface LoginProps {
   host?: string;
 }
-export default function Login({ host }: LoginProps) {
+export default function Recover({ host }: LoginProps) {
   const [error, setError] = useState<string | undefined>(undefined);
   const [mode, setMode] = useState<"signin" | "signup" | "forgot_password">(
-    "signin",
+    "forgot_password",
   );
 
   const [community, setCommunity] = useState<Partial<CommunityCollection>>();
@@ -49,7 +53,6 @@ export default function Login({ host }: LoginProps) {
 
   const signInSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(1, "Password is required"),
   });
 
   const formSchema = signInSchema;
@@ -57,7 +60,6 @@ export default function Login({ host }: LoginProps) {
   const emailPasswordForm = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
@@ -65,19 +67,42 @@ export default function Login({ host }: LoginProps) {
     formValues: z.infer<typeof formSchema>,
   ) => {
     try {
-      await emailPasswordSignIn(formValues.email, formValues.password);
-    } catch (error) {
-      // @ts-ignore
-      setError(error.message);
+      let response = await sendPasswordResetEmail({
+        formFields: [
+          {
+            id: "email",
+            value: formValues.email,
+          },
+        ],
+      });
+
+      if (response.status === "FIELD_ERROR") {
+        // one of the input formFields failed validation
+        response.formFields.forEach((formField) => {
+          if (formField.id === "email") {
+            // Email validation failed (for example incorrect email syntax).
+            window.alert(formField.error);
+          }
+        });
+      } else if (response.status === "PASSWORD_RESET_NOT_ALLOWED") {
+        // this can happen due to automatic account linking. Please read our account linking docs
+      } else {
+        // reset password email sent.
+        window.alert("Please check your email for the password reset link");
+      }
+    } catch (err: any) {
+      if (err.isSuperTokensGeneralError === true) {
+        // this may be a custom error message sent from the API by you.
+        window.alert(err.message);
+      } else {
+        window.alert("Oops! Something went wrong.");
+      }
     }
   };
 
   const emailPasswordSignIn = async (email: string, password: string) => {
     const response = await EmailPassword.signIn({
-      formFields: [
-        { id: "email", value: email },
-        { id: "password", value: password },
-      ],
+      formFields: [{ id: "email", value: email }],
     });
 
     console.log(response);
@@ -91,15 +116,6 @@ export default function Login({ host }: LoginProps) {
     // window.location.assign('/feed');
   };
 
-  function myFunction() {
-    var x = document.getElementsByName("password")[0];
-    if (x.type === "password") {
-      x.type = "text";
-    } else {
-      x.type = "password";
-    }
-  }
-
   return (
     <>
       <div className="flex flex-col">
@@ -112,17 +128,11 @@ export default function Login({ host }: LoginProps) {
         </Link>
         <div className="mt-20">
           <h2 className="text-lg font-semibold text-gray-900">
-            Sign in to your account
+            Recover Lost Account
           </h2>
           <p className="mt-2 text-sm text-gray-700">
-            Don’t have an account?{" "}
-            <Link
-              to="/register"
-              className="font-medium text-blue-600 hover:underline"
-            >
-              Sign up
-            </Link>{" "}
-            for a free account.
+            Please enter your email address. If we find your account, we'll send
+            you instructions to reset your password.
           </p>
         </div>
       </div>
@@ -151,35 +161,6 @@ export default function Login({ host }: LoginProps) {
               </FormItem>
             )}
           />
-          <FormField
-            control={emailPasswordForm.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="col-span-full">
-                <Input {...field} size="lg" type="password" placeholder="" />
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="relative flex items-start">
-            <div className="flex h-6 items-center">
-              <input
-                id="comments"
-                aria-describedby="comments-description"
-                name="comments"
-                type="checkbox"
-                onClick={() => myFunction()}
-                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-              />
-            </div>
-            <div className="ml-3 text-sm leading-6">
-              <label htmlFor="comments" className="font-medium text-gray-900">
-                Toggle Password
-              </label>
-            </div>
-          </div>
 
           <div>
             <Button
@@ -189,12 +170,12 @@ export default function Login({ host }: LoginProps) {
               className="w-full"
             >
               <span>
-                Sign in <span aria-hidden="true">&rarr;</span>
+                Recover Account <span aria-hidden="true">&rarr;</span>
               </span>
             </Button>
           </div>
-          <a className="mt-2 text-sm text-gray-700" href="/auth/recover">
-            Forgotten username/password?
+          <a className="mt-2 text-sm text-gray-700" href="/auth/">
+            Back to login
           </a>
         </form>
       </Form>
