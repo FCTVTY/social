@@ -151,8 +151,9 @@ type EventPost struct {
 }
 
 type Courses struct {
-	ID        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	ID        primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
 	Name      string             `json:"name"`
+	Category  string             `json:"category"`
 	Community string             `json:"community"`
 	Desc      string             `json:"desc"`
 	Featured  bool               `json:"featured"`

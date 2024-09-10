@@ -102,6 +102,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
 
   const handleInputChange = () => {
     const text = contentEditableRef.current.innerHTML;
+
     setContent(text);
     setPost((prevState) => ({
       ...prevState,

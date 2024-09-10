@@ -420,16 +420,16 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
             <div className="lg:col-span-2 lg:col-start-4 ">
               <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
-                <div className="rounded-t-lg h-32 overflow-hidden">
+                <div className="rounded-t-lg overflow-hidden">
                   <img
-                    className="object-cover object-top w-full"
+                    className="object-cover object-top w-full aspect-video"
                     src={profile?.coverPicture}
                     alt=""
                   />
                 </div>
                 <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
                   <img
-                    className="object-cover object-center h-32"
+                    className="object-cover object-center "
                     src={profile?.profilePicture}
                     alt=""
                   />

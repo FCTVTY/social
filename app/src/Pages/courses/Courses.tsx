@@ -1,4 +1,10 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   BriefcaseIcon,
   CheckIcon,
@@ -13,6 +19,8 @@ import {
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { Editor, RawDraftContentState } from "draft-js";
+
 import {
   Community,
   CommunityCollection,
@@ -37,7 +45,8 @@ import mc from "../../lib/utils/mc";
 import { Types } from "mongoose";
 import { Buffer } from "buffer/";
 import { LoadingButton } from "../../components/LoadingButton";
-
+import RTEditor from "../../components/Editor/RTEditor";
+import { getContentHTML } from "../../components/Editor/Renderer/rendererFunctions";
 window.Buffer = Buffer;
 
 interface HomeProps {
@@ -48,6 +57,7 @@ interface HomeProps {
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
+
 export default function CoursesPage({
   host,
   channel,
@@ -168,7 +178,16 @@ export default function CoursesPage({
     );
     setCourseData({ ...courseData, chapters: updatedChapters });
   };
-
+  const handleChapterTextChange = (
+    index: number,
+    e: React.SyntheticEvent<HTMLDivElement>,
+  ) => {
+    const htmlContent = e.currentTarget.innerHTML;
+    const updatedChapters = courseData.chapters.map((chapter, idx) =>
+      idx === index ? { ...chapter, text: htmlContent } : chapter,
+    );
+    setCourseData({ ...courseData, chapters: updatedChapters });
+  };
   const handleChapterImageChange = (
     index,
     e: React.ChangeEvent<HTMLInputElement>,
@@ -259,11 +278,24 @@ export default function CoursesPage({
     console.log(courseData);
     // Submit form data to your backend
   };
+  const handleDescChange = (e: React.FormEvent<HTMLDivElement>) => {
+    const htmlContent = e.currentTarget.innerHTML;
+    console.log("HTML Content:", htmlContent);
+
+    setCourseData({ ...courseData, desc: htmlContent });
+  };
 
   const chandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // @ts-ignore
     courseData.community = community?.community.id.toString();
+
+    const contentHTML = getContent();
+    if (!contentHTML) return;
+    saveToClipBoard(JSON.stringify(contentHTML));
+    courseData.desc = contentHTML;
+
+    console.log(courseData.desc);
     // @ts-ignore
     setLoading(true);
     // Handle form submission, e.g., send postData to an API
@@ -278,6 +310,51 @@ export default function CoursesPage({
   };
 
   const [openIndex, setOpenIndex] = useState(groupedCourses[0]);
+  const [content, setContent] = useState<RawDraftContentState>();
+
+  const toastNotify = (
+    title: string,
+    description: string,
+    variant: "default" | "destructive",
+  ) => {
+    toast({ title, description, variant });
+  };
+
+  const editorRef = useRef<Editor>(null);
+
+  // updates on each editor change
+  const updateContentHandler = useCallback(
+    (newContent: RawDraftContentState) => {
+      setContent(newContent);
+    },
+    [],
+  );
+
+  // focus issues resolver
+  useEffect(() => {
+    editorRef.current?.focus();
+  }, [content]);
+
+  // get finalize content data to html string.
+  const getContent = () => {
+    if (!content) {
+      return null;
+    }
+    const htmlContent = getContentHTML(content);
+    return htmlContent;
+  };
+
+  const saveToClipBoard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+  const copyJSONHandler = () => {
+    saveToClipBoard(JSON.stringify(content));
+  };
+  const copyHTMLHandler = () => {
+    const contentHTML = getContent();
+    if (!contentHTML) return;
+    saveToClipBoard(JSON.stringify(contentHTML));
+  };
 
   return (
     <div className="">
@@ -357,7 +434,10 @@ export default function CoursesPage({
                       <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
                         {product.name}
                       </p>
-                      <p className="mt-4 text-gray-500">{product.desc}</p>
+                      <p
+                        className="mt-4 text-gray-500"
+                        dangerouslySetInnerHTML={{ __html: product.desc }}
+                      ></p>
 
                       <dl className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 text-sm sm:grid-cols-2">
                         <div>
@@ -455,9 +535,10 @@ export default function CoursesPage({
                                 {product.hours}
                               </p>
                             </div>
-                            <p className="m-3 text-sm text-gray-500 dark:text-white">
-                              {product.desc}
-                            </p>
+                            <p
+                              className="m-3 text-sm text-gray-500 dark:text-white"
+                              dangerouslySetInnerHTML={{ __html: product.desc }}
+                            ></p>
                           </div>
                         ))}
                       </div>
@@ -550,7 +631,26 @@ export default function CoursesPage({
                                 />
                               </div>
                             </div>
-
+                            <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                              <div>
+                                <label
+                                  htmlFor="category"
+                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                >
+                                  Course Category
+                                </label>
+                              </div>
+                              <div className="sm:col-span-2">
+                                <input
+                                  type="text"
+                                  name="category"
+                                  id="category"
+                                  value={courseData.category}
+                                  onChange={handleChange}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
+                            </div>
                             {/* Course Description */}
                             <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                               <div>
@@ -562,14 +662,15 @@ export default function CoursesPage({
                                 </label>
                               </div>
                               <div className="sm:col-span-2">
-                                <textarea
+                                <div
                                   id="desc"
-                                  name="desc"
-                                  rows={3}
-                                  value={courseData.desc}
-                                  onChange={handleChange}
+                                  contentEditable
+                                  onBlur={handleDescChange}
+                                  dangerouslySetInnerHTML={{
+                                    __html: courseData.desc,
+                                  }}
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
+                                ></div>
                               </div>
                             </div>
 
@@ -594,7 +695,6 @@ export default function CoursesPage({
                                 />
                               </div>
                             </div>
-
                             {/* Course Image */}
                             <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                               <div>
@@ -623,7 +723,6 @@ export default function CoursesPage({
                                 )}
                               </div>
                             </div>
-
                             <input
                               type="file"
                               id="image-upload"
@@ -631,7 +730,6 @@ export default function CoursesPage({
                               style={{ display: "none" }}
                               onChange={handleImageCChange}
                             />
-
                             {/* Chapters */}
                             <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
                               <h3 className="text-sm font-medium leading-6 text-gray-900">
@@ -731,13 +829,15 @@ export default function CoursesPage({
                                     </label>
                                   </div>
                                   <div className="sm:col-span-2">
-                                    <textarea
-                                      name="text"
+                                    <div
                                       id={`chapter-text-${index}`}
-                                      value={chapter.text}
-                                      onChange={(e) =>
-                                        handleChapterChange(index, e)
+                                      contentEditable
+                                      onBlur={(e) =>
+                                        handleChapterTextChange(index, e)
                                       }
+                                      dangerouslySetInnerHTML={{
+                                        __html: chapter.text,
+                                      }}
                                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                   </div>
@@ -751,7 +851,6 @@ export default function CoursesPage({
                                 Add Chapter
                               </button>
                             </div>
-
                             {/* Files */}
                             <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
                               <h3 className="text-sm font-medium leading-6 text-gray-900">

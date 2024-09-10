@@ -1,23 +1,17 @@
 import { useEffect, useState } from "react";
-import { Profile, Meta } from "../../interfaces/interfaces";
+import { Profile } from "../../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import { sendPasswordResetEmail } from "supertokens-auth-react/recipe/emailpassword";
 
 export default function Settings() {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [meta, setMeta] = useState<Meta | null>(null);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
   const fetchDetails = async () => {
     try {
       const Presponse = await axios.get(`${getApiDomain()}/profile`);
       const profileData = Presponse.data;
 
       setProfile(profileData);
-      setFirstName(profileData.first_name);
-      setLastName(profileData.last_name);
     } catch (error) {
       console.error("Error fetching community details:", error);
     }
@@ -27,54 +21,35 @@ export default function Settings() {
     fetchDetails();
   }, []);
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      const response = await axios.post(`${getApiDomain()}/updateMeta`, {
-        first_name: firstName,
-        last_name: lastName,
-      });
-
-      if (response.status === 200) {
-        // Assuming the meta update includes profile updates too
-        const updatedMeta = response.data;
-        setMeta(updatedMeta);
-
-        window.alert("Profile updated successfully");
-      } else {
-        window.alert("Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      window.alert("Error updating profile.");
-    }
-  };
-
   async function PasswordChange(): void {
     try {
+      // @ts-ignore
       let response = await sendPasswordResetEmail({
         formFields: [
           {
             id: "email",
-            value: profile?.email,
+            value: profile.email,
           },
         ],
       });
 
       if (response.status === "FIELD_ERROR") {
+        // one of the input formFields failed validation
         response.formFields.forEach((formField) => {
           if (formField.id === "email") {
+            // Email validation failed (for example incorrect email syntax).
             window.alert(formField.error);
           }
         });
       } else if (response.status === "PASSWORD_RESET_NOT_ALLOWED") {
-        // account linking error
+        // this can happen due to automatic account linking. Please read our account linking docs
       } else {
+        // reset password email sent.
         window.alert("Please check your email for the password reset link");
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {
+        // this may be a custom error message sent from the API by you.
         window.alert(err.message);
       } else {
         window.alert("Oops! Something went wrong.");
@@ -95,7 +70,7 @@ export default function Settings() {
             </p>
           </div>
 
-          <form className="md:col-span-2" onSubmit={handleSave}>
+          <form className="md:col-span-2">
             <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
               <div className="col-span-full flex items-center gap-x-8">
                 <img
@@ -129,8 +104,7 @@ export default function Settings() {
                     type="text"
                     name="first-name"
                     id="first-name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    value={profile?.first_name}
                     autoComplete="given-name"
                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-grey-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   />
@@ -149,8 +123,7 @@ export default function Settings() {
                     type="text"
                     name="last-name"
                     id="last-name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    value={profile?.last_name}
                     autoComplete="family-name"
                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-grey-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   />
@@ -171,7 +144,7 @@ export default function Settings() {
                     type="email"
                     value={profile?.email}
                     autoComplete="email"
-                    readOnly
+                    readOnly="true"
                     className="block w-full rounded-md border-0 bg-gray-400/5 py-1.5 text-grey-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   />
                 </div>

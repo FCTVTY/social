@@ -167,14 +167,17 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
             <div className="bg-white dark:bg-zinc-900 dark:border-zinc-800 shadow-md rounded-lg overflow-hidden hidden lg:block md:block">
               <div className="w-full mx-auto">
                 <img
-                  src={profile.coverPicture}
+                  src={profile.coverPicture || "https://picsum.photos/1600/600"}
                   alt="User Cover"
-                  className="w-full object-cover object-top  xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] xs:h-[9.5rem]"
+                  className=" object-cover object-top   aspect-video"
                 />
 
                 <div className="w-full mx-auto flex justify-center">
                   <img
-                    src={profile.profilePicture}
+                    src={
+                      profile.profilePicture ||
+                      `https://eu.ui-avatars.com/api/?name=${profile.first_name}+${profile.last_name}&size=250`
+                    }
                     alt="User Profile"
                     className="rounded-full object-cover xl:w-[16rem] xl:h-[16rem] lg:w-[16rem] lg:h-[16rem] md:w-[12rem] md:h-[12rem] sm:w-[10rem] sm:h-[10rem] xs:w-[8rem] xs:h-[8rem] outline outline-4 outline-offset-0 outline-yellow-500 shadow-xl relative xl:bottom-[7rem] lg:bottom-[8rem] md:bottom-[6rem] sm:bottom-[5rem] xs:bottom-[4.3rem]"
                   />

@@ -351,9 +351,9 @@ export default function PostView({ host, channel, post }: HomeProps) {
         </div>
         <div className="lg:col-span-2 lg:col-start-4 px-4 sm:px-6 lg:px-8 ">
           <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
-            <div className="rounded-t-lg h-32 overflow-hidden">
+            <div className="rounded-t-lg  overflow-hidden">
               <img
-                className="object-cover object-top w-full"
+                className="object-cover object-top w-full aspect-video"
                 src={ppost?.profile?.coverPicture}
                 alt=""
               />

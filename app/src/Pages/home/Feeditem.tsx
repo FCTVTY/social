@@ -369,7 +369,10 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               <div>
                 <img
                   className="inline-block h-9 w-9 rounded-full"
-                  src={post.profile.profilePicture}
+                  src={
+                    post.profile.profilePicture ||
+                    `https://eu.ui-avatars.com/api/?name=${post.profile.first_name}+${post.rofile.last_name}&size=250`
+                  }
                   alt=""
                 />
               </div>
