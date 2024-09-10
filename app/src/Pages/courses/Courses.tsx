@@ -285,15 +285,9 @@ export default function CoursesPage({
     setCourseData({ ...courseData, desc: htmlContent });
   };
 
-  const chandleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const chandleSubmit = async () => {
     // @ts-ignore
     courseData.community = community?.community.id.toString();
-
-    const contentHTML = getContent();
-    if (!contentHTML) return;
-    saveToClipBoard(JSON.stringify(contentHTML));
-    courseData.desc = contentHTML;
 
     console.log(courseData.desc);
     // @ts-ignore
@@ -310,51 +304,6 @@ export default function CoursesPage({
   };
 
   const [openIndex, setOpenIndex] = useState(groupedCourses[0]);
-  const [content, setContent] = useState<RawDraftContentState>();
-
-  const toastNotify = (
-    title: string,
-    description: string,
-    variant: "default" | "destructive",
-  ) => {
-    toast({ title, description, variant });
-  };
-
-  const editorRef = useRef<Editor>(null);
-
-  // updates on each editor change
-  const updateContentHandler = useCallback(
-    (newContent: RawDraftContentState) => {
-      setContent(newContent);
-    },
-    [],
-  );
-
-  // focus issues resolver
-  useEffect(() => {
-    editorRef.current?.focus();
-  }, [content]);
-
-  // get finalize content data to html string.
-  const getContent = () => {
-    if (!content) {
-      return null;
-    }
-    const htmlContent = getContentHTML(content);
-    return htmlContent;
-  };
-
-  const saveToClipBoard = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
-  const copyJSONHandler = () => {
-    saveToClipBoard(JSON.stringify(content));
-  };
-  const copyHTMLHandler = () => {
-    const contentHTML = getContent();
-    if (!contentHTML) return;
-    saveToClipBoard(JSON.stringify(contentHTML));
-  };
 
   return (
     <div className="">
@@ -579,10 +528,7 @@ export default function CoursesPage({
                     leaveTo="translate-x-full"
                   >
                     <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
-                      <form
-                        className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
-                        onSubmit={chandleSubmit}
-                      >
+                      <form className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                         <div className="flex-1">
                           {/* Header */}
                           <div className="bg-gray-50 px-4 py-6 sm:px-6">
@@ -932,7 +878,8 @@ export default function CoursesPage({
                                 Cancel
                               </button>
                               <LoadingButton
-                                type="submit"
+                                type="button"
+                                onClick={() => chandleSubmit()}
                                 variant="default"
                                 className="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 loading={loading}
