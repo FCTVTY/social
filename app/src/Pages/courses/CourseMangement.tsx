@@ -119,7 +119,6 @@ export default function CourseManagement({
 
   return (
     <div className="course-management">
-      <ToastContainer />
       {Object.keys(groupedCourses).map((category) => (
         <div key={category} className="course-category">
           <h2>{category}</h2>

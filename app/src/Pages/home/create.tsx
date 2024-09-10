@@ -16,6 +16,7 @@ import Text from "@tiptap/extension-text";
 import { PlusIcon } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { toast } from "react-toastify";
 
 interface CreateProps {
   onSubmit: () => void;
@@ -90,7 +91,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
       // Clear form fields after successful submission
       setMessage("");
       setSelectedImage(null);
-
+      toast.success("Post Created");
       onSubmit();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -190,7 +191,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
     <>
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:border-2 dark:text-white shadow rounded-lg mb-6 p-2 "
+        className="bg-white dark:bg-zinc-950 dark:shadow-amber-500  dark:text-white shadow rounded-xl mb-6 p-4 "
       >
         {selectedImage && (
           <div className="mt-4 mx-auto">
@@ -207,7 +208,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
           placeholder="Type something..."
           value={post.desc}
           onChange={handleInputChange}
-          className="hidden w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
+          className="hidden w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-zinc-800"
         />
 
         <div
@@ -216,7 +217,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
           onInput={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="What's on your mind?"
-          className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-zinc-800"
+          className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-zinc-800 mb-4"
           style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
         ></div>
         {showSuggestions && (

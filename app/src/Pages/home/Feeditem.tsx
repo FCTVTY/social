@@ -219,7 +219,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
   return (
     <li
       key={post._id}
-      className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-zinc-950 shadow max-w-4xl`}
+      className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-zinc-950 dark:shadow-amber-500 dark:border-1 shadow max-w-4xl`}
     >
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-[999999]" onClose={setOpen}>

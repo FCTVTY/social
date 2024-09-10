@@ -275,7 +275,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
               <ul
                 role="list"
-                className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y dark:divide-amber-500"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto  "
               >
                 <li className="hidden">
                   <div className="flex space-x-2 items-center justify-center flex-wrap grid grid-cols-4 divide-x">
