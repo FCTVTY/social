@@ -115,6 +115,7 @@ export interface Meta {
 
 }
 export interface Profile {
+  hidden: boolean;
   location: any;
   commentCount: any;
   timeJoined: string;
@@ -131,6 +132,7 @@ export interface Profile {
   supertokensId: string;
   username: string;
   me: boolean;
+
   posts: PPosts[];
   communitesFull: Community[];
 }

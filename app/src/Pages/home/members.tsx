@@ -77,7 +77,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
             >
               {community &&
                 community.profiles
-                  .filter((x) => x.verified)
+                  .filter((x) => x.verified && !x.hidden )
                   .map((person) => (
                     <li key={person._id}>
                       <a href={`/profile/${person._id}`}>

@@ -91,6 +91,8 @@ type Profile struct {
 	Me             bool               `json:"me"`
 	Communities    []any              `json:"communities"`
 	Bio            string             `json:"bio"`
+	Hidden		   bool               `json:"hidden"`
+	Verified	   bool               `json:"verified"`
 }
 type BasicProfile struct {
 	ID             primitive.ObjectID `bson:"_id" json:"id,omitempty"`

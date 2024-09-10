@@ -1545,6 +1545,8 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 	var id = community.ID.Hex()
 
 	v.Communities = append(v.Communities, id)
+	v.Verified = false
+	v.Hidden = false
 
 	// Check if a profile already exists for this user
 	filter = bson.M{"supertokensId": v.SupertokensID}
@@ -1576,6 +1578,8 @@ func CreateProfile(rw http.ResponseWriter, r *http.Request) {
 			"communities":    v.Communities,
 			"email":          id.Email,
 			"deleted":        false,
+			"verified":       v.Verified,
+			"hidden":         v.Hidden,
 		}
 
 		result, err := profileCollection.InsertOne(context.Background(), updateData)
