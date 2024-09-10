@@ -107,11 +107,13 @@ export default function CourseManagement({
       await axios.post(
         `${getApiDomain()}/community/updatecourses`,
         updatedCourses,
+        {},
       );
       console.log("Courses reordered successfully");
       toast.success("saved");
     } catch (error) {
       console.error("Error saving reordered courses:", error);
+      toast.error("error: " + error.message);
     }
   };
 
