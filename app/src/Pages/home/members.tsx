@@ -110,7 +110,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
             className="divide-y divide-gray-100 dark:divide-amber-500 overflow-hidden bg-white dark:bg-zinc-950 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl m-2 mt-5"
           >
             {community &&
-              community.profiles.map((person) => (
+              community.profiles.filter((x) => !x.hidden).map((person) => (
                 <li
                   key={person._id}
                   className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 dark:hover:bg-zinc-900 sm:px-6"
