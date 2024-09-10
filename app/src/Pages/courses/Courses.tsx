@@ -496,51 +496,55 @@ export default function CoursesPage({
                     </dt>
                     <Disclosure.Panel as="dd" className="mt-2 ">
                       <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3">
-                        {groupedCourses[category].map((product) => (
-                          <div
-                            key={product._id}
-                            className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow"
-                          >
-                            <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg">
-                              <img
-                                src={product.media}
-                                alt={product.desc}
-                                className="object-cover object-center"
-                              />
-                              <div
-                                className="flex items-end p-4 opacity-0 group-hover:opacity-100"
-                                aria-hidden="true"
-                              >
-                                <a
-                                  href={`/course/${product.name.replace(/ /g, "_")}`}
-                                  className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter"
+                        {groupedCourses[category]
+                          .sort((a, b) => a.order - b.order)
+                          .map((product) => (
+                            <div
+                              key={product._id}
+                              className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow"
+                            >
+                              <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg">
+                                <img
+                                  src={product.media}
+                                  alt={product.desc}
+                                  className="object-cover object-center"
+                                />
+                                <div
+                                  className="flex items-end p-4 opacity-0 group-hover:opacity-100"
+                                  aria-hidden="true"
                                 >
-                                  View Course
-                                </a>
+                                  <a
+                                    href={`/course/${product.name.replace(/ /g, "_")}`}
+                                    className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter"
+                                  >
+                                    View Course
+                                  </a>
+                                </div>
                               </div>
+                              <div className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
+                                <h3>
+                                  <a
+                                    href={`/course/${product.name.replace(/ /g, "_")}`}
+                                  >
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute inset-0 dark:text-white"
+                                    />
+                                    {product.name}
+                                  </a>
+                                </h3>
+                                <p className="text-gray-900 text-sm dark:text-white">
+                                  {product.hours}
+                                </p>
+                              </div>
+                              <p
+                                className="m-3 text-sm text-gray-500 dark:text-white"
+                                dangerouslySetInnerHTML={{
+                                  __html: product.desc,
+                                }}
+                              ></p>
                             </div>
-                            <div className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
-                              <h3>
-                                <a
-                                  href={`/course/${product.name.replace(/ /g, "_")}`}
-                                >
-                                  <span
-                                    aria-hidden="true"
-                                    className="absolute inset-0 dark:text-white"
-                                  />
-                                  {product.name}
-                                </a>
-                              </h3>
-                              <p className="text-gray-900 text-sm dark:text-white">
-                                {product.hours}
-                              </p>
-                            </div>
-                            <p
-                              className="m-3 text-sm text-gray-500 dark:text-white"
-                              dangerouslySetInnerHTML={{ __html: product.desc }}
-                            ></p>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     </Disclosure.Panel>
                   </>

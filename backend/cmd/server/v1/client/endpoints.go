@@ -736,6 +736,142 @@ func UpdateCourse(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 	json.NewEncoder(rw).Encode("Course updated successfully")
 }
+func UpdateCourses(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+
+	// Decode the request body into the course model
+	var updatedCourses []models.Courses
+	err := json.NewDecoder(r.Body).Decode(&updatedCourses)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+	for _, updatedCourse := range updatedCourses {
+
+		// Validate that the course ID is provided
+
+		// Find the existing course in the database
+		courseID := updatedCourse.ID.Hex()
+		var existingCourse models.Courses
+
+		objectID, err := primitive.ObjectIDFromHex(courseID)
+		if err != nil {
+			http.Error(rw, "invalid post ID", http.StatusBadRequest)
+			return
+		}
+
+		err = coursesCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&existingCourse)
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				http.Error(rw, "course not found", http.StatusNotFound)
+			} else {
+				http.Error(rw, "failed to find course: "+err.Error(), http.StatusInternalServerError)
+			}
+			return
+		}
+
+		// Update fields (e.g., chapters and media)
+		for i, chapter := range updatedCourse.Chapters {
+			if chapter.Videourl != "" {
+				videoID, err := extractVideoID(chapter.Videourl)
+				if err != nil {
+					fmt.Printf("Failed to extract video ID from URL %s: %v\n", chapter.Videourl, err)
+					continue
+				}
+
+				embedUrl := fmt.Sprintf("https://www.youtube.com/embed/%s", videoID)
+				updatedCourse.Chapters[i].Videourl = embedUrl
+			}
+			if chapter.Image != "" && !strings.HasPrefix(chapter.Image, "https") {
+				img, _, err := decodeDataURI(chapter.Image)
+				if err != nil {
+					log.Fatalf("Failed to decode data URI: %v", err)
+				}
+
+				var buf bytes.Buffer
+				err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+				if err != nil {
+					log.Fatalf("Failed to encode image to WebP: %v", err)
+				}
+
+				endpoint := "s3.app.bhivecommunity.co.uk"
+				accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+				secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+				useSSL := true
+
+				minioClient, err := minio.New(endpoint, &minio.Options{
+					Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
+					Secure: useSSL,
+				})
+				if err != nil {
+					log.Fatalln(err)
+				}
+
+				bucketName := "files"
+				location := "uk-west-1"
+				err = minioClient.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{Region: location})
+				if err != nil {
+					exists, errBucketExists := minioClient.BucketExists(context.Background(), bucketName)
+					if errBucketExists == nil && exists {
+						log.Printf("We already own %s\n", bucketName)
+					} else {
+						log.Fatalln(err)
+					}
+				} else {
+					log.Printf("Successfully created %s\n", bucketName)
+				}
+
+				objectName := updatedCourse.Community + "/" + chapter.Name + ".webp"
+				imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
+				if err != nil {
+					log.Fatalln("Error decoding base64 string:", err)
+				}
+
+				imageReader := bytes.NewReader(imageData)
+				_, err = minioClient.PutObject(context.Background(), bucketName, objectName, imageReader, imageReader.Size(), minio.PutObjectOptions{
+					ContentType: "image/webp",
+				})
+				if err != nil {
+					log.Fatalln("Error uploading the image:", err)
+				}
+				embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + updatedCourse.Community + "/" + chapter.Name + ".webp"
+				updatedCourse.Chapters[i].Image = embedUrl
+			}
+		}
+
+		if updatedCourse.Media != "" && !strings.HasPrefix(updatedCourse.Media, "https") {
+			img, _, err := decodeDataURI(updatedCourse.Media)
+			if err != nil {
+				log.Fatalf("Failed to decode data URI: %v", err)
+			}
+
+			var buf bytes.Buffer
+			err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+			if err != nil {
+				log.Fatalf("Failed to encode image to WebP: %v", err)
+			}
+
+			webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+			updatedCourse.Media = webpDataURI
+		}
+
+		// Update the course in the database
+		filter := bson.M{"_id": objectID}
+		update := bson.M{"$set": updatedCourse}
+		_, err = coursesCollection.UpdateOne(context.Background(), filter, update)
+		if err != nil {
+			http.Error(rw, "failed to update course: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode("Courses updated successfully")
+}
 
 func convertToEmbedUrls(chapters []string) []string {
 	var embedUrls []string

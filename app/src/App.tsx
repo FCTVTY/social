@@ -23,6 +23,7 @@ import ProfilePage from "./Pages/home/Profile";
 import Onboarding from "./Pages/auth/Onboarding";
 import Onboarding2 from "./Pages/auth/Onboarding2";
 import Onboarding3 from "./Pages/auth/Onboarding3";
+import { AccessDeniedScreen } from "supertokens-auth-react/recipe/session/prebuiltui";
 
 import RemovePost from "./Pages/home/RemovePost";
 import UserRoles from "supertokens-auth-react/recipe/userroles";
@@ -49,6 +50,7 @@ import PostBox from "./Pages/home/PostBox";
 import Locked from "./Pages/Chat/Chat";
 import Recover from "./Pages/auth/Recover";
 import Landing from "./Pages/home/Landing";
+import CourseMangement from "./Pages/courses/CourseMangement";
 
 initSuperTokens();
 
@@ -336,6 +338,22 @@ function App() {
               <SessionAuth>
                 <ApplicationLayout host={subdomain} channel={channel}>
                   <CoursesPage host={subdomain} />
+                </ApplicationLayout>{" "}
+              </SessionAuth>
+            }
+          />
+          <Route
+            path="/AcademyMangement"
+            element={
+              <SessionAuth
+                accessDeniedScreen={AccessDeniedScreen}
+                overrideGlobalClaimValidators={(globalValidators) => [
+                  ...globalValidators,
+                  UserRoleClaim.validators.includes("admin"),
+                ]}
+              >
+                <ApplicationLayout host={subdomain} channel={channel}>
+                  <CourseMangement host={subdomain} />
                 </ApplicationLayout>{" "}
               </SessionAuth>
             }

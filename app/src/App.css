@@ -60,3 +60,24 @@ html,body,a,p, h1,h2,h3,h4,h5,h6, strong {
 .lexical code {
     @apply rounded-md bg-gray-900/[0.1] px-1 py-0.5 text-sm font-normal text-gray-900;
 }
+
+.course-management {
+    padding: 20px;
+}
+
+.course-category {
+    margin-bottom: 20px;
+}
+
+.droppable-area {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.course-content {
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}

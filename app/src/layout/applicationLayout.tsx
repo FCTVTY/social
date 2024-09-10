@@ -64,6 +64,7 @@ import {
   ChevronUpIcon,
   Bell,
   BellRing,
+  SchoolIcon,
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 import {
@@ -374,6 +375,13 @@ const ApplicationLayout: React.FC<Props> = ({
       href: "/admin/site",
       initial: <WrenchIcon />,
       current: "/admin/site" == currentUrl,
+    },
+    {
+      id: 1,
+      name: "Academy Mangement",
+      href: "/AcademyMangement",
+      initial: <SchoolIcon />,
+      current: "/AcademyMangement" == currentUrl,
     },
   ];
   const debug: TeamItem[] = [

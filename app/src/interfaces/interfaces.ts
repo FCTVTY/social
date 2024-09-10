@@ -109,10 +109,8 @@ export interface PEvent extends PPosts {
   eventDetails: EventDetails;
 }
 export interface Meta {
-
   first_name: string;
   last_name: string;
-
 }
 export interface Profile {
   hidden: boolean;
@@ -171,6 +169,7 @@ export interface Courses {
   chapters: Chapter[];
   files: File[];
   category: string;
+  order: number;
 }
 
 export interface Chapter {

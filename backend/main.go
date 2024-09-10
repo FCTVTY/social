@@ -251,13 +251,17 @@ func main() {
 			session.VerifySession(nil, client.UpdateCourse).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/community/updatecourses" && r.Method == "POST" {
+			session.VerifySession(nil, client.UpdateCourses).ServeHTTP(rw, r)
+			return
+		}
 		if parsedURL.Path == "/v1/data/get" {
 			session.VerifySession(nil, client.GetAds).ServeHTTP(rw, r)
 		}
 		if parsedURL.Path == "/v1/profile" {
 			session.VerifySession(nil, client.GetProfile).ServeHTTP(rw, r)
 		}
-		if parsedURL.Path == "/v1/updateMeta" && r.Method == "POST"  {
+		if parsedURL.Path == "/v1/updateMeta" && r.Method == "POST" {
 			session.VerifySession(nil, client.UpdateMeta).ServeHTTP(rw, r)
 		}
 

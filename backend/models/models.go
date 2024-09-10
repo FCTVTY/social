@@ -91,8 +91,8 @@ type Profile struct {
 	Me             bool               `json:"me"`
 	Communities    []any              `json:"communities"`
 	Bio            string             `json:"bio"`
-	Hidden		   bool               `json:"hidden"`
-	Verified	   bool               `json:"verified"`
+	Hidden         bool               `json:"hidden"`
+	Verified       bool               `json:"verified"`
 }
 type BasicProfile struct {
 	ID             primitive.ObjectID `bson:"_id" json:"id,omitempty"`
@@ -161,6 +161,7 @@ type Courses struct {
 	Featured  bool               `json:"featured"`
 	Media     string             `json:"media"`
 	Hours     string             `json:"hours"`
+	Order     int32              `json:"order"`
 	Chapters  []struct {
 		ID       string `json:"_id"`
 		Name     string `json:"name"`
