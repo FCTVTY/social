@@ -6,6 +6,7 @@ import (
 	_ "bhiveserver/models"
 	"fmt"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/rollbar/rollbar-go"
 	"log"
 	"net/http"
 	"net/url"
@@ -38,6 +39,12 @@ var (
 )
 
 func init() {
+	// Rollbar initialization
+	rollbar.SetToken("f6a064fe043a412cb2668ecf68df223f")
+	rollbar.SetEnvironment("production") // Use "development" for non-production environments
+	rollbar.SetCodeVersion("v1.0.0")
+
+	// Prometheus setup
 	prometheus.MustRegister(requestCount)
 }
 
@@ -50,6 +57,13 @@ func logMiddleware(next http.Handler) http.Handler {
 		rw := &responseWriter{ResponseWriter: w, statusCode: http.StatusOK}
 
 		// Serve the request
+		defer func() {
+			if err := recover(); err != nil {
+				rollbar.Error(fmt.Errorf("panic occurred: %v", err)) // Log panics to Rollbar
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			}
+		}()
+
 		next.ServeHTTP(rw, r)
 
 		duration := time.Since(start)
@@ -60,6 +74,8 @@ func logMiddleware(next http.Handler) http.Handler {
 		requestCount.WithLabelValues(method, path, status).Inc()
 
 		log.Printf("%s %s %s %s %d", r.Method, r.RequestURI, r.Proto, duration, rw.statusCode)
+		rollbar.Log("%s %s %s %s %d", r.Method, r.RequestURI, r.Proto, duration, rw.statusCode)
+
 	})
 }
 
@@ -75,48 +91,39 @@ func (rw *responseWriter) WriteHeader(code int) {
 }
 
 func main() {
+	defer rollbar.Wait() // Waits for any remaining errors to be sent to Rollbar before exiting
 
 	err := supertokens.Init(SuperTokensConfig)
 	if err != nil {
-		fmt.Println(err)
+		rollbar.Error(err) // Log initialization errors to Rollbar
 		panic(err.Error())
 	}
 	fmt.Println("supertokens init done..")
 
-	resp, err := userroles.CreateNewRoleOrAddPermissions("admin", []string{"read:all", "delete:all", "edit:all"}, nil)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	if resp.OK.CreatedNewRole == false {
-		// The role already exists
-	}
+	// Setup roles
+	roles := []string{"admin", "moderator", "god"}
+	permissions := []string{"read:all", "delete:all", "edit:all"}
 
-	resp, err = userroles.CreateNewRoleOrAddPermissions("moderator", []string{"read:all", "delete:all", "edit:all"}, nil)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	if resp.OK.CreatedNewRole == false {
-		// The role already exists
-	}
-
-	resp, err = userroles.CreateNewRoleOrAddPermissions("god", []string{"read:all", "delete:all", "edit:all"}, nil)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	if resp.OK.CreatedNewRole == false {
-		// The role already exists
+	for _, role := range roles {
+		resp, err := userroles.CreateNewRoleOrAddPermissions(role, permissions, nil)
+		if err != nil {
+			rollbar.Error(err) // Log error to Rollbar
+			fmt.Println(err)
+			return
+		}
+		if resp.OK.CreatedNewRole == false {
+			// The role already exists
+		}
 	}
 
 	http.Handle("/metrics", promhttp.Handler())
 
 	http.ListenAndServe(":3001", logMiddleware(corsMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-
 		parsedURL, err := url.Parse(r.URL.Path)
 		if err != nil {
-			// handle error
+			rollbar.Error(fmt.Errorf("failed to parse URL: %v", err))
+			http.Error(rw, "Internal Server Error", http.StatusInternalServerError)
+			return
 		}
 
 		// Prefix all requests with "v1/"
@@ -307,6 +314,7 @@ func main() {
 		}
 		rw.WriteHeader(404)
 	})))))
+
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
