@@ -379,10 +379,10 @@ const ApplicationLayout: React.FC<Props> = ({
     },
     {
       id: 1,
-      name: "Academy Mangement",
-      href: "/AcademyMangement",
+      name: "Academy Management",
+      href: "/AcademyManagement",
       initial: <SchoolIcon />,
-      current: "/AcademyMangement" == currentUrl,
+      current: "/AcademyManagement" == currentUrl,
     },
   ];
   const debug: TeamItem[] = [

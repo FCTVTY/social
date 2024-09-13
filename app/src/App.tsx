@@ -351,7 +351,7 @@ function App() {
               }
             />
             <Route
-              path="/AcademyMangement"
+                path="/AcademyManagement"
               element={
                 <SessionAuth
                   accessDeniedScreen={AccessDeniedScreen}
