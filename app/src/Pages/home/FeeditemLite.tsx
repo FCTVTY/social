@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { getApiDomain } from "../../lib/auth/supertokens";
+import { Link } from "react-router-dom";
 
 interface PostItemProps {
   lite?: boolean;
@@ -12,12 +13,12 @@ const PostItemLite = ({ post, profile, lite }) => {
   return (
     <li
       key={post._id}
-      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow shadow-2xl max-w-4xl"
+      className="col-span-1 flex flex-col divide-y divide-gray-200 dark:divide-gray-800 rounded-lg bg-white dark:bg-gray-900 shadow dark:shadow-gray-800 shadow-2xl max-w-4xl"
     >
       <div className="flex flex-1 flex-col p-3">
         <dl className="mt-1 flex flex-grow flex-col justify-between">
-          <a
-            href={`/profile/${profile._id}`}
+          <Link
+            to={`/profile/${profile._id}`}
             className="group block flex-shrink-0"
           >
             <div className="flex items-center">
@@ -37,14 +38,14 @@ const PostItemLite = ({ post, profile, lite }) => {
                 </p>
               </div>
             </div>
-          </a>
-          <a className="my-3" href={`/s/${post.channel}/${post._id}`}>
+          </Link>
+          <Link className="my-3" to={`/s/${post.channel}/${post._id}`}>
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
             <h2
               className="dark:!text-white"
               dangerouslySetInnerHTML={{ __html: post.desc }}
             ></h2>
-          </a>
+          </Link>
 
           <div className="flex py-4 justify-between">
             <div className="flex space-x-2">
@@ -58,12 +59,12 @@ const PostItemLite = ({ post, profile, lite }) => {
               </a>
             ))}
           </dd>
-          <a
+          <Link
             className="mt-0.5 text-sm text-gray-500"
-            href={`/s/${post.channel.name}/${post._id}`}
+            to={`/s/${post.channel.name}/${post._id}`}
           >
             View all comments
-          </a>
+          </Link>
           <dd className="mt-0.5 text-sm text-gray-500 ">
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>

@@ -27,6 +27,8 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/16/solid";
 import { BadgeCheck, CakeIcon, MessageCircle, ScrollText } from "lucide-react";
+import { cn } from "../../lib/utils/cn";
+import { useLocation } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -39,19 +41,30 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [profile, setProfile] = useState<Profile>();
   const [community, setCommunity] = useState<Partial<CommunityCollection>>();
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const [destroyloading, setdestroyloading] = useState(false);
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  channel = location.pathname.split("/")[2];
 
   useEffect(() => {
     if (channel === "Landing" && host === "auth") {
       window.location.href = "/Landing";
       return;
     }
-
     fetchDetails();
   }, [host, channel]);
+
+  useEffect(() => {
+    if (channel === "Landing" && host === "auth") {
+      window.location.href = "/Landing";
+      return;
+    }
+    channel = location.pathname.split("/")[2];
+
+    fetchDetails();
+  }, [host, channel, location]);
 
   useEffect(() => {
     if (!loading) return;
@@ -233,7 +246,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
         <div className="mx-auto max-w-7xl py-0 px-6 ">
           <div className="lg:grid lg:grid-cols-5 lg:grid-rows-1 lg:gap-4">
             <div className="lg:col-span-3">
-              <div className={classNames(home ? "" : "hidden", "mb-5")}>
+              <div className={cn(home ? "" : "hidden", "mb-5")}>
                 <div className="mx-auto max-w-7xl py-0 sm:px-2">
                   <div
                     tabIndex={0}
@@ -366,26 +379,26 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     <dl className="mt-1 flex flex-grow flex-col justify-between">
                       <div className="group block flex-shrink-0">
                         <div className="flex items-center">
-                          <div className="rounded-full h-9 w-9 bg-gray-200 dark:bg-slate-800" />
-                          <div className="ml-3 h-6 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
+                          <div className="rounded-full h-9 w-9 bg-gray-200 dark:bg-gray-800" />
+                          <div className="ml-3 h-6 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
                         </div>
-                        <div className="mx-auto mt-2 rounded-md h-48 w-full bg-gray-200 dark:bg-slate-800" />
-                        <div className="my-3 h-48 w-full bg-gray-200 dark:bg-slate-800" />
+                        <div className="mx-auto mt-2 rounded-md h-48 w-full bg-gray-200 dark:bg-gray-800" />
+                        <div className="my-3 h-48 w-full bg-gray-200 dark:bg-gray-800" />
                         <div className="flex py-4 justify-between">
                           <div className="flex space-x-2">
-                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-slate-800 rounded-full"></div>
-                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-slate-800 rounded-full"></div>
+                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
+                            <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
                           </div>
                         </div>
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-slate-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
                       </div>
                     </dl>
                   </div>
                 )}
 
-                <div ref={handleObserver}>
+                <div ref={observer}>
                   {loading && (
                     <div className="text-center my-10">
                       <div role="status">
@@ -419,7 +432,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
             </div>
 
             <div className="lg:col-span-2 lg:col-start-4 ">
-              <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
+              <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
                 <div className="rounded-t-lg overflow-hidden">
                   <img
                     className="object-cover object-top w-full aspect-video"
@@ -427,7 +440,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     alt=""
                   />
                 </div>
-                <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
+                <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
                   <img
                     className="object-cover object-center "
                     src={profile?.profilePicture}
@@ -439,7 +452,20 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     <span className="inline-flex">
                       {profile?.first_name} {profile?.last_name}
                       {profile?.verified && (
-                        <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2"></BadgeCheck>
+                        <>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="size-6 h-5 w-5 ml-2 text-rose-600"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </>
                       )}
                     </span>
                   </h2>
@@ -507,7 +533,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                 About
               </span>
 
-              <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 p-3 mb-4 dark:text-white ">
+              <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 p-3 mb-4 dark:text-white ">
                 <img
                   src={community && community.community?.logo}
                   className="mx-auto h-20 w-40 py-1 dark:invert object-contain"
@@ -584,12 +610,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                       key={post._id}
                       className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl"
                     >
-                      <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:text-white">
+                      <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
                         <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
-                          <a
-                            href="https://www.fkcreative.co.uk/"
-                            className="block shrink-0"
-                          >
+                          <a href={post.url} className="block shrink-0">
                             <img
                               alt=""
                               src={post.logo}
@@ -599,10 +622,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
                           <div>
                             <h3 className="font-medium sm:text-lg">
-                              <a
-                                href="https://www.fkcreative.co.uk/"
-                                className="hover:underline"
-                              >
+                              <a href={post.url} className="hover:underline">
                                 {" "}
                                 {post.name}{" "}
                               </a>

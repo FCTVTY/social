@@ -4,6 +4,7 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import moment from "moment/moment";
 import { ChevronRightIcon } from "@heroicons/react/16/solid";
+import { Link } from "react-router-dom";
 
 interface PostItemProps {
   lite?: boolean;
@@ -24,10 +25,10 @@ const EventItem = ({ post, profile, lite }) => {
         />
         <div className="min-w-0 flex-auto">
           <p className=" font-semibold leading-6 text-gray-900 dark:text-white">
-            <a href={`/event/${post._id}`}>
+            <Link to={`/event/${post._id}`}>
               <span className="absolute inset-x-0 -top-px bottom-0" />
               {post.desc}
-            </a>
+            </Link>
           </p>
           <p className="mt-1 flex text-sm leading-5 text-gray-500">
             <a href="{}" className="relative truncate hover:underline">

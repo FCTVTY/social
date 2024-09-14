@@ -50,7 +50,7 @@ export default function Landing({ host, profileid }: HomeProps) {
         <div className="container mx-auto p-4 lg:max-w-7xl">
           {/* Header */}
 
-          <div className=" bg-white dark:bg-zinc-900  shadow-md rounded-lg p-4 mb-4">
+          <div className=" bg-white dark:bg-gray-900  shadow-md rounded-lg p-4 mb-4">
             <div className="flex flex-wrap">
               <div className="bg-white py-24 sm:py-32">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">

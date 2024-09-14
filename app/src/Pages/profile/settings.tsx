@@ -3,6 +3,7 @@ import { Profile, Meta } from "../../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import { sendPasswordResetEmail } from "supertokens-auth-react/recipe/emailpassword";
+import { Link } from "react-router-dom";
 
 export default function Settings() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -104,13 +105,13 @@ export default function Settings() {
                   className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
                 />
                 <div>
-                  <a
-                    href="/onboarding"
+                  <Link
+                    to={`onboarding`}
                     type="button"
                     className="rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-grey-900 shadow-sm hover:bg-white/20"
                   >
                     Change avatar
-                  </a>
+                  </Link>
                   <p className="mt-2 text-xs leading-5 text-gray-400">
                     JPG, GIF or PNG. 1MB max.
                   </p>

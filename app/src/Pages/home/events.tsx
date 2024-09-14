@@ -243,7 +243,7 @@ export default function EventsPage({
 
   return (
     <div className="h-[100vh]">
-      <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
+      <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 ">
         <div className="min-w-0 flex-1">
           <h2 className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
             <span className="hidden lg:inline">
@@ -289,7 +289,7 @@ export default function EventsPage({
       <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-2">
         <ul
           role="list"
-          className="divide-y divide-gray-100 dark:divide-zinc-900 overflow-hidden bg-white dark:bg-zinc-950 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+          className="divide-y divide-gray-100 dark:divide-zinc-900 overflow-hidden bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
         >
           {posts &&
             posts.map((post) => (
