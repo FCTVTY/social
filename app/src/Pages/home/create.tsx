@@ -191,7 +191,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
     <>
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-zinc-950 dark:shadow-amber-500  dark:text-white shadow rounded-xl mb-6 p-4 "
+        className="bg-white dark:bg-gray-900 dark:shadow-gray-800  dark:text-white shadow rounded-xl mb-6 p-4 "
       >
         {selectedImage && (
           <div className="mt-4 mx-auto">
@@ -208,7 +208,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
           placeholder="Type something..."
           value={post.desc}
           onChange={handleInputChange}
-          className="hidden w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-zinc-800"
+          className="hidden w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-gray-900"
         />
 
         <div
@@ -217,7 +217,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
           onInput={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="What's on your mind?"
-          className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-zinc-800 mb-4"
+          className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-gray-900 mb-4"
           style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
         ></div>
         {showSuggestions && (
@@ -284,7 +284,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
               Create
             </LoadingButton>
             <Menu as="div" className="relative -ml-px block">
-              <Menu.Button className="relative inline-flex items-center rounded-r-md bg-primary px-2 py-2 text-white   hover:bg-gray-50 hover:text-black focus:z-10">
+              <Menu.Button className="relative inline-flex items-center rounded-r-md bg-primary px-2 py-2 text-white   hhover:bg-gray-800  focus:z-10">
                 <span className="sr-only">Open options</span>
                 <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
               </Menu.Button>

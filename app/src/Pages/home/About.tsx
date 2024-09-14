@@ -39,7 +39,7 @@ export default function About({ host, channel }: HomeProps) {
 
   return (
     <div className="h-[100vh]">
-      <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
+      <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 ">
         <div className="min-w-0 flex-1">
           <h2 className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
             FAQ's

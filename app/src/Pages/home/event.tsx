@@ -20,6 +20,7 @@ import { ClockIcon, GlobeIcon, PersonStandingIcon } from "lucide-react";
 import { UserIcon } from "@heroicons/react/20/solid";
 import ical, { ICalEvent } from "ical-generator";
 import ICalendarLink from "react-icalendar-link";
+import { Link } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -246,7 +247,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
               role="list"
               className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y"
             >
-              <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow max-w-7xl">
+              <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-900 shadow max-w-7xl">
                 <div className="flex flex-1 flex-col p-3">
                   <dl className="mt-1 flex flex-grow flex-col justify-between">
                     <strong>Event Details</strong>
@@ -264,7 +265,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
 
                     <div className="border-t border-gray-200">
                       <dl>
-                        <div className="bg-white dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                           <dt className="text-sm font-medium text-gray-500">
                             Location
                           </dt>
@@ -297,7 +298,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                             )}
                           </dd>
                         </div>
-                        <div className="bg-gray-50 dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="bg-gray-50 dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                           <dt className="text-sm font-medium text-gray-500">
                             Date
                           </dt>
@@ -306,7 +307,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                             {new Date(ev?.date).toLocaleDateString()}
                           </dd>
                         </div>
-                        <div className="bg-white dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                           <dt className="text-sm font-medium text-gray-500">
                             Time
                           </dt>
@@ -316,7 +317,7 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                           </dd>
                         </div>
 
-                        <div className="bg-white dark:bg-zinc-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                           <dt className="text-sm font-medium text-gray-500">
                             Going
                           </dt>
@@ -358,13 +359,13 @@ export default function EventPage({ host, channel, post }: HomeProps) {
                                       <div className="min-w-0 flex-1">
                                         <div>
                                           <div className="text-sm">
-                                            <a
-                                              href={activityItem._id}
+                                            <Link
+                                              to={activityItem._id}
                                               className="font-medium text-gray-900 dark:text-white"
                                             >
                                               {activityItem.profile.first_name}{" "}
                                               {activityItem.profile.last_name}
-                                            </a>
+                                            </Link>
                                           </div>
                                           <p className="mt-0.5 text-sm text-gray-500">
                                             Commented{" "}

@@ -18,6 +18,7 @@ import {
   Star,
 } from "lucide-react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { Link, useLocation } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -27,14 +28,14 @@ interface HomeProps {
 export default function ProfilePage({ host, profileid }: HomeProps) {
   const [profile, setProfile] = useState<Profile>();
   const [community, setCommunity] = useState<CommunityCollection>();
+  const location = useLocation();
 
   console.log(profileid);
-
   useEffect(() => {
-    if (profileid) {
-      fetchDetails();
-    }
-  }, [host, profileid]);
+    profileid = location.pathname.split("/")[2];
+
+    fetchDetails();
+  }, [host, profileid, location]);
 
   const fetchDetails = async () => {
     try {
@@ -94,13 +95,13 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
   };
   const isCakeDay = checkCakeDay(profile?.timeJoined);
   return (
-    <main className="profile-page">
+    <main className="min-h-screen profile-page">
       {profile && profile.deleted === false && (
         <div className=" min-h-screen">
           <div className="container mx-auto p-4 lg:max-w-7xl">
             {/* Header */}
 
-            <div className="lg:hidden md:hidden rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
+            <div className="lg:hidden md:hidden rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
               <div className="rounded-t-lg h-32 overflow-hidden">
                 <img
                   className="object-cover object-top w-full"
@@ -108,7 +109,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                   alt=""
                 />
               </div>
-              <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
+              <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
                 <img
                   className="object-cover object-center h-32"
                   src={profile?.profilePicture}
@@ -164,7 +165,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900 dark:border-zinc-800 shadow-md rounded-lg overflow-hidden hidden lg:block md:block">
+            <div className="bg-white dark:bg-gray-900 dark:border-gray-800 border-2 shadow-md rounded-lg overflow-hidden hidden lg:block md:block">
               <div className="w-full mx-auto">
                 <img
                   src={profile.coverPicture || "https://picsum.photos/1600/600"}
@@ -188,14 +189,25 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                     <span className="inline-flex">
                       {profile?.first_name} {profile?.last_name}
                       {profile?.verified && (
-                        <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2 mt-1"></BadgeCheck>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="size-6 h-7 w-7 ml-2 text-rose-600"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
                       )}
                     </span>
                   </h1>
 
                   <p className="w-full text-gray-700 dark:text-gray-400 text-md text-pretty sm:text-center xs:text-justify">
                     {profile.status} {isCakeDay && <p>🎂 Happy Cake Day! 🎂</p>}{" "}
-                    <div className="bg-white dark:bg-zinc-900 mt-6 -mb-20">
+                    <div className="bg-white dark:bg-gray-900 mt-6 -mb-20">
                       <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-4">
                           <div className="mx-auto flex max-w-xs flex-col gap-y-4">
@@ -243,12 +255,12 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
               {profile.me && (
                 <div className="p-4">
                   <div className="flex justify-end">
-                    <a
-                      href="/onboarding"
+                    <Link
+                      to="/onboarding"
                       className="ml-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300"
                     >
                       Edit Profile
-                    </a>
+                    </Link>
                   </div>
                 </div>
               )}
@@ -258,14 +270,14 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
             <div className="mt-4 lg:flex gap-4">
               {/* Sidebar */}
               <div className="lg:w-1/2 sm:w-full">
-                <div className="bg-white dark:bg-zinc-900 dark:border-zinc-800 shadow-md rounded-lg p-4 mb-4">
+                <div className="bg-white dark:bg-gray-900 dark:border-gray-800 border-2 shadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">About</h2>
                   <p
                     className="text-gray-700 dark:text-white"
                     dangerouslySetInnerHTML={{ __html: profile.bio }}
                   ></p>
                 </div>
-                <div className=" bg-white dark:bg-zinc-900  shadow-md rounded-lg p-4 mb-4">
+                <div className=" bg-white dark:bg-gray-900 dark:border-gray-800 border-2 shadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">Communities</h2>
                   <div className="flex flex-wrap">
                     {/* Example Friends */}
@@ -275,7 +287,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                           key={c.id}
                           src={c.logo}
                           alt={`COMMUNITY`}
-                          className=" h-16 rounded-xl border-2 border-white dark:border-zinc-900 m-2 p-2 object-contain"
+                          className=" h-16 rounded-xl border-2 border-white dark:border-gray-800 m-2 p-2 object-contain"
                         />
                       ))}
                   </div>

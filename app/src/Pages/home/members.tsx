@@ -21,6 +21,7 @@ import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import moment from "moment";
 import { BadgeCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -57,9 +58,9 @@ export default function MembersPage({ host, channel }: HomeProps) {
   };
 
   return (
-    <div className="">
+    <div className="min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-zinc-950 py-32">
+        <div className="bg-white dark:bg-gray-900 py-32">
           <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
             <div className="mx-auto max-w-2xl">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
@@ -77,10 +78,10 @@ export default function MembersPage({ host, channel }: HomeProps) {
             >
               {community &&
                 community.profiles
-                  .filter((x) => x.verified && !x.hidden )
+                  .filter((x) => x.verified && !x.hidden)
                   .map((person) => (
                     <li key={person._id}>
-                      <a href={`/profile/${person._id}`}>
+                      <Link to={`/profile/${person._id}`}>
                         <img
                           className="mx-auto h-56 w-56 rounded-full object-cover "
                           src={person.profilePicture}
@@ -95,7 +96,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                         <p className="text-sm leading-6 text-gray-600 truncate">
                           {person.bio}
                         </p>
-                      </a>
+                      </Link>
                     </li>
                   ))}
             </ul>
@@ -107,48 +108,50 @@ export default function MembersPage({ host, channel }: HomeProps) {
           </div>
           <ul
             role="list"
-            className="divide-y divide-gray-100 dark:divide-amber-500 overflow-hidden bg-white dark:bg-zinc-950 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl m-2 mt-5"
+            className="divide-y divide-gray-100 dark:divide-gray-800 overflow-hidden bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl m-2 mt-5"
           >
             {community &&
-              community.profiles.filter((x) => !x.hidden).map((person) => (
-                <li
-                  key={person._id}
-                  className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 dark:hover:bg-zinc-900 sm:px-6"
-                >
-                  <div className="flex min-w-0 gap-x-4">
-                    <img
-                      className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                      src={person.profilePicture}
-                      alt=""
-                    />
-                    <div className="min-w-0 flex-auto">
-                      <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
-                        <a
-                          href={`/profile/${person._id}`}
-                          className={`inline-flex`}
-                        >
-                          <span className="absolute inset-x-0 -top-px bottom-0" />
-                          {person.first_name} {person.last_name}{" "}
-                          {person?.verified && (
-                            <BadgeCheck className="text-indigo-400 h-3 w-3 ml-1 mt-1"></BadgeCheck>
-                          )}
-                        </a>
-                      </p>
-                      <p className="mt-1 flex text-xs leading-5 text-gray-500 dark:text-white">
-                        {person.bio.substring(0, 20)}{" "}
-                        {person.bio.length >= 20 && "..."}
-                      </p>
+              community.profiles
+                .filter((x) => !x.hidden)
+                .map((person) => (
+                  <li
+                    key={person._id}
+                    className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 dark:hover:bg-gray-800 sm:px-6"
+                  >
+                    <div className="flex min-w-0 gap-x-4">
+                      <img
+                        className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                        src={person.profilePicture}
+                        alt=""
+                      />
+                      <div className="min-w-0 flex-auto">
+                        <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                          <Link
+                            to={`/profile/${person._id}`}
+                            className={`inline-flex`}
+                          >
+                            <span className="absolute inset-x-0 -top-px bottom-0" />
+                            {person.first_name} {person.last_name}{" "}
+                            {person?.verified && (
+                              <BadgeCheck className="text-indigo-400 h-3 w-3 ml-1 mt-1"></BadgeCheck>
+                            )}
+                          </Link>
+                        </p>
+                        <p className="mt-1 flex text-xs leading-5 text-gray-500 dark:text-white">
+                          {person.bio.substring(0, 20)}{" "}
+                          {person.bio.length >= 20 && "..."}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-x-4">
-                    <div className="hidden sm:flex sm:flex-col sm:items-end"></div>
-                    <ChevronRightIcon
-                      className="h-5 w-5 flex-none text-gray-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                </li>
-              ))}
+                    <div className="flex shrink-0 items-center gap-x-4">
+                      <div className="hidden sm:flex sm:flex-col sm:items-end"></div>
+                      <ChevronRightIcon
+                        className="h-5 w-5 flex-none text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </li>
+                ))}
           </ul>
         </div>
       </div>

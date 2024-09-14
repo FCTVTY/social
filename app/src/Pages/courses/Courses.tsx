@@ -37,7 +37,7 @@ import { getApiDomain } from "../../lib/auth/supertokens";
 import moment from "moment";
 import { date } from "zod";
 import { ChevronUpIcon, PencilLineIcon, TicketPlus } from "lucide-react";
-import { json } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import EventItem from "./Eventitem";
 import Button from "../../components/Button";
 import * as minio from "minio";
@@ -306,9 +306,9 @@ export default function CoursesPage({
   const [openIndex, setOpenIndex] = useState(groupedCourses[0]);
 
   return (
-    <div className="">
+    <div className="min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 lg:-ml-72">
+        <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 ">
           <div className="min-w-0 flex-1">
             <h2 className="mt-2 text-3xl leading-7 tracking-wider text-sky-950 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
               <span className="hidden lg:inline">
@@ -355,7 +355,7 @@ export default function CoursesPage({
           posts
             .filter((post) => post.featured)
             .map((product) => (
-              <div className="bg-white dark:bg-zinc-900 shadow rounded-xl">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-xl">
                 <section
                   aria-labelledby="features-heading"
                   className="relative"
@@ -394,12 +394,12 @@ export default function CoursesPage({
                             Course length: {product.hours}
                           </dt>
                           <dd className="mt-4 text-gray-500">
-                            <a
+                            <Link
                               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                              href={`/course/${product.name.replace(/ /g, "_")}`}
+                              to={`/course/${product.name.replace(/ /g, "_")}`}
                             >
                               View
-                            </a>
+                            </Link>
                           </dd>
                         </div>
                       </dl>
@@ -409,7 +409,7 @@ export default function CoursesPage({
               </div>
             ))}
 
-        <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl bg-white dark:bg-zinc-950 shadow rounded-xl mt-10">
+        <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl bg-white dark:bg-gray-900 shadow rounded-xl mt-10">
           {Object.keys(groupedCourses).map((category) => (
             <div key={category} className="mb-10">
               <Disclosure
@@ -450,7 +450,7 @@ export default function CoursesPage({
                           .map((product) => (
                             <div
                               key={product._id}
-                              className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow"
+                              className="group relative divide-gray-200 rounded-lg bg-white dark:bg-gray-900 shadow"
                             >
                               <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg">
                                 <img
@@ -462,25 +462,25 @@ export default function CoursesPage({
                                   className="flex items-end p-4 opacity-0 group-hover:opacity-100"
                                   aria-hidden="true"
                                 >
-                                  <a
-                                    href={`/course/${product.name.replace(/ /g, "_")}`}
+                                  <Link
+                                    to={`/course/${product.name.replace(/ /g, "_")}`}
                                     className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter"
                                   >
                                     View Course
-                                  </a>
+                                  </Link>
                                 </div>
                               </div>
                               <div className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
                                 <h3>
-                                  <a
-                                    href={`/course/${product.name.replace(/ /g, "_")}`}
+                                  <Link
+                                    to={`/course/${product.name.replace(/ /g, "_")}`}
                                   >
                                     <span
                                       aria-hidden="true"
                                       className="absolute inset-0 dark:text-white"
                                     />
                                     {product.name}
-                                  </a>
+                                  </Link>
                                 </h3>
                                 <p className="text-gray-900 text-sm dark:text-white">
                                   {product.hours}
@@ -502,12 +502,12 @@ export default function CoursesPage({
             </div>
           ))}
           {posts && posts.length === 0 && (
-            <div className="bg-white shadow rounded-xl dark:bg-zinc-950 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
+            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
               No Courses available.
             </div>
           )}
           {posts == null && (
-            <div className="bg-white shadow rounded-xl dark:bg-zinc-950 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
+            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
               No Courses available.
             </div>
           )}

@@ -231,7 +231,7 @@ function Notfications() {
   );
 }
 
-const ApplicationLayout: React.FC<Props> = ({
+const ApplicationLayoutFull: React.FC<Props> = ({
   children,
   host,
   channel,
@@ -367,7 +367,7 @@ const ApplicationLayout: React.FC<Props> = ({
 
       setNavigation((prevNavigation) => [...channelNavigation]);
     }
-  }, [community, url]);
+  }, [community]);
 
   useEffect(() => {
     rolesData();
@@ -726,7 +726,7 @@ const ApplicationLayout: React.FC<Props> = ({
       </Transition.Root>
 
       {shouldRender && (
-        <div className="container max-w-7xl mx-auto">
+        <div className="w-full mx-auto">
           <ToastContainer />
 
           <Disclosure
@@ -1057,188 +1057,6 @@ const ApplicationLayout: React.FC<Props> = ({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:bg-gray-900 dark:border-gray-800">
-              {/* Sidebar component, swap this element with another sidebar if you like */}
-              <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
-                <nav className="flex flex-1 flex-col mt-2">
-                  <div className="text-xs  leading-6 text-gray-400 my-3">
-                    Spaces
-                  </div>
-
-                  <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                    <li>
-                      <ul role="list" className="-mx-3 space-y-3">
-                        {navigation.map((item) => (
-                          <li key={item.name}>
-                            <Link
-                              to={item.href}
-                              className={classNames(
-                                item.current
-                                  ? `text-indigo-600 bg-gray-200 dark:bg-gray-800`
-                                  : `text-gray-400 hover:text-white hover:bg-indigo-600`,
-                                "group flex gap-x-3 rounded-md p-2 text-sm leading-6 ",
-                              )}
-                            >
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="size-6"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                                  />
-                                </svg>
-                              </span>
-                              <span className="mt-[2px]">{item.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                    <li>
-                      <div className="text-xs  leading-6 text-gray-400 my-3">
-                        General
-                      </div>
-                      <ul role="list" className="-mx-3 space-y-3">
-                        {visibleTeams.map((team) => (
-                          <li key={team.name}>
-                            <Link
-                              to={team.href}
-                              className={classNames(
-                                team.current
-                                  ? `text-cyan-500 bg-gray-200 dark:bg-gray-800`
-                                  : `text-gray-400 hover:text-white hover:bg-cyan-500`,
-                                "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                              )}
-                            >
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                {team.initial}
-                              </span>
-                              <span className="mt-[2px]">{team.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                        {isOpen &&
-                          hiddenTeams.map((team) => (
-                            <li key={team.name}>
-                              <Link
-                                to={team.href}
-                                className={classNames(
-                                  team.current
-                                    ? `text-cyan-500 bg-gray-200 dark:bg-gray-800`
-                                    : `text-gray-400 hover:text-white hover:bg-cyan-500`,
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                                )}
-                              >
-                                <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                  {team.initial}
-                                </span>
-                                <span className="mt-[2px]">{team.name}</span>
-                              </Link>
-                            </li>
-                          ))}
-                      </ul>
-                      {hiddenTeams.length > 0 && (
-                        <button
-                          onClick={() => setIsOpen(!isOpen)}
-                          className="mt-4 text-gray-400  text-[0.625rem] font-medium"
-                        >
-                          {!isOpen ? (
-                            <span>Show More</span>
-                          ) : (
-                            <span>Show Less</span>
-                          )}
-                        </button>
-                      )}
-                    </li>
-                    {roles &&
-                      (roles.includes("admin") ||
-                        roles.includes("moderator")) && (
-                        <li>
-                          <div className="text-xs  leading-6 text-gray-400 my-3">
-                            Admin/Moderator Settings
-                          </div>
-                          <ul role="list" className="-mx-3 space-y-3">
-                            {admin.map((team) => (
-                              <li key={team.name}>
-                                <Link
-                                  to={team.href}
-                                  className={classNames(
-                                    team.current
-                                      ? "text-gray-900 bg-gray-200 dark:bg-gray-800"
-                                      : "text-gray-400 hover:text-white hover:bg-gray-900",
-                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                                  )}
-                                >
-                                  <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
-                                    {team.initial}
-                                  </span>
-                                  <span className="mt-[2px]">{team.name}</span>
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </li>
-                      )}
-                    {roles && roles.includes("god") && (
-                      <li>
-                        <div className="text-xs  leading-6 text-rose-400 my-3">
-                          {" "}
-                          DEBUG Settings
-                        </div>
-                        <ul role="list" className="-mx-3 space-y-3">
-                          {debug.map((team) => (
-                            <li key={team.name}>
-                              <Link
-                                onClick={() => setOpen(true)}
-                                className={classNames(
-                                  team.current
-                                    ? "text-rose-900 bg-rose-200"
-                                    : "text-rose-400 hover:text-white hover:bg-rose-900",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                                )}
-                              >
-                                <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
-                                  {team.initial}
-                                </span>
-                                <span className="mt-[2px]">{team.name}</span>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                    )}
-                    <li className="-mx-6 mt-auto">
-                      <div className="mt-auto p-6 text-sm text-gray-500 dark:text-dark-txt">
-                        <img
-                          className="mb-2 h-7 w-auto dark:hidden"
-                          src={LogoSquare}
-                          alt="b:hive"
-                        />
-
-                        <img
-                          className="mb-2 hidden h-7 w-auto dark:block"
-                          src={LogoSquareDark}
-                          alt="b:hive"
-                        />
-
-                        <Link to="/terms.html">Terms</Link>
-
-                        <br />
-
-                        <span>Bhive © 2024</span>
-                      </div>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
             <div className="">
               <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
                 <div className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-50 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
@@ -1269,7 +1087,7 @@ const ApplicationLayout: React.FC<Props> = ({
                 </div>
               </div>
 
-              <main className="lg:ml-72 py-10 bg dark:bg-gray-900">
+              <main className=" py-10 bg dark:bg-gray-900">
                 <div className="w-full ">
                   <div className="flex justify-center -mt-8 mb-10">
                     <img
@@ -1643,4 +1461,4 @@ const ResultItem = React.forwardRef(
   },
 );
 
-export default ApplicationLayout;
+export default ApplicationLayoutFull;

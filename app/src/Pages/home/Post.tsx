@@ -21,6 +21,7 @@ import { TagIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import Comment from "./comment";
 import YouTubeEmbed from "./youtube";
 import { BadgeCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -141,11 +142,11 @@ export default function PostView({ host, channel, post }: HomeProps) {
                   role="list"
                   className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto divide-y"
                 >
-                  <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow max-w-7xl">
+                  <li className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-900 shadow max-w-7xl">
                     <div className="flex flex-1 flex-col p-3">
                       <dl className="mt-1 flex flex-grow flex-col justify-between">
-                        <a
-                          href={`/profile/${ppost.profile.handle || ppost.profile._id}`}
+                        <Link
+                          to={`/profile/${ppost.profile.handle || ppost.profile._id}`}
                           className="group block flex-shrink-0"
                         >
                           <div className="flex items-center">
@@ -169,7 +170,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                               </p>
                             </div>
                           </div>
-                        </a>
+                        </Link>
                         <img
                           className="mx-auto mt-2 rounded-md"
                           src={ppost.media}
@@ -293,8 +294,8 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                           <div className="min-w-0 flex-1">
                                             <div>
                                               <div className="text-sm">
-                                                <a
-                                                  href={activityItem._id}
+                                                <Link
+                                                  to={activityItem._id}
                                                   className="font-medium text-gray-900 dark:text-white"
                                                 >
                                                   {
@@ -305,7 +306,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                     activityItem.profile
                                                       .last_name
                                                   }
-                                                </a>
+                                                </Link>
                                               </div>
                                               <p className="mt-0.5 text-sm text-gray-500">
                                                 Commented{" "}
@@ -350,7 +351,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
           )}
         </div>
         <div className="lg:col-span-2 lg:col-start-4 px-4 sm:px-6 lg:px-8 ">
-          <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 mb-4 dark:text-white ">
+          <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
             <div className="rounded-t-lg  overflow-hidden">
               <img
                 className="object-cover object-top w-full aspect-video"
@@ -358,7 +359,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                 alt=""
               />
             </div>
-            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-zinc-800 rounded-full overflow-hidden">
+            <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
               <img
                 className="object-cover object-center h-32"
                 src={ppost?.profile?.profilePicture}
@@ -431,12 +432,9 @@ export default function PostView({ host, channel, post }: HomeProps) {
                   key={post._id}
                   className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl"
                 >
-                  <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-zinc-950 dark:border-zinc-800 dark:text-white">
+                  <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
                     <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
-                      <a
-                        href="https://www.fkcreative.co.uk/"
-                        className="block shrink-0"
-                      >
+                      <a href={post.url} className="block shrink-0">
                         <img
                           alt=""
                           src={post.logo}
@@ -446,10 +444,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
 
                       <div>
                         <h3 className="font-medium sm:text-lg">
-                          <a
-                            href="https://www.fkcreative.co.uk/"
-                            className="hover:underline"
-                          >
+                          <a href={post.url} className="hover:underline">
                             {" "}
                             {post.name}{" "}
                           </a>

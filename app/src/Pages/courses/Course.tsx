@@ -37,17 +37,19 @@ import {
   PEvent,
   Courses,
 } from "../../interfaces/interfaces";
+
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import moment from "moment";
 import { date } from "zod";
 import {
   ChevronLeftIcon,
+  Minimize2,
   SignalIcon,
   StarIcon,
   TicketPlus,
 } from "lucide-react";
-import { json } from "react-router-dom";
+import { json, Link, useParams } from "react-router-dom";
 import EventItem from "./Eventitem";
 import { ChevronUpDownIcon, ServerIcon } from "@heroicons/react/24/solid";
 import { LoadingButton } from "../../components/LoadingButton";
@@ -56,22 +58,18 @@ import mc from "../../lib/utils/mc";
 
 interface HomeProps {
   host?: string;
-  channel?: string;
 }
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
-export default function CoursePage({
-  host,
-  channel,
-  roles,
-  setRoles,
-}: HomeProps) {
+export default function CoursePage({ host, roles, setRoles }: HomeProps) {
   const [posts, setPosts] = useState<Courses>();
   const [community, setCommunity] = useState<CommunityCollection>();
   const [open, setOpen] = useState(false);
   const [openM, setOpenM] = useState(false);
+  const { ID } = useParams(); // Extract the ID parameter from the route
+  const [channel, setChannel] = useState(ID); // Set channel using the ID from URL
 
   useEffect(() => {
     if (host) {
@@ -303,15 +301,45 @@ export default function CoursePage({
     setOpen(false);
     //window.location.reload();
   };
-
+  $("#desc").tinymce({
+    height: 500,
+    menubar: false,
+    plugins: [
+      "a11ychecker",
+      "advlist",
+      "advcode",
+      "advtable",
+      "autolink",
+      "checklist",
+      "markdown",
+      "lists",
+      "link",
+      "image",
+      "charmap",
+      "preview",
+      "anchor",
+      "searchreplace",
+      "visualblocks",
+      "powerpaste",
+      "fullscreen",
+      "formatpainter",
+      "insertdatetime",
+      "media",
+      "table",
+      "help",
+      "wordcount",
+    ],
+    toolbar:
+      "undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help",
+  });
   return (
     <>
       {posts && (
-        <div className="h-[100vh]">
+        <div className="min-h-screen">
           <div className="sticky">
             {/* Sticky search header */}
 
-            <main className="lg:pr-96 mt-[-10px] dark:bg-zinc-950">
+            <main className="lg:pr-96 mt-[-10px] dark:bg-gray-900">
               <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
                 <div>
                   <h1 className="text-xl">{posts?.name}</h1>
@@ -490,7 +518,7 @@ export default function CoursePage({
             </main>
 
             {/* Activity feed */}
-            <aside className=" p-5 bg-white dark:bg-zinc-950 lg:fixed lg:bottom-0 lg:right-0 lg:top-[64px]  lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
+            <aside className=" p-5 bg-white dark:bg-gray-900 lg:fixed lg:bottom-0 lg:right-0 lg:top-[64px]  lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
               <header className="flex items-center justify-between border-b border-white/5 ">
                 <h2 className="text-base font-semibold leading-7 ">
                   {" "}
@@ -661,6 +689,20 @@ export default function CoursePage({
                       </li>
                     )}
                 </ul>
+                <div className="flex items-center justify-between gap-x-6 py-5 bottom-0 fixed right-5">
+                  <h2 className="text-base font-semibold leading-7 "></h2>
+
+                  <Link
+                    to={`/s/Home`}
+                    className="hidden md:inline-flex items-center rounded-md bg-black text-white dark:bg-white dark:text-black px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    <Minimize2
+                      className="-ml-0.5 mr-1.5 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                    Exit Course
+                  </Link>
+                </div>
               </div>
             </aside>
           </div>

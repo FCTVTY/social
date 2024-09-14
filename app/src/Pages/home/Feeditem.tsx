@@ -9,6 +9,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import { BadgeCheck, CakeSlice } from "lucide-react";
 import Comment from "./comment";
+import { Link } from "react-router-dom";
 
 interface PostItemProps {
   lite?: boolean;
@@ -219,7 +220,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
   return (
     <li
       key={post._id}
-      className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-zinc-950 dark:shadow-amber-500 dark:border-1 shadow max-w-4xl`}
+      className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-gray-900 dark:shadow-gray-800 dark:border-1 shadow max-w-4xl`}
     >
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-[999999]" onClose={setOpen}>
@@ -339,13 +340,13 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                         MANAGE
                       </span>
 
-                      <a
-                        href={`/removepost/${post._id}`}
+                      <Link
+                        to={`/removepost/${post._id}`}
                         className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
                       >
                         Remove
-                      </a>
+                      </Link>
                       <a
                         href="/documentation"
                         className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -361,9 +362,9 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
         </div>
 
         <dl className="mt-1 flex flex-grow flex-col justify-between">
-          <a
-            href={`/profile/${post.profile.handle || post.profile._id}`}
-            className="group block flex-shrink-0"
+          <Link
+            to={`/profile/${post.profile.handle || post.profile._id}`}
+            className="group block flex-shrink-0 dark:hover:text-white"
           >
             <div className="flex items-center">
               <div>
@@ -379,7 +380,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               <div className="ml-3">
                 {post.profile.verified && (
                   <p
-                    className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip"
+                    className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900  dark:group-hover:text-white inline-flex tooltip"
                     data-tip="Verfied User"
                   >
                     {post.profile.first_name} {post.profile.last_name}
@@ -389,14 +390,22 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                         data-tip="Community Anniversary"
                       />
                     )}
-                    <BadgeCheck
-                      className="text-indigo-400 h-5 w-5 ml-2 tooltip"
-                      data-tip="Verified User"
-                    ></BadgeCheck>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="size-6 h-5 w-5 ml-2 text-rose-600"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </p>
                 )}
                 {!post.profile.verified && (
-                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex tooltip">
+                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white inline-flex tooltip">
                     {post.profile.first_name} {post.profile.last_name}{" "}
                     {isCakeDay && (
                       <CakeSlice
@@ -411,15 +420,15 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 </p>
               </div>
             </div>
-          </a>
-          <a
+          </Link>
+          <Link
             className="my-3 dark:text-white"
-            href={`/s/${post.channels.name}/${post._id}`}
+            to={`/s/${post.channels.name}/${post._id}`}
           >
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
             <h2 dangerouslySetInnerHTML={{ __html: post.desc }}></h2>
             <YouTubeEmbedsmall url={post.desc} />
-          </a>
+          </Link>
 
           <div className="flex py-4 justify-between">
             <div className="flex space-x-2">
@@ -489,12 +498,12 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               </a>
             ))}
           </dd>
-          <a
+          <Link
             className="mt-0.5 text-sm text-gray-500"
-            href={`/s/${post.channels.name}/${post._id}`}
+            to={`/s/${post.channels.name}/${post._id}`}
           >
             View all comments
-          </a>
+          </Link>
           <dd className="mt-0.5 text-sm text-gray-500 ">
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>
@@ -528,13 +537,13 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                           <div className="min-w-0 flex-1">
                             <div>
                               <div className="text-sm">
-                                <a
-                                  href={activityItem._id}
+                                <Link
+                                  to={activityItem._id}
                                   className="font-medium text-gray-900 dark:text-white"
                                 >
                                   {activityItem.profile.first_name}{" "}
                                   {activityItem.profile.last_name}
-                                </a>
+                                </Link>
                               </div>
                               <div className="mt-2 text-sm text-gray-700 dark:text-white">
                                 <p
@@ -564,7 +573,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               onInput={handleInputChange}
               onKeyDown={handleKeyDown}
               placeholder="What's on your mind?"
-              className="a dark:bg-zinc-800 flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"
+              className="a dark:bg-gray-800 flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"
               style={{ minHeight: "2rem", whiteSpace: "pre-wrap" }}
             ></div>
             {showSuggestions && (

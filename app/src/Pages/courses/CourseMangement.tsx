@@ -118,7 +118,7 @@ export default function CourseManagement({
   };
 
   return (
-    <div className="course-management">
+    <div className="course-management min-h-screen">
       {Object.keys(groupedCourses).map((category) => (
         <div key={category} className="course-category">
           <h2>{category}</h2>
@@ -144,7 +144,7 @@ export default function CourseManagement({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="group relative divide-gray-200 rounded-lg bg-white dark:bg-zinc-900 shadow p-4 mb-2"
+                          className="group relative divide-gray-200 rounded-lg bg-white shadow p-4 mb-2"
                         >
                           <div className="course-content">
                             <div className="grid grid-cols-5 grid-rows-1 gap-4">

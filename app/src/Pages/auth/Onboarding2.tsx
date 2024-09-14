@@ -5,6 +5,7 @@ import { getApiDomain } from "../../lib/auth/supertokens";
 import { LoadingButton } from "../../components/LoadingButton";
 import logo from "../../assets/logo-light.svg";
 import Cropper, { Area } from "react-easy-crop";
+import { BadgeCheck, ImageIcon } from "lucide-react";
 
 interface HomeProps {
   host: string;
@@ -275,14 +276,46 @@ function OnboardingPage({ host, channel }: HomeProps) {
                               type="file"
                               id="image-upload"
                               accept="image/*"
+                              className="hidden"
                               onChange={handleImageChange}
                             />
 
-                            <img
-                              src={formData.coverPicture}
-                              alt="Profile"
-                              className="w-64 border-4 border-white mx-auto"
-                            />
+                            <div className="rounded-xl w-[400px] border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
+                              <div className="rounded-t-lg overflow-hidden">
+                                {formData.coverPicture != "" ? (
+                                  <img
+                                    src={formData.coverPicture}
+                                    alt="Profile"
+                                    className="object-cover object-top w-full aspect-video"
+                                  />
+                                ) : (
+                                  <>
+                                    <div className="w-[400px] h-64 bg-indigo-700 flex items-center justify-center">
+                                      <span className="text-white h-20 w-20 bg-indigo-500 flex items-center justify-center rounded-3xl mx-auto">
+                                        <ImageIcon className="" />
+                                      </span>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                              <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
+                                <img
+                                  className="object-cover object-center "
+                                  src={formData?.profilePicture}
+                                  alt=""
+                                />
+                              </div>
+                              <div className="text-center mt-2 mx-auto">
+                                <h2 className="font-semibold">
+                                  <span className="inline-flex">
+                                    {formData?.first_name} {formData?.last_name}
+                                  </span>
+                                </h2>
+                                <p className="text-gray-500 pb-5">
+                                  {formData?.bio}
+                                </p>
+                              </div>
+                            </div>
                           </label>
                         )}
                       </div>
