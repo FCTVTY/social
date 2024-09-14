@@ -81,7 +81,7 @@ function App() {
     // Parse the subdomain
     let subDomainValue = parseSubdomain(host);
     if (host === "localhost:5173") {
-      subDomainValue = "auth";
+      subDomainValue = "meta";
     }
     setSubDomain(subDomainValue);
 
