@@ -679,7 +679,7 @@ export default function CoursePage({
                       leaveFrom="translate-x-0"
                       leaveTo="translate-x-full"
                     >
-                      <Dialog.Panel className="pointer-events-auto w-screen max-w-2xl">
+                      <Dialog.Panel className="pointer-events-auto w-screen max-w-7xl">
                         <form
                           className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
                           onSubmit={chandleSubmit}
@@ -769,6 +769,10 @@ export default function CoursePage({
                                     onBlur={handleDescChange}
                                     dangerouslySetInnerHTML={{
                                       __html: posts.desc,
+                                    }}
+                                    style={{
+                                      minHeight: "4rem",
+                                      whiteSpace: "pre-wrap",
                                     }}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   ></div>
@@ -938,6 +942,10 @@ export default function CoursePage({
                                         }
                                         dangerouslySetInnerHTML={{
                                           __html: chapter.text,
+                                        }}
+                                        style={{
+                                          minHeight: "4rem",
+                                          whiteSpace: "pre-wrap",
                                         }}
                                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                       />
