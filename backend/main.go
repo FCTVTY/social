@@ -220,6 +220,10 @@ func main() {
 			session.VerifySession(nil, client.PostDelete).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/lockpost" && r.Method == "GET" {
+			session.VerifySession(nil, client.PostLock).ServeHTTP(rw, r)
+			return
+		}
 		if parsedURL.Path == "/v1/RemoveCourse" && r.Method == "GET" {
 			session.VerifySession(nil, client.CourseDelete).ServeHTTP(rw, r)
 			return

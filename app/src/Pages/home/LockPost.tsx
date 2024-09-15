@@ -16,7 +16,7 @@ interface HomeProps {
   profileid?: string;
 }
 
-export default function RemovePost({ host, profileid }: HomeProps) {
+export default function LockPost({ host, profileid }: HomeProps) {
   const location = useLocation();
   profileid = location.pathname.split("/")[2];
 
@@ -31,7 +31,7 @@ export default function RemovePost({ host, profileid }: HomeProps) {
   const fetchDetails = async () => {
     try {
       const response = await axios.get(
-        `${getApiDomain()}/removepost?oid=${profileid}`,
+        `${getApiDomain()}/lockpost?oid=${profileid}`,
       );
       const timer = setTimeout(() => {
         // Redirect to the desired location after 3 seconds
@@ -53,15 +53,10 @@ export default function RemovePost({ host, profileid }: HomeProps) {
           </div>
           <div className="ml-3">
             <h3 className="text-sm font-medium text-yellow-800">
-              Please wait.. Removing Post
+              Please wait.. Locking Post
             </h3>
             <div className="mt-2 text-sm text-yellow-700">
-              <p>
-                Removing Post <br />
-                Removing Media <br />
-                Removing Likes <br />
-                Removing Comments <br />
-              </p>
+              <p>Restricting Comments.</p>
             </div>
           </div>
         </div>

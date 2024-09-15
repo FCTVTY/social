@@ -191,7 +191,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
     <>
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-900 dark:shadow-gray-800  dark:text-white shadow rounded-xl mb-6 p-4 "
+        className="bg-white dark:bg-gray-900 dark:shadow-gray-800  dark:text-white shadow rounded-xl  p-4 dark:border-gray-800 dark:border dark:rounded-none"
       >
         {selectedImage && (
           <div className="mt-4 mx-auto">

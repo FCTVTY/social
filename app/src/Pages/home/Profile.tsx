@@ -101,7 +101,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
           <div className="container mx-auto p-4 lg:max-w-7xl">
             {/* Header */}
 
-            <div className="lg:hidden md:hidden rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
+            <div className="lg:hidden md:hidden rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
               <div className="rounded-t-lg h-32 overflow-hidden">
                 <img
                   className="object-cover object-top w-full"
@@ -165,7 +165,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-900 dark:border-gray-800 border-2 shadow-md rounded-lg overflow-hidden hidden lg:block md:block">
+            <div className="bg-white dark:bg-gray-900 dark:border-gray-800 bordershadow-md rounded-lg overflow-hidden hidden lg:block md:block">
               <div className="w-full mx-auto">
                 <img
                   src={profile.coverPicture || "https://picsum.photos/1600/600"}
@@ -270,14 +270,14 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
             <div className="mt-4 lg:flex gap-4">
               {/* Sidebar */}
               <div className="lg:w-1/2 sm:w-full">
-                <div className="bg-white dark:bg-gray-900 dark:border-gray-800 border-2 shadow-md rounded-lg p-4 mb-4">
+                <div className="bg-white dark:bg-gray-900 dark:border-gray-800 bordershadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">About</h2>
                   <p
                     className="text-gray-700 dark:text-white"
                     dangerouslySetInnerHTML={{ __html: profile.bio }}
                   ></p>
                 </div>
-                <div className=" bg-white dark:bg-gray-900 dark:border-gray-800 border-2 shadow-md rounded-lg p-4 mb-4">
+                <div className=" bg-white dark:bg-gray-900 dark:border-gray-800 bordershadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">Communities</h2>
                   <div className="flex flex-wrap">
                     {/* Example Friends */}
@@ -287,7 +287,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                           key={c.id}
                           src={c.logo}
                           alt={`COMMUNITY`}
-                          className=" h-16 rounded-xl border-2 border-white dark:border-gray-800 m-2 p-2 object-contain"
+                          className=" h-16 rounded-xl border border-white dark:border-gray-800 m-2 p-2 object-contain"
                         />
                       ))}
                   </div>

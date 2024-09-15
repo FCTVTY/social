@@ -55,6 +55,7 @@ import Landing from "./Pages/home/Landing";
 import CourseMangement from "./Pages/courses/CourseMangement";
 import store from "./store/store";
 import ApplicationLayoutFull from "./layout/applicationLayoutFull";
+import LockPost from "./Pages/home/LockPost";
 
 initSuperTokens();
 
@@ -82,7 +83,6 @@ function App() {
     let subDomainValue = parseSubdomain(host);
     if (host === "localhost:5173") {
       subDomainValue = "meta";
-
     }
     setSubDomain(subDomainValue);
 
@@ -281,12 +281,21 @@ function App() {
                   element={
                     <SessionAuth>
                       <ApplicationLayout host={subdomain} channel={channel}>
-                        <RemovePost host={subdomain} profileid={channel} />
+                        <RemovePost host={subdomain} />
                       </ApplicationLayout>{" "}
                     </SessionAuth>
                   }
                 />
-
+                <Route
+                  path="/lockpost/:id"
+                  element={
+                    <SessionAuth>
+                      <ApplicationLayout host={subdomain} channel={channel}>
+                        <LockPost host={subdomain} />
+                      </ApplicationLayout>{" "}
+                    </SessionAuth>
+                  }
+                />
                 <Route
                   path="/removeCourse/:id"
                   element={

@@ -678,10 +678,10 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
 
                   <Link
                     to={`/s/Home`}
-                    className="hidden md:inline-flex items-center rounded-md bg-black text-white dark:bg-white dark:text-black px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className=" md:inline-flex items-center rounded-md bg-black text-white dark:bg-white dark:text-black px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     <Minimize2
-                      className="-ml-0.5 mr-1.5 h-5 w-5"
+                      className="-ml-0.5 mr-1.5 h-5 w-5 "
                       aria-hidden="true"
                     />
                     Exit Course
@@ -837,7 +837,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                   <div className="flex space-x-2 mb-2">
                                     <label
                                       htmlFor="image-upload"
-                                      className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                      className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                     >
                                       <PlusIcon
                                         className="h-5 w-5"
@@ -932,7 +932,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                       <div className="flex space-x-2 mb-2">
                                         <label
                                           htmlFor={`chapter-image-${index}`}
-                                          className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                          className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                         >
                                           <PlusIcon
                                             className="h-5 w-5"

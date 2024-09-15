@@ -21,7 +21,7 @@ import { TagIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import Comment from "./comment";
 import YouTubeEmbed from "./youtube";
 import { BadgeCheck } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -38,7 +38,8 @@ export default function PostView({ host, channel, post }: HomeProps) {
   const [profile, setProfile] = useState<Profile>();
   const [community, setCommunity] = useState<Partial<CommunityCollection>>();
   const [ads, setAds] = useState<Ads[]>([]);
-
+  const location = useLocation();
+  post = location.pathname.split("/")[3];
   useEffect(() => {
     if (post) {
       fetchDetails();
@@ -340,7 +341,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
               </div>
             </>
           )}
-          {ppost && (
+          {ppost && ppost.commentsallowed ? (
             <Comment
               onSubmit={handleRefresh}
               post={post}
@@ -348,10 +349,12 @@ export default function PostView({ host, channel, post }: HomeProps) {
               profiles={community?.profiles}
               channel={ppost?.channel}
             />
+          ) : (
+            <p className="text-center py-3">comments have been disabled</p>
           )}
         </div>
         <div className="lg:col-span-2 lg:col-start-4 px-4 sm:px-6 lg:px-8 ">
-          <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
+          <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
             <div className="rounded-t-lg  overflow-hidden">
               <img
                 className="object-cover object-top w-full aspect-video"
@@ -432,7 +435,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                   key={post._id}
                   className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl"
                 >
-                  <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
+                  <article className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
                     <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                       <a href={post.url} className="block shrink-0">
                         <img

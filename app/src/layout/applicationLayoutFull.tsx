@@ -1095,14 +1095,7 @@ const ApplicationLayoutFull: React.FC<Props> = ({
               </div>
 
               <main className=" py-10 bg dark:bg-gray-900">
-                <div className="w-full ">
-                  <div className="flex justify-center -mt-8 mb-10">
-                    <img
-                      src={community && community.community?.logo}
-                      className="sm:mx-auto md:hidden sm:block h-9 rounded-xs"
-                    />
-                  </div>
-                </div>
+                <div className="w-full "></div>
                 {community?.community?.private && community?.user?.notjoined ? (
                   <Join
                     text={community.community.desc}

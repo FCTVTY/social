@@ -329,6 +329,7 @@ func CreatePost(rw http.ResponseWriter, r *http.Request) {
 	v.Channel, _ = primitive.ObjectIDFromHex(v.Channelstring)
 	v.Tags = []string{}
 	v.Visability = true
+	v.Commentsallowed = true
 	v.UserID = sessionContainer.GetUserID()
 	if v.Media != "" {
 		img, _, err := decodeDataURI(v.Media)
@@ -1860,6 +1861,63 @@ func PostDelete(rw http.ResponseWriter, r *http.Request) {
 
 	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
 	rw.Write([]byte("post deleted successfully"))
+}
+func PostLock(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+	roles, err := userroles.GetRolesForUser("public", userID, nil)
+	if err != nil {
+		http.Error(rw, "failed to get user roles", http.StatusInternalServerError)
+		return
+	}
+
+	hasRole := false
+	for _, role := range roles.OK.Roles {
+		if role == "admin" || role == "moderator" {
+			hasRole = true
+			break
+		}
+	}
+
+	if !hasRole {
+		http.Error(rw, "user does not have the required role", http.StatusForbidden) // 403 Forbidden for insufficient role
+		return
+	}
+
+	name := r.URL.Query().Get("oid")
+	if name == "" {
+		http.Error(rw, "missing object ID", http.StatusBadRequest) // 400 Bad Request for missing ID
+		return
+	}
+
+	objectId, err := primitive.ObjectIDFromHex(name)
+	if err != nil {
+		http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		return
+	}
+
+	data := bson.M{"_id": objectId}
+	update := bson.M{"$set": bson.M{"commentsallowed": false}}
+
+	ctx := context.Background()
+	result, err := postCollection.UpdateOne(ctx, data, update)
+	if err != nil {
+		http.Error(rw, "failed to lock", http.StatusInternalServerError)
+		return
+	}
+
+	if result.ModifiedCount == 0 {
+		http.Error(rw, "post not found", http.StatusNotFound) // 404 Not Found if no document is deleted
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
+	rw.Write([]byte("post locked successfully"))
 }
 
 func CourseDelete(rw http.ResponseWriter, r *http.Request) {

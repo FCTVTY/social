@@ -280,7 +280,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                               onChange={handleImageChange}
                             />
 
-                            <div className="rounded-xl w-[400px] border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
+                            <div className="rounded-xl w-[400px] border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
                               <div className="rounded-t-lg overflow-hidden">
                                 {formData.coverPicture != "" ? (
                                   <img

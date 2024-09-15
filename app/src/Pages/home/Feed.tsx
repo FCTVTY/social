@@ -243,14 +243,14 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
         </div>
       )}
       {channel && (
-        <div className="mx-auto max-w-7xl py-0 px-6 ">
+        <div className="mx-auto max-w-7xl py-0 px-6 -mt-10">
           <div className="lg:grid lg:grid-cols-5 lg:grid-rows-1 lg:gap-4">
             <div className="lg:col-span-3">
               <div className={cn(home ? "" : "hidden", "mb-5")}>
                 <div className="mx-auto max-w-7xl py-0 sm:px-2">
                   <div
                     tabIndex={0}
-                    className="collapse collapse-arrow relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl rounded-2xl sm:px-16 __welcome"
+                    className="collapse collapse-arrow relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl dark:border-gray-800 dark:borderrounded-2xl sm:px-16 __welcome"
                   >
                     <div className="collapse-title text-xl font-medium text-white">
                       <h2 className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
@@ -288,9 +288,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
               <ul
                 role="list"
-                className="grid grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto  "
+                className="grid grid-cols-1 dark:gap-0 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto  "
               >
-                <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
+                <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl ">
                   <Create
                     channel={
                       community?.channels?.find(
@@ -375,7 +375,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
             </div>
 
             <div className="lg:col-span-2 lg:col-start-4 ">
-              <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
+              <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
                 <div className="rounded-t-lg overflow-hidden">
                   <img
                     className="object-cover object-top w-full aspect-video"
@@ -476,7 +476,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                 About
               </span>
 
-              <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 p-3 mb-4 dark:text-white ">
+              <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 p-3 mb-4 dark:text-white ">
                 <img
                   src={community && community.community?.logo}
                   className="mx-auto h-20 w-40 py-1 object-contain dark:hidden"
@@ -560,7 +560,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                       key={post._id}
                       className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl"
                     >
-                      <article className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
+                      <article className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
                         <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                           <a href={post.url} className="block shrink-0">
                             <img
@@ -629,7 +629,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     </div>
                   ));
                 })()}
-              <div className="rounded-xl border-2 border-gray-100 bg-white p-3 mt-4 hidden">
+              <div className="rounded-xl border border-gray-100 bg-white p-3 mt-4 hidden">
                 <h2 className="text-xl">Members</h2>
 
                 <dl className="">
@@ -807,7 +807,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                               <div className="flex space-x-2">
                                 <button
                                   type="button"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <span className="sr-only">
                                     Add team member

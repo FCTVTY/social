@@ -744,7 +744,7 @@ const ApplicationLayout: React.FC<Props> = ({
                       <div className="flex flex-shrink-0 items-center ">
                         <button
                           type="button"
-                          className="m-2.5 -ml-2.5 p-2.5 text-gray-700 lg:hidden"
+                          className="m-2.5 ml-4 p-2.5 text-gray-700 lg:hidden"
                           onClick={() => setSidebarOpen(true)}
                         >
                           <span className="sr-only">Open sidebar</span>
@@ -753,14 +753,14 @@ const ApplicationLayout: React.FC<Props> = ({
 
                         <img
                           src={community && community.community?.logo}
-                          className="sm:mx-auto hidden md:block h-9 rounded-xs dark:hidden"
+                          className="sm:mx-auto  h-5 sm:h-9 rounded-xs dark:hidden"
                         />
                         <img
                           src={
                             (community && community.community?.dLogo) ||
                             (community && community.community?.logo)
                           }
-                          className="sm:mx-auto hidden  h-9 rounded-xs dark:block sm:hidden"
+                          className="sm:mx-auto hidden  h-5 sm:h-9  rounded-xs dark:block"
                         />
                       </div>
                     </div>
@@ -1280,14 +1280,7 @@ const ApplicationLayout: React.FC<Props> = ({
               </div>
 
               <main className="lg:ml-72 py-10 bg dark:bg-gray-900">
-                <div className="w-full ">
-                  <div className="flex justify-center -mt-8 mb-10">
-                    <img
-                      src={community && community.community?.logo}
-                      className="sm:mx-auto md:hidden sm:block h-9 rounded-xs"
-                    />
-                  </div>
-                </div>
+                <div className="w-full "></div>
                 {community?.community?.private && community?.user?.notjoined ? (
                   <Join
                     text={community.community.desc}
