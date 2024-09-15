@@ -204,7 +204,6 @@ func UpdateMeta(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
 func Community(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
@@ -298,6 +297,36 @@ func Community(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 		collection.Profiles = append(collection.Profiles, result)
+	}
+
+	// Encode and send community details in the response
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(collection); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+func SCommunity(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+
+	// Validate and retrieve community name from URL query parameters
+	name := r.URL.Query().Get("name")
+	if name == "" {
+		http.Error(rw, "community name is required", http.StatusBadRequest)
+		return
+	}
+	var collection models.CommunityCollection
+	// Check if the community exists in the database
+	filter := bson.M{"url": name}
+	var community models.Community
+	err := communitesCollection.FindOne(context.Background(), filter).Decode(&community)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "community not found", http.StatusNotFound)
+			return
+		}
+		http.Error(rw, "failed to fetch community details", http.StatusInternalServerError)
+		return
 	}
 
 	// Encode and send community details in the response

@@ -34,7 +34,7 @@ export default function Login({ host }: LoginProps) {
   const fetchDetails = async () => {
     try {
       const response = await axios.get(
-        `${getApiDomain()}/community?name=${host}`,
+        `${getApiDomain()}/scommunity?name=${host}`,
       );
       setCommunity(response.data);
     } catch (error) {

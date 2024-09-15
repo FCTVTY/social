@@ -204,6 +204,10 @@ func main() {
 			session.VerifySession(nil, client.Community).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/scommunity" && r.Method == "GET" {
+			session.VerifySession(nil, client.SCommunity).ServeHTTP(rw, r)
+			return
+		}
 		if parsedURL.Path == "/v1/join" && r.Method == "POST" {
 			session.VerifySession(nil, client.CommunityJoin).ServeHTTP(rw, r)
 			return

@@ -3,7 +3,7 @@ import Button from "../../components/Button";
 import { SelectField, TextField } from "../../components/Fields";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo-light.svg";
-import mlogo from '../../assets/logo-light.svg';
+import mlogo from "../../assets/logo-light.svg";
 
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -34,7 +34,7 @@ const Register: React.FC = ({ host }: RegisterProps) => {
   const fetchDetails = async () => {
     try {
       const response = await axios.get(
-        `${getApiDomain()}/community?name=${host}`,
+        `${getApiDomain()}/scommunity?name=${host}`,
       );
       setCommunity(response.data);
     } catch (error) {
