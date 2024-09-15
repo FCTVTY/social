@@ -18,19 +18,21 @@ import (
 )
 
 type Community struct {
-	ID        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Name      string             `json:"name"`
-	Logo      string             `json:"logo"`
-	Desc      string             `json:"desc"`
-	Private   bool               `json:"private"`
-	OwnerId   string             `json:"ownerId"`
-	Create    bool               `json:"create"`
-	Url       string             `json:"url"`
-	Access    string             `json:"access"`
-	Published bool               `json:"published"`
-	Menu      string             `json:"menu"`
-	MenuText  string             `json:"menutext"`
-	LandingBg string             `json:"landingBg"`
+	ID    primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Name  string             `json:"name"`
+	Logo  string             `json:"logo"`
+	DLogo string             `json:"dLogo"`
+
+	Desc      string `json:"desc"`
+	Private   bool   `json:"private"`
+	OwnerId   string `json:"ownerId"`
+	Create    bool   `json:"create"`
+	Url       string `json:"url"`
+	Access    string `json:"access"`
+	Published bool   `json:"published"`
+	Menu      string `json:"menu"`
+	MenuText  string `json:"menutext"`
+	LandingBg string `json:"landingBg"`
 }
 type Channel struct {
 	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`

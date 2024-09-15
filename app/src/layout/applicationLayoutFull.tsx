@@ -367,7 +367,8 @@ const ApplicationLayoutFull: React.FC<Props> = ({
 
       setNavigation((prevNavigation) => [...channelNavigation]);
     }
-  }, [community]);
+  }, [community, url]);
+
 
   useEffect(() => {
     rolesData();
@@ -753,7 +754,8 @@ const ApplicationLayoutFull: React.FC<Props> = ({
 
                         <img
                           src={community && community.community?.logo}
-                          className="sm:mx-auto hidden md:block h-9 rounded-xs dark:invert"
+                          className="sm:mx-auto hidden md:block h-9 rounded-xs"
+
                         />
                       </div>
                     </div>
@@ -1092,7 +1094,8 @@ const ApplicationLayoutFull: React.FC<Props> = ({
                   <div className="flex justify-center -mt-8 mb-10">
                     <img
                       src={community && community.community?.logo}
-                      className="sm:mx-auto md:hidden sm:block h-9 rounded-xs dark:invert"
+                      className="sm:mx-auto md:hidden sm:block h-9 rounded-xs"
+
                     />
                   </div>
                 </div>

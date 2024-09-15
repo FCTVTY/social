@@ -5,6 +5,7 @@ export interface Community {
   id: ObjectId;
   name: string;
   logo: string;
+  dLogo: string;
   desc: string;
   private: boolean;
   create: boolean;
