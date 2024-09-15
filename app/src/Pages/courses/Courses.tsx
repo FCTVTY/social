@@ -36,7 +36,12 @@ import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import moment from "moment";
 import { date } from "zod";
-import { ChevronUpIcon, PencilLineIcon, TicketPlus } from "lucide-react";
+import {
+  ChevronUpIcon,
+  PencilLineIcon,
+  TicketPlus,
+  Trash2,
+} from "lucide-react";
 import { json, Link } from "react-router-dom";
 import EventItem from "./Eventitem";
 import Button from "../../components/Button";
@@ -168,6 +173,18 @@ export default function CoursesPage({
         ...courseData.chapters,
         { _id: "", name: "", status: "", videourl: "", image: "", text: "" },
       ],
+    });
+  };
+  const RemoveChapter = (index) => {
+    setCourseData({
+      ...courseData,
+      chapters: courseData.chapters.filter((_, i) => i !== index),
+    });
+  };
+  const RemoveFile = (index) => {
+    setCourseData({
+      ...courseData,
+      files: courseData.files.filter((_, i) => i !== index),
     });
   };
 
@@ -692,8 +709,14 @@ export default function CoursesPage({
                               {courseData.chapters.map((chapter, index) => (
                                 <div
                                   key={index}
-                                  className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0"
+                                  className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 relative pr-20 pb-10"
                                 >
+                                  <span
+                                    className="absolute top-5 right-5"
+                                    onClick={() => RemoveChapter(index)}
+                                  >
+                                    <Trash2 />
+                                  </span>
                                   <div>
                                     <label
                                       htmlFor={`chapter-name-${index}`}
@@ -817,8 +840,14 @@ export default function CoursesPage({
                               {courseData.files.map((file, index) => (
                                 <div
                                   key={index}
-                                  className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0"
+                                  className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 relative pr-20 pb-10"
                                 >
+                                  <span
+                                    className="absolute top-5 right-5"
+                                    onClick={() => RemoveFile(index)}
+                                  >
+                                    <Trash2 />
+                                  </span>
                                   <div>
                                     <label
                                       htmlFor={`file-name-${index}`}

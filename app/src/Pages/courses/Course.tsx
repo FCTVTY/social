@@ -48,6 +48,7 @@ import {
   SignalIcon,
   StarIcon,
   TicketPlus,
+  Trash2,
 } from "lucide-react";
 import { json, Link, useParams } from "react-router-dom";
 import EventItem from "./Eventitem";
@@ -155,6 +156,19 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
     setPosts({
       ...posts,
       files: [...posts.files, { url: "", name: "", logo: "", fileExt: "" }],
+    });
+  };
+
+  const RemoveChapter = (index) => {
+    setPosts({
+      ...posts,
+      chapters: posts.chapters.filter((_, i) => i !== index),
+    });
+  };
+  const RemoveFile = (index) => {
+    setPosts({
+      ...posts,
+      files: posts.files.filter((_, i) => i !== index),
     });
   };
 
@@ -301,37 +315,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
     setOpen(false);
     //window.location.reload();
   };
-  $("#desc").tinymce({
-    height: 500,
-    menubar: false,
-    plugins: [
-      "a11ychecker",
-      "advlist",
-      "advcode",
-      "advtable",
-      "autolink",
-      "checklist",
-      "markdown",
-      "lists",
-      "link",
-      "image",
-      "charmap",
-      "preview",
-      "anchor",
-      "searchreplace",
-      "visualblocks",
-      "powerpaste",
-      "fullscreen",
-      "formatpainter",
-      "insertdatetime",
-      "media",
-      "table",
-      "help",
-      "wordcount",
-    ],
-    toolbar:
-      "undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help",
-  });
+
   return (
     <>
       {posts && (
@@ -885,8 +869,15 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 {posts.chapters.map((chapter, index) => (
                                   <div
                                     key={index}
-                                    className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0"
+                                    className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 relative pr-20 pb-10"
                                   >
+                                    <button
+                                      type="button"
+                                      className="absolute top-5 right-5"
+                                      onClick={() => RemoveChapter(index)}
+                                    >
+                                      <Trash2 />
+                                    </button>
                                     <div>
                                       <label
                                         htmlFor={`chapter-name-${index}`}
@@ -1010,8 +1001,15 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 {posts.files.map((file, index) => (
                                   <div
                                     key={index}
-                                    className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0"
+                                    className="space-y-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 relative pr-20 pb-10"
                                   >
+                                    <button
+                                      type="button"
+                                      className="absolute top-5 right-5"
+                                      onClick={() => RemoveFile(index)}
+                                    >
+                                      <Trash2 />
+                                    </button>
                                     <div>
                                       <label
                                         htmlFor={`file-name-${index}`}
