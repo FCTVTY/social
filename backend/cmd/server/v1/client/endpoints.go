@@ -315,7 +315,6 @@ func SCommunity(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "community name is required", http.StatusBadRequest)
 		return
 	}
-	var collection models.CommunityCollection
 	// Check if the community exists in the database
 	filter := bson.M{"url": name}
 	var community models.Community
@@ -331,7 +330,7 @@ func SCommunity(rw http.ResponseWriter, r *http.Request) {
 
 	// Encode and send community details in the response
 	rw.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(rw).Encode(collection); err != nil {
+	if err := json.NewEncoder(rw).Encode(community); err != nil {
 		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
 		return
 	}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/bob-badge.svg";
 import { Link } from "react-router-dom";
-import { CommunityCollection } from "../interfaces/interfaces";
+import { Community, CommunityCollection } from "../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../lib/auth/supertokens";
 
@@ -15,11 +15,10 @@ function classNames(...classes: string[]) {
 }
 
 const AuthLayout: React.FC<Props> = ({ children, host }) => {
-  const [community, setCommunity] =
-    useState<Partial<CommunityCollection> | null>(null); // Initialize as null
+  const [community, setCommunity] = useState<Partial<Community> | null>(null); // Initialize as null
 
   useEffect(() => {
-    if (host) {
+    if (host != null) {
       fetchDetails();
       console.log(host);
     }
@@ -69,7 +68,7 @@ const AuthLayout: React.FC<Props> = ({ children, host }) => {
             <img
               className="absolute inset-0 h-full w-full object-cover"
               src={
-                community?.community?.landingBg ||
+                community?.landingBg ||
                 "https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg"
               }
               alt="Community Background"

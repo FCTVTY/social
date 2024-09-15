@@ -60,51 +60,49 @@ import LockPost from "./Pages/home/LockPost";
 initSuperTokens();
 
 function App() {
-  const [subdomain, setSubDomain] = useState<string | undefined>(undefined);
-  const [communityFound, setCommunity] = useState<string | undefined>(
-    undefined,
-  );
-  const [channel, setChannel] = useState<string | undefined>(undefined);
-  const [profile, setProfile] = useState<string | undefined>(undefined);
-  const [post, setPost] = useState<string | undefined>(undefined);
-  const [event, setEvent] = useState<string | undefined>(undefined);
-
-  // Use `useMemo` to derive `host` and avoid recomputation on each render
-  const host = useMemo(() => window.location.host, []);
-
-  // Utility function to parse subdomain
-  const parseSubdomain = (host: string): string | null => {
-    const arr = host.split(".").slice(0, host.includes("local") ? -1 : -2);
-    return arr.length > 0 ? arr[0] : null;
-  };
+  const [subdomain, setSubDomain] = useState("null");
+  const [communityFound, setCommunity] = useState("null");
+  const [channel, setChannel] = useState("null");
+  const [post, setPost] = useState("null");
+  const [host, setHost] = useState(window.location.host); // Use state for host
 
   useEffect(() => {
-    // Parse the subdomain
-    let subDomainValue = parseSubdomain(host);
-    if (host === "localhost:5173") {
-      subDomainValue = "meta";
+    const arr = host.split(".").slice(0, host.includes("local") ? -1 : -2);
+    if (arr.length > 0) {
+      setSubDomain(arr[0]);
+      console.log(arr[0]);
+      console.log("using:" + host);
     }
-    setSubDomain(subDomainValue);
+    console.log(host);
+    if (host === "localhost:5173") {
+      // setSubDomain("neo-egvzkmsh")
+      setSubDomain("meta");
+      setHost("meta");
+    }
+
+    // Parse the URL
+    const parsedUrl = window.location.href;
+    const url = new URL(window.location.href);
 
     // Extracting the channel and post IDs from the URL
-    const url = new URL(window.location.href);
     const pathnameParts = url.pathname.split("/");
-    const channelID = pathnameParts[2] || null;
-    const postID = pathnameParts[3] || null;
+    const channelID = pathnameParts[2];
+    const postID = pathnameParts[3]; // This may be undefined if the URL structure changes
 
-    // Set channel and post states
+    console.info("host:", host);
+    console.log("Channel ID:", channelID);
+    console.log("Post ID:", postID);
+
     setChannel(channelID);
     setPost(postID);
-    if (url.pathname.includes("profile")) {
-      const eventPostID = pathnameParts[2] || null;
-      setProfile(eventPostID);
-    }
-    // Check for event page
+
     if (url.pathname.includes("event")) {
-      const eventPostID = pathnameParts[2] || null;
-      setEvent(eventPostID);
+      console.log("event page");
+      const postID = pathnameParts[2];
+      console.log("Post ID:", postID);
+      setPost(postID);
     }
-  }, [host]); // `host` is derived, so it doesn't change
+  }, []);
 
   const [progress, setProgress] = useState(false);
 
@@ -113,7 +111,6 @@ function App() {
     captureUncaught: true,
     captureUnhandledRejections: true,
   };
-
   return (
     <RollbarProvider config={rollbarConfig}>
       <Provider store={store}>
@@ -212,7 +209,7 @@ function App() {
                   element={
                     <SessionAuth>
                       <ApplicationLayout host={subdomain} channel={channel}>
-                        <EventPage host={subdomain} post={event} />
+                        <EventPage host={subdomain} post={channel} />
                       </ApplicationLayout>
                     </SessionAuth>
                   }
@@ -234,7 +231,7 @@ function App() {
                   element={
                     <SessionAuth>
                       <ApplicationLayout host={subdomain} channel={channel}>
-                        <ProfilePage host={subdomain} profileid={profile} />
+                        <ProfilePage host={subdomain} profileid={channel} />
                       </ApplicationLayout>
                     </SessionAuth>
                   }

@@ -11,7 +11,7 @@ import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 import { Form, FormField, FormItem, FormMessage } from "../../components/form";
 import { Input } from "../../components/input";
 import { Alert, AlertDescription, AlertTitle } from "../../components/alert";
-import { CommunityCollection } from "../../interfaces/interfaces";
+import { Community, CommunityCollection } from "../../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 
@@ -25,7 +25,7 @@ const Register: React.FC = ({ host }: RegisterProps) => {
     "signup",
   );
 
-  const [community, setCommunity] = useState<Partial<CommunityCollection>>();
+  const [community, setCommunity] = useState<Partial<Community>>();
 
   useEffect(() => {
     fetchDetails();
@@ -115,7 +115,7 @@ const Register: React.FC = ({ host }: RegisterProps) => {
       <div className="flex flex-col">
         <Link to="/" aria-label="Feed">
           <img
-            src={community?.community?.logo || mlogo}
+            src={community?.logo || mlogo}
             className="h-10 w-auto"
             alt="Logo"
           />
