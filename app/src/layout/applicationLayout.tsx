@@ -753,7 +753,14 @@ const ApplicationLayout: React.FC<Props> = ({
 
                         <img
                           src={community && community.community?.logo}
-                          className="sm:mx-auto hidden md:block h-9 rounded-xs dark:invert"
+                          className="sm:mx-auto hidden md:block h-9 rounded-xs dark:hidden"
+                        />
+                        <img
+                          src={
+                            (community && community.community?.dLogo) ||
+                            community.community?.logo
+                          }
+                          className="sm:mx-auto hidden  h-9 rounded-xs dark:block sm:hidden"
                         />
                       </div>
                     </div>
@@ -1057,7 +1064,7 @@ const ApplicationLayout: React.FC<Props> = ({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col border-r-2 border-slate-100 dark:bg-gray-900 dark:border-gray-800">
+            <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col  border-slate-100 dark:bg-gray-900 dark:border-gray-800">
               {/* Sidebar component, swap this element with another sidebar if you like */}
               <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
                 <nav className="flex flex-1 flex-col mt-2">
@@ -1274,7 +1281,7 @@ const ApplicationLayout: React.FC<Props> = ({
                   <div className="flex justify-center -mt-8 mb-10">
                     <img
                       src={community && community.community?.logo}
-                      className="sm:mx-auto md:hidden sm:block h-9 rounded-xs dark:invert"
+                      className="sm:mx-auto md:hidden sm:block h-9 rounded-xs"
                     />
                   </div>
                 </div>

@@ -29,6 +29,7 @@ import (
 	"strings"
 	"time"
 
+	infisical "github.com/infisical/go-sdk"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
@@ -751,6 +752,31 @@ func UpdateCourses(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	client := infisical.NewInfisicalClient(infisical.Config{
+		SiteUrl: "https://app.infisical.com", // Optional, default is https://app.infisical.com
+	})
+
+	_, err = client.Auth().UniversalAuthLogin("78fdd09f-fe90-4810-8cd3-679e323e0841", "5e0688e2af93211b367d8dd14f4921bd49f39df266f76aa14e35b15465b44625")
+
+	if err != nil {
+		fmt.Printf("Authentication failed: %v", err)
+		os.Exit(1)
+	}
+
+	bucketid, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
+		SecretKey:   "BUCKET_ACCESS_KEY",
+		Environment: "Production",
+		ProjectID:   "3d9ac7aa-5755-4f79-a53b-d75ec28192a3",
+		SecretPath:  "/",
+	})
+	bucketsec, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
+		SecretKey:   "BUCKET_ACCESS_SECRET",
+		Environment: "Production",
+		ProjectID:   "3d9ac7aa-5755-4f79-a53b-d75ec28192a3",
+		SecretPath:  "/",
+	})
+
 	for _, updatedCourse := range updatedCourses {
 
 		// Validate that the course ID is provided
@@ -800,8 +826,8 @@ func UpdateCourses(rw http.ResponseWriter, r *http.Request) {
 				}
 
 				endpoint := "s3.app.bhivecommunity.co.uk"
-				accessKeyID := "HWL0Z36tnBEItLIHpK9U"
-				secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+				accessKeyID := bucketid.SecretValue
+				secretAccessKey := bucketsec.SecretValue
 				useSSL := true
 
 				minioClient, err := minio.New(endpoint, &minio.Options{

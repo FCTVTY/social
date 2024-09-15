@@ -288,65 +288,8 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
               <ul
                 role="list"
-                className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto  "
+                className="grid grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 mx-auto  "
               >
-                <li className="hidden">
-                  <div className="flex space-x-2 items-center justify-center flex-wrap grid grid-cols-4 divide-x">
-                    <div className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out">
-                      <img
-                        src="https://picsum.photos/id/23/200/300"
-                        className="rounded-xl"
-                      />
-                      <div className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
-                        <img
-                          src="https://picsum.photos/id/237/50/50"
-                          className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
-                        />
-                        <div className="text-center text-white">John Doe</div>
-                      </div>
-                    </div>
-                    <div className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out">
-                      <img
-                        src="https://picsum.photos/id/29/200/300"
-                        className="rounded-xl"
-                      />
-                      <div className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
-                        <img
-                          src="https://picsum.photos/id/237/50/50"
-                          className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
-                        />
-                        <div className="text-center text-white">John Doe</div>
-                      </div>
-                    </div>
-                    <div className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out">
-                      <img
-                        src="https://picsum.photos/id/230/200/300"
-                        className="rounded-xl"
-                      />
-                      <div className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
-                        <img
-                          src="https://picsum.photos/id/237/50/50"
-                          className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
-                        />
-                        <div className="text-center text-white">John Doe</div>
-                      </div>
-                    </div>
-                    <div className="story-item relative hover:opacity-90 cursor-pointer transition duration-200 ease-in-out">
-                      <img
-                        src="https://picsum.photos//id/63/200/300"
-                        className="rounded-xl"
-                      />
-                      <div className="absolute flex flex-col justify-between h-full w-full top-0 left-0 py-4">
-                        <img
-                          src="https://picsum.photos/id/237/50/50"
-                          className="rounded-full w-10 h-10 border-4 border-blue-500 ml-4"
-                        />
-                        <div className="text-center text-white">John Doe</div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
                 <li className="col-span-1 flex flex-col divide-y divide-gray-200 max-w-4xl">
                   <Create
                     channel={
@@ -536,7 +479,14 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
               <div className="rounded-xl border-2 border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 p-3 mb-4 dark:text-white ">
                 <img
                   src={community && community.community?.logo}
-                  className="mx-auto h-20 w-40 py-1 object-contain"
+                  className="mx-auto h-20 w-40 py-1 object-contain dark:hidden"
+                />
+                <img
+                  src={
+                    (community && community.community?.dLogo) ||
+                    community.community?.logo
+                  }
+                  className="mx-auto h-20 w-40 py-1 object-contain hidden dark:block"
                 />
 
                 <p className={`py-6`}>{community?.community?.desc}</p>
