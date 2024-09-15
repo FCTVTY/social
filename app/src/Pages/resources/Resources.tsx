@@ -94,7 +94,26 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
     acc[fileext].push(file);
     return acc;
   }, {});
+  function camelCaseToWords(s: string) {
+    // Step 1: Insert spaces before uppercase letters that are followed by lowercase letters (camelCase)
+    const result = s.replace(/([a-z])([A-Z])/g, "$1 $2");
 
+    // Step 2: Split the string into words based on spaces and punctuation
+    const words = result.split(/(\s|-|\.)/); // Split by spaces, hyphens, or periods
+
+    // Step 3: Process each word
+    const processedWords = words.map((word) => {
+      // Skip processing if the word is entirely uppercase
+      if (word === word.toUpperCase() && word.length > 1) {
+        return word; // Return the original word without modification
+      }
+      // Otherwise, convert the word to the appropriate format (capitalize the first letter)
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    });
+
+    // Step 4: Join the processed words back into a single string
+    return processedWords.join("");
+  }
   return (
     <div className="min-h-screen dark:bg-gray-900">
       <div className="lg:flex lg:items-center lg:justify-between mt-[-2.5rem] p-3 pl-4 text-center mb-3 ">
@@ -195,7 +214,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                                 key={index}
                                 className="group relative bg-white dark:bg-gray-900 dark:border-gray-800 border border-gray-200 rounded-lg shadow-sm overflow-hidden"
                               >
-                                <div className="aspect-w-1 aspect-h-1 bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-56">
+                                <div className="aspect-w-1 aspect-h-1 bg-gray-800 group-hover:opacity-75 sm:aspect-none sm:h-56">
                                   {file.image ? (
                                     <img
                                       src={file.image}
@@ -203,14 +222,14 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                                       className="w-full h-full object-center object-cover sm:w-full sm:h-full"
                                     />
                                   ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-500">
+                                    <div className="w-full h-full flex items-center justify-center text-white">
                                       No Image Available
                                     </div>
                                   )}
                                 </div>
                                 <div className="px-4 py-2">
-                                  <p className="mt-1 text-sm text-gray-500">
-                                    {file.name}
+                                  <p className="mt-1 text-sm text-gray-500 min-h-[60px] text-wrap">
+                                    {camelCaseToWords(file.name)}
                                   </p>
                                   <h3 className="flex text-sm text-gray-700">
                                     <span aria-hidden="true" className="" />

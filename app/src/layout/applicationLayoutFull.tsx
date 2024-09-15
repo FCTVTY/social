@@ -369,7 +369,6 @@ const ApplicationLayoutFull: React.FC<Props> = ({
     }
   }, [community, url]);
 
-
   useEffect(() => {
     rolesData();
   }, []);
@@ -754,8 +753,14 @@ const ApplicationLayoutFull: React.FC<Props> = ({
 
                         <img
                           src={community && community.community?.logo}
-                          className="sm:mx-auto hidden md:block h-9 rounded-xs"
-
+                          className="sm:mx-auto hidden md:block h-9 rounded-xs dark:hidden"
+                        />
+                        <img
+                          src={
+                            (community && community.community?.dLogo) ||
+                            (community && community.community?.logo)
+                          }
+                          className="sm:mx-auto hidden  h-9 rounded-xs dark:block sm:hidden"
                         />
                       </div>
                     </div>
@@ -1095,7 +1100,6 @@ const ApplicationLayoutFull: React.FC<Props> = ({
                     <img
                       src={community && community.community?.logo}
                       className="sm:mx-auto md:hidden sm:block h-9 rounded-xs"
-
                     />
                   </div>
                 </div>
