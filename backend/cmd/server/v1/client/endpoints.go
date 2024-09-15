@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -495,6 +496,13 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 
 	v.ID = primitive.NewObjectID()
 	for i, chapter := range v.Chapters {
+
+		//clean up chapter text
+		re := regexp.MustCompile(`(?i)\s*style="[^"]*"`)
+
+		// Remove all inline style attributes
+		chapter.Text = re.ReplaceAllString(chapter.Text, "")
+
 		if chapter.Videourl != "" {
 			videoID, err := extractVideoID(chapter.Videourl)
 			if err != nil {
@@ -594,6 +602,12 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 		v.Media = webpDataURI
 	}
 
+	//clean up chapter text
+	re := regexp.MustCompile(`(?i)\s*style="[^"]*"`)
+
+	// Remove all inline style attributes
+	v.Desc = re.ReplaceAllString(v.Desc, "")
+
 	result, err := coursesCollection.InsertOne(context.Background(), v)
 	if err != nil {
 		http.Error(rw, "failed to insert posts: "+err.Error(), http.StatusInternalServerError)
@@ -617,6 +631,12 @@ func UpdateCourse(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	//clean up chapter text
+	re := regexp.MustCompile(`(?i)\s*style="[^"]*"`)
+
+	// Remove all inline style attributes
+	updatedCourse.Desc = re.ReplaceAllString(updatedCourse.Desc, "")
 
 	// Validate that the course ID is provided
 
@@ -642,6 +662,9 @@ func UpdateCourse(rw http.ResponseWriter, r *http.Request) {
 
 	// Update fields (e.g., chapters and media)
 	for i, chapter := range updatedCourse.Chapters {
+
+		chapter.Text = re.ReplaceAllString(chapter.Text, "")
+
 		if chapter.Videourl != "" {
 			videoID, err := extractVideoID(chapter.Videourl)
 			if err != nil {
