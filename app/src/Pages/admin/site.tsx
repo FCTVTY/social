@@ -656,6 +656,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                   value={community.name || ""}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:text-black"
+
                 />
               </div>
               <div className="mb-4">
@@ -693,6 +694,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                   value={community.desc || ""}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:text-black"
+
                 />
               </div>
               <button

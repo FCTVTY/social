@@ -487,6 +487,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     community.community?.logo
                   }
                   className="mx-auto h-20 w-40 py-1 object-contain hidden dark:block"
+
                 />
 
                 <p className={`py-6`}>{community?.community?.desc}</p>

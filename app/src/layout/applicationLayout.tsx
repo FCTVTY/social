@@ -766,6 +766,10 @@ const ApplicationLayout: React.FC<Props> = ({
                     </div>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
                       <div className="flex flex-shrink-0 items-center "></div>
+
+                    </div>
+                    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
+                      <div className="flex flex-shrink-0 items-center "></div>
                     </div>
                     <div className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                       <Themeswitch></Themeswitch>
@@ -1065,6 +1069,7 @@ const ApplicationLayout: React.FC<Props> = ({
 
             {/* Static sidebar for desktop */}
             <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col  border-slate-100 dark:bg-gray-900 dark:border-gray-800">
+
               {/* Sidebar component, swap this element with another sidebar if you like */}
               <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
                 <nav className="flex flex-1 flex-col mt-2">
