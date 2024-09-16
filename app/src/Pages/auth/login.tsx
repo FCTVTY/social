@@ -15,6 +15,7 @@ import { emailPasswordSignIn } from "supertokens-web-js/lib/build/recipe/thirdpa
 import { Community, CommunityCollection } from "../../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
+import { usePageTitle } from "../../lib/hooks/usePageTitle";
 
 interface LoginProps {
   host: string;
@@ -41,6 +42,7 @@ export default function Login({ host }: LoginProps) {
       console.error("Error fetching community details:", error);
     }
   };
+  usePageTitle("signin");
 
   const handleSetMode = (mode: "signin" | "signup" | "forgot_password") => {
     setMode(mode);

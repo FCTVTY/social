@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "../../components/alert";
 import { Community, CommunityCollection } from "../../interfaces/interfaces";
 import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
+import { usePageTitle } from "../../lib/hooks/usePageTitle";
 
 interface RegisterProps {
   host?: string;
@@ -37,10 +38,12 @@ const Register: React.FC = ({ host }: RegisterProps) => {
         `${getApiDomain()}/scommunity?name=${host}`,
       );
       setCommunity(response.data);
+      usePageTitle(response.data.name);
     } catch (error) {
       console.error("Error fetching community details:", error);
     }
   };
+  usePageTitle("signup");
 
   const handleSetMode = (mode: "signin" | "signup" | "forgot_password") => {
     setMode(mode);

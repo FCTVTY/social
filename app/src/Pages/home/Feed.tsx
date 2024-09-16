@@ -29,6 +29,7 @@ import {
 import { BadgeCheck, CakeIcon, MessageCircle, ScrollText } from "lucide-react";
 import { cn } from "../../lib/utils/cn";
 import { useLocation } from "react-router-dom";
+import { usePageTitle } from "../../lib/hooks/usePageTitle";
 
 interface HomeProps {
   host?: string;
@@ -49,6 +50,8 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [cchannel, setcChanel] = useState(location.pathname.split("/")[2]);
 
   channel = location.pathname.split("/")[2];
+  usePageTitle(channel);
+
   console.log(location);
   // Handle channel change and reset page and posts
   useEffect(() => {
