@@ -46,13 +46,15 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [destroyloading, setdestroyloading] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  
+
   channel = location.pathname.split("/")[2];
 
   // Handle channel change and reset page and posts
   useEffect(() => {
     setPage(1);
     setPosts([]);
+    setdestroyloading(false);
+    setLoading(true);
   }, [channel]);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
       window.location.href = "/Landing";
       return;
     }
-   
+
     fetchDetails();
   }, [host, channel]);
 
