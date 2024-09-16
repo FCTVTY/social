@@ -160,7 +160,7 @@ function App() {
                 />
 
                 <Route
-                  path="/s/:ID"
+                  path="/s/:channel"
                   element={
                     <SessionAuth>
                       <ApplicationLayout

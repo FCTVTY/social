@@ -46,16 +46,22 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [destroyloading, setdestroyloading] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const [cchannel, setcChanel] = useState(location.pathname.split("/")[2]);
 
   channel = location.pathname.split("/")[2];
-
+  console.log(location);
   // Handle channel change and reset page and posts
   useEffect(() => {
+    setcChanel(location.pathname.split("/")[2]);
     setPage(1);
     setPosts([]);
     setdestroyloading(false);
     setLoading(true);
-  }, [channel]);
+  }, [location]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [cchannel]);
 
   useEffect(() => {
     if (channel === "Landing" && host === "auth") {
@@ -63,7 +69,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
       return;
     }
 
-    fetchDetails();
+    fetchDetails(location.pathname.split("/")[2]);
   }, [host, channel]);
 
   useEffect(() => {
@@ -73,7 +79,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
     }
     channel = location.pathname.split("/")[2];
 
-    fetchDetails();
+    fetchDetails(location.pathname.split("/")[2]);
   }, [host, channel, location]);
 
   useEffect(() => {
@@ -82,7 +88,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
     const loadMorePosts = async () => {
       try {
         const response = await fetch(
-          `${getApiDomain()}/community/posts?oid=${host}&name=${channel}&page=${page}`,
+          `${getApiDomain()}/community/posts?oid=${host}&name=${cchannel}&page=${page}`,
         );
         const responseData = await response.json();
 
@@ -108,7 +114,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
     loadMorePosts();
   }, [loading, channel, page]);
 
-  const fetchDetails = async () => {
+  const fetchDetails = async (chanel: string) => {
     try {
       setskelloading(true);
       const communityResponse = await fetch(
@@ -125,7 +131,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
       const [postsResponse, adsResponse, profileResponse] = await Promise.all([
         fetch(
-          `${getApiDomain()}/community/posts?oid=${host}&name=${channel}&page=${page}`,
+          `${getApiDomain()}/community/posts?oid=${host}&name=${chanel}&page=1`,
         ),
         fetch(`${getApiDomain()}/data/get`),
         fetch(`${getApiDomain()}/profile`),
