@@ -229,22 +229,9 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 		v.Logo = webpDataURI
 	}
 
-	uniquePart, err := GenerateUniqueString(8)
-	if err != nil {
-		fmt.Println("Error generating unique string:", err)
-		return
-	}
+	
 
-	// Add a timestamp to ensure uniqueness
-	timestamp := time.Now().UnixNano()
-	uniqueString := fmt.Sprintf("%s%d", uniquePart, timestamp)
-
-	// Trim the string to 8 characters if needed
-	if len(uniqueString) > 8 {
-		uniqueString = uniqueString[:8]
-	}
-
-	v.Url = strings.ToLower(v.Url + "-" + uniqueString)
+	v.Url = strings.ToLower(v.Url)
 
 	if len(v.Access) > 0 {
 

@@ -105,7 +105,7 @@ export const AdminWalkAdd: FC = () => {
 
           <div className="mb-4">
             <label htmlFor="url" className="block text-sm font-medium">
-              URL - please make sure there's no spaces
+              URL - please make sure there's no spaces and no-other community is using the same domain
             </label>
             <div className="flex">
               <input
@@ -118,12 +118,7 @@ export const AdminWalkAdd: FC = () => {
                 value={newCommunity.url}
                 onChange={handleInputChange}
               />
-              <button
-                type="button"
-                className="ml-3 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Random Domain
-              </button>
+             
             </div>
           </div>
 
