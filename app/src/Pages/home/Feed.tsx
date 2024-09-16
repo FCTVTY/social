@@ -55,6 +55,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
       window.location.href = "/Landing";
       return;
     }
+    setPage(1)
     fetchDetails();
   }, [host, channel]);
 
