@@ -341,7 +341,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                   </div>
                 )}
 
-                <div ref={observer}>
+                <div ref={handleObserver}>
                   {loading && (
                     <div className="text-center my-10">
                       <div role="status">
