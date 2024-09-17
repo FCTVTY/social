@@ -1181,7 +1181,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                   to={team.href}
                                   className={classNames(
                                     team.current
-                                      ? "text-gray-900 bg-gray-200 dark:bg-gray-800"
+                                      ? "text-gray-900 bg-gray-200 dark:bg-gray-800 dark:text-white"
                                       : "text-gray-400 hover:text-white hover:bg-gray-900",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
                                   )}

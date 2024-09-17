@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import { Community } from "../../interfaces/interfaces";
 import { BoxIcon } from "lucide-react";
+import logo from "../../assets/bob-badge.svg";
 
 interface HomeProps {
   host?: string;
@@ -78,6 +79,24 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
           ? {
               ...prevState,
               dLogo: base64String,
+            }
+          : prevState,
+      );
+    };
+    reader.readAsDataURL(file);
+  };
+  const handlelImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64String = event.target?.result as string;
+      setCommunity((prevState) =>
+        prevState
+          ? {
+              ...prevState,
+              landingBg: base64String,
             }
           : prevState,
       );
@@ -721,6 +740,116 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                     />
                   )}
                 </div>{" "}
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="mb-4 ">
+                  <label
+                    htmlFor="landingBg"
+                    className="block text-sm font-medium text-gray-700 dark:text-white"
+                  >
+                    Login page background
+                  </label>
+                  <input
+                    type="file"
+                    id="landingBg"
+                    name="landingBg"
+                    className="my-2 block w-full border-gray-300 rounded-md shadow-sm"
+                    onChange={handlelImageChange}
+                  />
+                  <div className="mockup-browser bg-base-300 border dark:border-gray-900">
+                    <div className="mockup-browser-toolbar">
+                      <div className="input">
+                        https://{community.url}
+                        .app.bhivecommunity.co.uk
+                      </div>
+                    </div>
+                    <div className="relative flex h-[60vh] justify-center md:px-12 lg:px-0">
+                      <div className="relative z-10 flex flex-1 flex-col bg-white px-4 py-10 shadow-2xl sm:justify-center md:flex-none md:px-18">
+                        <div className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
+                          <div className="flex flex-col">
+                            <a
+                              aria-label="Feed"
+                              href="https://bhivecommunity.co.uk"
+                            >
+                              <img
+                                src={community.logo}
+                                className="h-5 w-auto"
+                                alt="Logo"
+                              />
+                            </a>
+                            <div className="mt-20">
+                              <h2 className="text-sm font-semibold text-gray-900">
+                                Sign in to your account
+                              </h2>
+                              <p className="mt-2 text-xs text-gray-700">
+                                Don’t have an account?{" "}
+                                <a
+                                  className="text-xs font-medium text-blue-600 hover:underline"
+                                  href="/register"
+                                >
+                                  Sign up
+                                </a>{" "}
+                                for a free account.
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mb-4 mt-6" />
+                          <form className="mt-10 grid grid-cols-1 gap-y-8">
+                            <div className="col-span-full">
+                              <input
+                                type="email"
+                                className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 text-xs h-7"
+                                name="email"
+                                placeholder="Email"
+                                defaultValue=""
+                              />
+                            </div>
+                            <div className="col-span-full">
+                              <input
+                                type="password"
+                                className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 text-xs h-7"
+                                name="password"
+                                placeholder=""
+                                defaultValue=""
+                              />
+                            </div>
+
+                            <div>
+                              <button
+                                className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-xs font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900 w-full"
+                                type="button"
+                              >
+                                <span>
+                                  Sign in <span aria-hidden="true">→</span>
+                                </span>
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                      <div className="hidden sm:contents lg:relative lg:block lg:flex-1">
+                        <img
+                          className="absolute inset-0 h-full w-full object-cover"
+                          src={
+                            community.landingBg ||
+                            "https://images.pexels.com/photos/3280130/pexels-photo-3280130.jpeg"
+                          }
+                          alt="Community Background"
+                        />
+                        <a
+                          aria-label="Feed"
+                          href="https://bhivecommunity.co.uk"
+                        >
+                          <img
+                            src={logo}
+                            className="h-10 w-auto absolute bottom-5 right-5"
+                            alt="Logo"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="mb-4">
                 <label

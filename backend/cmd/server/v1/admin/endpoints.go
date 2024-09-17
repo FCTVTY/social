@@ -229,8 +229,6 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 		v.Logo = webpDataURI
 	}
 
-	
-
 	v.Url = strings.ToLower(v.Url)
 
 	if len(v.Access) > 0 {
@@ -328,7 +326,8 @@ func UpdateCommunity(rw http.ResponseWriter, r *http.Request) {
 
 	existingCommunity.Menu = v.Menu
 	existingCommunity.MenuText = v.MenuText
-
+	existingCommunity.DLogo = v.DLogo
+	existingCommunity.LandingBg = v.LandingBg
 	existingCommunity.Published = v.Published
 
 	if v.Logo != "" && (strings.Contains(v.Logo, "data:image/png") || strings.Contains(v.Logo, "image/gif") || strings.Contains(v.Logo, "image/jpg")) {
