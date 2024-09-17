@@ -132,8 +132,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
           // Compare the first post in the fetched data with the current posts
           if (posts.length > 0 && responseData[0]._id !== posts[0]._id) {
             setHasNewPosts(true); // New posts found
+          } else {
+            setHasNewPosts(false);
           }
-          setHasNewPosts(false);
         }
       } catch (error) {
         console.error("Error polling for new posts:", error);
