@@ -2,6 +2,7 @@ import React, {
   Children,
   Component,
   Fragment,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -65,6 +66,7 @@ import {
   Bell,
   BellRing,
   SchoolIcon,
+  RefreshCcw,
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 import {
@@ -247,7 +249,55 @@ const ApplicationLayout: React.FC<Props> = ({
   const cancelButtonRef = useRef(null);
   const location = useLocation();
   const [navigation, setNavigation] = useState<NavigationItem[]>([]);
+  const appVersion = __APP_VERSION__;
+  const versionCheckInterval = __VERSION_CHECK_INTERVAL__;
+  /** The remote version fetched from JSON */
+  const [newVersion, setNewVersion] = useState("");
+  const [lastChecked, setLastChecked] = useState<Date | null>(null);
+  const [showNewVersion, setShowNewVersion] = useState(false);
 
+  /** Fetch remote version from signature.json. Add timestamp for cache busting. */
+  const fetchRemoteVersion = useCallback(
+    () =>
+      fetch(`/signature.json?${Date.now()}`, {
+        cache: "no-store",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data: { version: string }) => {
+          setNewVersion(data.version);
+          setLastChecked(new Date());
+          return data.version;
+        }),
+    [],
+  );
+
+  useEffect(() => {
+    /** initial run and update without prompt */
+    fetchRemoteVersion().then((version) => {
+      if (version !== appVersion) {
+        hardReloadPage();
+      }
+    });
+
+    /** interval run and show prompt if update is needed */
+    const timer = setInterval(() => {
+      fetchRemoteVersion().then((version) => {
+        if (version !== appVersion) {
+          setShowNewVersion(true);
+        } else {
+          console.log("version not changed");
+        }
+      });
+    }, versionCheckInterval);
+    return () => clearInterval(timer);
+  }, [fetchRemoteVersion]);
+
+  /** Use your favorite way to perform a hard reload on the current page. */
+  function hardReloadPage() {
+    window.location.reload();
+  }
   useEffect(() => {
     setUrl(location.pathname);
   }, [location]);
@@ -726,288 +776,300 @@ const ApplicationLayout: React.FC<Props> = ({
       </Transition.Root>
 
       {shouldRender && (
-        <div className="container max-w-7xl mx-auto">
-          <ToastContainer />
-
-          <Disclosure
-            as="nav"
-            className={`overscroll-none sticky top-0 z-50  ${community && community.community?.published ? "bg-gray-50 dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-900"} `}
-          >
-            {({ open }) => (
-              <>
-                <div className="mx-auto px-2 sm:px-6 lg:px-8">
-                  <div className="relative flex h-16 justify-between">
-                    <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                      {/* Mobile menu button */}
-                    </div>
-                    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
-                      <div className="flex flex-shrink-0 items-center ">
-                        <button
-                          type="button"
-                          className="m-2.5 ml-4 p-2.5 text-gray-700 lg:hidden"
-                          onClick={() => setSidebarOpen(true)}
-                        >
-                          <span className="sr-only">Open sidebar</span>
-                          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-                        </button>
-
-                        <img
-                          src={community && community.community?.logo}
-                          className="sm:mx-auto  h-5 sm:h-9 rounded-xs dark:hidden"
-                        />
-                        <img
-                          src={
-                            (community && community.community?.dLogo) ||
-                            (community && community.community?.logo)
-                          }
-                          className="sm:mx-auto hidden  h-5 sm:h-9  rounded-xs dark:block"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
-                      <div className="flex flex-shrink-0 items-center "></div>
-                    </div>
-                    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
-                      <div className="flex flex-shrink-0 items-center "></div>
-                    </div>
-                    <div className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                      <Themeswitch></Themeswitch>
-                      <Notfications />
-
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative">
-                        <div>
-                          <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={profile?.profilePicture}
-                              alt=""
-                            />
-                          </Menu.Button>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-200"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <Menu.Item>
-                              {({ active }) => (
-                                <Link
-                                  to={`/profile/${profile?._id}`}
-                                  className={classNames(
-                                    active
-                                      ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
-                                      : "",
-                                    "block px-4 py-2 text-sm text-gray-700",
-                                  )}
-                                >
-                                  Your Profile
-                                </Link>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <Link
-                                  to={`/settings`}
-                                  className={classNames(
-                                    active
-                                      ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
-                                      : "",
-                                    "block px-4 py-2 text-sm text-gray-700",
-                                  )}
-                                >
-                                  Settings
-                                </Link>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <Link
-                                  to="/auth"
-                                  className={classNames(
-                                    active
-                                      ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
-                                      : "",
-                                    "block px-4 py-2 text-sm text-gray-700",
-                                  )}
-                                >
-                                  Sign out
-                                </Link>
-                              )}
-                            </Menu.Item>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-                    </div>
-                  </div>
-                </div>
-
-                <Disclosure.Panel className="sm:hidden">
-                  <div className="space-y-1 pb-4 pt-2">
-                    {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
-                      className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+        <>
+          <>
+            {showNewVersion && (
+              <div className="flex items-center gap-x-6 bg-indigo-600 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+                <p className="text-sm leading-6 text-white">
+                  <a href="#">
+                    <strong className="font-semibold">Update Available</strong>
+                    <svg
+                      viewBox="0 0 2 2"
+                      className="mx-2 inline h-0.5 w-0.5 fill-current"
+                      aria-hidden="true"
                     >
-                      Dashboard
-                    </Disclosure.Button>
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
-                      className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                    >
-                      Team
-                    </Disclosure.Button>
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
-                      className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                    >
-                      Projects
-                    </Disclosure.Button>
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
-                      className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                    >
-                      Calendar
-                    </Disclosure.Button>
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-          <div>
-            <Transition.Root show={sidebarOpen} as={Fragment}>
-              <Dialog
-                as="div"
-                className="relative z-50 lg:hidden"
-                onClose={setSidebarOpen}
-              >
-                <Transition.Child
-                  as={Fragment}
-                  enter="transition-opacity ease-linear duration-300"
-                  enterFrom="opacity-0"
-                  enterTo="opacity-100"
-                  leave="transition-opacity ease-linear duration-300"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <div className="fixed inset-0 bg-white/80" />
-                </Transition.Child>
-
-                <div className="fixed inset-0 flex">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="transition ease-in-out duration-300 transform"
-                    enterFrom="-translate-x-full"
-                    enterTo="translate-x-0"
-                    leave="transition ease-in-out duration-300 transform"
-                    leaveFrom="translate-x-0"
-                    leaveTo="-translate-x-full"
+                      <circle cx={1} cy={1} r={1} />
+                    </svg>
+                    A new version is available. Would you like to update now?
+                  </a>
+                </p>
+                <div className="flex flex-1 justify-end">
+                  <button
+                    type="button"
+                    className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
                   >
-                    <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
-                      <Transition.Child
-                        as={Fragment}
-                        enter="ease-in-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in-out duration-300"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                      >
-                        <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
+                    <span className="sr-only">Dismiss</span>
+                    <RefreshCcw
+                      onClick={hardReloadPage}
+                      className="h-5 w-5 text-white"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+          <div className="container max-w-7xl mx-auto">
+            <ToastContainer />
+
+            <Disclosure
+              as="nav"
+              className={`overscroll-none sticky top-0 z-50  ${community && community.community?.published ? "bg-gray-50 dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-900"} `}
+            >
+              {({ open }) => (
+                <>
+                  <div className="mx-auto px-2 sm:px-6 lg:px-8">
+                    <div className="relative flex h-16 justify-between">
+                      <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                        {/* Mobile menu button */}
+                      </div>
+                      <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
+                        <div className="flex flex-shrink-0 items-center ">
                           <button
                             type="button"
-                            className="-m-2.5 p-2.5"
-                            onClick={() => setSidebarOpen(false)}
+                            className="m-2.5 ml-4 p-2.5 text-gray-700 lg:hidden"
+                            onClick={() => setSidebarOpen(true)}
                           >
-                            <span className="sr-only">Close sidebar</span>
-                            <XMarkIcon
-                              className="h-6 w-6 text-black"
-                              aria-hidden="true"
-                            />
+                            <span className="sr-only">Open sidebar</span>
+                            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                           </button>
+
+                          <img
+                            src={community && community.community?.logo}
+                            className="sm:mx-auto  h-5 sm:h-9 rounded-xs dark:hidden"
+                          />
+                          <img
+                            src={
+                              (community && community.community?.dLogo) ||
+                              (community && community.community?.logo)
+                            }
+                            className="sm:mx-auto hidden  h-5 sm:h-9  rounded-xs dark:block"
+                          />
                         </div>
-                      </Transition.Child>
-                      {/* Sidebar component, swap this element with another sidebar if you like */}
-                      <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white dark:bg-gray-900 pl-6 lg:mt-[62px]">
-                        <nav className="flex flex-1 flex-col mt-2">
-                          <ul
-                            role="list"
-                            className="flex flex-1 flex-col gap-y-7"
+                      </div>
+                      <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
+                        <div className="flex flex-shrink-0 items-center "></div>
+                      </div>
+                      <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-32">
+                        <div className="flex flex-shrink-0 items-center "></div>
+                      </div>
+                      <div className="absolute inset-y-0 right-0 justify-content-end flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <Themeswitch></Themeswitch>
+                        <Notfications />
+
+                        {/* Profile dropdown */}
+                        <Menu as="div" className="relative">
+                          <div>
+                            <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                              <span className="sr-only">Open user menu</span>
+                              <img
+                                className="h-8 w-8 rounded-full"
+                                src={profile?.profilePicture}
+                                alt=""
+                              />
+                            </Menu.Button>
+                          </div>
+                          <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
                           >
-                            <li>
-                              <ul role="list" className="-mx-3 space-y-3">
-                                {navigation.map((item) => (
-                                  <li key={item.name}>
-                                    <Link
-                                      to={item.href}
-                                      className={classNames(
-                                        item.current
-                                          ? "text-indigo-600 bg-gray-200 dark:bg-gray-800"
-                                          : "text-gray-400 hover:text-white hover:bg-indigo-600",
-                                        "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                                      )}
-                                    >
-                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium ">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          strokeWidth={1.5}
-                                          stroke="currentColor"
-                                          className="size-6"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
-                                          />
-                                        </svg>
-                                      </span>
-                                      <span className="mt-[2px]">
-                                        {item.name}
-                                      </span>
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            </li>
-                            <li>
-                              <div className="text-xs  leading-6 text-gray-400 my-3">
-                                General
-                              </div>
-                              <ul role="list" className="-mx-3 space-y-3">
-                                {visibleTeams.map((team) => (
-                                  <li key={team.name}>
-                                    <Link
-                                      to={team.href}
-                                      className={classNames(
-                                        team.current
-                                          ? `text-cyan-500 bg-gray-200 dark:bg-gray-800`
-                                          : `text-gray-400 hover:text-white hover:bg-cyan-500`,
-                                        "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                                      )}
-                                    >
-                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                        {team.initial}
-                                      </span>
-                                      <span className="mt-[2px]">
-                                        {team.name}
-                                      </span>
-                                    </Link>
-                                  </li>
-                                ))}
-                                {isOpen &&
-                                  hiddenTeams.map((team) => (
+                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <Link
+                                    to={`/profile/${profile?._id}`}
+                                    className={classNames(
+                                      active
+                                        ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
+                                        : "",
+                                      "block px-4 py-2 text-sm text-gray-700",
+                                    )}
+                                  >
+                                    Your Profile
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <Link
+                                    to={`/settings`}
+                                    className={classNames(
+                                      active
+                                        ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
+                                        : "",
+                                      "block px-4 py-2 text-sm text-gray-700",
+                                    )}
+                                  >
+                                    Settings
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <Link
+                                    to="/auth"
+                                    className={classNames(
+                                      active
+                                        ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
+                                        : "",
+                                      "block px-4 py-2 text-sm text-gray-700",
+                                    )}
+                                  >
+                                    Sign out
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                            </Menu.Items>
+                          </Transition>
+                        </Menu>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Disclosure.Panel className="sm:hidden">
+                    <div className="space-y-1 pb-4 pt-2">
+                      {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
+                      <Disclosure.Button
+                        as="a"
+                        href="#"
+                        className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
+                      >
+                        Dashboard
+                      </Disclosure.Button>
+                      <Disclosure.Button
+                        as="a"
+                        href="#"
+                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                      >
+                        Team
+                      </Disclosure.Button>
+                      <Disclosure.Button
+                        as="a"
+                        href="#"
+                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                      >
+                        Projects
+                      </Disclosure.Button>
+                      <Disclosure.Button
+                        as="a"
+                        href="#"
+                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                      >
+                        Calendar
+                      </Disclosure.Button>
+                    </div>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+            <div>
+              <Transition.Root show={sidebarOpen} as={Fragment}>
+                <Dialog
+                  as="div"
+                  className="relative z-50 lg:hidden"
+                  onClose={setSidebarOpen}
+                >
+                  <Transition.Child
+                    as={Fragment}
+                    enter="transition-opacity ease-linear duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity ease-linear duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="fixed inset-0 bg-white/80" />
+                  </Transition.Child>
+
+                  <div className="fixed inset-0 flex">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="transition ease-in-out duration-300 transform"
+                      enterFrom="-translate-x-full"
+                      enterTo="translate-x-0"
+                      leave="transition ease-in-out duration-300 transform"
+                      leaveFrom="translate-x-0"
+                      leaveTo="-translate-x-full"
+                    >
+                      <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
+                        <Transition.Child
+                          as={Fragment}
+                          enter="ease-in-out duration-300"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="ease-in-out duration-300"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
+                            <button
+                              type="button"
+                              className="-m-2.5 p-2.5"
+                              onClick={() => setSidebarOpen(false)}
+                            >
+                              <span className="sr-only">Close sidebar</span>
+                              <XMarkIcon
+                                className="h-6 w-6 text-black"
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </div>
+                        </Transition.Child>
+                        {/* Sidebar component, swap this element with another sidebar if you like */}
+                        <div className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white dark:bg-gray-900 pl-6 lg:mt-[62px]">
+                          <nav className="flex flex-1 flex-col mt-2">
+                            <ul
+                              role="list"
+                              className="flex flex-1 flex-col gap-y-7"
+                            >
+                              <li>
+                                <ul role="list" className="-mx-3 space-y-3">
+                                  {navigation.map((item) => (
+                                    <li key={item.name}>
+                                      <Link
+                                        to={item.href}
+                                        className={classNames(
+                                          item.current
+                                            ? "text-indigo-600 bg-gray-200 dark:bg-gray-800"
+                                            : "text-gray-400 hover:text-white hover:bg-indigo-600",
+                                          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
+                                        )}
+                                      >
+                                        <span className="flex h-6 w-6 shrink-0 items-center justify-center  text-[0.625rem] font-medium ">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="size-6"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+                                            />
+                                          </svg>
+                                        </span>
+                                        <span className="mt-[2px]">
+                                          {item.name}
+                                        </span>
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </li>
+                              <li>
+                                <div className="text-xs  leading-6 text-gray-400 my-3">
+                                  General
+                                </div>
+                                <ul role="list" className="-mx-3 space-y-3">
+                                  {visibleTeams.map((team) => (
                                     <li key={team.name}>
                                       <Link
                                         to={team.href}
@@ -1027,115 +1089,117 @@ const ApplicationLayout: React.FC<Props> = ({
                                       </Link>
                                     </li>
                                   ))}
-                              </ul>
-                              {hiddenTeams.length > 0 && (
-                                <button
-                                  onClick={() => setIsOpen(!isOpen)}
-                                  className="mt-4 text-gray-400  text-[0.625rem] font-medium"
+                                  {isOpen &&
+                                    hiddenTeams.map((team) => (
+                                      <li key={team.name}>
+                                        <Link
+                                          to={team.href}
+                                          className={classNames(
+                                            team.current
+                                              ? `text-cyan-500 bg-gray-200 dark:bg-gray-800`
+                                              : `text-gray-400 hover:text-white hover:bg-cyan-500`,
+                                            "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
+                                          )}
+                                        >
+                                          <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
+                                            {team.initial}
+                                          </span>
+                                          <span className="mt-[2px]">
+                                            {team.name}
+                                          </span>
+                                        </Link>
+                                      </li>
+                                    ))}
+                                </ul>
+                                {hiddenTeams.length > 0 && (
+                                  <button
+                                    onClick={() => setIsOpen(!isOpen)}
+                                    className="mt-4 text-gray-400  text-[0.625rem] font-medium"
+                                  >
+                                    {!isOpen ? (
+                                      <span>Show More</span>
+                                    ) : (
+                                      <span>Show Less</span>
+                                    )}
+                                  </button>
+                                )}
+                              </li>
+                              <li className="-mx-6 mt-auto">
+                                <Link
+                                  to={`/profile/${profile?._id}`}
+                                  className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
                                 >
-                                  {!isOpen ? (
-                                    <span>Show More</span>
-                                  ) : (
-                                    <span>Show Less</span>
-                                  )}
-                                </button>
-                              )}
-                            </li>
-                            <li className="-mx-6 mt-auto">
+                                  <img
+                                    className="h-8 w-8 rounded-full bg-gray-800"
+                                    src={profile?.profilePicture}
+                                    alt=""
+                                  />
+                                  <span className="sr-only">Your profile</span>
+                                  <span aria-hidden="true">
+                                    {profile?.first_name} {profile?.last_name}
+                                  </span>
+                                </Link>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </Dialog>
+              </Transition.Root>
+
+              {/* Static sidebar for desktop */}
+              <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col  border-slate-100 dark:bg-gray-900 dark:border-gray-800">
+                {/* Sidebar component, swap this element with another sidebar if you like */}
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
+                  <nav className="flex flex-1 flex-col mt-2">
+                    <div className="text-xs  leading-6 text-gray-400 my-3">
+                      Spaces
+                    </div>
+
+                    <ul role="list" className="flex flex-1 flex-col gap-y-7">
+                      <li>
+                        <ul role="list" className="-mx-3 space-y-3">
+                          {navigation.map((item) => (
+                            <li key={item.name}>
                               <Link
-                                to={`/profile/${profile?._id}`}
-                                className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6  "
+                                to={item.href}
+                                className={classNames(
+                                  item.current
+                                    ? `text-indigo-600 bg-gray-200 dark:bg-gray-800`
+                                    : `text-gray-400 hover:text-white hover:bg-indigo-600`,
+                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 ",
+                                )}
                               >
-                                <img
-                                  className="h-8 w-8 rounded-full bg-gray-800"
-                                  src={profile?.profilePicture}
-                                  alt=""
-                                />
-                                <span className="sr-only">Your profile</span>
-                                <span aria-hidden="true">
-                                  {profile?.first_name} {profile?.last_name}
+                                <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-6"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+                                    />
+                                  </svg>
                                 </span>
+                                <span className="mt-[2px]">{item.name}</span>
                               </Link>
                             </li>
-                          </ul>
-                        </nav>
-                      </div>
-                    </Dialog.Panel>
-                  </Transition.Child>
-                </div>
-              </Dialog>
-            </Transition.Root>
-
-            {/* Static sidebar for desktop */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:mt-[64px] lg:z-50 lg:flex lg:w-72 lg:flex-col  border-slate-100 dark:bg-gray-900 dark:border-gray-800">
-              {/* Sidebar component, swap this element with another sidebar if you like */}
-              <div className="flex grow flex-col gap-y-5 overflow-y-auto  px-6 ml-4 mt-4">
-                <nav className="flex flex-1 flex-col mt-2">
-                  <div className="text-xs  leading-6 text-gray-400 my-3">
-                    Spaces
-                  </div>
-
-                  <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                    <li>
-                      <ul role="list" className="-mx-3 space-y-3">
-                        {navigation.map((item) => (
-                          <li key={item.name}>
-                            <Link
-                              to={item.href}
-                              className={classNames(
-                                item.current
-                                  ? `text-indigo-600 bg-gray-200 dark:bg-gray-800`
-                                  : `text-gray-400 hover:text-white hover:bg-indigo-600`,
-                                "group flex gap-x-3 rounded-md p-2 text-sm leading-6 ",
-                              )}
-                            >
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="size-6"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
-                                  />
-                                </svg>
-                              </span>
-                              <span className="mt-[2px]">{item.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                    <li>
-                      <div className="text-xs  leading-6 text-gray-400 my-3">
-                        General
-                      </div>
-                      <ul role="list" className="-mx-3 space-y-3">
-                        {visibleTeams.map((team) => (
-                          <li key={team.name}>
-                            <Link
-                              to={team.href}
-                              className={classNames(
-                                team.current
-                                  ? `text-cyan-500 bg-gray-200 dark:bg-gray-800`
-                                  : `text-gray-400 hover:text-white hover:bg-cyan-500`,
-                                "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                              )}
-                            >
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                {team.initial}
-                              </span>
-                              <span className="mt-[2px]">{team.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                        {isOpen &&
-                          hiddenTeams.map((team) => (
+                          ))}
+                        </ul>
+                      </li>
+                      <li>
+                        <div className="text-xs  leading-6 text-gray-400 my-3">
+                          General
+                        </div>
+                        <ul role="list" className="-mx-3 space-y-3">
+                          {visibleTeams.map((team) => (
                             <li key={team.name}>
                               <Link
                                 to={team.href}
@@ -1153,36 +1217,85 @@ const ApplicationLayout: React.FC<Props> = ({
                               </Link>
                             </li>
                           ))}
-                      </ul>
-                      {hiddenTeams.length > 0 && (
-                        <button
-                          onClick={() => setIsOpen(!isOpen)}
-                          className="mt-4 text-gray-400  text-[0.625rem] font-medium"
-                        >
-                          {!isOpen ? (
-                            <span>Show More</span>
-                          ) : (
-                            <span>Show Less</span>
-                          )}
-                        </button>
-                      )}
-                    </li>
-                    {roles &&
-                      (roles.includes("admin") ||
-                        roles.includes("moderator")) && (
-                        <li>
-                          <div className="text-xs  leading-6 text-gray-400 my-3">
-                            Admin/Moderator Settings
-                          </div>
-                          <ul role="list" className="-mx-3 space-y-3">
-                            {admin.map((team) => (
+                          {isOpen &&
+                            hiddenTeams.map((team) => (
                               <li key={team.name}>
                                 <Link
                                   to={team.href}
                                   className={classNames(
                                     team.current
-                                      ? "text-gray-900 bg-gray-200 dark:bg-gray-800 dark:text-white"
-                                      : "text-gray-400 hover:text-white hover:bg-gray-900",
+                                      ? `text-cyan-500 bg-gray-200 dark:bg-gray-800`
+                                      : `text-gray-400 hover:text-white hover:bg-cyan-500`,
+                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
+                                  )}
+                                >
+                                  <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
+                                    {team.initial}
+                                  </span>
+                                  <span className="mt-[2px]">{team.name}</span>
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                        {hiddenTeams.length > 0 && (
+                          <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="mt-4 text-gray-400  text-[0.625rem] font-medium"
+                          >
+                            {!isOpen ? (
+                              <span>Show More</span>
+                            ) : (
+                              <span>Show Less</span>
+                            )}
+                          </button>
+                        )}
+                      </li>
+                      {roles &&
+                        (roles.includes("admin") ||
+                          roles.includes("moderator")) && (
+                          <li>
+                            <div className="text-xs  leading-6 text-gray-400 my-3">
+                              Admin/Moderator Settings
+                            </div>
+                            <ul role="list" className="-mx-3 space-y-3">
+                              {admin.map((team) => (
+                                <li key={team.name}>
+                                  <Link
+                                    to={team.href}
+                                    className={classNames(
+                                      team.current
+                                        ? "text-gray-900 bg-gray-200 dark:bg-gray-800 dark:text-white"
+                                        : "text-gray-400 hover:text-white hover:bg-gray-900",
+                                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
+                                    )}
+                                  >
+                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
+                                      {team.initial}
+                                    </span>
+                                    <span className="mt-[2px]">
+                                      {team.name}
+                                    </span>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        )}
+                      {roles && roles.includes("god") && (
+                        <li>
+                          <div className="text-xs  leading-6 text-rose-400 my-3">
+                            {" "}
+                            DEBUG Settings
+                          </div>
+                          <ul role="list" className="-mx-3 space-y-3">
+                            {debug.map((team) => (
+                              <li key={team.name}>
+                                <Link
+                                  onClick={() => setOpen(true)}
+                                  className={classNames(
+                                    team.current
+                                      ? "text-rose-900 bg-rose-200"
+                                      : "text-rose-400 hover:text-white hover:bg-rose-900",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
                                   )}
                                 >
@@ -1196,135 +1309,110 @@ const ApplicationLayout: React.FC<Props> = ({
                           </ul>
                         </li>
                       )}
-                    {roles && roles.includes("god") && (
-                      <li>
-                        <div className="text-xs  leading-6 text-rose-400 my-3">
-                          {" "}
-                          DEBUG Settings
+                      <li className="-mx-6 mt-auto">
+                        <div className="mt-auto p-6 text-sm text-gray-500 dark:text-dark-txt">
+                          <img
+                            className="mb-2 h-7 w-auto dark:hidden"
+                            src={LogoSquare}
+                            alt="b:hive"
+                          />
+                          <img
+                            className="mb-2 hidden h-7 w-auto dark:block"
+                            src={LogoSquareDark}
+                            alt="b:hive"
+                          />{" "}
+                          <br />
+                          <span className="text-xs w-full">
+                            app version: {__APP_VERSION__}
+                          </span>
+                          <br />
+                          <Link to="/terms.html">Terms</Link>
+                          <br />
+                          <span>Bhive © 2024</span>
                         </div>
-                        <ul role="list" className="-mx-3 space-y-3">
-                          {debug.map((team) => (
-                            <li key={team.name}>
-                              <Link
-                                onClick={() => setOpen(true)}
-                                className={classNames(
-                                  team.current
-                                    ? "text-rose-900 bg-rose-200"
-                                    : "text-rose-400 hover:text-white hover:bg-rose-900",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
-                                )}
-                              >
-                                <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
-                                  {team.initial}
-                                </span>
-                                <span className="mt-[2px]">{team.name}</span>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
                       </li>
-                    )}
-                    <li className="-mx-6 mt-auto">
-                      <div className="mt-auto p-6 text-sm text-gray-500 dark:text-dark-txt">
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+              <div className="">
+                <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
+                  <div className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-50 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
+                    <button
+                      type="button"
+                      className="-m-2.5 p-2.5 text-gray-700 dark:text-white lg:hidden"
+                      onClick={() => setSidebarOpen(true)}
+                    >
+                      <span className="sr-only">Open sidebar</span>
+                      <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+
+                    {/* Separator */}
+                    <div
+                      className="h-6 w-px bg-gray-200 lg:hidden"
+                      aria-hidden="true"
+                    />
+
+                    <div className="px-4 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+                      <div className="flex flex-1 items-center gap-x-4 lg:gap-x-6">
                         <img
-                          className="mb-2 h-7 w-auto dark:hidden"
-                          src={LogoSquare}
-                          alt="b:hive"
+                          src={community && community.community?.logo}
+                          className="sm:mx-auto h-9 py-1"
                         />
-
-                        <img
-                          className="mb-2 hidden h-7 w-auto dark:block"
-                          src={LogoSquareDark}
-                          alt="b:hive"
-                        />
-
-                        <Link to="/terms.html">Terms</Link>
-
-                        <br />
-
-                        <span>Bhive © 2024</span>
+                        {/* Separator */}
                       </div>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-            <div className="">
-              <div className="sticky top-[62px] z-40 lg:mx-auto hidden">
-                <div className="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-gray-50 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
-                  <button
-                    type="button"
-                    className="-m-2.5 p-2.5 text-gray-700 dark:text-white lg:hidden"
-                    onClick={() => setSidebarOpen(true)}
-                  >
-                    <span className="sr-only">Open sidebar</span>
-                    <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-
-                  {/* Separator */}
-                  <div
-                    className="h-6 w-px bg-gray-200 lg:hidden"
-                    aria-hidden="true"
-                  />
-
-                  <div className="px-4 flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-                    <div className="flex flex-1 items-center gap-x-4 lg:gap-x-6">
-                      <img
-                        src={community && community.community?.logo}
-                        className="sm:mx-auto h-9 py-1"
-                      />
-                      {/* Separator */}
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <main className="lg:ml-72 py-10 bg dark:bg-gray-900">
-                <div className="w-full "></div>
-                {community?.community?.private && community?.user?.notjoined ? (
-                  <Join
-                    text={community.community.desc}
-                    logo={community.community.logo}
-                  />
-                ) : (
-                  Children.map(children, (child) => {
-                    // @ts-ignore
-                    return React.cloneElement(child, { roles, setRoles });
-                  })
+                <main className="lg:ml-72 py-10 bg dark:bg-gray-900">
+                  <div className="w-full "></div>
+                  {community?.community?.private &&
+                  community?.user?.notjoined ? (
+                    <Join
+                      text={community.community.desc}
+                      logo={community.community.logo}
+                    />
+                  ) : (
+                    Children.map(children, (child) => {
+                      // @ts-ignore
+                      return React.cloneElement(child, { roles, setRoles });
+                    })
+                  )}
+                </main>
+              </div>
+            </div>
+            <>
+              {community &&
+                community.community?.published !== true &&
+                roles &&
+                (roles.includes("admin") || roles.includes("moderator")) && (
+                  <div className="fixed inset-x-0 bottom-0 z-[100]">
+                    <div className="flex items-center gap-x-6 bg-indigo-700 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+                      <p className="text-sm leading-6 text-white">
+                        <a href="#">
+                          Your website is currently unpublished and can only be
+                          viewed by administrators.
+                        </a>
+                      </p>
+                      <div className="flex flex-1 justify-end">
+                        <button
+                          type="button"
+                          className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
+                        >
+                          <span className="sr-only">Dismiss</span>
+                          <XMarkIcon
+                            className="h-5 w-5 text-white"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </main>
-            </div>
-          </div>
-          <>
-            {community &&
-              community.community?.published !== true &&
-              roles &&
-              (roles.includes("admin") || roles.includes("moderator")) && (
-                <div className="fixed inset-x-0 bottom-0 z-[100]">
-                  <div className="flex items-center gap-x-6 bg-indigo-700 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
-                    <p className="text-sm leading-6 text-white">
-                      <a href="#">
-                        Your website is currently unpublished and can only be
-                        viewed by administrators.
-                      </a>
-                    </p>
-                    <div className="flex flex-1 justify-end">
-                      <button
-                        type="button"
-                        className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
-                      >
-                        <span className="sr-only">Dismiss</span>
-                        <XMarkIcon
-                          className="h-5 w-5 text-white"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-          </>
-        </div>
+            </>
+          </div>{" "}
+        </>
       )}
       {community &&
         community.community?.published == false &&
