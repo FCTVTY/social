@@ -268,7 +268,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
                           <div>
-                            {window.location.origin}/feed/{post._id}
+                            {window.location.origin}/s/{post._id}
                           </div>
                         </p>
                       </div>

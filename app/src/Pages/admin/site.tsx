@@ -66,6 +66,24 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
     };
     reader.readAsDataURL(file);
   };
+  const handledImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64String = event.target?.result as string;
+      setCommunity((prevState) =>
+        prevState
+          ? {
+              ...prevState,
+              dLogo: base64String,
+            }
+          : prevState,
+      );
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSave = async () => {
     try {
@@ -656,30 +674,53 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                   value={community.name || ""}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:text-black"
-
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="logo"
-                  className="block text-sm font-medium text-gray-700 dark:text-white"
-                >
-                  Branding Logo
-                </label>
-                <input
-                  type="file"
-                  id="logo"
-                  name="logo"
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                  onChange={handleImageChange}
-                />
-                {community.logo && (
-                  <img
-                    src={community.logo}
-                    alt="Community Logo"
-                    className="mt-2 max-w-full h-auto"
+              <div className="grid grid-cols-2 gap-4">
+                <div className="mb-4 p-4 rounded-2xl bg-gray-50">
+                  <label
+                    htmlFor="logo"
+                    className="block text-sm font-medium text-gray-700 "
+                  >
+                    Branding Logo
+                  </label>
+                  <input
+                    type="file"
+                    id="logo"
+                    name="logo"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                    onChange={handleImageChange}
                   />
-                )}
+                  {community.logo && (
+                    <img
+                      src={community.logo}
+                      alt="Community Logo"
+                      className="mt-2 max-w-full h-auto"
+                    />
+                  )}
+                </div>
+                <div className="mb-4 bg-gray-900 rounded-2xl p-4">
+                  <label
+                    htmlFor="dLogo"
+                    className="block text-sm font-medium text-white"
+                  >
+                    Branding Logo (dark theme)
+                  </label>
+                  <input
+                    type="file"
+                    id="dLogo"
+                    name="dLogo"
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                    onChange={handledImageChange}
+                  />
+                  {community.dLogo && (
+                    <img
+                      src={community.dLogo}
+                      alt="Community Logo dark"
+                      className="mt-2 max-w-full h-auto"
+                    />
+                  )}
+                </div>{" "}
               </div>
               <div className="mb-4">
                 <label
@@ -694,7 +735,6 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                   value={community.desc || ""}
                   onChange={handleInputChange}
                   className="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:text-black"
-
                 />
               </div>
               <button

@@ -221,12 +221,12 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
           style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
         ></div>
         {showSuggestions && (
-          <ul className="border border-gray-300 rounded mt-2 bg-white shadow-md max-h-40 overflow-y-auto">
+          <ul className="border border-gray-300 rounded mt-2 bg-white dark:bg-gray-800 dark:border-gray-800 shadow-md max-h-40 overflow-y-auto">
             {filteredSuggestions.map((suggestion, index) => (
               <li
                 key={index}
                 onClick={() => handleSuggestionClick(suggestion)}
-                className="p-2 hover:bg-gray-200 cursor-pointer"
+                className="p-2 hover:bg-gray-200 hover:bg-indigo-600 cursor-pointer"
               >
                 <span className="inline-flex">
                   <div className="avatar mr-2">
