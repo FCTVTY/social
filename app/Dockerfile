@@ -7,7 +7,7 @@ WORKDIR /app
 # Install dependencies
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
+RUN npm version patch
 COPY . .
 
 # Install Vite and plugins
