@@ -48,11 +48,13 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [cchannel, setcChanel] = useState(location.pathname.split("/")[2]);
+  const [hasNewPosts, setHasNewPosts] = useState(false); // New state variable for flagging new posts
 
   channel = location.pathname.split("/")[2];
   usePageTitle(channel);
 
   console.log(location);
+
   // Handle channel change and reset page and posts
   useEffect(() => {
     setcChanel(location.pathname.split("/")[2]);
@@ -116,6 +118,34 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
 
     loadMorePosts();
   }, [loading, channel, page]);
+
+  // Polling for new posts
+  useEffect(() => {
+    const pollForNewPosts = async () => {
+      try {
+        const response = await fetch(
+          `${getApiDomain()}/community/posts?oid=${host}&name=${cchannel}&page=1`,
+        );
+        const responseData = await response.json();
+
+        if (responseData && responseData.length > 0) {
+          // Compare the first post in the fetched data with the current posts
+          if (posts.length > 0 && responseData[0]._id !== posts[0]._id) {
+            setHasNewPosts(true); // New posts found
+          }
+          setHasNewPosts(false);
+        }
+      } catch (error) {
+        console.error("Error polling for new posts:", error);
+      }
+    };
+
+    // Set up polling interval
+    const intervalId = setInterval(pollForNewPosts, 30000); // Poll every 30 seconds
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [cchannel, host, posts]);
 
   const fetchDetails = async (chanel: string) => {
     try {
@@ -217,7 +247,6 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   if (currentUrl == "/s/" + community?.channels?.[0].name) {
     home = true;
   }
-
   return (
     <>
       {isLoading && (
@@ -320,7 +349,13 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     onSubmit={handleRefresh}
                   />
                 </li>
-
+                {hasNewPosts && (
+                  <li
+                    className={`col-span-1 flex flex-col p-5 text-center  rounded-2xl bg-white dark:bg-gray-900 dark:shadow-gray-800 dark:border shadow max-w-4xl dark:border-gray-800 dark:border dark:rounded-none`}
+                  >
+                    New posts are available. Refresh to see them!
+                  </li>
+                )}
                 {!skelloading &&
                   posts
                     .filter((post) => post.type !== "event")
