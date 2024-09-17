@@ -277,7 +277,7 @@ const ApplicationLayout: React.FC<Props> = ({
     /** initial run and update without prompt */
     fetchRemoteVersion().then((version) => {
       if (version !== appVersion) {
-        hardReloadPage();
+        //hardReloadPage();
       }
     });
 
@@ -285,7 +285,7 @@ const ApplicationLayout: React.FC<Props> = ({
     const timer = setInterval(() => {
       fetchRemoteVersion().then((version) => {
         if (version !== appVersion) {
-          setShowNewVersion(true);
+          //setShowNewVersion(true);
         } else {
           console.log("version not changed");
         }
