@@ -210,9 +210,8 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
   const [skelloading, setskelloading] = useState(true);
 
   const handleRefresh = () => {
-    if (channel) {
-      setIsLoading(true);
-      window.location.reload();
+    if (cchannel) {
+      fetchDetails(cchannel);
     }
   };
 
@@ -292,7 +291,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
         </div>
       )}
       {channel && (
-        <div className="mx-auto max-w-7xl py-0 px-6 -mt-10">
+        <div className="mx-auto max-w-7xl py-0 px-6 -mt-10 min-h-screen">
           <div className="lg:grid lg:grid-cols-5 lg:grid-rows-1 lg:gap-4">
             <div className="lg:col-span-3">
               <div className={cn(home ? "" : "hidden", "mb-5")}>

@@ -93,6 +93,14 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
       setSelectedImage(null);
       toast.success("Post Created");
       onSubmit();
+      setLoading(false);
+      setContent("");
+      setPost((prevState) => ({
+        ...prevState,
+        desc: "",
+        media: undefined,
+      }));
+      contentEditableRef.current.innerHTML = "";
     } catch (error) {
       console.error("Error creating post:", error);
     }
