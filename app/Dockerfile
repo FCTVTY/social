@@ -7,13 +7,13 @@ WORKDIR /app
 # Install dependencies
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-RUN npm version patch
+
 COPY . .
 
 # Install Vite and plugins
 RUN yarn add vite @vitejs/plugin-react daisyui@latest vite-plugin-node-stdlib-browser
 # Copy application code
-
+RUN npm version patch
 # Build the application
 RUN yarn build
 
