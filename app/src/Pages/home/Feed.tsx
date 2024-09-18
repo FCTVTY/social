@@ -248,7 +248,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
     home = true;
   }
   return (
-    <>
+    <div className="mx-auto max-w-7xl py-0 px-6 -mt-10 min-h-screen bg-gray-50 dark:bg-gray-900">
       {isLoading && (
         <div className="w-full h-full fixed top-0 left-0 bg-white opacity-75 z-50">
           <div className="flex justify-center items-center mt-[50vh]">
@@ -291,7 +291,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
         </div>
       )}
       {channel && (
-        <div className="mx-auto max-w-7xl py-0 px-6 -mt-10 min-h-screen">
+        <div className="mx-auto max-w-7xl py-0 px-6 -mt-10 min-h-screen bg-gray-50 dark:bg-gray-900">
           <div className="lg:grid lg:grid-cols-5 lg:grid-rows-1 lg:gap-4">
             <div className="lg:col-span-3">
               <div className={cn(home ? "" : "hidden", "mb-5")}>
@@ -1024,6 +1024,6 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
           </div>
         </Dialog>
       </Transition.Root>
-    </>
+    </div>
   );
 }

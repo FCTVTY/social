@@ -91,18 +91,11 @@ import KeyboardShortcut from "../hooks/keyboard";
 import { LifebuoyIcon, PencilSquareIcon } from "@heroicons/react/16/solid";
 import { toast, ToastContainer } from "react-toastify";
 
-interface NavigationItem {
-  name: string;
-  href: string;
-  icon: React.ElementType;
-  current: boolean;
-}
-
-interface TeamItem {
+interface MenuItem {
   id: number;
   name: string;
   href: string;
-  initial: string;
+  icon: React.ElementType;
   current: boolean;
 }
 
@@ -248,7 +241,7 @@ const ApplicationLayout: React.FC<Props> = ({
   const [url, setUrl] = useState(useLocation().pathname);
   const cancelButtonRef = useRef(null);
   const location = useLocation();
-  const [navigation, setNavigation] = useState<NavigationItem[]>([]);
+  const [navigation, setNavigation] = useState<MenuItem[]>([]);
   const appVersion = __APP_VERSION__;
   const versionCheckInterval = __VERSION_CHECK_INTERVAL__;
   /** The remote version fetched from JSON */
@@ -302,73 +295,73 @@ const ApplicationLayout: React.FC<Props> = ({
     setUrl(location.pathname);
   }, [location]);
   // This gives you the path of the current URL
-  const teams: TeamItem[] = [
+  const teams: MenuItem[] = [
     {
       id: 1,
       name: "Academy",
       href: "/Academy",
-      initial: <GraduationCapIcon />,
+      icon: <GraduationCapIcon />,
       current: "/Academy" == url,
     },
     {
       id: 2,
       name: "Resources",
       href: "/Resources",
-      initial: <SquareCodeIcon />,
+      icon: <SquareCodeIcon />,
       current: "/Resources" == url,
     },
     {
       id: 3,
       name: "Events",
       href: "/events/upcoming",
-      initial: <CalendarDaysIcon />,
+      icon: <CalendarDaysIcon />,
       current: "/events/upcoming" == url,
     },
     {
       id: 4,
       name: "Members",
       href: "/members/list",
-      initial: <UsersIcon />,
+      icon: <UsersIcon />,
       current: "/members/list" == url,
     },
     {
       id: 5,
       name: "Changelog",
       href: "/changelog",
-      initial: <LogsIcon />,
+      icon: <LogsIcon />,
       current: "/changelog" == url,
     },
     {
       id: 6,
       name: "FAQ",
       href: "/FAQ",
-      initial: <MessageCircleQuestionIcon />,
+      icon: <MessageCircleQuestionIcon />,
       current: "/FAQ" == url,
     },
   ];
-  const admin: TeamItem[] = [
+  const admin: MenuItem[] = [
     {
       id: 1,
       name: "Site Settings",
       href: "/admin/site",
-      initial: <WrenchIcon />,
+      icon: <WrenchIcon />,
       current: "/admin/site" == url,
     },
     {
       id: 1,
       name: "Academy Management",
       href: "/AcademyManagement",
-      initial: <SchoolIcon />,
+      icon: <SchoolIcon />,
       current: "/AcademyManagement" == url,
     },
   ];
-  const debug: TeamItem[] = [
+  const debug: MenuItem[] = [
     {
       id: 1,
       name: "DEBUG",
       href: "/admin/site",
-      initial: <WrenchIcon />,
-      current: "/Academy" == url,
+      icon: <WrenchIcon />,
+      current: false,
     },
   ];
   const userNavigation: UserNavigationItem[] = [
@@ -584,17 +577,6 @@ const ApplicationLayout: React.FC<Props> = ({
 
   const [query, setQuery] = useState("");
   const [kopen, setKOpen] = useState(false);
-
-  const actions = [
-    {
-      id: 1,
-      name: "Text",
-      description: "Add freeform text with basic formatting options.",
-      url: "#",
-      color: "bg-indigo-500",
-      icon: PencilSquareIcon,
-    },
-  ];
 
   const filteredItems =
     query === ""
@@ -1081,7 +1063,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                         )}
                                       >
                                         <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                          {team.initial}
+                                          {team.icon}
                                         </span>
                                         <span className="mt-[2px]">
                                           {team.name}
@@ -1102,7 +1084,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                           )}
                                         >
                                           <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                            {team.initial}
+                                            {team.icon}
                                           </span>
                                           <span className="mt-[2px]">
                                             {team.name}
@@ -1211,7 +1193,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                 )}
                               >
                                 <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                  {team.initial}
+                                  {team.icon}
                                 </span>
                                 <span className="mt-[2px]">{team.name}</span>
                               </Link>
@@ -1230,7 +1212,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                   )}
                                 >
                                   <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium group-hover:text-white">
-                                    {team.initial}
+                                    {team.icon}
                                   </span>
                                   <span className="mt-[2px]">{team.name}</span>
                                 </Link>
@@ -1270,7 +1252,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                     )}
                                   >
                                     <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
-                                      {team.initial}
+                                      {team.icon}
                                     </span>
                                     <span className="mt-[2px]">
                                       {team.name}
@@ -1300,7 +1282,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                   )}
                                 >
                                   <span className="flex h-6 w-6 shrink-0 items-center justify-center text-[0.625rem] font-medium  group-hover:text-white">
-                                    {team.initial}
+                                    {team.icon}
                                   </span>
                                   <span className="mt-[2px]">{team.name}</span>
                                 </Link>
