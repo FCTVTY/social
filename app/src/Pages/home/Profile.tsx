@@ -303,6 +303,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                         (post) =>
                           post.type !== "event" &&
                           post.softdelete !== true &&
+                          post.visability == true &&
                           community?.channels.some(
                             (channel) => channel.id === post.channelstring,
                           ),
