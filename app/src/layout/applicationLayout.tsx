@@ -448,10 +448,13 @@ const ApplicationLayout: React.FC<Props> = ({
   const code = queryParams.get("code");
   const loggedin = queryParams.get("loggedin");
   useEffect(() => {
-    themeChange(false);
-    if (loggedin) {
+    if (loggedin === "true") {
       toast("Logged in ...");
     }
+  }, [loggedin]);
+  useEffect(() => {
+    themeChange(false);
+
     setLocked(community?.community?.private);
 
     //check cookie...

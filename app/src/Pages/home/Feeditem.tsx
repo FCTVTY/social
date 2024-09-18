@@ -216,10 +216,27 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
     return today.toDateString() === cakeDayDate.toDateString();
   };
   const isCakeDay = checkCakeDay(profile?.timeJoined);
+  const dropdownRef = useRef(null);
 
+  useEffect(() => {
+    // Function to handle clicks outside the dropdown
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on cleanup
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
   return (
     <li
       key={post._id}
+      onClick={() => setOpen(false)}
       className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-gray-900 dark:shadow-gray-800 dark:border shadow max-w-4xl dark:border-gray-800 dark:border dark:rounded-none`}
     >
       <Transition.Root show={open} as={Fragment}>
@@ -282,10 +299,13 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
       </Transition.Root>
 
       <div className="flex flex-1 flex-col p-3 relative">
-        <div className="absolute top-0 right-[-10px] text-left">
+        <div
+          className="absolute top-0 right-[-10px] text-left"
+          ref={dropdownRef}
+        >
           <button
             type="button"
-            className="inline-flex justify-center rounded-md px-4 py-2 text-sm text-gray-700 "
+            className="inline-flex justify-center rounded-md px-4 py-2 text-sm text-gray-700"
             onClick={() => setIsOpen(!isOpen)}
           >
             <svg
@@ -304,7 +324,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             </svg>
           </button>
           {isOpen && (
-            <div className="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white text-xs">
+            <div className="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 text-xs">
               <div
                 className="py-1"
                 role="menu"
@@ -315,7 +335,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   <a
                     href="#"
                     onClick={() => Remove()}
-                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
                     role="menuitem"
                   >
                     Delete
@@ -324,7 +344,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 <a
                   href="#"
                   onClick={() => setOpen(!open)}
-                  className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
                   role="menuitem"
                 >
                   Share
@@ -332,9 +352,8 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 {roles &&
                   (roles.includes("admin") || roles.includes("moderator")) && (
                     <>
-                      <hr />
                       <span
-                        className="block px-4 py-2 text-xs text-gray-700 opacity-50"
+                        className="block px-4 py-2 text-xs text-gray-700 "
                         role="menuitem"
                       >
                         MANAGE
@@ -342,14 +361,14 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
 
                       <Link
                         to={`/removepost/${post._id}`}
-                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
                         role="menuitem"
                       >
                         Remove
                       </Link>
                       <Link
                         to={`/lockpost/${post._id}`}
-                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
                         role="menuitem"
                       >
                         Lock Comments

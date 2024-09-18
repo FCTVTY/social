@@ -13,7 +13,7 @@ import { Editor } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
-import { PlusIcon } from "lucide-react";
+import { CircleX, PlusIcon } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
@@ -218,16 +218,31 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
           onChange={handleInputChange}
           className="hidden w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-gray-900"
         />
-
-        <div
-          ref={contentEditableRef}
-          contentEditable
-          onInput={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="What's on your mind?"
-          className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-gray-900 mb-4"
-          style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
-        ></div>
+        <div className="relative">
+          <div
+            ref={contentEditableRef}
+            contentEditable
+            onInput={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="What's on your mind?"
+            className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-gray-900 mb-4"
+            style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
+          ></div>
+          <button
+            type="button"
+            onClick={() => {
+              setContent("");
+              setPost((prevState) => ({
+                ...prevState,
+                desc: "",
+              }));
+              contentEditableRef.current.innerHTML = "";
+            }}
+            className="duration-300 absolute top-2 right-2 dark:text-gray-700 text-gray-400"
+          >
+            <CircleX />
+          </button>
+        </div>
         {showSuggestions && (
           <ul className="border border-gray-300 rounded mt-2 bg-white dark:bg-gray-800 dark:border-gray-800 shadow-md max-h-40 overflow-y-auto">
             {filteredSuggestions.map((suggestion, index) => (
