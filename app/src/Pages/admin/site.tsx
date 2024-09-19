@@ -3,6 +3,7 @@ import { getApiDomain } from "../../lib/auth/supertokens";
 import { Community } from "../../interfaces/interfaces";
 import { BoxIcon } from "lucide-react";
 import logo from "../../assets/bob-badge.svg";
+import ReactQuill from "react-quill";
 
 interface HomeProps {
   host?: string;
@@ -648,7 +649,18 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
 
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedTColor, setSelectedTColor] = useState("");
+  const handleDescChange = (content, delta, source, editor) => {
+    console.log("HTML Content:", content);
 
+    setCommunity((prevState) =>
+      prevState
+        ? {
+            ...prevState,
+            desc: content,
+          }
+        : prevState,
+    );
+  };
   const handleChange = (event) => {
     setSelectedColor(event.target.value);
     setCommunity((prevState) =>
@@ -671,6 +683,36 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
         : prevState,
     );
   };
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ size: [] }],
+      [{ font: [] }],
+      [{ align: ["right", "center", "justify"] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "color",
+    "image",
+    "background",
+    "align",
+    "size",
+    "font",
+  ];
+
   return (
     <>
       {community &&
@@ -858,12 +900,12 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                 >
                   Description
                 </label>
-                <textarea
-                  id="desc"
-                  name="desc"
-                  value={community.desc || ""}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:text-black"
+                <ReactQuill
+                  theme="snow"
+                  modules={modules}
+                  formats={formats}
+                  value={community.desc}
+                  onChange={handleDescChange}
                 />
               </div>
               <button

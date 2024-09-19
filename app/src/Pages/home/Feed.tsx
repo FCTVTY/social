@@ -307,9 +307,12 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                       </h2>
                     </div>
                     <div className="collapse-content">
-                      <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-                        {community?.community?.desc}
-                      </p>
+                      <p
+                        className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300"
+                        dangerouslySetInnerHTML={{
+                          __html: community?.community?.desc,
+                        }}
+                      ></p>
                       <svg
                         viewBox="0 0 1024 1024"
                         className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
@@ -543,7 +546,12 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                   className="mx-auto h-20 w-40 py-1 object-contain hidden dark:block"
                 />
 
-                <p className={`py-6`}>{community?.community?.desc}</p>
+                <p
+                  className={`py-6`}
+                  dangerouslySetInnerHTML={{
+                    __html: community?.community?.desc,
+                  }}
+                ></p>
                 <dl>
                   {!community?.community?.private && (
                     <>
