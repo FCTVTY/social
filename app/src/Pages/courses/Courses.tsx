@@ -329,9 +329,6 @@ export default function CoursesPage({
       [{ font: [] }],
       [{ align: ["right", "center", "justify"] }],
       [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-      [{ color: ["red", "#785412"] }],
-      [{ background: ["red", "#785412"] }],
     ],
   };
 
