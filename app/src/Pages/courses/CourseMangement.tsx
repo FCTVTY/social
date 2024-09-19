@@ -153,7 +153,11 @@ export default function CourseManagement({
                               </div>
                               <div className="col-span-4 col-start-2">
                                 <h3>{course.name}</h3>
-                                <p>{course.desc}</p>
+                                <p
+                                  dangerouslySetInnerHTML={{
+                                    __html: course.desc,
+                                  }}
+                                ></p>
                               </div>
                             </div>
 

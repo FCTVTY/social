@@ -12,15 +12,51 @@
     background-color: #08090B;
 
 }
-
-
-html,body,a,p, h1,h2,h3,h4,h5,h6, strong {
+/* Global font settings */
+html, body {
     font-family: 'Avenir', sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 }
 
+/* Ensure all text elements inherit these styles */
+a, p, h1, h2, h3, h4, h5, h6, strong {
+    font-family: inherit;
+    font-optical-sizing: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+}
+
+@layer components {
+    h1 {
+        @apply text-4xl font-bold;
+    }
+    h2 {
+        @apply text-3xl font-semibold;
+    }
+    h3 {
+        @apply text-2xl font-medium;
+    }
+    h4 {
+        @apply text-xl font-medium;
+    }
+    h5 {
+        @apply text-lg font-medium;
+    }
+    h6 {
+        @apply text-base font-medium;
+    }
+}
+
+/* Optional: Customize headings or strong elements separately if needed */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600; /* Optional stronger font-weight for headings */
+}
+
+strong {
+    font-weight: 700; /* Optional bolder font-weight for strong text */
+}
 
 [contenteditable=true]:empty:before{
     content: attr(placeholder);
@@ -48,4 +84,46 @@ html,body,a,p, h1,h2,h3,h4,h5,h6, strong {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+
+   .quill > * {
+       border-color: inherit !important;
+       color: inherit !important;
+   }
+.quill > .ql-toolbar {
+    /* border radius of the toolbar */
+    border-radius: 10px 10px 0 0;
+}
+.quill > .ql-container {
+    /* border radius of the container and for font size*/
+    font-size: inherit;
+    border-radius: 0 0 10px 10px;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+    color: inherit !important;
+    opacity: 0.76;
+}
+.ql-snow .ql-picker {
+    color: inherit !important;
+}
+.quill > .ql-container > .ql-editor.ql-blank::before {
+    /* for placeholder */
+    color: inherit;
+}
+.ql-snow.ql-toolbar button svg {
+    opacity: 0.76;
+    color: currentColor;
+}
+.ql-snow .ql-stroke {
+    /* for the border of the editor */
+    stroke: currentColor !important;
+}
+.ql-snow .ql-fill {
+    /* for the bg color */
+    fill: currentColor !important;
+}
+.ql-picker-item {
+    /* for dropdown */
+    color: #444 !important;
 }

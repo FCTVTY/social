@@ -297,14 +297,25 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
               <div className={cn(home ? "" : "hidden", "mb-5")}>
                 <div className="mx-auto max-w-7xl py-0 sm:px-2">
                   <div
+                    role="alert"
+                    className="alert md:hidden bg-gray-900 text-white"
+                  >
+                    <span>
+                      {" "}
+                      Welcome to the {community?.community?.name} B:Hive
+                      Community
+                    </span>
+                  </div>
+
+                  <div
                     tabIndex={0}
-                    className="collapse collapse-arrow relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl dark:border-gray-800 dark:borderrounded-2xl sm:px-16 __welcome"
+                    className="hidden md:collapse collapse-arrow relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-10 text-center shadow-xl dark:border-gray-800 dark:borderrounded-2xl sm:px-16 __welcome"
                   >
                     <div className="collapse-title text-xl font-medium text-white">
-                      <h2 className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
+                      <h3 className="mx-auto max-w-2xl text-3xl font-bold  text-white sm:text-4xl">
                         Welcome to the {community?.community?.name} B:Hive
                         Community
-                      </h2>
+                      </h3>
                     </div>
                     <div className="collapse-content">
                       <p

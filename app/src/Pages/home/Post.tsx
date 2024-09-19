@@ -184,9 +184,9 @@ export default function PostView({ host, channel, post }: HomeProps) {
                             dangerouslySetInnerHTML={{ __html: ppost.article }}
                           ></dd>
                         ) : (
-                          <h2
+                          <h3
                             dangerouslySetInnerHTML={{ __html: ppost.desc }}
-                          ></h2>
+                          ></h3>
                         )}
 
                         <div className="relative">
@@ -358,7 +358,10 @@ export default function PostView({ host, channel, post }: HomeProps) {
             <div className="rounded-t-lg  overflow-hidden">
               <img
                 className="object-cover object-top w-full aspect-video"
-                src={ppost?.profile?.coverPicture}
+                src={
+                  ppost?.profile?.coverPicture ||
+                  "https://picsum.photos/1600/600"
+                }
                 alt=""
               />
             </div>
@@ -370,14 +373,14 @@ export default function PostView({ host, channel, post }: HomeProps) {
               />
             </div>
             <div className="text-center mt-2 mx-auto">
-              <h2 className="font-semibold">
+              <h3 className="font-semibold">
                 <span className="inline-flex">
                   {ppost?.profile?.first_name} {ppost?.profile?.last_name}
                   {ppost?.profile?.verified && (
                     <BadgeCheck className="text-indigo-400 h-5 w-5 ml-2"></BadgeCheck>
                   )}
                 </span>
-              </h2>
+              </h3>
               <p className="text-gray-500 pb-5">{ppost?.profile?.bio}</p>
             </div>
             <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around hidden">

@@ -249,6 +249,10 @@ const ApplicationLayout: React.FC<Props> = ({
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
   const [showNewVersion, setShowNewVersion] = useState(false);
 
+  useEffect(() => {
+    console.log("Location changed");
+    setSidebarOpen(false);
+  }, [location]);
   /** Fetch remote version from signature.json. Add timestamp for cache busting. */
   const fetchRemoteVersion = useCallback(
     () =>

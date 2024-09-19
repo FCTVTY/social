@@ -188,10 +188,18 @@ func main() {
 				}
 			}
 		}
+
+		if parsedURL.Path == "/v1/health" {
+			rw.WriteHeader(http.StatusOK)
+			rw.Write([]byte("OK")) // or you could return JSON: {"status": "healthy"}
+			return
+		}
+
 		if parsedURL.Path == "/v1/user/roles" {
 			session.VerifySession(nil, client.Roles).ServeHTTP(rw, r)
 			return
 		}
+
 		if parsedURL.Path == "/v1/sessioninfo" {
 			session.VerifySession(nil, client.Sessioninfo).ServeHTTP(rw, r)
 			return

@@ -445,7 +445,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             to={`/s/${post.channels.name}/${post._id}`}
           >
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
-            <h2 dangerouslySetInnerHTML={{ __html: post.desc }}></h2>
+            <h3 dangerouslySetInnerHTML={{ __html: post.desc }}></h3>
             <YouTubeEmbedsmall url={post.desc} />
           </Link>
 
