@@ -98,6 +98,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "postcss-obfuscator": "^1.6.1",
     "tailwindcss-font-inter": "^3.0.1",
     "typescript": "^5.2.2",
     "vite": "^5.3.2",

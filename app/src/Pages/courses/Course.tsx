@@ -38,7 +38,7 @@ import {
   Courses,
 } from "../../interfaces/interfaces";
 
-import axios from "axios";
+import axios, { post } from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import moment from "moment";
 import { date } from "zod";
@@ -56,6 +56,7 @@ import { ChevronUpDownIcon, ServerIcon } from "@heroicons/react/24/solid";
 import { LoadingButton } from "../../components/LoadingButton";
 import { Buffer } from "buffer";
 import mc from "../../lib/utils/mc";
+import ReactQuill from "react-quill";
 
 interface HomeProps {
   host?: string;
@@ -120,13 +121,10 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
     );
     setPosts({ ...posts, chapters: updatedChapters });
   };
-  const handleChapterTextChange = (
-    index: number,
-    e: React.SyntheticEvent<HTMLDivElement>,
-  ) => {
-    const htmlContent = e.currentTarget.innerHTML;
+  const handleChapterTextChange = (content, delta, source, editor, index) => {
+    const htmlContent = content;
     const updatedChapters = posts.chapters.map((chapter, idx) =>
-      idx === index ? { ...chapter, text: htmlContent } : chapter,
+      idx === parseInt(index) ? { ...chapter, text: htmlContent } : chapter,
     );
     setPosts({ ...posts, chapters: updatedChapters });
   };
@@ -298,11 +296,11 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
     setOpen(false);
     //window.location.reload();
   };
-  const handleDescChange = (e: React.FormEvent<HTMLDivElement>) => {
-    const htmlContent = e.currentTarget.innerHTML;
-    console.log("HTML Content:", htmlContent);
+  const handleDescChange = (content, delta, source, editor) => {
+    const htmlContent = content;
+    console.log("HTML Content:", content);
 
-    setPosts({ ...posts, desc: htmlContent });
+    setPosts({ ...posts, desc: content });
   };
   const chandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -315,7 +313,37 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
     setOpen(false);
     //window.location.reload();
   };
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ size: [] }],
+      [{ font: [] }],
+      [{ align: ["right", "center", "justify"] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      [{ color: ["red", "#785412"] }],
+      [{ background: ["red", "#785412"] }],
+    ],
+  };
 
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "color",
+    "image",
+    "background",
+    "align",
+    "size",
+    "font",
+  ];
   return (
     <>
       {posts && (
@@ -789,19 +817,13 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                   </label>
                                 </div>
                                 <div className="sm:col-span-2">
-                                  <div
-                                    id="desc"
-                                    contentEditable
-                                    onBlur={handleDescChange}
-                                    dangerouslySetInnerHTML={{
-                                      __html: posts.desc,
-                                    }}
-                                    style={{
-                                      minHeight: "4rem",
-                                      whiteSpace: "pre-wrap",
-                                    }}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                  ></div>
+                                  <ReactQuill
+                                    theme="snow"
+                                    modules={modules}
+                                    formats={formats}
+                                    value={posts.desc}
+                                    onChange={handleDescChange}
+                                  />
                                 </div>
                               </div>
 
@@ -967,20 +989,26 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                       </label>
                                     </div>
                                     <div className="sm:col-span-2">
-                                      <div
-                                        id={`chapter-text-${index}`}
-                                        contentEditable
-                                        onBlur={(e) =>
-                                          handleChapterTextChange(index, e)
+                                      <ReactQuill
+                                        theme="snow"
+                                        id={`${index}`}
+                                        modules={modules}
+                                        formats={formats}
+                                        value={chapter.text}
+                                        onChange={(
+                                          content,
+                                          delta,
+                                          source,
+                                          editor,
+                                        ) =>
+                                          handleChapterTextChange(
+                                            content,
+                                            delta,
+                                            source,
+                                            editor,
+                                            index,
+                                          )
                                         }
-                                        dangerouslySetInnerHTML={{
-                                          __html: chapter.text,
-                                        }}
-                                        style={{
-                                          minHeight: "4rem",
-                                          whiteSpace: "pre-wrap",
-                                        }}
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                       />
                                     </div>
                                   </div>

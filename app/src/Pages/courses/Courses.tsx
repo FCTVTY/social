@@ -52,6 +52,8 @@ import { Buffer } from "buffer/";
 import { LoadingButton } from "../../components/LoadingButton";
 import RTEditor from "../../components/Editor/RTEditor";
 import { getContentHTML } from "../../components/Editor/Renderer/rendererFunctions";
+import ReactQuill, { Quill } from "react-quill";
+import { c } from "vite/dist/node/types.d-aGj9QkWt";
 window.Buffer = Buffer;
 
 interface HomeProps {
@@ -195,14 +197,13 @@ export default function CoursesPage({
     );
     setCourseData({ ...courseData, chapters: updatedChapters });
   };
-  const handleChapterTextChange = (
-    index: number,
-    e: React.SyntheticEvent<HTMLDivElement>,
-  ) => {
-    const htmlContent = e.currentTarget.innerHTML;
+  const handleChapterTextChange = (content, delta, source, editor, index) => {
+    console.log("HTML Content:", index);
+    const htmlContent = content;
     const updatedChapters = courseData.chapters.map((chapter, idx) =>
-      idx === index ? { ...chapter, text: htmlContent } : chapter,
+      idx === parseInt(index) ? { ...chapter, text: htmlContent } : chapter,
     );
+    console.log(updatedChapters);
     setCourseData({ ...courseData, chapters: updatedChapters });
   };
   const handleChapterImageChange = (
@@ -295,11 +296,10 @@ export default function CoursesPage({
     console.log(courseData);
     // Submit form data to your backend
   };
-  const handleDescChange = (e: React.FormEvent<HTMLDivElement>) => {
-    const htmlContent = e.currentTarget.innerHTML;
-    console.log("HTML Content:", htmlContent);
+  const handleDescChange = (content, delta, source, editor) => {
+    console.log("HTML Content:", content);
 
-    setCourseData({ ...courseData, desc: htmlContent });
+    setCourseData({ ...courseData, desc: content });
   };
 
   const chandleSubmit = async () => {
@@ -321,7 +321,37 @@ export default function CoursesPage({
   };
 
   const [openIndex, setOpenIndex] = useState(groupedCourses[0]);
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ size: [] }],
+      [{ font: [] }],
+      [{ align: ["right", "center", "justify"] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      [{ color: ["red", "#785412"] }],
+      [{ background: ["red", "#785412"] }],
+    ],
+  };
 
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "color",
+    "image",
+    "background",
+    "align",
+    "size",
+    "font",
+  ];
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -472,7 +502,7 @@ export default function CoursesPage({
                               <div className="aspect-h-3 aspect-w-4 overflow-hidden rounded-t-lg">
                                 <img
                                   src={product.media}
-                                  alt={product.desc}
+                                  alt={product.name}
                                   className="object-cover object-center"
                                 />
                                 <div
@@ -629,19 +659,15 @@ export default function CoursesPage({
                                 </label>
                               </div>
                               <div className="sm:col-span-2">
-                                <div
-                                  id="desc"
-                                  contentEditable
-                                  onBlur={handleDescChange}
-                                  dangerouslySetInnerHTML={{
-                                    __html: courseData.desc,
-                                  }}
-                                  style={{
-                                    minHeight: "4rem",
-                                    whiteSpace: "pre-wrap",
-                                  }}
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                ></div>
+                                <ReactQuill
+                                  theme="snow"
+                                  modules={modules}
+                                  formats={formats}
+                                  value={courseData.desc}
+                                  onChange={handleDescChange}
+                                />
+
+                                <script></script>
                               </div>
                             </div>
 
@@ -806,20 +832,26 @@ export default function CoursesPage({
                                     </label>
                                   </div>
                                   <div className="sm:col-span-2">
-                                    <div
-                                      id={`chapter-text-${index}`}
-                                      contentEditable
-                                      onBlur={(e) =>
-                                        handleChapterTextChange(index, e)
+                                    <ReactQuill
+                                      theme="snow"
+                                      id={`${index}`}
+                                      modules={modules}
+                                      formats={formats}
+                                      value={chapter.text}
+                                      onChange={(
+                                        content,
+                                        delta,
+                                        source,
+                                        editor,
+                                      ) =>
+                                        handleChapterTextChange(
+                                          content,
+                                          delta,
+                                          source,
+                                          editor,
+                                          index,
+                                        )
                                       }
-                                      dangerouslySetInnerHTML={{
-                                        __html: chapter.text,
-                                      }}
-                                      style={{
-                                        minHeight: "4rem",
-                                        whiteSpace: "pre-wrap",
-                                      }}
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                   </div>
                                 </div>

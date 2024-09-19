@@ -60,5 +60,16 @@
   <script src="./node_modules/preline/dist/preline.js"></script>
 
   <script src="/src/index.tsx" type="module"></script>
-
+  <!-- Include the Quill library -->
+  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+  <link
+          href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"
+          rel="stylesheet"
+  />
+  <!-- Initialize Quill editor -->
+  <script>
+    const quill = new Quill("#desc", {
+      theme: "snow",
+    });
+  </script>
 </html>
