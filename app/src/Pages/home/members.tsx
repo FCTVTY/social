@@ -64,7 +64,11 @@ export default function MembersPage({ host, channel }: HomeProps) {
           <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
             <div className="mx-auto max-w-2xl">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                Meet <strong>{community?.name}</strong> Moderators
+                Meet{" "}
+                <strong className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
+                  {community?.name}
+                </strong>{" "}
+                Moderators
               </h2>
               <p className="mt-4 text-lg leading-8 text-gray-600">
                 We’re a dynamic group of individuals who are passionate about
@@ -156,7 +160,6 @@ export default function MembersPage({ host, channel }: HomeProps) {
                                   clipRule="evenodd"
                                 />
                               </svg>
-
                             )}
                           </Link>
                         </p>
