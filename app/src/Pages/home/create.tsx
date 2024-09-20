@@ -17,7 +17,8 @@ import { CircleX, PlusIcon } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
-
+import ContentEditable from "react-contenteditable";
+import sanitizeHtml from "sanitize-html";
 interface CreateProps {
   onSubmit: () => void;
   channel: string;
@@ -111,7 +112,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
 
   const handleInputChange = () => {
     const text = contentEditableRef.current.innerHTML;
-
+    console.log(text);
     setContent(text);
     setPost((prevState) => ({
       ...prevState,
@@ -134,7 +135,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    const text = contentEditableRef.current.innerHTML;
+    const text = contentEditableRef.current.innerHTML.replace(/\n/g, "<br />");
     const words = text.split(" ");
     words.pop();
     const newText = `${words.join(" ")} <a href="/profile/${suggestion.id}" class="inline-flex items-center rounded-md bg-indigo-100 px-2 py-1 text-xs font-medium text-gray-600">${suggestion.first_name} ${suggestion.last_name}</span> `;
@@ -195,6 +196,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
   return (
     <>
       <form
@@ -228,6 +230,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
             className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-lg placeholder-gray-400 dark:bg-gray-900 mb-4"
             style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
           ></div>
+
           <button
             type="button"
             onClick={() => {

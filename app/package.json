@@ -1,7 +1,7 @@
 {
   "name": "vite-react-typescript-starter",
   "private": true,
-  "version": "1.1.256",
+  "version": "1.1.257",
   "type": "module",
   "scripts": {
     "dev": "./scripts/sync-version.sh && vite",
@@ -31,6 +31,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "@rollbar/react": "^0.12.0-beta",
     "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.15",
     "@tailwindui/react": "^0.1.1",
     "@tiptap/extension-color": "^2.6.6",
     "@tiptap/extension-text-style": "^2.6.6",
@@ -63,6 +64,7 @@
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-contenteditable": "^3.3.7",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.0.8",
     "react-giphy-picker": "^1.1.1",
@@ -78,6 +80,7 @@
     "react-topbar-progress-indicator": "^4.1.1",
     "rollbar": "^2.26.4",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "sanitize-html": "^2.13.0",
     "stream-browserify": "^3.0.0",
     "supertokens-auth-react": "^0.43.0",
     "supertokens-web-js": "^0.10.1",
