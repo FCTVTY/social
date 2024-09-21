@@ -10,6 +10,7 @@ import axios from "axios";
 import { BadgeCheck, CakeSlice } from "lucide-react";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 interface PostItemProps {
   lite?: boolean;
@@ -40,6 +41,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
         (like) => like.userId !== profile?.supertokensId,
       );
     } else {
+      toast("Post Liked");
       // Add the like
       updatedLikes = [
         ...postLikes,
@@ -448,7 +450,9 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             <h3 dangerouslySetInnerHTML={{ __html: post.desc }}></h3>
             <YouTubeEmbedsmall url={post.desc} />
           </Link>
-
+          <dd className="mt-0.5 text-sm text-gray-500 ">
+            {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
+          </dd>
           <div className="flex py-4 justify-between">
             <div className="flex space-x-2">
               <div className="flex space-x-1 items-center">
@@ -517,19 +521,25 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               </a>
             ))}
           </dd>
-          <Link
-            className="mt-0.5 text-sm text-gray-500"
-            to={`/s/${post.channels.name}/${post._id}`}
-          >
-            View all comments
-          </Link>
-          <dd className="mt-0.5 text-sm text-gray-500 ">
-            {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
-          </dd>
+          {post && post.postComments.length > 0 && (
+            <Link
+              className="mt-0.5 text-sm text-gray-500"
+              to={`/s/${post.channels.name}/${post._id}`}
+            >
+              View all comments
+            </Link>
+          )}
         </dl>
       </div>
       <div></div>
       <div className=" p-4">
+        <Link
+          to={`/s/${post.channels.name}/${post._id}`}
+          className="btn btn-sm hidden"
+        >
+          Previous Comments
+          <div className="badge badge-secondary">99</div>
+        </Link>
         <div className="flow-root mt-3">
           <ul role="list" className="-mb-8">
             {post &&
@@ -583,7 +593,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
         {post && post.commentsallowed && (
           <form
             onSubmit={handleSubmit}
-            className=" mt-10 flex items-center mb-4 space-x-3"
+            className=" mt-5 flex items-center mb-4 space-x-3"
           >
             <>
               <div

@@ -13,7 +13,7 @@ const PostItemLite = ({ post, profile, lite }) => {
   return (
     <li
       key={post._id}
-      className="col-span-1 flex flex-col divide-y divide-gray-200 dark:divide-gray-800 rounded-lg bg-white dark:bg-gray-900 shadow dark:shadow-gray-800 shadow-2xl max-w-4xl"
+      className={`col-span-1 flex flex-col  rounded-2xl bg-white dark:bg-gray-900 dark:shadow-gray-800 dark:border shadow max-w-4xl dark:border-gray-800 dark:border dark:rounded-none`}
     >
       <div className="flex flex-1 flex-col p-3">
         <dl className="mt-1 flex flex-grow flex-col justify-between">

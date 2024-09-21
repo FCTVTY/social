@@ -182,7 +182,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                     />
                   </svg>
                 </span>
-                <h3 className="font-medium leading-tight">Profile Image</h3>
+                <h5 className="font-medium leading-tight">Profile Image</h5>
                 <p className="text-sm">Lets upload a awesome picture</p>
               </li>
               <li className="mb-10 ms-10">
@@ -203,7 +203,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                     />
                   </svg>
                 </span>
-                <h3 className="font-medium leading-tight">Cover Photo</h3>
+                <h5 className="font-medium leading-tight">Cover Photo</h5>
                 <p className="text-sm">Lets make your profile pop!</p>
               </li>
               <li className="mb-10 ms-10">
@@ -218,7 +218,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                     <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
                   </svg>
                 </span>
-                <h3 className="font-medium leading-tight">Bio</h3>
+                <h5 className="font-medium leading-tight">Bio</h5>
                 <p className="text-sm">Let people know who you are!</p>
               </li>
               <li className="ms-10">
@@ -233,7 +233,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                     <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
                   </svg>
                 </span>
-                <h3 className="font-medium leading-tight">Finished</h3>
+                <h5 className="font-medium leading-tight">Finished</h5>
                 <p className="text-sm">Lets get going</p>
               </li>
             </ol>
@@ -244,16 +244,16 @@ function OnboardingPage({ host, channel }: HomeProps) {
           <div className="my-auto mx-auto flex flex-col justify-center pt-8 md:justify-start lg:w-[34rem]">
             <div className="flex w-full flex-col sm:px-14">
               <div className="mx-auto w-full max-w-md pb-20 px-8 sm:px-0"></div>
-              <h2 className="font-serif text-2xl font-semibold text-gray-700">
+              <h2 className="font-serif font-semibold text-gray-700 text-center">
                 Awesome, let's upload a cover photo
               </h2>
               <form onSubmit={handleSubmit}>
                 <div className="mt-8 flex w-full flex-col pb-8">
                   <div className="relative text-center">
                     <div className="relative mb-4">
-                      <h2 className="font-semibold text-gray-700">
+                      <h3 className="font-semibold text-gray-700">
                         Upload Cover Photo
-                      </h2>
+                      </h3>
                       <div className="flex items-center text-center">
                         {selectedImage ? (
                           <div className="crop-container h-[200px] w-[200px]">
@@ -311,9 +311,12 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                     {formData?.first_name} {formData?.last_name}
                                   </span>
                                 </h2>
-                                <p className="text-gray-500 pb-5">
-                                  {formData?.bio}
-                                </p>
+                                <p
+                                  className="text-gray-500 pb-5"
+                                  dangerouslySetInnerHTML={{
+                                    __html: formData?.bio,
+                                  }}
+                                ></p>
                               </div>
                             </div>
                           </label>

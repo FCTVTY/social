@@ -480,7 +480,10 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                       )}
                     </span>
                   </h2>
-                  <p className="text-gray-500 pb-5">{profile?.bio}</p>
+                  <p
+                    className="text-gray-500 pb-5"
+                    dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
+                  ></p>
                   {roles && roles.length > 0 && (
                     <div className="pb-5">
                       {roles.map((role) => {

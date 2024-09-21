@@ -6,8 +6,8 @@ import {
   Profile,
 } from "../../interfaces/interfaces";
 import { getApiDomain } from "../../lib/auth/supertokens";
-import PostItem from "./Feeditem";
-import PostItemLite from "./FeeditemLite";
+import PostItem from "../home/Feeditem";
+import PostItemLite from "../home/FeeditemLite";
 import {
   BadgeCheck,
   CakeIcon,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { Link, useLocation } from "react-router-dom";
+import LogoSquare from "../../assets/logo-light.svg";
 
 interface HomeProps {
   host?: string;
@@ -279,16 +280,18 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                 </div>
                 <div className=" bg-white dark:bg-gray-900 dark:border-gray-800 bordershadow-md rounded-lg p-4 mb-4">
                   <h2 className="text-lg font-bold mb-2">Communities</h2>
-                  <div className="flex flex-wrap">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {/* Example Friends */}
                     {profile.communitesFull &&
                       profile.communitesFull.map((c) => (
-                        <img
-                          key={c.id}
-                          src={c.logo}
-                          alt={`COMMUNITY`}
-                          className=" h-16 rounded-xl border border-white dark:border-gray-800 m-2 p-2 object-contain"
-                        />
+                        <div>
+                          <img
+                            key={c.id}
+                            src={c.logo || LogoSquare}
+                            alt={`COMMUNITY`}
+                            className=" h-16 max-w-full rounded-xl border border-white dark:border-gray-800 m-2 p-2 object-contain"
+                          />
+                        </div>
                       ))}
                   </div>
                 </div>

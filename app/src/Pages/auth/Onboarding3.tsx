@@ -4,6 +4,7 @@ import axios from "axios";
 import { getApiDomain } from "../../lib/auth/supertokens";
 import { LoadingButton } from "../../components/LoadingButton";
 import logo from "../../assets/logo-light.svg";
+import ReactQuill from "react-quill";
 
 interface HomeProps {
   host: string;
@@ -42,11 +43,10 @@ function OnboardingPage3({ host, channel }: HomeProps) {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (content, delta, source, editor, index) => {
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      bio: content,
     }));
   };
 
@@ -70,6 +70,36 @@ function OnboardingPage3({ host, channel }: HomeProps) {
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ size: [] }],
+      [{ font: [] }],
+      [{ align: ["right", "center", "justify"] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "color",
+    "image",
+    "background",
+    "align",
+    "size",
+    "font",
+  ];
+
   return (
     <>
       {formData && (
@@ -102,7 +132,7 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                         />
                       </svg>
                     </span>
-                    <h3 className="font-medium leading-tight">Profile Image</h3>
+                    <h5 className="font-medium leading-tight">Profile Image</h5>
                     <p className="text-sm">Lets upload a awesome picture</p>
                   </li>
                   <li className="mb-10 ms-10">
@@ -123,7 +153,7 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                         />
                       </svg>
                     </span>
-                    <h3 className="font-medium leading-tight">Cover Photo</h3>
+                    <h5 className="font-medium leading-tight">Cover Photo</h5>
                     <p className="text-sm">Lets make your profile pop!</p>
                   </li>
                   <li className="mb-10 ms-10">
@@ -144,7 +174,7 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                         />
                       </svg>
                     </span>
-                    <h3 className="font-medium leading-tight">Bio</h3>
+                    <h5 className="font-medium leading-tight">Bio</h5>
                     <p className="text-sm">Let people know who you are!</p>
                   </li>
                   <li className="ms-10">
@@ -159,7 +189,7 @@ function OnboardingPage3({ host, channel }: HomeProps) {
                         <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z" />
                       </svg>
                     </span>
-                    <h3 className="font-medium leading-tight">Finished</h3>
+                    <h5 className="font-medium leading-tight">Finished</h5>
                     <p className="text-sm">Lets get going</p>
                   </li>
                 </ol>
@@ -170,26 +200,22 @@ function OnboardingPage3({ host, channel }: HomeProps) {
               <div className="my-auto mx-auto flex flex-col justify-center pt-8 md:justify-start lg:w-[34rem]">
                 <div className="flex w-full flex-col  sm:px-14">
                   <div className="mx-auto w-full max-w-md pb-20 px-8 sm:px-0"></div>
-                  <h2 className="font-serif text-2xl font-semibold text-gray-700">
+                  <h2 className="font-serif text-center font-semibold text-gray-700">
                     One final thing, lets set a bio
                   </h2>
                   <form className="" onSubmit={handleSubmit}>
                     <div className="mt-8 flex w-full flex-col pb-8">
                       <div className="relative text-center">
                         <div className="relative mb-4">
-                          <h2 className=" font-semibold text-gray-700">
-                            Upload your bio
-                          </h2>
                           <div className="flex items-center text-center">
-                            <div className="mt-1 ml-auo space-y-4 w-full">
-                              <textarea
-                                id="bio"
-                                name="bio"
+                            <div className="mt-1 ml-auto space-y-4 w-full mb-20">
+                              <ReactQuill
+                                theme="snow"
+                                modules={modules}
+                                formats={formats}
                                 value={formData.bio}
-                                rows={3}
-                                className="w-full rounded-md px-4 border text-sm pt-2.5 outline-[#007bff] w-full"
-                                placeholder="Tell us a little about yourself"
                                 onChange={handleInputChange}
+                                style={{ height: "15rem" }}
                               />
                             </div>
                           </div>
