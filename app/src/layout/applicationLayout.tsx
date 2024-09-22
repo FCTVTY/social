@@ -404,7 +404,7 @@ const ApplicationLayout: React.FC<Props> = ({
           .post(`${getApiDomain()}/join?id=` + community.community?.id)
           .then(
             window.location.assign(
-              "/s/" + community.channels[0].id + "?loggedin=true",
+              "/s/" + community.channels[0].name + "?loggedin=true",
             ),
           );
       }
