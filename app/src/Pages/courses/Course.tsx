@@ -702,7 +702,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                   <h2 className="text-base font-semibold leading-7 "></h2>
 
                   <Link
-                    to={`/s/Home`}
+                    to={`/s`}
                     className=" md:inline-flex items-center rounded-md bg-black text-white dark:bg-white dark:text-black px-3 py-2 text-sm font-semibold  shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     <Minimize2

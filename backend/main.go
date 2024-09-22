@@ -40,9 +40,6 @@ var (
 
 func init() {
 	// Rollbar initialization
-	rollbar.SetToken("f6a064fe043a412cb2668ecf68df223f")
-	rollbar.SetEnvironment("production") // Use "development" for non-production environments
-	rollbar.SetCodeVersion("v1.0.0")
 
 	// Prometheus setup
 	prometheus.MustRegister(requestCount)
@@ -59,7 +56,6 @@ func logMiddleware(next http.Handler) http.Handler {
 		// Serve the request
 		defer func() {
 			if err := recover(); err != nil {
-				rollbar.Error(fmt.Errorf("panic occurred: %v", err)) // Log panics to Rollbar
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			}
 		}()
@@ -74,7 +70,6 @@ func logMiddleware(next http.Handler) http.Handler {
 		requestCount.WithLabelValues(method, path, status).Inc()
 
 		log.Printf("%s %s %s %s %d", r.Method, r.RequestURI, r.Proto, duration, rw.statusCode)
-		rollbar.Log("%s %s %s %s %d", r.Method, r.RequestURI, r.Proto, duration, rw.statusCode)
 
 	})
 }
@@ -91,7 +86,7 @@ func (rw *responseWriter) WriteHeader(code int) {
 }
 
 func main() {
-	defer rollbar.Wait() // Waits for any remaining errors to be sent to Rollbar before exiting
+	//defer rollbar.Wait() // Waits for any remaining errors to be sent to Rollbar before exiting
 
 	err := supertokens.Init(SuperTokensConfig)
 	if err != nil {
@@ -107,7 +102,7 @@ func main() {
 	for _, role := range roles {
 		resp, err := userroles.CreateNewRoleOrAddPermissions(role, permissions, nil)
 		if err != nil {
-			rollbar.Error(err) // Log error to Rollbar
+			//rollbar.Error(err) // Log error to Rollbar
 			fmt.Println(err)
 			return
 		}
@@ -121,7 +116,7 @@ func main() {
 	http.ListenAndServe(":3001", logMiddleware(corsMiddleware(supertokens.Middleware(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		parsedURL, err := url.Parse(r.URL.Path)
 		if err != nil {
-			rollbar.Error(fmt.Errorf("failed to parse URL: %v", err))
+			//rollbar.Error(fmt.Errorf("failed to parse URL: %v", err))
 			http.Error(rw, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
