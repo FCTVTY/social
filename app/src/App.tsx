@@ -98,8 +98,8 @@ function App() {
     console.log(host);
     if (host === "localhost:5173") {
       // setSubDomain("neo-egvzkmsh")
-      setSubDomain("meta");
-      setHost("meta");
+      setSubDomain("wmb");
+      setHost("wmb");
     }
 
     // Parse the URL

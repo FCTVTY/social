@@ -21,6 +21,7 @@ export interface Channel {
   id: ObjectId;
   name: string;
   locked: boolean;
+  publicId: string;
   // Getter for the URLFriendly property
   get URLFriendly(): string;
   // Replace spaces with hyphens or any other preferred URL-friendly character
@@ -30,15 +31,17 @@ export class ChannelClass implements Channel {
   id: ObjectId;
   name: string;
   locked: boolean;
+  publicId: string;
 
   // Getter for the URLFriendly property
 
   url: string;
 
-  constructor(id: ObjectId, name: string, locked: boolean) {
+  constructor(id: ObjectId, name: string, locked: boolean, publicId: string) {
     this.id = id;
     this.name = name;
     this.locked = locked;
+    this.publicId = publicId;
   }
 }
 

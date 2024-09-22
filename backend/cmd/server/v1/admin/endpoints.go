@@ -23,6 +23,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"log"
+	"math/big"
 	"net/http"
 	"os"
 	"strings"
@@ -249,7 +250,12 @@ func CreateCommunity(rw http.ResponseWriter, r *http.Request) {
 	c.Name = "Home"
 	c.Locked = false
 	c.Parent = result.InsertedID.(primitive.ObjectID)
-
+	channelID, err := generateChannelID(idLength)
+	if err != nil {
+		fmt.Println("Error generating channel ID:", err)
+		return
+	}
+	c.PublicID = channelID
 	result, err = channelCollection.InsertOne(context.Background(), c)
 	if err != nil {
 		http.Error(rw, "failed to insert Channel: "+err.Error(), http.StatusInternalServerError)
@@ -365,6 +371,20 @@ func UpdateCommunity(rw http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(rw).Encode(existingCommunity)
 }
 
+const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+const idLength = 12
+
+func generateChannelID(length int) (string, error) {
+	result := make([]byte, length)
+	for i := range result {
+		randomNum, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+		if err != nil {
+			return "", err
+		}
+		result[i] = charset[randomNum.Int64()]
+	}
+	return string(result), nil
+}
 func CreateChannel(rw http.ResponseWriter, r *http.Request) {
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {
@@ -375,6 +395,13 @@ func CreateChannel(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	var v models.Channel
 
+	channelID, err := generateChannelID(idLength)
+	if err != nil {
+		fmt.Println("Error generating channel ID:", err)
+		return
+	}
+
+	v.PublicID = channelID
 	// We decode our body request params
 	err := json.NewDecoder(r.Body).Decode(&v)
 	if err != nil {

@@ -35,10 +35,11 @@ type Community struct {
 	LandingBg string `json:"landingBg"`
 }
 type Channel struct {
-	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Name   string             `json:"name"`
-	Locked bool               `json:"locked"`
-	Parent primitive.ObjectID `bson:"parent" json:"parent,omitempty"`
+	ID       primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Name     string             `json:"name"`
+	Locked   bool               `json:"locked"`
+	Parent   primitive.ObjectID `bson:"parent" json:"parent,omitempty"`
+	PublicID string             `json:"publicId"`
 }
 
 type CommunityCollection struct {

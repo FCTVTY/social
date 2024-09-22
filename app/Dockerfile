@@ -13,10 +13,9 @@ COPY . .
 # Install Vite and plugins
 RUN yarn add vite @vitejs/plugin-react daisyui@latest vite-plugin-node-stdlib-browser
 # Copy application code
-RUN npm version patch
+
 # Build the application
 RUN yarn build
-
 # Stage 2: Production stage
 FROM nginx
 

@@ -470,7 +470,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
 
                             <img
                               onClick={() => setOpenM(true)}
-                              className="h-48 w-full object-cover lg:h-64"
+                              className="h-48 w-full object-cover lg:h-1/6"
                               src={posts.chapters[currentChapterIndex].image}
                               alt=""
                             />
@@ -553,7 +553,10 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
               </div>
               <div className="">
                 <nav className="flex" aria-label="Progress">
-                  <ol role="list" className="space-y-6">
+                  <ol
+                    role="list"
+                    className="space-y-6 h-[20vh] overflow-scroll"
+                  >
                     {posts.chapters.map((step) => (
                       <li key={step.name}>
                         {step.status === "complete" ? (

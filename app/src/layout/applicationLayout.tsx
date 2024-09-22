@@ -67,6 +67,7 @@ import {
   BellRing,
   SchoolIcon,
   RefreshCcw,
+  LockIcon,
 } from "lucide-react";
 import Themeswitch from "./themeswitch";
 import {
@@ -97,6 +98,7 @@ interface MenuItem {
   href: string;
   icon: React.ElementType;
   current: boolean;
+  locked: boolean;
 }
 
 interface UserNavigationItem {
@@ -282,7 +284,7 @@ const ApplicationLayout: React.FC<Props> = ({
     const timer = setInterval(() => {
       fetchRemoteVersion().then((version) => {
         if (version !== appVersion) {
-          //setShowNewVersion(true);
+          setShowNewVersion(true);
         } else {
           console.log("version not changed");
         }
@@ -410,6 +412,8 @@ const ApplicationLayout: React.FC<Props> = ({
         href: `/s/${channel.name}`, // Update with appropriate channel ID or URL
         icon: ChartPieIcon, // Update with appropriate icon
         current: `/s/${channel.name}` === url, // Set current to true if the URL matches
+        locked: channel.locked,
+        id: channel.publicId,
       }));
 
       setNavigation((prevNavigation) => [...channelNavigation]);
@@ -1045,8 +1049,11 @@ const ApplicationLayout: React.FC<Props> = ({
                                             />
                                           </svg>
                                         </span>
-                                        <span className="mt-[2px]">
-                                          {item.name}
+                                        <span className="mt-[2px] relative">
+                                          {item.name}{" "}
+                                          {item.locked && (
+                                            <LockIcon className="absolute right-0 top-0" />
+                                          )}
                                         </span>
                                       </Link>
                                     </li>
@@ -1177,7 +1184,12 @@ const ApplicationLayout: React.FC<Props> = ({
                                     />
                                   </svg>
                                 </span>
-                                <span className="mt-[2px]">{item.name}</span>
+                                <span className="mt-[2px] relative w-full">
+                                  {item.name}{" "}
+                                  {item.locked && (
+                                    <LockIcon className="absolute right-0 top-0" />
+                                  )}
+                                </span>
                               </Link>
                             </li>
                           ))}

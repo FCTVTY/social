@@ -546,7 +546,8 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 
 			img, _, err := decodeDataURI(chapter.Image)
 			if err != nil {
-				log.Fatalf("Failed to decode data URI: %v", err)
+				http.Error(rw, "image issue", http.StatusInternalServerError)
+				return
 			}
 
 			// Encode the image to WebP format
@@ -616,7 +617,8 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 	if v.Media != "" && !strings.HasPrefix(v.Media, "https") {
 		img, _, err := decodeDataURI(v.Media)
 		if err != nil {
-			log.Fatalf("Failed to decode data URI: %v", err)
+			http.Error(rw, "cover image issue", http.StatusInternalServerError)
+			return
 		}
 
 		// Encode the image to WebP format
