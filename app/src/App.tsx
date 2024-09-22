@@ -73,6 +73,15 @@ interface AppContextType {
 // Create the context
 
 function App() {
+  if (process.env.NODE_ENV !== "development") {
+    // Disable all console methods in production
+    console.log = () => {};
+    console.error = () => {};
+    console.warn = () => {};
+    console.info = () => {};
+    console.debug = () => {};
+  }
+
   const [subdomain, setSubDomain] = useState("null");
   const [communityFound, setCommunity] = useState("null");
   const [channel, setChannel] = useState("null");
