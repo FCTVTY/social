@@ -276,7 +276,9 @@ const ApplicationLayout: React.FC<Props> = ({
     /** initial run and update without prompt */
     fetchRemoteVersion().then((version) => {
       if (version !== appVersion) {
-        //hardReloadPage();
+        if (process.env.NODE_ENV !== "development") {
+          hardReloadPage();
+        }
       }
     });
 
