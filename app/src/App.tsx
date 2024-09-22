@@ -23,10 +23,8 @@ import Home from "./Pages/home/Home";
 import Post from "./Pages/home/Post";
 import PostView from "./Pages/home/Post";
 import EventsPage from "./Pages/home/events";
-import Profile from "./Pages/profile/Profile";
 import EventPage from "./Pages/home/event";
 import MembersPage from "./Pages/home/members";
-import ProfilePage from "./Pages/profile/Profile";
 import Onboarding from "./Pages/auth/Onboarding";
 import Onboarding2 from "./Pages/auth/Onboarding2";
 import Onboarding3 from "./Pages/auth/Onboarding3";
@@ -49,7 +47,6 @@ import PasswordReset from "./Pages/auth/passwordReset";
 import DeleteAccount from "./Pages/auth/DeleteAccount";
 import ResourcesPage from "./Pages/resources/Resources";
 import RemoveCourse from "./Pages/home/RemoveCourse";
-import AcademiesPage from "./Pages/Academy/Academies";
 import CoursesPage from "./Pages/courses/Courses";
 import CoursePage from "./Pages/courses/Course";
 import Site from "./Pages/admin/site";
@@ -63,6 +60,7 @@ import CourseMangement from "./Pages/courses/CourseMangement";
 import store from "./store/store";
 import ApplicationLayoutFull from "./layout/applicationLayoutFull";
 import LockPost from "./Pages/home/LockPost";
+import ProfilePage from "./Pages/profile/Profile";
 
 initSuperTokens();
 

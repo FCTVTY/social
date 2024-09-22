@@ -139,10 +139,10 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
 
     reader.onload = function (event) {
       const base64String = event.target?.result as string;
-      const updatedChapters = courseData.chapters.map((chapter, idx) =>
+      const updatedChapters = posts.chapters.map((chapter, idx) =>
         idx === index ? { ...chapter, image: base64String } : chapter,
       );
-      setCourseData({ ...courseData, chapters: updatedChapters });
+      setPosts({ ...posts, chapters: updatedChapters });
       // @ts-ignore
       //setSelectedImage(base64String)
     };
@@ -210,14 +210,14 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
       const fileUrl = `https://${endPoint}/${bucketName}/${fileName}`;
 
       // Update the state with the file URL
-      const updatedFiles = courseData.files.map((f, idx) =>
+      const updatedFiles = posts.files.map((f, idx) =>
         idx === index ? { ...f, url: fileUrl, name: file.name } : f,
       );
 
       e.target.value = "";
       e.target.className = "hidden";
 
-      setCourseData({ ...courseData, files: updatedFiles });
+      setPosts({ ...posts, files: updatedFiles });
     });
 
     // Update the file name in state
@@ -257,7 +257,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
 
     reader.onload = function (event) {
       const base64String = event.target?.result as string;
-      setPostData((prevState) => ({
+      setPosts((prevState) => ({
         ...prevState,
         media: base64String,
       }));
