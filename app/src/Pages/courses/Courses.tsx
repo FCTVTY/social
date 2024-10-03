@@ -54,6 +54,7 @@ import RTEditor from "../../components/Editor/RTEditor";
 import { getContentHTML } from "../../components/Editor/Renderer/rendererFunctions";
 import ReactQuill, { Quill } from "react-quill";
 import { c } from "vite/dist/node/types.d-aGj9QkWt";
+import { toast } from "react-toastify";
 window.Buffer = Buffer;
 
 interface HomeProps {
@@ -98,6 +99,7 @@ export default function CoursesPage({
 
   const fetchDetails = async () => {
     try {
+      // Fetch community details
       const communityResponse = await fetch(
         `${getApiDomain()}/community?name=${host}`,
       );
@@ -107,15 +109,32 @@ export default function CoursesPage({
       const communityData = await communityResponse.json();
       setCommunity(communityData);
 
-      const postsResponse = await fetch(
-        `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=1`,
-      );
-      if (!postsResponse.ok) {
-        throw new Error("Network response was not ok for courses fetch");
-      }
-      const postsData = await postsResponse.json();
-      setPosts(postsData);
-      groupCoursesByCategory(postsData);
+      let page = 1;
+      let allCourses = [];
+      let postsData;
+
+      // Fetch courses and continue polling until no more courses
+      do {
+        const postsResponse = await fetch(
+          `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=${page}`,
+        );
+        if (!postsResponse.ok) {
+          throw new Error("Network response was not ok for courses fetch");
+        }
+        postsData = await postsResponse.json();
+
+        if (postsData !== null) {
+          allCourses = [...allCourses, ...postsData];
+          setPosts(allCourses);
+          groupCoursesByCategory(allCourses);
+          page++;
+        }
+      } while (postsData !== null); // Continue fetching while data is not null
+
+      // Set posts and group by category once all pages are fetched
+      setPosts(allCourses);
+      groupCoursesByCategory(allCourses);
+      toast.success("Courses loaded");
     } catch (error) {
       console.error("Error fetching community details:", error);
     }
