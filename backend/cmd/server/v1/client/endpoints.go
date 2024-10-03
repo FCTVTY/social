@@ -1213,8 +1213,8 @@ func Courses(rw http.ResponseWriter, r *http.Request) {
 	limitStr := r.URL.Query().Get("limit")
 	pageStr := r.URL.Query().Get("page")
 
-	limit := 50 // default limit
-	page := 1   // default page
+	limit := 3 // default limit
+	page := 1  // default page
 
 	if limitStr != "" {
 		l, err := strconv.Atoi(limitStr)

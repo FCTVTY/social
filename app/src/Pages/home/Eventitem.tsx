@@ -15,7 +15,7 @@ const EventItem = ({ post, profile, lite }) => {
   return (
     <li
       key={post._id}
-      className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 dark:hover:bg-zinc-900 sm:px-6"
+      className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 dark:hover:bg-gray-800 sm:px-6"
     >
       <div className="flex gap-x-4">
         <img

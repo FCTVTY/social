@@ -100,7 +100,32 @@ export default function CourseManagement({
     // Save the reordered list
     saveReorderedCourses(updatedCourses);
   };
+  const handleFeaturedChange = async (updatedCourse: Courses) => {
+    try {
+      // Update the state of the course
+      setGroupedCourses((prevCourses) => {
+        const updatedCourses = { ...prevCourses };
+        Object.keys(updatedCourses).forEach((category) => {
+          updatedCourses[category] = updatedCourses[category].map((course) =>
+            course._id === updatedCourse._id ? updatedCourse : course,
+          );
+        });
+        return updatedCourses;
+      });
 
+      // Call backend to update the entire course
+      const response = await axios.post(
+        `${getApiDomain()}/community/updatecourse`,
+        updatedCourse,
+      );
+      if (response.status === 200) {
+        toast.success("Course updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating course:", error);
+      toast.error("Error updating course");
+    }
+  };
   const saveReorderedCourses = async (updatedCourses: Courses[]) => {
     try {
       toast("saving all courses, please wait...");
@@ -153,6 +178,19 @@ export default function CourseManagement({
                               </div>
                               <div className="col-span-4 col-start-2">
                                 <h3>{course.name}</h3>
+                                <p>
+                                  Featured{" "}
+                                  <input
+                                    type="checkbox"
+                                    checked={course.featured}
+                                    onChange={(e) =>
+                                      handleFeaturedChange({
+                                        ...course,
+                                        featured: e.target.checked,
+                                      })
+                                    }
+                                  />
+                                </p>
                                 <p
                                   dangerouslySetInnerHTML={{
                                     __html: course.desc,

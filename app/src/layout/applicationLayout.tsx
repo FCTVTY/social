@@ -1368,7 +1368,7 @@ const ApplicationLayout: React.FC<Props> = ({
                   </div>
                 </div>
 
-                <main className="lg:ml-72 py-10 bg dark:bg-gray-900">
+                <main className="lg:ml-72 py-10 min-h-screen bg dark:bg-gray-900">
                   <div className="w-full "></div>
                   {community?.community?.private &&
                   community?.user?.notjoined ? (

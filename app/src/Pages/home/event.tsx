@@ -20,7 +20,7 @@ import { ClockIcon, GlobeIcon, PersonStandingIcon } from "lucide-react";
 import { UserIcon } from "@heroicons/react/20/solid";
 import ical, { ICalEvent } from "ical-generator";
 import ICalendarLink from "react-icalendar-link";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface HomeProps {
   host?: string;
@@ -28,7 +28,7 @@ interface HomeProps {
   post?: string;
 }
 
-export default function EventPage({ host, channel, post }: HomeProps) {
+export default function EventPage({ host, channel }: HomeProps) {
   const [ppost, setPost] = useState<PPosts | null>(null);
   const [ev, setEv] = useState<EventDetails | null>(null);
 
@@ -36,6 +36,9 @@ export default function EventPage({ host, channel, post }: HomeProps) {
   const [postLikes, setPostLikes] = useState<PostLike[]>([]);
   const [going, setGoing] = useState<boolean>(false);
   const [event, setEvent] = useState<ICalEvent | null>(null);
+  const { ID } = useParams(); // Extract the ID parameter from the route
+
+  const [post, setsPost] = useState(ID); // Set channel using the ID from URL
 
   const userHasLiked = postLikes.some(
     (like) => like.userId === profile?.supertokensId,
@@ -113,10 +116,8 @@ export default function EventPage({ host, channel, post }: HomeProps) {
   };
 
   useEffect(() => {
-    if (post) {
-      fetchDetails();
-    }
-  }, [host, channel, post]);
+    fetchDetails();
+  }, [post]);
 
   const handleDownload = (event) => {
     // Create a new iCal instance

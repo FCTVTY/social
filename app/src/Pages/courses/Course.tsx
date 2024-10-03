@@ -342,9 +342,9 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
     "font",
   ];
   return (
-    <>
+    <div className="min-h-screen dark:bg-gray-900">
       {posts && (
-        <div className="min-h-screen">
+        <div className="min-h-screen dark:bg-gray-900">
           <div className="sticky">
             {/* Sticky search header */}
 
@@ -452,11 +452,9 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                           <div className="mt-3 text-center sm:mt-0 sm:text-left">
                                             <img
                                               className="h-[90vh] !w-[90vw] object-contain "
-                                              src={
-                                                posts.chapters[
-                                                  currentChapterIndex
-                                                ].image
-                                              }
+                                              src={posts.chapters[
+                                                currentChapterIndex
+                                              ].image.replace("?", "_")}
                                               alt=""
                                             />
                                           </div>
@@ -471,7 +469,9 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                             <img
                               onClick={() => setOpenM(true)}
                               className="h-48 w-full object-cover lg:h-1/6"
-                              src={posts.chapters[currentChapterIndex].image}
+                              src={posts.chapters[
+                                currentChapterIndex
+                              ].image.replace("?", "_")}
                               alt=""
                             />
                           </>
@@ -643,7 +643,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                         </div>
                       </div>
                       <a
-                        href={file.url}
+                        href={file.url.replace("?", "_")}
                         className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
                         <svg
@@ -869,7 +869,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                   </div>
                                   {posts.media && (
                                     <img
-                                      src={posts.media}
+                                      src={posts.media.replace("?", "_")}
                                       alt="Course Cover"
                                       className="w-32 h-32 object-cover"
                                     />
@@ -964,7 +964,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                       </div>
                                       {chapter.image && (
                                         <img
-                                          src={chapter.image}
+                                          src={chapter.image.replace("?", "_")}
                                           alt="Course Cover"
                                           className="w-32 h-32 object-cover"
                                         />
@@ -1126,6 +1126,6 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
           </Transition.Root>
         </div>
       )}
-    </>
+    </div>
   );
 }
