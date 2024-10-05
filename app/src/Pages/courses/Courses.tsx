@@ -112,7 +112,7 @@ export default function CoursesPage({
       let page = 1;
       let allCourses = [];
       let postsData;
-      let limit = 2;
+      let limit = 10;
 
       // Fetch courses and continue polling until no more courses
       do {
