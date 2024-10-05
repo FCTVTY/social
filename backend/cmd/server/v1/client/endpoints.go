@@ -1202,7 +1202,85 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func FullCourses(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
 
+	// Validate and retrieve community name from URL query parameters
+	data := bson.M{}
+
+	name := r.URL.Query().Get("oid")
+	if name != "" {
+		//objectId, err := primitive.ObjectIDFromHex(name)
+		//if err != nil {
+		//http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		//return
+		//}
+		data = bson.M{"community": name}
+	}
+
+	// Pagination parameters
+	limitStr := r.URL.Query().Get("limit")
+	pageStr := r.URL.Query().Get("page")
+
+	limit := 3 // default limit
+	page := 1  // default page
+
+	if limitStr != "" {
+		l, err := strconv.Atoi(limitStr)
+		if err == nil && l > 0 {
+			limit = l
+		}
+	}
+
+	if pageStr != "" {
+		p, err := strconv.Atoi(pageStr)
+		if err == nil && p > 0 {
+			page = p
+		}
+	}
+
+	// Calculate skip
+	skip := (page - 1) * limit
+
+	// Find options with limit and skip for pagination
+	findOptions := options.Find()
+	findOptions.SetLimit(int64(limit))
+	findOptions.SetSkip(int64(skip))
+
+	// Fetch posts with pagination
+	var posts []bson.M
+	cursor, err := coursesCollection.Find(context.Background(), data, findOptions)
+	if err != nil {
+		http.Error(rw, "failed to fetch courses", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var post bson.M
+		if err := cursor.Decode(&post); err != nil {
+			http.Error(rw, "failed to decode courses", http.StatusInternalServerError)
+			return
+		}
+
+		posts = append(posts, post)
+	}
+	if err := cursor.Err(); err != nil {
+		http.Error(rw, "cursor error", http.StatusInternalServerError)
+		return
+	}
+
+	// Response with posts in JSON format
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(posts); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
 func Courses(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
