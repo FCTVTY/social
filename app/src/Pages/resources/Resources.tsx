@@ -42,7 +42,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
       setCommunity(communityData);
 
       const postsResponse = await fetch(
-        `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=1`,
+        `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=1&limit=1000`,
       );
       if (!postsResponse.ok) {
         throw new Error("Network response was not ok for Academy fetch");

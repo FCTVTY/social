@@ -163,6 +163,12 @@ type CoursesLite struct {
 	Featured  bool               `json:"featured"`
 	Media     string             `json:"media"`
 	Hours     string             `json:"hours"`
+	Files     []struct {
+		URL     string `json:"url"`
+		Name    string `json:"name"`
+		Logo    string `json:"logo"`
+		FileExt string `json:"fileExt"`
+	} `json:"files"`
 }
 type Courses struct {
 	ID        primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
