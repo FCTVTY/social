@@ -112,11 +112,12 @@ export default function CoursesPage({
       let page = 1;
       let allCourses = [];
       let postsData;
+      let limit = 2;
 
       // Fetch courses and continue polling until no more courses
       do {
         const postsResponse = await fetch(
-          `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=${page}`,
+          `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=${page}&limit=${limit}`,
         );
         if (!postsResponse.ok) {
           throw new Error("Network response was not ok for courses fetch");
