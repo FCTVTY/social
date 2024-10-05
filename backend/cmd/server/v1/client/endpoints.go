@@ -1239,7 +1239,7 @@ func Courses(rw http.ResponseWriter, r *http.Request) {
 	findOptions.SetSkip(int64(skip))
 
 	// Fetch posts with pagination
-	var posts []bson.M
+	var posts []models.CoursesLite
 	cursor, err := coursesCollection.Find(context.Background(), data, findOptions)
 	if err != nil {
 		http.Error(rw, "failed to fetch courses", http.StatusInternalServerError)
@@ -1247,7 +1247,7 @@ func Courses(rw http.ResponseWriter, r *http.Request) {
 	}
 	defer cursor.Close(context.Background())
 	for cursor.Next(context.Background()) {
-		var post bson.M
+		var post models.CoursesLite
 		if err := cursor.Decode(&post); err != nil {
 			http.Error(rw, "failed to decode courses", http.StatusInternalServerError)
 			return

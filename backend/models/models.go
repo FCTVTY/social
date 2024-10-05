@@ -154,7 +154,16 @@ type EventPost struct {
 		Location     string    `json:"location"`
 	} `json:"eventDetails,omitempty"`
 }
-
+type CoursesLite struct {
+	ID        primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
+	Name      string             `json:"name"`
+	Category  string             `json:"category"`
+	Community string             `json:"community"`
+	Desc      string             `json:"desc"`
+	Featured  bool               `json:"featured"`
+	Media     string             `json:"media"`
+	Hours     string             `json:"hours"`
+}
 type Courses struct {
 	ID        primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
 	Name      string             `json:"name"`
