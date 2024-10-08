@@ -246,8 +246,17 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
     // Regular expression to find URLs
     const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-    // Replace URLs with <a> tags
-    return text.replace(urlRegex, (url) => {
+    // Regular expression to find URLs already wrapped in <a> tags
+    const anchorTagRegex =
+      /<a\s+[^>]*href="(https?:\/\/[^\s]+)"[^>]*>[^<]+<\/a>/gi;
+
+    // Remove any existing <a> tags wrapping the URLs
+    let unwrappedText = text.replace(anchorTagRegex, (match, p1) => {
+      return p1; // Return only the URL from the <a> tag
+    });
+
+    // Replace unwrapped URLs with <a> tags
+    return unwrappedText.replace(urlRegex, (url) => {
       return `<a href="${url}" target="_blank" class="text-indigo-600" rel="noopener noreferrer">${url}</a>`;
     });
   };
