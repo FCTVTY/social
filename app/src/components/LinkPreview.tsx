@@ -63,7 +63,6 @@ function LinkPreview({ url }) {
   if (!previewData) {
     return <p>Failed to fetch link preview.</p>;
   }
-
   const getDomain = (url: string) => {
     try {
       const domain = new URL(url).hostname;
@@ -73,7 +72,6 @@ function LinkPreview({ url }) {
       return "";
     }
   };
-
   if (previewData.videoId) {
     return (
       <div className="video-responsive rounded-2xl">
@@ -90,8 +88,11 @@ function LinkPreview({ url }) {
   }
 
   return (
-    <div className="flex flex-col space-y-4 cursor-pointer">
-      <div onClick={handleClick}>
+    <div className="flex flex-col space-y-4">
+      <div
+        onClick={handleClick}
+        className="status-card compact status-card--link"
+      >
         <div className="status-card__image w-full md:size-auto md:shrink-0 h-[200px] rounded-l">
           <img
             className="status-card__image-image"

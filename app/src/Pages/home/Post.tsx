@@ -130,6 +130,11 @@ export default function PostView({ host, channel, post }: HomeProps) {
       fetchDetails();
     }
   };
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+  // Check if the description contains a URL
+  const hasUrl = urlPattern.test(ppost?.article);
+  const hasUrld = urlPattern.test(ppost?.desc);
 
   // @ts-ignore
   // @ts-ignore
@@ -182,32 +187,35 @@ export default function PostView({ host, channel, post }: HomeProps) {
                         {ppost.article && ppost.article !== "" ? (
                           <>
                             <dd
-                              className="text-sm text-gray-900"
+                              className=" mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
                               dangerouslySetInnerHTML={{
                                 __html: ppost.article,
                               }}
                             ></dd>
-                            <LinkPreview
-                              url={
-                                ppost.article.match(/(https?:\/\/[^\s]+)/g)[0]
-                              }
-                            ></LinkPreview>
+                            {hasUrl && (
+                              <LinkPreview
+                                url={
+                                  ppost.article.match(/(https?:\/\/[^\s]+)/g)[0]
+                                }
+                              ></LinkPreview>
+                            )}
                           </>
                         ) : (
                           <>
                             {" "}
-                            <h3
+                            <p
+                              className="mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
                               dangerouslySetInnerHTML={{ __html: ppost.desc }}
-                            ></h3>
-                            <LinkPreview
-                              url={ppost.desc.match(/(https?:\/\/[^\s]+)/g)[0]}
-                            ></LinkPreview>
+                            ></p>
+                            {hasUrld && (
+                              <LinkPreview
+                                url={
+                                  ppost.desc.match(/(https?:\/\/[^\s]+)/g)[0]
+                                }
+                              ></LinkPreview>
+                            )}
                           </>
                         )}
-
-                        <div className="relative">
-                          <YouTubeEmbed url={ppost.desc} />
-                        </div>
 
                         <dd className="mt-2">
                           {ppost.tags.map((tag) => (

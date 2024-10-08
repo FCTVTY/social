@@ -388,11 +388,105 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             </div>
           )}
         </div>
+        <dl className="mt-1 flex flex-grow flex-col justify-between">
+          <div data-testid="account" className="group block shrink-0">
+            <div className="flex rtl:space-x-reverse items-center justify-between">
+              <div className="flex rtl:space-x-reverse items-center space-x-3 overflow-hidden">
+                <div className="inline-block cursor-pointer">
+                  <Link
+                    to={`/profile/${post.profile.handle || post.profile._id}`}
+                  >
+                    <div
+                      data-testid="still-image-container"
+                      className="rounded-full group relative isolate overflow-hidden h-[42px] w-[42px]"
+                    >
+                      <img
+                        src={
+                          post.profile.profilePicture ||
+                          `https://eu.ui-avatars.com/api/?name=${post.profile.first_name}+${post.rofile.last_name}&size=250`
+                        }
+                        alt="Avatar"
+                        className="block size-full object-cover"
+                      />
+                      <div className="absolute bottom-2 left-2 z-[1] flex items-center space-x-2"></div>
+                    </div>
+                  </Link>
+                </div>
+                <div className="grow overflow-hidden">
+                  <div className="inline-block cursor-pointer">
+                    <Link
+                      title=""
+                      to={`/profile/${post.profile.handle || post.profile._id}`}
+                    >
+                      <div className="flex rtl:space-x-reverse items-center space-x-1 grow">
+                        <p className="truncate text-sm text-gray-900 dark:text-gray-100 font-semibold tracking-normal font-sans normal-case">
+                          {post.profile.first_name} {post.profile.last_name}
+                        </p>
+                        {post.profile.verified && (
+                          <span
+                            className="verified-icon text-rose-600"
+                            data-testid="verified-badge"
+                          >
+                            <div
+                              className="relative flex shrink-0 flex-col"
+                              data-testid="icon"
+                            >
+                              <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-4 text-secondary-500"
+                                data-testid="svg-icon"
+                              >
+                                <title>Verified Account</title>
+                                <path
+                                  d="M8.82.521a1.596 1.596 0 012.36 0l.362.398c.42.46 1.07.635 1.664.445l.512-.163a1.596 1.596 0 012.043 1.18l.115.525a1.596 1.596 0 001.218 1.218l.525.115a1.596 1.596 0 011.18 2.043l-.163.513a1.596 1.596 0 00.446 1.663l.397.362a1.596 1.596 0 010 2.36l-.397.362c-.461.42-.635 1.07-.446 1.664l.163.512a1.596 1.596 0 01-1.18 2.043l-.525.115a1.596 1.596 0 00-1.218 1.218l-.115.525a1.596 1.596 0 01-2.043 1.18l-.512-.163a1.596 1.596 0 00-1.664.445l-.362.398a1.596 1.596 0 01-2.36 0l-.362-.398a1.596 1.596 0 00-1.663-.445l-.513.163a1.596 1.596 0 01-2.043-1.18l-.115-.525a1.596 1.596 0 00-1.218-1.218l-.525-.115a1.596 1.596 0 01-1.18-2.043l.164-.512a1.596 1.596 0 00-.446-1.664L.52 11.18a1.596 1.596 0 010-2.36l.398-.362c.46-.42.635-1.07.446-1.663L1.2 6.282a1.596 1.596 0 011.18-2.043l.525-.115a1.596 1.596 0 001.218-1.218l.115-.525A1.596 1.596 0 016.282 1.2l.513.163c.594.19 1.244.015 1.663-.445L8.821.52z"
+                                  fill="currentColor"
+                                ></path>
+                                <path
+                                  d="M6.66 7.464L5.012 9.111l3.85 3.85 5.483-5.481-1.966-1.966L8.544 9.35 6.66 7.464z"
+                                  fill="#fff"
+                                ></path>
+                                <path
+                                  opacity=".5"
+                                  d="M11.25 15.55l-1.646-1.848 1.646-1.646 1.887 1.887-1.887 1.606z"
+                                  fill="#fff"
+                                ></path>
+                              </svg>
+                            </div>
+                          </span>
+                        )}
+                      </div>
+                    </Link>
+                  </div>
+                  <div className="flex flex-col space-y-0">
+                    <div className="flex rtl:space-x-reverse items-center space-x-1">
+                      <p className="truncate text-sm text-gray-700 dark:text-gray-600 font-normal tracking-normal font-sans normal-case">
+                        @{post.profile.handle || post.profile._id}
+                      </p>
+                      <span className="text-sm text-gray-700 dark:text-gray-600 font-normal tracking-normal font-sans normal-case">
+                        ·
+                      </span>
 
+                      <time className="text-sm text-gray-700 dark:text-gray-600 font-normal tracking-normal font-sans normal-case whitespace-nowrap">
+                        {formatDistanceToNow(new Date(post.date), {
+                          addSuffix: true,
+                        })}
+                      </time>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div></div>
+            </div>
+          </div>
+        </dl>
         <dl className="mt-1 flex flex-grow flex-col justify-between">
           <Link
             to={`/profile/${post.profile.handle || post.profile._id}`}
-            className="group block flex-shrink-0 dark:hover:text-white"
+            className="group block flex-shrink-0 dark:hover:text-white hidden"
           >
             <div className="flex items-center">
               <div>
@@ -444,7 +538,10 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   </p>
                 )}
                 <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
-                  View profile
+                  View profile &#183;
+                  {formatDistanceToNow(new Date(post.date), {
+                    addSuffix: true,
+                  })}
                 </p>
               </div>
             </div>
@@ -453,21 +550,17 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             className="my-3 dark:text-white"
             to={`/s/${post.channels.name}/${post._id}`}
           >
-            <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
-            <h4
+            <img className="mx-auto my-2 rounded-md" src={post.media} alt="" />
+            <p
               dangerouslySetInnerHTML={{ __html: post.desc }}
-              className="posts text-wrap"
-            ></h4>
+              className="posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+            ></p>
           </Link>
           {hasUrl && (
             <dd className="mt-0.5 text-sm text-gray-900 ">
               <LinkPreview url={post.desc.match(urlPattern)[0]}></LinkPreview>
             </dd>
           )}
-          <dd className="mt-1 text-sm text-gray-900 ">
-            &#183; Posted{" "}
-            {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
-          </dd>
           <div className="flex py-4 justify-between">
             <div className="flex space-x-2">
               <div className="flex space-x-1 items-center">
@@ -605,53 +698,6 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 ))}
           </ul>
         </div>
-        {post && post.commentsallowed && (
-          <form
-            onSubmit={handleSubmit}
-            className=" mt-5 flex items-center mb-4 space-x-3"
-          >
-            <>
-              <div
-                ref={contentEditableRef}
-                contentEditable
-                onInput={handleInputChange}
-                onKeyDown={handleKeyDown}
-                placeholder="What's on your mind?"
-                className="a dark:bg-gray-800 flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"
-                style={{ minHeight: "2rem", whiteSpace: "pre-wrap" }}
-              ></div>
-              {showSuggestions && (
-                <ul className="absolute border border-gray-300 rounded mt-[13rem] z-[100] bg-white shadow-md h-40 overflow-y-auto">
-                  {filteredSuggestions.map((suggestion, index) => (
-                    <li
-                      key={index}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                      className="p-2 hover:bg-gray-200 cursor-pointer"
-                    >
-                      <span className="inline-flex">
-                        <div className="avatar mr-2">
-                          <div className="w-8 rounded-full">
-                            <img
-                              src={suggestion.profilePicture}
-                              alt="Tailwind-CSS-Avatar-component"
-                            />
-                          </div>
-                        </div>
-                        {suggestion.first_name} {suggestion.last_name}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-            <button
-              className="bg-primary text-white text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-              type="submit"
-            >
-              Comment
-            </button>
-          </form>
-        )}
       </div>
     </li>
   );
