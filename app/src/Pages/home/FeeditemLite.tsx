@@ -16,7 +16,17 @@ const PostItemLite = ({ post, profile, lite }) => {
 
   // Check if the description contains a URL
   const hasUrl = urlPattern.test(post.desc);
+  const wrapUrlsWithAnchorTags = (text: string) => {
+    // Regular expression to find URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
 
+    // Replace URLs with <a> tags
+    return text.replace(urlRegex, (url) => {
+      return `<a href="${url}" target="_blank" class="text-indigo-600" rel="noopener noreferrer">${url}</a>`;
+    });
+  };
+
+  const processedDesc = wrapUrlsWithAnchorTags(post.desc);
   return (
     <li
       key={post._id}
@@ -143,8 +153,8 @@ const PostItemLite = ({ post, profile, lite }) => {
           <Link className="my-3" to={`/s/${post.channel}/${post._id}`}>
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
             <p
-              className="dark:!text-white posts"
-              dangerouslySetInnerHTML={{ __html: post.desc }}
+              className="dark:!text-white            posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+              dangerouslySetInnerHTML={{ __html: processedDesc }}
             ></p>
           </Link>
           {hasUrl && (

@@ -242,6 +242,17 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
   // Check if the description contains a URL
   const hasUrl = urlPattern.test(post.desc);
 
+  const wrapUrlsWithAnchorTags = (text: string) => {
+    // Regular expression to find URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // Replace URLs with <a> tags
+    return text.replace(urlRegex, (url) => {
+      return `<a href="${url}" target="_blank" class="text-indigo-600" rel="noopener noreferrer">${url}</a>`;
+    });
+  };
+
+  const processedDesc = wrapUrlsWithAnchorTags(post.desc);
   return (
     <li
       key={post._id}
@@ -552,7 +563,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
           >
             <img className="mx-auto my-2 rounded-md" src={post.media} alt="" />
             <p
-              dangerouslySetInnerHTML={{ __html: post.desc }}
+              dangerouslySetInnerHTML={{ __html: processedDesc }}
               className="posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
             ></p>
           </Link>

@@ -91,7 +91,7 @@ function LinkPreview({ url }) {
     <div className="flex flex-col space-y-4">
       <div
         onClick={handleClick}
-        className="status-card compact status-card--link"
+        className="status-card compact status-card--link cursor-pointer"
       >
         <div className="status-card__image w-full md:size-auto md:shrink-0 h-[200px] rounded-l">
           <img
