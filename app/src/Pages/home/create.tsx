@@ -303,13 +303,13 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
             <LoadingButton
               type="submit"
               variant="ghost"
-              className=" py-3 font-medium rounded-r-none text-white bg-gray-950 hover:bg-gray-800 bg-primary"
+              className=" py-3 font-medium text-white bg-gray-950 hover:bg-gray-800 bg-primary"
               loading={loading}
             >
               {" "}
               Create
             </LoadingButton>
-            <Menu as="div" className="relative -ml-px block">
+            <Menu as="div" className="relative -ml-px block hidden">
               <Menu.Button className="relative inline-flex items-center rounded-r-md bg-primary px-2 py-2 text-white   hhover:bg-gray-800  focus:z-10">
                 <span className="sr-only">Open options</span>
                 <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
