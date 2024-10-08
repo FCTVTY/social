@@ -1,5 +1,5 @@
 # Use an official Golang runtime as the base image
-FROM golang:1.22 AS builder
+FROM golang:1.23 AS builder
 
 # Set the current working directory inside the container
 WORKDIR /app
