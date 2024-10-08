@@ -456,16 +456,16 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
             <h4
               dangerouslySetInnerHTML={{ __html: post.desc }}
-              className="text-wrap"
+              className="posts text-wrap"
             ></h4>
-            <YouTubeEmbedsmall url={post.desc} />
           </Link>
           {hasUrl && (
             <dd className="mt-0.5 text-sm text-gray-900 ">
               <LinkPreview url={post.desc.match(urlPattern)[0]}></LinkPreview>
             </dd>
           )}
-          <dd className="mt-0.5 text-sm text-gray-900 ">
+          <dd className="mt-1 text-sm text-gray-900 ">
+            &#183; Posted{" "}
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>
           <div className="flex py-4 justify-between">
