@@ -107,7 +107,7 @@ const PostItemLite = ({ post, profile, lite }) => {
                   <div className="flex flex-col space-y-0">
                     <div className="flex rtl:space-x-reverse items-center space-x-1">
                       <p className="truncate text-sm text-gray-700 dark:text-gray-600 font-normal tracking-normal font-sans normal-case">
-                        @{profile.handle || profile._id}
+                        {profile.handle != null && <>@{profile.handle}</>}
                       </p>
                       <span className="text-sm text-gray-700 dark:text-gray-600 font-normal tracking-normal font-sans normal-case">
                         ·
