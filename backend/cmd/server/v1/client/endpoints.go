@@ -18,6 +18,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/common-nighthawk/go-figure"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -67,8 +68,19 @@ var (
 
 func init() {
 	envFile := ".env.dev" // Change this to ".env.prod" for production
+
+	db := os.Getenv("MONGO_COLLECTION")
+
 	if os.Getenv("ENV") == "prod" {
 		envFile = ".env.prod"
+		db = "bhive"
+
+	}
+	if os.Getenv("ENV") == "dev" {
+		myFigure := figure.NewColorFigure("DEVELOPMENT DB", "", "green", true)
+		myFigure.Print()
+		fmt.Println("Not for production use... internal development only. database may be stale. last update: 05/10/2024 v1.2.16")
+		fmt.Println("using " + db + " database")
 	}
 
 	if err := godotenv.Load(envFile); err != nil {
@@ -86,7 +98,7 @@ func init() {
 		log.Fatalf("Error connecting to MongoDB: %v", err)
 	}
 
-	database := client.Database("bhive")
+	database := client.Database(db)
 	communitesCollection = database.Collection("communites")
 	channelCollection = database.Collection("channels")
 	postCollection = database.Collection("posts")

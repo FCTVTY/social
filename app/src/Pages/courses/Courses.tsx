@@ -425,7 +425,7 @@ export default function CoursesPage({
                   aria-labelledby="features-heading"
                   className="relative"
                 >
-                  <div className="overflow-hidden aspect-square	 rounded-l-lg  lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-16">
+                  <div className="overflow-hidden aspect-square	 rounded-l-lg sm:rounded-lg  lg:absolute lg:h-full lg:w-1/2 lg:pr-4 xl:pr-16">
                     <div className="badge badge-neutral absolute top-[10px] left-[10px]">
                       FEATURED
                     </div>
