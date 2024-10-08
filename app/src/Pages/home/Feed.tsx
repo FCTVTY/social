@@ -401,9 +401,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                             <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
                           </div>
                         </div>
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-500 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-900 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-900 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-900 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
                       </div>
                     </dl>
                   </div>
@@ -481,7 +481,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     </span>
                   </h2>
                   <p
-                    className="text-gray-500 pb-5"
+                    className="text-gray-900 pb-5"
                     dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
                   ></p>
                   {roles && roles.length > 0 && (
@@ -512,7 +512,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                         }
 
                         return (
-                          <p className="text-gray-500" key={role}>
+                          <p className="text-gray-900" key={role}>
                             <span
                               className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ${roleClasses}`}
                             >
@@ -666,7 +666,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                 &middot;
                               </span>
 
-                              <p className="sm:block sm:text-xs sm:text-gray-500">
+                              <p className="sm:block sm:text-xs sm:text-gray-900">
                                 <a
                                   href={post.url}
                                   className="font-medium underline hover:text-gray-700"
@@ -809,14 +809,14 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
                                 Manage Channel
                               </Dialog.Title>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-gray-900">
                                 Moderator Tools{" "}
                               </p>
                             </div>
                             <div className="flex h-7 items-center">
                               <button
                                 type="button"
-                                className="text-gray-400 hover:text-gray-500"
+                                className="text-gray-400 hover:text-gray-900"
                                 onClick={() => setOpen(false)}
                               >
                                 <span className="sr-only">Close panel</span>
@@ -883,7 +883,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                               <div className="flex space-x-2">
                                 <button
                                   type="button"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <span className="sr-only">
                                     Add team member
@@ -928,7 +928,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                     </label>
                                     <p
                                       id="public-access-description"
-                                      className="text-gray-500"
+                                      className="text-gray-900"
                                     >
                                       Everyone with the link will see this
                                       project
@@ -954,7 +954,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                     </label>
                                     <p
                                       id="restricted-access-description"
-                                      className="text-gray-500"
+                                      className="text-gray-900"
                                     >
                                       Only members of this project would be able
                                       to access
@@ -980,7 +980,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                     </label>
                                     <p
                                       id="private-access-description"
-                                      className="text-gray-500"
+                                      className="text-gray-900"
                                     >
                                       You are the only one able to access this
                                       project
@@ -1005,10 +1005,10 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                 <div>
                                   <a
                                     href="#"
-                                    className="group flex items-center space-x-2.5 text-sm text-gray-500 hover:text-gray-900"
+                                    className="group flex items-center space-x-2.5 text-sm text-gray-900 hover:text-gray-900"
                                   >
                                     <QuestionMarkCircleIcon
-                                      className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                                      className="h-5 w-5 text-gray-400 group-hover:text-gray-900"
                                       aria-hidden="true"
                                     />
                                     <span>Learn more about sharing</span>

@@ -163,7 +163,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                             )}
                           </Link>
                         </p>
-                        <p className="mt-1 flex text-xs leading-5 text-gray-500 dark:text-white">
+                        <p className="mt-1 flex text-xs leading-5 text-gray-900 dark:text-white">
                           {person.bio.substring(0, 20)}{" "}
                           {person.bio.length >= 20 && "..."}
                         </p>

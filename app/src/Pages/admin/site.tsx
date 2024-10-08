@@ -419,7 +419,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
     "text-gray-200",
     "text-gray-300",
     "text-gray-400",
-    "text-gray-500",
+    "text-gray-900",
     "text-gray-600",
     "text-gray-700",
     "text-gray-800",

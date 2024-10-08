@@ -333,7 +333,7 @@ export default function EventsPage({
           </div>
 
           {posts.filter((post) => post.type === "event").length == 0 && (
-            <div className="p-6 text-center text-gray-500 dark:text-gray-400">
+            <div className="p-6 text-center text-gray-900 dark:text-gray-400">
               No Events available.
             </div>
           )}
@@ -368,7 +368,7 @@ export default function EventsPage({
                               <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
                                 New Event
                               </Dialog.Title>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-gray-900">
                                 Get started by filling in the information below
                                 to create your new Event.
                               </p>
@@ -376,7 +376,7 @@ export default function EventsPage({
                             <div className="flex h-7 items-center">
                               <button
                                 type="button"
-                                className="text-gray-400 hover:text-gray-500"
+                                className="text-gray-400 hover:text-gray-900"
                                 onClick={() => setOpen(false)}
                               >
                                 <span className="sr-only">Close panel</span>
@@ -446,7 +446,7 @@ export default function EventsPage({
                               <div className="flex space-x-2 mb-2">
                                 <label
                                   htmlFor="imagec-upload"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <PlusIcon
                                     className="h-5 w-5"
@@ -467,7 +467,7 @@ export default function EventsPage({
                               <div className="flex space-x-2 mb-2">
                                 <label
                                   htmlFor="image-upload"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <PlusIcon
                                     className="h-5 w-5"
@@ -510,7 +510,7 @@ export default function EventsPage({
                                     </label>
                                     <p
                                       id="online-event-description"
-                                      className="text-gray-500"
+                                      className="text-gray-900"
                                     >
                                       People join via Zoom or Google Meet
                                     </p>
@@ -537,7 +537,7 @@ export default function EventsPage({
                                     </label>
                                     <p
                                       id="in-person-event-description"
-                                      className="text-gray-500"
+                                      className="text-gray-900"
                                     >
                                       Meet at a conference center or other
                                       location

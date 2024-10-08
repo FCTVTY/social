@@ -555,7 +555,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                 <nav className="flex" aria-label="Progress">
                   <ol
                     role="list"
-                    className="space-y-6 h-[20vh] overflow-scroll"
+                    className="space-y-6 h-[20vh] overflow-scroll min-w-full"
                   >
                     {posts.chapters.map((step) => (
                       <li key={step.name}>
@@ -568,7 +568,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                   aria-hidden="true"
                                 />
                               </span>
-                              <span className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900 dark:text-white">
+                              <span className="ml-3 text-sm font-medium text-gray-900 group-hover:text-gray-900 dark:text-white">
                                 {step.name}
                               </span>
                             </span>
@@ -595,7 +595,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                               >
                                 <div className="h-2 w-2 rounded-full bg-gray-300 group-hover:bg-gray-400" />
                               </div>
-                              <p className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900 dark:text-white">
+                              <p className="ml-3 text-sm font-medium text-gray-900 group-hover:text-gray-900 dark:text-white">
                                 {step.name}
                               </p>
                             </div>
@@ -637,7 +637,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                           <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                             {file.name}
                           </p>
-                          <p className="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-white">
+                          <p className="mt-1 truncate text-xs leading-5 text-gray-900 dark:text-white">
                             {file.fileext}
                           </p>
                         </div>
@@ -750,7 +750,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 <div className="flex h-7 items-center">
                                   <button
                                     type="button"
-                                    className="text-gray-400 hover:text-gray-500"
+                                    className="text-gray-400 hover:text-gray-900"
                                     onClick={() => setOpen(false)}
                                   >
                                     <span className="sr-only">Close panel</span>
@@ -859,7 +859,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                   <div className="flex space-x-2 mb-2">
                                     <label
                                       htmlFor="image-upload"
-                                      className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                      className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                     >
                                       <PlusIcon
                                         className="h-5 w-5"
@@ -954,7 +954,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                       <div className="flex space-x-2 mb-2">
                                         <label
                                           htmlFor={`chapter-image-${index}`}
-                                          className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                          className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                         >
                                           <PlusIcon
                                             className="h-5 w-5"

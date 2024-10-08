@@ -254,12 +254,12 @@ export default function EventPage({ host, channel }: HomeProps) {
                     <strong>Event Details</strong>
                     {ppost.article ? (
                       <dd
-                        className="text-sm text-gray-500 my-3"
+                        className="text-sm text-gray-900 my-3"
                         dangerouslySetInnerHTML={{ __html: ppost.article }}
                       ></dd>
                     ) : (
                       <dd
-                        className="text-sm text-gray-500 my-3"
+                        className="text-sm text-gray-900 my-3"
                         dangerouslySetInnerHTML={{ __html: ppost.desc }}
                       ></dd>
                     )}
@@ -267,7 +267,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                     <div className="border-t border-gray-200">
                       <dl>
                         <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
+                          <dt className="text-sm font-medium text-gray-900">
                             Location
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
@@ -300,7 +300,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                           </dd>
                         </div>
                         <div className="bg-gray-50 dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
+                          <dt className="text-sm font-medium text-gray-900">
                             Date
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
@@ -309,7 +309,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                           </dd>
                         </div>
                         <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
+                          <dt className="text-sm font-medium text-gray-900">
                             Time
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
@@ -319,7 +319,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                         </div>
 
                         <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-500">
+                          <dt className="text-sm font-medium text-gray-900">
                             Going
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
@@ -368,7 +368,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                                               {activityItem.profile.last_name}
                                             </Link>
                                           </div>
-                                          <p className="mt-0.5 text-sm text-gray-500">
+                                          <p className="mt-0.5 text-sm text-gray-900">
                                             Commented{" "}
                                             {formatDistanceToNow(
                                               new Date(activityItem.date),

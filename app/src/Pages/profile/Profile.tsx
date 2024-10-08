@@ -323,7 +323,7 @@ export default function ProfilePage({ host, profileid }: HomeProps) {
                   {profile.posts &&
                     profile.posts.filter((post) => post.type === "event")
                       .length == 0 && (
-                      <div className="p-6 text-center text-gray-500 dark:text-gray-400">
+                      <div className="p-6 text-center text-gray-900 dark:text-gray-400">
                         No New Activity.
                       </div>
                     )}

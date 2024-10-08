@@ -30,7 +30,7 @@ const EventItem = ({ post, profile, lite }) => {
               {post.desc}
             </Link>
           </p>
-          <p className="mt-1 flex text-sm leading-5 text-gray-500">
+          <p className="mt-1 flex text-sm leading-5 text-gray-900">
             <a href="{}" className="relative truncate hover:underline">
               {post.desc}
             </a>
@@ -43,7 +43,7 @@ const EventItem = ({ post, profile, lite }) => {
             {post.eventDetails?.etype}
           </p>
 
-          <p className="mt-1  leading-5 text-gray-500">
+          <p className="mt-1  leading-5 text-gray-900">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"

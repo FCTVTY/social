@@ -449,7 +449,7 @@ export default function CoursesPage({
                         {product.name}
                       </p>
                       <p
-                        className="mt-4 text-gray-500"
+                        className="mt-4 text-gray-900"
                         dangerouslySetInnerHTML={{ __html: product.desc }}
                       ></p>
 
@@ -458,7 +458,7 @@ export default function CoursesPage({
                           <dt className="font-medium text-gray-900 dark:text-white">
                             Course length: {product.hours}
                           </dt>
-                          <dd className="mt-4 text-gray-500">
+                          <dd className="mt-4 text-gray-900">
                             <Link
                               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                               to={`/course/${product.name.replace(/ /g, "_")}`}
@@ -579,7 +579,7 @@ export default function CoursesPage({
                                 </p>
                               </div>
                               <p
-                                className="m-3 text-sm text-gray-500 dark:text-white"
+                                className="m-3 text-sm text-gray-900 dark:text-white"
                                 dangerouslySetInnerHTML={{
                                   __html: product.desc,
                                 }}
@@ -594,12 +594,12 @@ export default function CoursesPage({
             </div>
           ))}
           {posts && posts.length === 0 && (
-            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
+            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-900 dark:text-gray-400 w-full">
               No Courses available.
             </div>
           )}
           {posts == null && (
-            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-500 dark:text-gray-400 w-full">
+            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-900 dark:text-gray-400 w-full">
               No Courses available.
             </div>
           )}
@@ -629,7 +629,7 @@ export default function CoursesPage({
                                 <h2 className="text-base font-semibold leading-6 text-gray-900">
                                   New Course
                                 </h2>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-sm text-gray-900">
                                   Fill in the information below to create your
                                   new course.
                                 </p>
@@ -637,7 +637,7 @@ export default function CoursesPage({
                               <div className="flex h-7 items-center">
                                 <button
                                   type="button"
-                                  className="text-gray-400 hover:text-gray-500"
+                                  className="text-gray-400 hover:text-gray-900"
                                   onClick={() => setOpen(false)}
                                 >
                                   <span className="sr-only">Close panel</span>
@@ -748,7 +748,7 @@ export default function CoursesPage({
                                 <div className="flex space-x-2 mb-2">
                                   <label
                                     htmlFor="image-upload"
-                                    className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                   >
                                     <PlusIcon
                                       className="h-5 w-5"
@@ -842,7 +842,7 @@ export default function CoursesPage({
                                     <div className="flex space-x-2 mb-2">
                                       <label
                                         htmlFor={`chapter-image-${index}`}
-                                        className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                        className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                       >
                                         <PlusIcon
                                           className="h-5 w-5"

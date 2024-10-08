@@ -33,7 +33,7 @@ const PostItemLite = ({ post, profile, lite }) => {
                 <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
                   {profile.first_name} {profile.last_name}
                 </p>
-                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
                   View profile
                 </p>
               </div>
@@ -52,7 +52,7 @@ const PostItemLite = ({ post, profile, lite }) => {
               <div className="flex space-x-1 items-center"></div>
             </div>
           </div>
-          <dd className="mt-0.5 text-sm text-gray-500">
+          <dd className="mt-0.5 text-sm text-gray-900">
             {post.tags.map((tag) => (
               <a key={tag} href={`#${tag}`} className="mr-2">
                 #{tag}{" "}
@@ -60,12 +60,12 @@ const PostItemLite = ({ post, profile, lite }) => {
             ))}
           </dd>
           <Link
-            className="mt-0.5 text-sm text-gray-500"
+            className="mt-0.5 text-sm text-gray-900"
             to={`/s/${post.channel.name}/${post._id}`}
           >
             View all comments
           </Link>
-          <dd className="mt-0.5 text-sm text-gray-500 ">
+          <dd className="mt-0.5 text-sm text-gray-900 ">
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>
         </dl>

@@ -276,7 +276,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                     <button
                       type="button"
-                      className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md bg-white text-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       onClick={() => setOpen(false)}
                     >
                       <span className="sr-only">Close</span>
@@ -292,7 +292,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                         Share Post
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-900">
                           <div>
                             {window.location.origin}/s/{post._id}
                           </div>
@@ -443,7 +443,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                     )}
                   </p>
                 )}
-                <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
                   View profile
                 </p>
               </div>
@@ -461,11 +461,11 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             <YouTubeEmbedsmall url={post.desc} />
           </Link>
           {hasUrl && (
-            <dd className="mt-0.5 text-sm text-gray-500 ">
+            <dd className="mt-0.5 text-sm text-gray-900 ">
               <LinkPreview url={post.desc.match(urlPattern)[0]}></LinkPreview>
             </dd>
           )}
-          <dd className="mt-0.5 text-sm text-gray-500 ">
+          <dd className="mt-0.5 text-sm text-gray-900 ">
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>
           <div className="flex py-4 justify-between">
@@ -529,7 +529,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               )}
             </div>
           </div>
-          <dd className="mt-0.5 text-sm text-gray-500">
+          <dd className="mt-0.5 text-sm text-gray-900">
             {post.tags.map((tag) => (
               <a key={tag} href={`#${tag}`} className="mr-2">
                 #{tag}{" "}
@@ -538,7 +538,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
           </dd>
           {post && post.postComments.length > 0 && (
             <Link
-              className="mt-0.5 text-sm text-gray-500"
+              className="mt-0.5 text-sm text-gray-900"
               to={`/s/${post.channels.name}/${post._id}`}
             >
               View all comments

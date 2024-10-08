@@ -449,7 +449,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
               id="tags"
               className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
             />
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-900">
               Separate tags with commas (e.g., react, javascript)
             </p>
           </div>

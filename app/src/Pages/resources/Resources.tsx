@@ -228,7 +228,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                                   )}
                                 </div>
                                 <div className="px-4 py-2">
-                                  <p className="mt-1 text-sm text-gray-500 min-h-[60px] text-wrap">
+                                  <p className="mt-1 text-sm text-gray-900 min-h-[60px] text-wrap">
                                     {camelCaseToWords(file.name)}
                                   </p>
                                   <h3 className="flex text-sm text-gray-700">
@@ -253,7 +253,7 @@ export default function ResourcesPage({ host, channel }: HomeProps) {
                 </div>
               ))
             ) : (
-              <div className="p-6 text-center text-gray-500 dark:text-gray-400">
+              <div className="p-6 text-center text-gray-900 dark:text-gray-400">
                 No resources available.
               </div>
             )}

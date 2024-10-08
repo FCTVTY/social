@@ -163,7 +163,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
             <a href="#" className="text-2xl font-bold text-blue-600">
               <img src={logo} className="h-10 w-auto" alt="Logo" />
             </a>
-            <ol className="relative text-gray-500  mt-10 ml-5">
+            <ol className="relative text-gray-900  mt-10 ml-5">
               <li className="mb-10 ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
                   <svg
@@ -209,7 +209,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
               <li className="mb-10 ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
                   <svg
-                    className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400"
+                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -224,7 +224,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
               <li className="ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
                   <svg
-                    className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400"
+                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -312,7 +312,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
                                   </span>
                                 </h2>
                                 <p
-                                  className="text-gray-500 pb-5"
+                                  className="text-gray-900 pb-5"
                                   dangerouslySetInnerHTML={{
                                     __html: formData?.bio,
                                   }}

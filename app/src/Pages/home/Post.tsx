@@ -167,7 +167,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                   addSuffix: true,
                                 })}{" "}
                               </p>
-                              <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                              <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
                                 View profile
                               </p>
                             </div>
@@ -182,7 +182,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                         {ppost.article && ppost.article !== "" ? (
                           <>
                             <dd
-                              className="text-sm text-gray-500"
+                              className="text-sm text-gray-900"
                               dangerouslySetInnerHTML={{
                                 __html: ppost.article,
                               }}
@@ -325,7 +325,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                   }
                                                 </Link>
                                               </div>
-                                              <p className="mt-0.5 text-sm text-gray-500">
+                                              <p className="mt-0.5 text-sm text-gray-900">
                                                 Commented{" "}
                                                 {formatDistanceToNow(
                                                   new Date(activityItem.date),
@@ -416,7 +416,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                 </span>
               </h3>
               <p
-                className="text-gray-500 pb-5"
+                className="text-gray-900 pb-5"
                 dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
               ></p>{" "}
             </div>
@@ -502,7 +502,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                             &middot;
                           </span>
 
-                          <p className="sm:block sm:text-xs sm:text-gray-500">
+                          <p className="sm:block sm:text-xs sm:text-gray-900">
                             <a
                               href={post.url}
                               className="font-medium underline hover:text-gray-700"
