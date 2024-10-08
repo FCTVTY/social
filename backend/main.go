@@ -4,7 +4,9 @@ import (
 	"bhiveserver/cmd/server/v1/admin"
 	"bhiveserver/cmd/server/v1/client"
 	_ "bhiveserver/models"
+	"encoding/json"
 	"fmt"
+	"github.com/PuerkitoBio/goquery"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rollbar/rollbar-go"
 	"log"
@@ -327,11 +329,61 @@ func main() {
 			session.VerifySession(nil, admin.CreatePost).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/handlePreview" && r.Method == "GET" {
+			session.VerifySession(nil, handlePreview).ServeHTTP(rw, r)
+			return
+		}
 		rw.WriteHeader(404)
 	})))))
 
 }
 
+type Metadata struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Image       string `json:"image"`
+}
+
+func handlePreview(w http.ResponseWriter, r *http.Request) {
+	// Enable CORS for the frontend
+
+	// Get the "url" query parameter
+	url := r.URL.Query().Get("url")
+	if url == "" {
+		http.Error(w, "Missing 'url' parameter", http.StatusBadRequest)
+		return
+	}
+
+	// Fetch the content from the provided URL
+	resp, err := http.Get(url)
+	if err != nil {
+		http.Error(w, "Failed to fetch the URL", http.StatusInternalServerError)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Parse the HTML content
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		http.Error(w, "Failed to parse HTML", http.StatusInternalServerError)
+		return
+	}
+
+	// Extract title, description, and image metadata
+	title := doc.Find("title").Text()
+	description, _ := doc.Find(`meta[name="description"]`).Attr("content")
+	image, _ := doc.Find(`meta[property="og:image"]`).Attr("content")
+
+	// Create metadata object
+	metadata := Metadata{
+		Title:       title,
+		Description: description,
+		Image:       image,
+	}
+
+	// Return metadata as JSON
+	json.NewEncoder(w).Encode(metadata)
+}
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(response http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
