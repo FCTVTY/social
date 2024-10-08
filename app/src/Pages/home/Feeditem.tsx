@@ -454,16 +454,15 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             to={`/s/${post.channels.name}/${post._id}`}
           >
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
-            <h3 dangerouslySetInnerHTML={{ __html: post.desc }}></h3>
+            <h4
+              dangerouslySetInnerHTML={{ __html: post.desc }}
+              className="text-wrap"
+            ></h4>
             <YouTubeEmbedsmall url={post.desc} />
           </Link>
           {hasUrl && (
             <dd className="mt-0.5 text-sm text-gray-500 ">
-              Found URL:{" "}
               <LinkPreview url={post.desc.match(urlPattern)[0]}></LinkPreview>
-              <a href={post.desc.match(urlPattern)[0]}>
-                {post.desc.match(urlPattern)[0]}
-              </a>
             </dd>
           )}
           <dd className="mt-0.5 text-sm text-gray-500 ">

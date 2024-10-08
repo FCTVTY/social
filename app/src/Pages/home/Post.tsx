@@ -22,6 +22,7 @@ import Comment from "./comment";
 import YouTubeEmbed from "./youtube";
 import { BadgeCheck } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import LinkPreview from "../../components/LinkPreview";
 
 interface HomeProps {
   host?: string;
@@ -179,14 +180,29 @@ export default function PostView({ host, channel, post }: HomeProps) {
                         />
 
                         {ppost.article && ppost.article !== "" ? (
-                          <dd
-                            className="text-sm text-gray-500"
-                            dangerouslySetInnerHTML={{ __html: ppost.article }}
-                          ></dd>
+                          <>
+                            <dd
+                              className="text-sm text-gray-500"
+                              dangerouslySetInnerHTML={{
+                                __html: ppost.article,
+                              }}
+                            ></dd>
+                            <LinkPreview
+                              url={
+                                ppost.article.match(/(https?:\/\/[^\s]+)/g)[0]
+                              }
+                            ></LinkPreview>
+                          </>
                         ) : (
-                          <h3
-                            dangerouslySetInnerHTML={{ __html: ppost.desc }}
-                          ></h3>
+                          <>
+                            {" "}
+                            <h3
+                              dangerouslySetInnerHTML={{ __html: ppost.desc }}
+                            ></h3>
+                            <LinkPreview
+                              url={ppost.desc.match(/(https?:\/\/[^\s]+)/g)[0]}
+                            ></LinkPreview>
+                          </>
                         )}
 
                         <div className="relative">
@@ -323,6 +339,13 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                   __html: activityItem.comment,
                                                 }}
                                               ></p>
+                                              <LinkPreview
+                                                url={
+                                                  activityItem.comment.match(
+                                                    /(https?:\/\/[^\s]+)/g,
+                                                  )[0]
+                                                }
+                                              ></LinkPreview>
                                             </div>
                                           </div>
                                         </>
