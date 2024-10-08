@@ -30,7 +30,6 @@ import (
 	"strings"
 	"time"
 
-	infisical "github.com/infisical/go-sdk"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
@@ -807,30 +806,6 @@ func UpdateCourses(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := infisical.NewInfisicalClient(infisical.Config{
-		SiteUrl: "https://app.infisical.com", // Optional, default is https://app.infisical.com
-	})
-
-	_, err = client.Auth().UniversalAuthLogin("78fdd09f-fe90-4810-8cd3-679e323e0841", "5e0688e2af93211b367d8dd14f4921bd49f39df266f76aa14e35b15465b44625")
-
-	if err != nil {
-		fmt.Printf("Authentication failed: %v", err)
-		os.Exit(1)
-	}
-
-	bucketid, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
-		SecretKey:   "BUCKET_ACCESS_KEY",
-		Environment: "Production",
-		ProjectID:   "3d9ac7aa-5755-4f79-a53b-d75ec28192a3",
-		SecretPath:  "/",
-	})
-	bucketsec, err := client.Secrets().Retrieve(infisical.RetrieveSecretOptions{
-		SecretKey:   "BUCKET_ACCESS_SECRET",
-		Environment: "Production",
-		ProjectID:   "3d9ac7aa-5755-4f79-a53b-d75ec28192a3",
-		SecretPath:  "/",
-	})
-
 	for _, updatedCourse := range updatedCourses {
 
 		// Validate that the course ID is provided
@@ -880,8 +855,8 @@ func UpdateCourses(rw http.ResponseWriter, r *http.Request) {
 				}
 
 				endpoint := "s3.app.bhivecommunity.co.uk"
-				accessKeyID := bucketid.SecretValue
-				secretAccessKey := bucketsec.SecretValue
+				accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+				secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
 				useSSL := true
 
 				minioClient, err := minio.New(endpoint, &minio.Options{
@@ -936,8 +911,48 @@ func UpdateCourses(rw http.ResponseWriter, r *http.Request) {
 				log.Fatalf("Failed to encode image to WebP: %v", err)
 			}
 
-			webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
-			updatedCourse.Media = webpDataURI
+			endpoint := "s3.app.bhivecommunity.co.uk"
+			accessKeyID := "HWL0Z36tnBEItLIHpK9U"
+			secretAccessKey := "k2JLHoWAkEGBaQdQKAWAKS2A0GfdHQMX4C57yKbg"
+			useSSL := true
+
+			minioClient, err := minio.New(endpoint, &minio.Options{
+				Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
+				Secure: useSSL,
+			})
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			bucketName := "files"
+			location := "uk-west-1"
+			err = minioClient.MakeBucket(context.Background(), bucketName, minio.MakeBucketOptions{Region: location})
+			if err != nil {
+				exists, errBucketExists := minioClient.BucketExists(context.Background(), bucketName)
+				if errBucketExists == nil && exists {
+					log.Printf("We already own %s\n", bucketName)
+				} else {
+					log.Fatalln(err)
+				}
+			} else {
+				log.Printf("Successfully created %s\n", bucketName)
+			}
+
+			objectName := updatedCourse.Community + "/" + courseID + ".webp"
+			imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
+			if err != nil {
+				log.Fatalln("Error decoding base64 string:", err)
+			}
+
+			imageReader := bytes.NewReader(imageData)
+			_, err = minioClient.PutObject(context.Background(), bucketName, objectName, imageReader, imageReader.Size(), minio.PutObjectOptions{
+				ContentType: "image/webp",
+			})
+			if err != nil {
+				log.Fatalln("Error uploading the image:", err)
+			}
+			embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + updatedCourse.Community + "/" + courseID + ".webp"
+			updatedCourse.Media = embedUrl
 		}
 
 		// Update the course in the database
@@ -1187,8 +1202,7 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-func Courses(rw http.ResponseWriter, r *http.Request) {
+func FullCourses(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {
@@ -1248,6 +1262,85 @@ func Courses(rw http.ResponseWriter, r *http.Request) {
 	defer cursor.Close(context.Background())
 	for cursor.Next(context.Background()) {
 		var post bson.M
+		if err := cursor.Decode(&post); err != nil {
+			http.Error(rw, "failed to decode courses", http.StatusInternalServerError)
+			return
+		}
+
+		posts = append(posts, post)
+	}
+	if err := cursor.Err(); err != nil {
+		http.Error(rw, "cursor error", http.StatusInternalServerError)
+		return
+	}
+
+	// Response with posts in JSON format
+	rw.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(rw).Encode(posts); err != nil {
+		http.Error(rw, "failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+func Courses(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusInternalServerError)
+		return
+	}
+
+	// Validate and retrieve community name from URL query parameters
+	data := bson.M{}
+
+	name := r.URL.Query().Get("oid")
+	if name != "" {
+		//objectId, err := primitive.ObjectIDFromHex(name)
+		//if err != nil {
+		//http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		//return
+		//}
+		data = bson.M{"community": name}
+	}
+
+	// Pagination parameters
+	limitStr := r.URL.Query().Get("limit")
+	pageStr := r.URL.Query().Get("page")
+
+	limit := 3 // default limit
+	page := 1  // default page
+
+	if limitStr != "" {
+		l, err := strconv.Atoi(limitStr)
+		if err == nil && l > 0 {
+			limit = l
+		}
+	}
+
+	if pageStr != "" {
+		p, err := strconv.Atoi(pageStr)
+		if err == nil && p > 0 {
+			page = p
+		}
+	}
+
+	// Calculate skip
+	skip := (page - 1) * limit
+
+	// Find options with limit and skip for pagination
+	findOptions := options.Find()
+	findOptions.SetLimit(int64(limit))
+	findOptions.SetSkip(int64(skip))
+
+	// Fetch posts with pagination
+	var posts []models.CoursesLite
+	cursor, err := coursesCollection.Find(context.Background(), data, findOptions)
+	if err != nil {
+		http.Error(rw, "failed to fetch courses", http.StatusInternalServerError)
+		return
+	}
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var post models.CoursesLite
 		if err := cursor.Decode(&post); err != nil {
 			http.Error(rw, "failed to decode courses", http.StatusInternalServerError)
 			return

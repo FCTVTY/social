@@ -403,7 +403,7 @@ func CreateChannel(rw http.ResponseWriter, r *http.Request) {
 
 	v.PublicID = channelID
 	// We decode our body request params
-	err := json.NewDecoder(r.Body).Decode(&v)
+	err = json.NewDecoder(r.Body).Decode(&v)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 		return

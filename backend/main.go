@@ -253,6 +253,10 @@ func main() {
 			session.VerifySession(nil, client.CreateEvent).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/community/fullcourses" && r.Method == "GET" {
+			session.VerifySession(nil, client.FullCourses).ServeHTTP(rw, r)
+			return
+		}
 		if parsedURL.Path == "/v1/community/courses" && r.Method == "GET" {
 			session.VerifySession(nil, client.Courses).ServeHTTP(rw, r)
 			return

@@ -47,7 +47,7 @@ export default function CourseManagement({
         setCommunity(communityData);
 
         const postsResponse = await fetch(
-          `${getApiDomain()}/community/courses?oid=${communityData.community.id}&page=1`,
+          `${getApiDomain()}/community/fullcourses?oid=${communityData.community.id}&page=1&limit=300`,
         );
         if (!postsResponse.ok) {
           throw new Error("Network response was not ok for courses fetch");
