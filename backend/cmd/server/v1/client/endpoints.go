@@ -758,7 +758,7 @@ func UpdateCourse(rw http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Fatalln("Error uploading the image:", err)
 			}
-			embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + updatedCourse.Community + "/" + chapter.Name + ".webp"
+			embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + updatedCourse.Community + "/" + courseID + "/" + chapter.Name + ".webp"
 			updatedCourse.Chapters[i].Image = embedUrl
 		}
 	}
