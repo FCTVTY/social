@@ -11,6 +11,7 @@ import { BadgeCheck, CakeSlice } from "lucide-react";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import LinkPreview from "../../components/LinkPreview";
 
 interface PostItemProps {
   lite?: boolean;
@@ -235,6 +236,12 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+  // Check if the description contains a URL
+  const hasUrl = urlPattern.test(post.desc);
+
   return (
     <li
       key={post._id}
@@ -450,6 +457,15 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             <h3 dangerouslySetInnerHTML={{ __html: post.desc }}></h3>
             <YouTubeEmbedsmall url={post.desc} />
           </Link>
+          {hasUrl && (
+            <dd className="mt-0.5 text-sm text-gray-500 ">
+              Found URL:{" "}
+              <LinkPreview url={post.desc.match(urlPattern)[0]}></LinkPreview>
+              <a href={post.desc.match(urlPattern)[0]}>
+                {post.desc.match(urlPattern)[0]}
+              </a>
+            </dd>
+          )}
           <dd className="mt-0.5 text-sm text-gray-500 ">
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>
