@@ -419,11 +419,11 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
     "text-gray-200",
     "text-gray-300",
     "text-gray-400",
-    "text-gray-900",
+    "text-gray-900 dark:text-gray-400",
     "text-gray-600",
     "text-gray-700",
     "text-gray-800",
-    "text-gray-900",
+    "text-gray-900 dark:text-gray-400",
     "text-gray-950",
     "text-zinc-50",
     "text-zinc-100",
@@ -820,7 +820,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                               />
                             </a>
                             <div className="mt-20">
-                              <h2 className="text-sm font-semibold text-gray-900">
+                              <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-400">
                                 Sign in to your account
                               </h2>
                               <p className="mt-2 text-xs text-gray-700">
@@ -840,7 +840,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                             <div className="col-span-full">
                               <input
                                 type="email"
-                                className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 text-xs h-7"
+                                className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 dark:text-gray-400 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 text-xs h-7"
                                 name="email"
                                 placeholder="Email"
                                 defaultValue=""
@@ -849,7 +849,7 @@ export default function Site({ host, channel, roles, setRoles }: HomeProps) {
                             <div className="col-span-full">
                               <input
                                 type="password"
-                                className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 text-xs h-7"
+                                className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-gray-900 dark:text-gray-400 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 text-xs h-7"
                                 name="password"
                                 placeholder=""
                                 defaultValue=""

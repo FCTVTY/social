@@ -171,7 +171,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                 </div>
                 <div className="mt-10 pt-10 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                   <div className="mt-15 min-w-0 flex-1 sm:hidden md:block">
-                    <h1 className="truncate text-2xl font-bold text-gray-900 dark:text-white">
+                    <h1 className="truncate text-2xl font-bold text-gray-900 dark:text-gray-400 dark:text-white">
                       {ppost?.desc} <br />
                       <span className="text-red-600 text-sm mt-[-10px]">
                         {new Date(ev?.date).toLocaleDateString()} At{" "}
@@ -183,7 +183,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                     {!userHasLiked ? (
                       <div
                         onClick={handleLikeClick}
-                        className="cursor-pointer inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        className="cursor-pointer inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
                         <EnvelopeIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
@@ -204,7 +204,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                           <span>Going</span>
                         </div>
                         <ICalendarLink
-                          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                          className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                           event={event}
                         >
                           Add to Calendar
@@ -215,7 +215,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                     {ev?.etype === "Zoom" && going && (
                       <a
                         href={ev.location}
-                        className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
                         <LinkIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
@@ -228,7 +228,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                       <a
                         href={`https://maps.google.com/?q=${ev?.location}`}
                         target="_blank"
-                        className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        className="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
                         <LinkIcon
                           className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
@@ -254,12 +254,12 @@ export default function EventPage({ host, channel }: HomeProps) {
                     <strong>Event Details</strong>
                     {ppost.article ? (
                       <dd
-                        className="text-sm text-gray-900 my-3"
+                        className="text-sm text-gray-900 dark:text-gray-400 my-3"
                         dangerouslySetInnerHTML={{ __html: ppost.article }}
                       ></dd>
                     ) : (
                       <dd
-                        className="text-sm text-gray-900 my-3"
+                        className="text-sm text-gray-900 dark:text-gray-400 my-3"
                         dangerouslySetInnerHTML={{ __html: ppost.desc }}
                       ></dd>
                     )}
@@ -267,10 +267,10 @@ export default function EventPage({ host, channel }: HomeProps) {
                     <div className="border-t border-gray-200">
                       <dl>
                         <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-900">
+                          <dt className="text-sm font-medium text-gray-900 dark:text-gray-400">
                             Location
                           </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          <dd className="mt-1 text-sm text-gray-900 dark:text-gray-400 sm:mt-0 sm:col-span-2">
                             {ev?.etype === "In-Person" ? (
                               <>
                                 {" "}
@@ -300,29 +300,29 @@ export default function EventPage({ host, channel }: HomeProps) {
                           </dd>
                         </div>
                         <div className="bg-gray-50 dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-900">
+                          <dt className="text-sm font-medium text-gray-900 dark:text-gray-400">
                             Date
                           </dt>
-                          <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                          <dd className="mt-1 text-sm text-gray-900 dark:text-gray-400 dark:text-white sm:mt-0 sm:col-span-2">
                             <CalendarIcon className="h-5 w-5 inline-block mr-2" />
                             {new Date(ev?.date).toLocaleDateString()}
                           </dd>
                         </div>
                         <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-900">
+                          <dt className="text-sm font-medium text-gray-900 dark:text-gray-400">
                             Time
                           </dt>
-                          <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                          <dd className="mt-1 text-sm text-gray-900 dark:text-gray-400 dark:text-white sm:mt-0 sm:col-span-2">
                             <ClockIcon className="h-5 w-5 inline-block mr-2" />
                             {new Date(ev?.date).toLocaleTimeString()} GMT
                           </dd>
                         </div>
 
                         <div className="bg-white dark:bg-gray-900 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                          <dt className="text-sm font-medium text-gray-900">
+                          <dt className="text-sm font-medium text-gray-900 dark:text-gray-400">
                             Going
                           </dt>
-                          <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">
+                          <dd className="mt-1 text-sm text-gray-900 dark:text-gray-400 dark:text-white sm:mt-0 sm:col-span-2">
                             <UserIcon className="h-5 w-5 inline-block mr-2" />
                             {userHasLikedCount} Responded
                           </dd>
@@ -362,13 +362,13 @@ export default function EventPage({ host, channel }: HomeProps) {
                                           <div className="text-sm">
                                             <Link
                                               to={activityItem._id}
-                                              className="font-medium text-gray-900 dark:text-white"
+                                              className="font-medium text-gray-900 dark:text-gray-400 dark:text-white"
                                             >
                                               {activityItem.profile.first_name}{" "}
                                               {activityItem.profile.last_name}
                                             </Link>
                                           </div>
-                                          <p className="mt-0.5 text-sm text-gray-900">
+                                          <p className="mt-0.5 text-sm text-gray-900 dark:text-gray-400">
                                             Commented{" "}
                                             {formatDistanceToNow(
                                               new Date(activityItem.date),

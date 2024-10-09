@@ -31,10 +31,10 @@ export default function Home() {
                   src="/public/logo-dark.svg"
                 />
                 <div className="flex flex-col space-y-1">
-                  <p className="font-sans !text-3xl text-base font-bold normal-case leading-5 tracking-normal text-gray-900 md:!text-5xl dark:text-gray-100">
+                  <p className="font-sans !text-3xl text-base font-bold normal-case leading-5 tracking-normal text-gray-900 md:!text-5xl dark:text-gray-100 dark:text-gray-400">
                     Your voice.
                   </p>
-                  <p className="font-sans !text-3xl text-base font-bold normal-case leading-5 tracking-normal text-gray-900 md:!text-5xl dark:text-gray-100">
+                  <p className="font-sans !text-3xl text-base font-bold normal-case leading-5 tracking-normal text-gray-900 md:!text-5xl dark:text-gray-100 dark:text-gray-400">
                     Your freedom.
                   </p>
                 </div>
@@ -42,7 +42,7 @@ export default function Home() {
                   <div>
                     <div>
                       <button
-                        className="bg-primary-500 hover:bg-primary-400 disabled:hover:bg-primary-500 dark:disabled:hover:bg-primary-500 dark:hover:bg-primary-600 focus:bg-primary-500 focus:ring-primary-300 flex inline-flex w-full appearance-none place-content-center items-center justify-center space-x-2 whitespace-nowrap rounded-full border-2 border-transparent px-6 py-3 text-base font-medium text-gray-100 transition-all focus:outline-none focus:ring-2 rtl:space-x-reverse"
+                        className="focus:ring-primary-300 flex inline-flex w-full appearance-none place-content-center items-center justify-center space-x-2 whitespace-nowrap rounded-full border-2 border-transparent bg-primary-500 px-6 py-3 text-base font-medium text-gray-100 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 disabled:hover:bg-primary-500 rtl:space-x-reverse dark:hover:bg-primary-600 dark:disabled:hover:bg-primary-500"
                         type="button"
                         data-testid="create-account"
                       >
@@ -51,7 +51,7 @@ export default function Home() {
                     </div>
                   </div>
                   <button
-                    className="flex inline-flex w-full appearance-none place-content-center items-center justify-center space-x-2 whitespace-nowrap rounded-full border-2 !border-gray-300 border-gray-300 !bg-white bg-transparent px-6 py-3 text-base font-medium text-gray-900 transition-all hover:!border-gray-400 hover:border-gray-500 focus:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 rtl:space-x-reverse dark:!border-gray-800 dark:border-gray-800 dark:!bg-gray-900 dark:text-gray-100 dark:hover:!border-gray-700/50 dark:hover:border-gray-700 dark:focus:border-gray-800 dark:focus:ring-gray-700"
+                    className="flex inline-flex w-full appearance-none place-content-center items-center justify-center space-x-2 whitespace-nowrap rounded-full border-2 !border-gray-300 border-gray-300 !bg-white bg-transparent px-6 py-3 text-base font-medium text-gray-900 transition-all hover:!border-gray-400 hover:border-gray-500 focus:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 rtl:space-x-reverse dark:!border-gray-800 dark:border-gray-800 dark:!bg-gray-900 dark:text-gray-100 dark:text-gray-400 dark:hover:!border-gray-700/50 dark:hover:border-gray-700 dark:focus:border-gray-800 dark:focus:ring-gray-700"
                     type="button"
                     data-testid="button"
                   >
@@ -99,7 +99,7 @@ export default function Home() {
                   <a
                     href="https://apps.apple.com/app/apple-store/id1586018825?pt=123469648&amp;ct=TruthSocial.com&amp;mt=8"
                     target="_blank"
-                    className="flex w-full items-center justify-center rounded-full border-2 border-solid border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+                    className="flex w-full items-center justify-center rounded-full border-2 border-solid border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:text-gray-400 dark:hover:bg-gray-800"
                   >
                     <div className="mr-3">
                       <svg viewBox="0 0 384 512" className="h-7">
@@ -110,10 +110,10 @@ export default function Home() {
                       </svg>
                     </div>
                     <div className="flex flex-col whitespace-nowrap">
-                      <p className="font-sans text-xs font-medium normal-case tracking-normal text-gray-900 dark:text-gray-100">
+                      <p className="font-sans text-xs font-medium normal-case tracking-normal text-gray-900 dark:text-gray-100 dark:text-gray-400">
                         Download on the
                       </p>
-                      <p className="font-sans text-base font-bold normal-case leading-5 tracking-normal text-gray-900 dark:text-gray-100">
+                      <p className="font-sans text-base font-bold normal-case leading-5 tracking-normal text-gray-900 dark:text-gray-100 dark:text-gray-400">
                         App Store
                       </p>
                     </div>
@@ -121,7 +121,7 @@ export default function Home() {
                   <a
                     href="https://play.google.com/store/apps/details?id=com.truthsocial.android.app"
                     target="_blank"
-                    className="flex w-full items-center justify-center rounded-full border-2 border-solid border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+                    className="flex w-full items-center justify-center rounded-full border-2 border-solid border-gray-300 bg-white px-4 py-2 text-gray-900 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:text-gray-400 dark:hover:bg-gray-800"
                   >
                     <div className="mr-3">
                       <svg
@@ -161,10 +161,10 @@ export default function Home() {
                       </svg>
                     </div>
                     <div className="flex flex-col whitespace-nowrap">
-                      <p className="font-sans text-xs font-medium normal-case tracking-normal text-gray-900 dark:text-gray-100">
+                      <p className="font-sans text-xs font-medium normal-case tracking-normal text-gray-900 dark:text-gray-100 dark:text-gray-400">
                         Download on the
                       </p>
-                      <p className="font-sans text-base font-bold normal-case leading-5 tracking-normal text-gray-900 dark:text-gray-100">
+                      <p className="font-sans text-base font-bold normal-case leading-5 tracking-normal text-gray-900 dark:text-gray-100 dark:text-gray-400">
                         Play Store
                       </p>
                     </div>

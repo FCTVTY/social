@@ -63,7 +63,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
         <div className="bg-white dark:bg-gray-900 py-32">
           <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
             <div className="mx-auto max-w-2xl">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-400 dark:text-white sm:text-4xl">
                 Meet{" "}
                 <strong className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
                   {community?.name}
@@ -91,7 +91,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                           src={person.profilePicture}
                           alt=""
                         />
-                        <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-white inline-flex">
+                        <h3 className="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900 dark:text-gray-400 dark:text-white inline-flex">
                           {person.first_name} {person.last_name}{" "}
                           {person?.verified && (
                             <svg
@@ -117,7 +117,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
             </ul>
           </div>
           <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
-            <h3 className="font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl mt-10">
+            <h3 className="font-bold tracking-tight text-gray-900 dark:text-gray-400 dark:text-white sm:text-4xl mt-10">
               All Members
             </h3>
           </div>
@@ -140,7 +140,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                         alt=""
                       />
                       <div className="min-w-0 flex-auto">
-                        <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                        <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-400 dark:text-white">
                           <Link
                             to={`/profile/${person._id}`}
                             className={`inline-flex`}
@@ -163,7 +163,7 @@ export default function MembersPage({ host, channel }: HomeProps) {
                             )}
                           </Link>
                         </p>
-                        <p className="mt-1 flex text-xs leading-5 text-gray-900 dark:text-white">
+                        <p className="mt-1 flex text-xs leading-5 text-gray-900 dark:text-gray-400 dark:text-white">
                           {person.bio.substring(0, 20)}{" "}
                           {person.bio.length >= 20 && "..."}
                         </p>

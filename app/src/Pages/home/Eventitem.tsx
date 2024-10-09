@@ -24,13 +24,13 @@ const EventItem = ({ post, profile, lite }) => {
           alt=""
         />
         <div className="min-w-0 flex-auto">
-          <p className=" font-semibold leading-6 text-gray-900 dark:text-white">
+          <p className=" font-semibold leading-6 text-gray-900 dark:text-gray-400 dark:text-white">
             <Link to={`/event/${post._id}`}>
               <span className="absolute inset-x-0 -top-px bottom-0" />
               {post.desc}
             </Link>
           </p>
-          <p className="mt-1 flex text-sm leading-5 text-gray-900">
+          <p className="mt-1 flex text-sm leading-5 text-gray-900 dark:text-gray-400">
             <a href="{}" className="relative truncate hover:underline">
               {post.desc}
             </a>
@@ -39,11 +39,11 @@ const EventItem = ({ post, profile, lite }) => {
       </div>
       <div className="flex items-center gap-x-4">
         <div className="hidden sm:flex sm:flex-col sm:items-end">
-          <p className="text-sm leading-6 text-gray-900 dark:text-white">
+          <p className="text-sm leading-6 text-gray-900 dark:text-gray-400 dark:text-white">
             {post.eventDetails?.etype}
           </p>
 
-          <p className="mt-1  leading-5 text-gray-900">
+          <p className="mt-1  leading-5 text-gray-900 dark:text-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"

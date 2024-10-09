@@ -333,7 +333,7 @@ export default function EventsPage({
           </div>
 
           {posts.filter((post) => post.type === "event").length == 0 && (
-            <div className="p-6 text-center text-gray-900 dark:text-gray-400">
+            <div className="p-6 text-center text-gray-900 dark:text-gray-400 dark:text-gray-400">
               No Events available.
             </div>
           )}
@@ -365,10 +365,10 @@ export default function EventsPage({
                         <div className="bg-gray-50 px-4 py-6 sm:px-6">
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
-                              <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                              <Dialog.Title className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-400">
                                 New Event
                               </Dialog.Title>
-                              <p className="text-sm text-gray-900">
+                              <p className="text-sm text-gray-900 dark:text-gray-400">
                                 Get started by filling in the information below
                                 to create your new Event.
                               </p>
@@ -376,7 +376,7 @@ export default function EventsPage({
                             <div className="flex h-7 items-center">
                               <button
                                 type="button"
-                                className="text-gray-400 hover:text-gray-900"
+                                className="text-gray-400 hover:text-gray-900 dark:text-gray-400"
                                 onClick={() => setOpen(false)}
                               >
                                 <span className="sr-only">Close panel</span>
@@ -396,7 +396,7 @@ export default function EventsPage({
                             <div>
                               <label
                                 htmlFor="desc"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                               >
                                 Event name
                               </label>
@@ -408,7 +408,7 @@ export default function EventsPage({
                                 id="desc"
                                 value={postData.desc}
                                 onChange={handleChange}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
                           </div>
@@ -418,7 +418,7 @@ export default function EventsPage({
                             <div>
                               <label
                                 htmlFor="article"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                               >
                                 Description
                               </label>
@@ -430,7 +430,7 @@ export default function EventsPage({
                                 rows={3}
                                 value={postData.article}
                                 onChange={handleChange}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
                           </div>
@@ -438,7 +438,7 @@ export default function EventsPage({
                           {/* Event image */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
-                              <h3 className="text-sm font-medium leading-6 text-gray-900">
+                              <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                 Cover Image
                               </h3>
                             </div>
@@ -446,7 +446,7 @@ export default function EventsPage({
                               <div className="flex space-x-2 mb-2">
                                 <label
                                   htmlFor="imagec-upload"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <PlusIcon
                                     className="h-5 w-5"
@@ -459,7 +459,7 @@ export default function EventsPage({
                           </div>
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
-                              <h3 className="text-sm font-medium leading-6 text-gray-900">
+                              <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                 Logo
                               </h3>
                             </div>
@@ -467,7 +467,7 @@ export default function EventsPage({
                               <div className="flex space-x-2 mb-2">
                                 <label
                                   htmlFor="image-upload"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <PlusIcon
                                     className="h-5 w-5"
@@ -482,7 +482,7 @@ export default function EventsPage({
                           <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <legend className="sr-only">Event Type</legend>
                             <div
-                              className="text-sm font-medium leading-6 text-gray-900"
+                              className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400"
                               aria-hidden="true"
                             >
                               Event Type
@@ -504,13 +504,13 @@ export default function EventsPage({
                                   <div className="pl-7 text-sm leading-6">
                                     <label
                                       htmlFor="online-event"
-                                      className="font-medium text-gray-900"
+                                      className="font-medium text-gray-900 dark:text-gray-400"
                                     >
                                       Online Event
                                     </label>
                                     <p
                                       id="online-event-description"
-                                      className="text-gray-900"
+                                      className="text-gray-900 dark:text-gray-400"
                                     >
                                       People join via Zoom or Google Meet
                                     </p>
@@ -531,13 +531,13 @@ export default function EventsPage({
                                   <div className="pl-7 text-sm leading-6">
                                     <label
                                       htmlFor="in-person-event"
-                                      className="font-medium text-gray-900"
+                                      className="font-medium text-gray-900 dark:text-gray-400"
                                     >
                                       In-Person
                                     </label>
                                     <p
                                       id="in-person-event-description"
-                                      className="text-gray-900"
+                                      className="text-gray-900 dark:text-gray-400"
                                     >
                                       Meet at a conference center or other
                                       location
@@ -553,7 +553,7 @@ export default function EventsPage({
                             <div>
                               <label
                                 htmlFor="date"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                               >
                                 Date
                               </label>
@@ -565,7 +565,7 @@ export default function EventsPage({
                                 id="date"
                                 value={eventData.date}
                                 onChange={handleEventChange}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
                           </div>
@@ -588,7 +588,7 @@ export default function EventsPage({
                             <div>
                               <label
                                 htmlFor="location"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                               >
                                 Location
                               </label>
@@ -600,7 +600,7 @@ export default function EventsPage({
                                 id="location"
                                 value={eventData.location}
                                 onChange={handleEventChange}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
                           </div>
@@ -611,7 +611,7 @@ export default function EventsPage({
                           <div className="flex justify-end space-x-3">
                             <button
                               type="button"
-                              className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                              className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                               onClick={() => setOpen(false)}
                             >
                               Cancel

@@ -113,7 +113,7 @@ export default function Login({ host }: LoginProps) {
           />
         </Link>
         <div className="mt-20">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-400">
             Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-gray-700">
@@ -177,7 +177,10 @@ export default function Login({ host }: LoginProps) {
               />
             </div>
             <div className="ml-3 text-sm leading-6">
-              <label htmlFor="comments" className="font-medium text-gray-900">
+              <label
+                htmlFor="comments"
+                className="font-medium text-gray-900 dark:text-gray-400"
+              >
                 Toggle Password
               </label>
             </div>

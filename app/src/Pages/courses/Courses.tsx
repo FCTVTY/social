@@ -445,20 +445,20 @@ export default function CoursesPage({
                       >
                         Course of the month
                       </h2>
-                      <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+                      <p className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-400 dark:text-white">
                         {product.name}
                       </p>
                       <p
-                        className="mt-4 text-gray-900"
+                        className="mt-4 text-gray-900 dark:text-gray-400"
                         dangerouslySetInnerHTML={{ __html: product.desc }}
                       ></p>
 
                       <dl className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 text-sm sm:grid-cols-2">
                         <div>
-                          <dt className="font-medium text-gray-900 dark:text-white">
+                          <dt className="font-medium text-gray-900 dark:text-gray-400 dark:text-white">
                             Course length: {product.hours}
                           </dt>
-                          <dd className="mt-4 text-gray-900">
+                          <dd className="mt-4 text-gray-900 dark:text-gray-400">
                             <Link
                               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                               to={`/course/${product.name.replace(/ /g, "_")}`}
@@ -513,7 +513,7 @@ export default function CoursesPage({
                 {({ open }) => (
                   <>
                     <dt>
-                      <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900 dark:text-white">
+                      <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900 dark:text-gray-400 dark:text-white">
                         <span className="text-base font-semibold leading-7">
                           {category || "All"}{" "}
                         </span>
@@ -556,13 +556,13 @@ export default function CoursesPage({
                                 >
                                   <Link
                                     to={`/course/${product.name.replace(/ /g, "_")}`}
-                                    className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 backdrop-blur backdrop-filter"
+                                    className="w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-center text-sm font-medium text-gray-900 dark:text-gray-400 backdrop-blur backdrop-filter"
                                   >
                                     View Course
                                   </Link>
                                 </div>
                               </div>
-                              <div className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-white">
+                              <div className="mt-2 p-2 flex items-center justify-between space-x-8 text-base font-medium text-gray-900 dark:text-gray-400 dark:text-white">
                                 <h3>
                                   <Link
                                     to={`/course/${product.name.replace(/ /g, "_")}`}
@@ -574,12 +574,12 @@ export default function CoursesPage({
                                     {product.name}
                                   </Link>
                                 </h3>
-                                <p className="text-gray-900 text-sm dark:text-white">
+                                <p className="text-gray-900 dark:text-gray-400 text-sm dark:text-white">
                                   {product.hours}
                                 </p>
                               </div>
                               <p
-                                className="m-3 text-sm text-gray-900 dark:text-white"
+                                className="m-3 text-sm text-gray-900 dark:text-gray-400 dark:text-white"
                                 dangerouslySetInnerHTML={{
                                   __html: product.desc,
                                 }}
@@ -594,12 +594,12 @@ export default function CoursesPage({
             </div>
           ))}
           {posts && posts.length === 0 && (
-            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-900 dark:text-gray-400 w-full">
+            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-900 dark:text-gray-400 dark:text-gray-400 w-full">
               No Courses available.
             </div>
           )}
           {posts == null && (
-            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-900 dark:text-gray-400 w-full">
+            <div className="bg-white shadow rounded-xl dark:bg-gray-900 p-6 text-center col-span-3 mx-auto text-gray-900 dark:text-gray-400 dark:text-gray-400 w-full">
               No Courses available.
             </div>
           )}
@@ -626,10 +626,10 @@ export default function CoursesPage({
                           <div className="bg-gray-50 px-4 py-6 sm:px-6">
                             <div className="flex items-start justify-between space-x-3">
                               <div className="space-y-1">
-                                <h2 className="text-base font-semibold leading-6 text-gray-900">
+                                <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-400">
                                   New Course
                                 </h2>
-                                <p className="text-sm text-gray-900">
+                                <p className="text-sm text-gray-900 dark:text-gray-400">
                                   Fill in the information below to create your
                                   new course.
                                 </p>
@@ -637,7 +637,7 @@ export default function CoursesPage({
                               <div className="flex h-7 items-center">
                                 <button
                                   type="button"
-                                  className="text-gray-400 hover:text-gray-900"
+                                  className="text-gray-400 hover:text-gray-900 dark:text-gray-400"
                                   onClick={() => setOpen(false)}
                                 >
                                   <span className="sr-only">Close panel</span>
@@ -657,7 +657,7 @@ export default function CoursesPage({
                               <div>
                                 <label
                                   htmlFor="name"
-                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                  className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                 >
                                   Course Name
                                 </label>
@@ -669,7 +669,7 @@ export default function CoursesPage({
                                   id="name"
                                   value={courseData.name}
                                   onChange={handleChange}
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
                             </div>
@@ -677,7 +677,7 @@ export default function CoursesPage({
                               <div>
                                 <label
                                   htmlFor="category"
-                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                  className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                 >
                                   Course Category
                                 </label>
@@ -689,7 +689,7 @@ export default function CoursesPage({
                                   id="category"
                                   value={courseData.category}
                                   onChange={handleChange}
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
                             </div>
@@ -698,7 +698,7 @@ export default function CoursesPage({
                               <div>
                                 <label
                                   htmlFor="desc"
-                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                  className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                 >
                                   Description
                                 </label>
@@ -721,7 +721,7 @@ export default function CoursesPage({
                               <div>
                                 <label
                                   htmlFor="hours"
-                                  className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                  className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                 >
                                   Hours
                                 </label>
@@ -733,14 +733,14 @@ export default function CoursesPage({
                                   id="hours"
                                   value={courseData.hours}
                                   onChange={handleChange}
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
                             </div>
                             {/* Course Image */}
                             <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                               <div>
-                                <h3 className="text-sm font-medium leading-6 text-gray-900">
+                                <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                   Cover Image
                                 </h3>
                               </div>
@@ -748,7 +748,7 @@ export default function CoursesPage({
                                 <div className="flex space-x-2 mb-2">
                                   <label
                                     htmlFor="image-upload"
-                                    className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                   >
                                     <PlusIcon
                                       className="h-5 w-5"
@@ -774,7 +774,7 @@ export default function CoursesPage({
                             />
                             {/* Chapters */}
                             <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-                              <h3 className="text-sm font-medium leading-6 text-gray-900">
+                              <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                 Chapters
                               </h3>
                               {courseData.chapters.map((chapter, index) => (
@@ -791,7 +791,7 @@ export default function CoursesPage({
                                   <div>
                                     <label
                                       htmlFor={`chapter-name-${index}`}
-                                      className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                      className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                     >
                                       Chapter Name
                                     </label>
@@ -805,14 +805,14 @@ export default function CoursesPage({
                                       onChange={(e) =>
                                         handleChapterChange(index, e)
                                       }
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                   </div>
 
                                   <div>
                                     <label
                                       htmlFor={`chapter-videourl-${index}`}
-                                      className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                      className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                     >
                                       Video URL
                                     </label>
@@ -826,14 +826,14 @@ export default function CoursesPage({
                                       onChange={(e) =>
                                         handleChapterChange(index, e)
                                       }
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                   </div>
 
                                   <div>
                                     <label
                                       htmlFor={`chapter-image-${index}`}
-                                      className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                      className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                     >
                                       Or Image
                                     </label>
@@ -842,7 +842,7 @@ export default function CoursesPage({
                                     <div className="flex space-x-2 mb-2">
                                       <label
                                         htmlFor={`chapter-image-${index}`}
-                                        className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                        className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                       >
                                         <PlusIcon
                                           className="h-5 w-5"
@@ -871,7 +871,7 @@ export default function CoursesPage({
                                   <div>
                                     <label
                                       htmlFor={`chapter-text-${index}`}
-                                      className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                      className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                     >
                                       Text
                                     </label>
@@ -911,7 +911,7 @@ export default function CoursesPage({
                             </div>
                             {/* Files */}
                             <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-                              <h3 className="text-sm font-medium leading-6 text-gray-900">
+                              <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                 Files
                               </h3>
                               {courseData.files.map((file, index) => (
@@ -928,7 +928,7 @@ export default function CoursesPage({
                                   <div>
                                     <label
                                       htmlFor={`file-name-${index}`}
-                                      className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                      className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                     >
                                       File Name
                                     </label>
@@ -941,7 +941,7 @@ export default function CoursesPage({
                                       onChange={(e) =>
                                         handleFileChange(index, e)
                                       }
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                     <label className="text-sm">
                                       {file.url}
@@ -950,7 +950,7 @@ export default function CoursesPage({
                                   <div>
                                     <label
                                       htmlFor={`file-name-${index}`}
-                                      className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                      className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                     >
                                       File Category
                                     </label>
@@ -963,7 +963,7 @@ export default function CoursesPage({
                                       onChange={(e) =>
                                         handleFileCatChange(index, e)
                                       }
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     />
                                     <label className="text-sm">
                                       {file.url}
@@ -986,7 +986,7 @@ export default function CoursesPage({
                             <div className="flex justify-end space-x-3">
                               <button
                                 type="button"
-                                className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                                 onClick={() => setOpen(false)}
                               >
                                 Cancel

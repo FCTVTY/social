@@ -127,7 +127,7 @@ export default function Recover({ host }: LoginProps) {
           />
         </Link>
         <div className="mt-20">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-400">
             Recover Lost Account
           </h2>
           <p className="mt-2 text-sm text-gray-700">

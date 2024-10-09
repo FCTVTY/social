@@ -34,7 +34,7 @@ export default function ChangeLogPage({ host, channel }: HomeProps) {
             B:Hive v1.0.3
             <div className="ml-2 badge badge-secondary">Friday 6th Sep</div>
           </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-400 sm:text-4xl dark:text-white">
             General Improvements{" "}
           </h1>
           <br />
@@ -90,7 +90,7 @@ export default function ChangeLogPage({ host, channel }: HomeProps) {
             B:Hive v1.0.2 <div className="badge badge-accent">Improvements</div>
             <div className="badge badge-secondary">Wednesday 14th Aug</div>
           </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-400 sm:text-4xl dark:text-white">
             Improved URLS{" "}
           </h1>
           <br />
@@ -108,7 +108,7 @@ export default function ChangeLogPage({ host, channel }: HomeProps) {
             <div className="badge badge-accent">New Features/Improvements</div>
             <div className="badge badge-secondary">Thursday 8th Aug</div>
           </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-400 sm:text-4xl dark:text-white">
             Tweaks
           </h1>
           <p className="mt-6 ">Tweaks & More </p>
@@ -131,7 +131,7 @@ export default function ChangeLogPage({ host, channel }: HomeProps) {
             B:Hive v1.0.0 <div className="badge badge-accent">New Features</div>
             <div className="badge badge-secondary">Sunday 4th Aug</div>
           </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-400 sm:text-4xl dark:text-white">
             Production Release 🤘
           </h1>
           <p className="mt-6 ">Welcome to Version 1 of B:hive! </p>

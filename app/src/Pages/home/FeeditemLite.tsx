@@ -62,7 +62,7 @@ const PostItemLite = ({ post, profile, lite }) => {
                       to={`/profile/${profile.handle || profile._id}`}
                     >
                       <div className="flex rtl:space-x-reverse items-center space-x-1 grow">
-                        <p className="truncate text-sm text-gray-900 dark:text-gray-100 font-semibold tracking-normal font-sans normal-case">
+                        <p className="truncate text-sm text-gray-900 dark:text-gray-400 dark:text-gray-100 font-semibold tracking-normal font-sans normal-case">
                           {profile.first_name} {profile.last_name}
                         </p>
                         {profile.verified && (
@@ -141,10 +141,10 @@ const PostItemLite = ({ post, profile, lite }) => {
                 />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 inline-flex">
+                <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 dark:text-gray-400 inline-flex">
                   {profile.first_name} {profile.last_name}
                 </p>
-                <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-400 group-hover:text-gray-700">
                   View profile
                 </p>
               </div>
@@ -153,7 +153,7 @@ const PostItemLite = ({ post, profile, lite }) => {
           <Link className="my-3" to={`/s/${post.channel}/${post._id}`}>
             <img className="mx-auto mt-2 rounded-md" src={post.media} alt="" />
             <p
-              className="dark:!text-white            posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+              className="dark:!text-white            posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
               dangerouslySetInnerHTML={{ __html: processedDesc }}
             ></p>
           </Link>
@@ -165,7 +165,7 @@ const PostItemLite = ({ post, profile, lite }) => {
               <div className="flex space-x-1 items-center"></div>
             </div>
           </div>
-          <dd className="mt-0.5 text-sm text-gray-900">
+          <dd className="mt-0.5 text-sm text-gray-900 dark:text-gray-400">
             {post.tags.map((tag) => (
               <a key={tag} href={`#${tag}`} className="mr-2">
                 #{tag}{" "}
@@ -173,12 +173,12 @@ const PostItemLite = ({ post, profile, lite }) => {
             ))}
           </dd>
           <Link
-            className="mt-0.5 text-sm text-gray-900"
+            className="mt-0.5 text-sm text-gray-900 dark:text-gray-400"
             to={`/s/${post.channel.name}/${post._id}`}
           >
             View all comments
           </Link>
-          <dd className="mt-0.5 text-sm text-gray-900 ">
+          <dd className="mt-0.5 text-sm text-gray-900 dark:text-gray-400 ">
             {formatDistanceToNow(new Date(post.date), { addSuffix: true })}
           </dd>
         </dl>

@@ -129,7 +129,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
             <a href="#" className="text-2xl font-bold text-blue-600">
               <img src={logo} className="h-10 w-auto" alt="Logo" />
             </a>
-            <ol className="relative text-gray-900  mt-10 ml-5">
+            <ol className="relative text-gray-900 dark:text-gray-400  mt-10 ml-5">
               <li className="mb-10 ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-green-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
                   <svg
@@ -154,7 +154,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
               <li className="mb-10 ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
                   <svg
-                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400"
+                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400 dark:text-gray-400"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -169,7 +169,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
               <li className="mb-10 ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
                   <svg
-                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400"
+                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400 dark:text-gray-400"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -184,7 +184,7 @@ function OnboardingPage({ host, channel }: HomeProps) {
               <li className="ms-10">
                 <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
                   <svg
-                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400"
+                    className="w-3.5 h-3.5 text-gray-900 dark:text-gray-400 dark:text-gray-400"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="currentColor"
@@ -302,10 +302,10 @@ function OnboardingPage({ host, channel }: HomeProps) {
 
       <div className="hidden min-h-screen flex flex-col  py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md md:w-3/5">
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-400">
             Welcome to b:hive
           </h2>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-400">
             Create your profile
           </h2>
         </div>

@@ -296,7 +296,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                     <button
                       type="button"
-                      className="rounded-md bg-white text-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="rounded-md bg-white text-gray-400 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       onClick={() => setOpen(false)}
                     >
                       <span className="sr-only">Close</span>
@@ -307,12 +307,12 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title
                         as="h3"
-                        className="text-base font-semibold leading-6 text-gray-900"
+                        className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-400"
                       >
                         Share Post
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-900">
+                        <p className="text-sm text-gray-900 dark:text-gray-400">
                           <div>
                             {window.location.origin}/s/{post._id}
                           </div>
@@ -364,7 +364,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   <a
                     href="#"
                     onClick={() => Remove()}
-                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
+                    className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900 dark:text-gray-400"
                     role="menuitem"
                   >
                     Delete
@@ -373,7 +373,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 <a
                   href="#"
                   onClick={() => setOpen(!open)}
-                  className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
+                  className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900 dark:text-gray-400"
                   role="menuitem"
                 >
                   Share
@@ -390,14 +390,14 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
 
                       <Link
                         to={`/removepost/${post._id}`}
-                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
+                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900 dark:text-gray-400"
                         role="menuitem"
                       >
                         Remove
                       </Link>
                       <Link
                         to={`/lockpost/${post._id}`}
-                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900"
+                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-100 dark:hover:bg-indigo-900 dark:hover:text-white hover:text-gray-900 dark:text-gray-400"
                         role="menuitem"
                       >
                         Lock Comments
@@ -439,7 +439,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                       to={`/profile/${post.profile.handle || post.profile._id}`}
                     >
                       <div className="flex rtl:space-x-reverse items-center space-x-1 grow">
-                        <p className="truncate text-sm text-gray-900 dark:text-gray-100 font-semibold tracking-normal font-sans normal-case">
+                        <p className="truncate text-sm text-gray-900 dark:text-gray-400 dark:text-gray-100 font-semibold tracking-normal font-sans normal-case">
                           {post.profile.first_name} {post.profile.last_name}
                         </p>
                         {post.profile.verified && (
@@ -524,7 +524,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               <div className="ml-3">
                 {post.profile.verified && (
                   <p
-                    className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900  dark:group-hover:text-white inline-flex tooltip"
+                    className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 dark:text-gray-400  dark:group-hover:text-white inline-flex tooltip"
                     data-tip="Verfied User"
                   >
                     {post.profile.first_name} {post.profile.last_name}
@@ -549,7 +549,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                   </p>
                 )}
                 {!post.profile.verified && (
-                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white inline-flex tooltip">
+                  <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white inline-flex tooltip">
                     {post.profile.first_name} {post.profile.last_name}{" "}
                     {isCakeDay && (
                       <CakeSlice
@@ -559,7 +559,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                     )}
                   </p>
                 )}
-                <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
+                <p className="text-xs font-medium text-gray-900 dark:text-gray-400 group-hover:text-gray-700">
                   View profile &#183;
                   {formatDistanceToNow(new Date(post.date), {
                     addSuffix: true,
@@ -575,11 +575,11 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             <img className="mx-auto my-2 rounded-md" src={post.media} alt="" />
             <p
               dangerouslySetInnerHTML={{ __html: processedDesc }}
-              className="posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+              className="posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
             ></p>
           </Link>
           {hasUrl && (
-            <dd className="mt-0.5 text-sm text-gray-900 ">
+            <dd className="mt-0.5 text-sm text-gray-900 dark:text-gray-400 ">
               <LinkPreview url={post.desc.match(urlPattern)[0]}></LinkPreview>
             </dd>
           )}
@@ -644,7 +644,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
               )}
             </div>
           </div>
-          <dd className="mt-0.5 text-sm text-gray-900">
+          <dd className="mt-0.5 text-sm text-gray-900 dark:text-gray-400">
             {post.tags.map((tag) => (
               <a key={tag} href={`#${tag}`} className="mr-2">
                 #{tag}{" "}
@@ -653,7 +653,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
           </dd>
           {post && post.postComments.length > 0 && (
             <Link
-              className="mt-0.5 text-sm text-gray-900"
+              className="mt-0.5 text-sm text-gray-900 dark:text-gray-400"
               to={`/s/${post.channels.name}/${post._id}`}
             >
               View all comments
@@ -698,7 +698,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                               <div className="text-sm">
                                 <Link
                                   to={activityItem._id}
-                                  className="font-medium text-gray-900 dark:text-white"
+                                  className="font-medium text-gray-900 dark:text-gray-400 dark:text-white"
                                 >
                                   {activityItem.profile.first_name}{" "}
                                   {activityItem.profile.last_name}

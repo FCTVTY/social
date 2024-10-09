@@ -283,7 +283,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="hidden relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              className="hidden relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
             >
               Admin Tools
             </button>
@@ -401,9 +401,9 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                             <div className="flex space-x-1 items-center h-6 w-16 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
                           </div>
                         </div>
-                        <div className="mt-0.5 text-sm text-gray-900 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-900 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
-                        <div className="mt-0.5 text-sm text-gray-900 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-900 dark:text-gray-400 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-900 dark:text-gray-400 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
+                        <div className="mt-0.5 text-sm text-gray-900 dark:text-gray-400 h-4 w-32 bg-gray-200 dark:bg-gray-800 rounded-full" />
                       </div>
                     </dl>
                   </div>
@@ -481,7 +481,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                     </span>
                   </h2>
                   <p
-                    className="text-gray-900 pb-5"
+                    className="text-gray-900 dark:text-gray-400 pb-5"
                     dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
                   ></p>
                   {roles && roles.length > 0 && (
@@ -512,7 +512,10 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                         }
 
                         return (
-                          <p className="text-gray-900" key={role}>
+                          <p
+                            className="text-gray-900 dark:text-gray-400"
+                            key={role}
+                          >
                             <span
                               className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ${roleClasses}`}
                             >
@@ -666,7 +669,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                 &middot;
                               </span>
 
-                              <p className="sm:block sm:text-xs sm:text-gray-900">
+                              <p className="sm:block sm:text-xs sm:text-gray-900 dark:text-gray-400">
                                 <a
                                   href={post.url}
                                   className="font-medium underline hover:text-gray-700"
@@ -806,17 +809,17 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                         <div className="bg-gray-50 px-4 py-6 sm:px-6">
                           <div className="flex items-start justify-between space-x-3">
                             <div className="space-y-1">
-                              <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                              <Dialog.Title className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-400">
                                 Manage Channel
                               </Dialog.Title>
-                              <p className="text-sm text-gray-900">
+                              <p className="text-sm text-gray-900 dark:text-gray-400">
                                 Moderator Tools{" "}
                               </p>
                             </div>
                             <div className="flex h-7 items-center">
                               <button
                                 type="button"
-                                className="text-gray-400 hover:text-gray-900"
+                                className="text-gray-400 hover:text-gray-900 dark:text-gray-400"
                                 onClick={() => setOpen(false)}
                               >
                                 <span className="sr-only">Close panel</span>
@@ -836,7 +839,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                             <div>
                               <label
                                 htmlFor="project-name"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                               >
                                 Channel Name
                               </label>
@@ -846,7 +849,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                 type="text"
                                 name="project-name"
                                 id="project-name"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               />
                             </div>
                           </div>
@@ -856,7 +859,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                             <div>
                               <label
                                 htmlFor="project-description"
-                                className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                               >
                                 Description
                               </label>
@@ -866,7 +869,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                 id="project-description"
                                 name="project-description"
                                 rows={3}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 defaultValue={""}
                               />
                             </div>
@@ -875,7 +878,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                           {/* Team members */}
                           <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <div>
-                              <h3 className="text-sm font-medium leading-6 text-gray-900">
+                              <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                 Team Members
                               </h3>
                             </div>
@@ -883,7 +886,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                               <div className="flex space-x-2">
                                 <button
                                   type="button"
-                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                  className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
                                   <span className="sr-only">
                                     Add team member
@@ -901,7 +904,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                           <fieldset className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                             <legend className="sr-only">Privacy</legend>
                             <div
-                              className="text-sm font-medium leading-6 text-gray-900"
+                              className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400"
                               aria-hidden="true"
                             >
                               Privacy
@@ -922,13 +925,13 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                   <div className="pl-7 text-sm leading-6">
                                     <label
                                       htmlFor="public-access"
-                                      className="font-medium text-gray-900"
+                                      className="font-medium text-gray-900 dark:text-gray-400"
                                     >
                                       Public access
                                     </label>
                                     <p
                                       id="public-access-description"
-                                      className="text-gray-900"
+                                      className="text-gray-900 dark:text-gray-400"
                                     >
                                       Everyone with the link will see this
                                       project
@@ -948,13 +951,13 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                   <div className="pl-7 text-sm leading-6">
                                     <label
                                       htmlFor="restricted-access"
-                                      className="font-medium text-gray-900"
+                                      className="font-medium text-gray-900 dark:text-gray-400"
                                     >
                                       Private to Project Members
                                     </label>
                                     <p
                                       id="restricted-access-description"
-                                      className="text-gray-900"
+                                      className="text-gray-900 dark:text-gray-400"
                                     >
                                       Only members of this project would be able
                                       to access
@@ -974,13 +977,13 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                   <div className="pl-7 text-sm leading-6">
                                     <label
                                       htmlFor="private-access"
-                                      className="font-medium text-gray-900"
+                                      className="font-medium text-gray-900 dark:text-gray-400"
                                     >
                                       Private to you
                                     </label>
                                     <p
                                       id="private-access-description"
-                                      className="text-gray-900"
+                                      className="text-gray-900 dark:text-gray-400"
                                     >
                                       You are the only one able to access this
                                       project
@@ -1005,10 +1008,10 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                                 <div>
                                   <a
                                     href="#"
-                                    className="group flex items-center space-x-2.5 text-sm text-gray-900 hover:text-gray-900"
+                                    className="group flex items-center space-x-2.5 text-sm text-gray-900 dark:text-gray-400 hover:text-gray-900 dark:text-gray-400"
                                   >
                                     <QuestionMarkCircleIcon
-                                      className="h-5 w-5 text-gray-400 group-hover:text-gray-900"
+                                      className="h-5 w-5 text-gray-400 group-hover:text-gray-900 dark:text-gray-400"
                                       aria-hidden="true"
                                     />
                                     <span>Learn more about sharing</span>
@@ -1025,7 +1028,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                         <div className="flex justify-end space-x-3">
                           <button
                             type="button"
-                            className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             onClick={() => setOpen(false)}
                           >
                             Cancel

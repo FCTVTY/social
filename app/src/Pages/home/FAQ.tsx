@@ -53,7 +53,7 @@ export default function FAQ({ host, channel }: HomeProps) {
               {({ open }) => (
                 <>
                   <dt>
-                    <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900 dark:text-white">
+                    <Disclosure.Button className="flex w-full items-start justify-between text-left text-gray-900 dark:text-gray-400 dark:text-white">
                       <span className="text-base font-semibold leading-7">
                         {faq.question}
                       </span>

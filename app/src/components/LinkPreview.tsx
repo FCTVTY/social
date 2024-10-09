@@ -130,7 +130,7 @@ function LinkPreview({ url }) {
               <span className="text-sm text-gray-700 dark:text-gray-600 font-medium tracking-normal font-sans normal-case">
                 {getDomain(url)}
               </span>
-              <p className="text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case">
+              <p className="text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-gray-100 font-normal tracking-normal font-sans normal-case">
                 <span>{previewData.title}</span>
               </p>
               <p className="text-sm text-gray-700 dark:text-gray-600 font-normal tracking-normal font-sans normal-case">

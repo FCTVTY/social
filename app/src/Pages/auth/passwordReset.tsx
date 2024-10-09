@@ -206,7 +206,7 @@ export default function PasswordReset({ host }: LoginProps) {
                   Your password must contain:
                 </h4>
 
-                <ul className="space-y-1 text-sm text-gray-900 dark:text-neutral-500">
+                <ul className="space-y-1 text-sm text-gray-900 dark:text-gray-400 dark:text-neutral-500">
                   <li
                     data-hs-strong-password-hints-rule-text="min-length"
                     className="hs-strong-password-active:text-teal-500 flex items-center gap-x-2"

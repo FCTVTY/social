@@ -536,7 +536,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
               </header>
               <div>
                 <h4 className="sr-only">Status</h4>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-400 dark:text-white">
                   {currentChapterIndex + 1}/{posts.chapters.length} Completed
                 </p>
                 <div className="mt-6" aria-hidden="true">
@@ -564,11 +564,11 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                             <span className="flex items-start">
                               <span className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center">
                                 <CheckCircleIcon
-                                  className="h-full w-full text-gray-900 group-hover:text-indigo-800"
+                                  className="h-full w-full text-gray-900 dark:text-gray-400 group-hover:text-indigo-800"
                                   aria-hidden="true"
                                 />
                               </span>
-                              <span className="ml-3 text-sm font-medium text-gray-900 group-hover:text-gray-900 dark:text-white">
+                              <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-400 group-hover:text-gray-900 dark:text-gray-400 dark:text-white">
                                 {step.name}
                               </span>
                             </span>
@@ -582,7 +582,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                               <span className="absolute h-4 w-4 rounded-full bg-indigo-200" />
                               <span className="relative block h-2 w-2 rounded-full bg-gray-900" />
                             </span>
-                            <span className="ml-3 text-sm font-medium text-gray-900">
+                            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-400">
                               {step.name}
                             </span>
                           </div>
@@ -595,7 +595,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                               >
                                 <div className="h-2 w-2 rounded-full bg-gray-300 group-hover:bg-gray-400" />
                               </div>
-                              <p className="ml-3 text-sm font-medium text-gray-900 group-hover:text-gray-900 dark:text-white">
+                              <p className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-400 group-hover:text-gray-900 dark:text-gray-400 dark:text-white">
                                 {step.name}
                               </p>
                             </div>
@@ -634,17 +634,17 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                         </svg>
 
                         <div className="min-w-0 flex-auto">
-                          <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+                          <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-400 dark:text-white">
                             {file.name}
                           </p>
-                          <p className="mt-1 truncate text-xs leading-5 text-gray-900 dark:text-white">
+                          <p className="mt-1 truncate text-xs leading-5 text-gray-900 dark:text-gray-400 dark:text-white">
                             {file.fileext}
                           </p>
                         </div>
                       </div>
                       <a
                         href={file.url.replace("?", "_")}
-                        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -743,14 +743,14 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                             <div className="bg-gray-50 px-4 py-6 sm:px-6">
                               <div className="flex items-start justify-between space-x-3">
                                 <div className="space-y-1">
-                                  <h2 className="text-base font-semibold leading-6 text-gray-900">
+                                  <h2 className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-400">
                                     Update Course
                                   </h2>
                                 </div>
                                 <div className="flex h-7 items-center">
                                   <button
                                     type="button"
-                                    className="text-gray-400 hover:text-gray-900"
+                                    className="text-gray-400 hover:text-gray-900 dark:text-gray-400"
                                     onClick={() => setOpen(false)}
                                   >
                                     <span className="sr-only">Close panel</span>
@@ -770,7 +770,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 <div>
                                   <label
                                     htmlFor="name"
-                                    className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                   >
                                     Course Name
                                   </label>
@@ -782,7 +782,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     id="name"
                                     value={posts.name}
                                     onChange={handleChange}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   />
                                 </div>
                               </div>
@@ -790,7 +790,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 <div>
                                   <label
                                     htmlFor="category"
-                                    className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                   >
                                     Course Category
                                   </label>
@@ -802,7 +802,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     id="category"
                                     value={posts.category}
                                     onChange={handleChange}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   />
                                 </div>
                               </div>
@@ -811,7 +811,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 <div>
                                   <label
                                     htmlFor="desc"
-                                    className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                   >
                                     Description
                                   </label>
@@ -832,7 +832,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                 <div>
                                   <label
                                     htmlFor="hours"
-                                    className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                    className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                   >
                                     Hours
                                   </label>
@@ -844,14 +844,14 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     id="hours"
                                     value={posts.hours}
                                     onChange={handleChange}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   />
                                 </div>
                               </div>
                               {/* Course Image */}
                               <div className="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                 <div>
-                                  <h3 className="text-sm font-medium leading-6 text-gray-900">
+                                  <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                     Cover Image
                                   </h3>
                                 </div>
@@ -859,7 +859,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                   <div className="flex space-x-2 mb-2">
                                     <label
                                       htmlFor="image-upload"
-                                      className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                      className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                     >
                                       <PlusIcon
                                         className="h-5 w-5"
@@ -885,7 +885,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                               />
                               {/* Chapters */}
                               <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-                                <h3 className="text-sm font-medium leading-6 text-gray-900">
+                                <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                   Chapters
                                 </h3>
                                 {posts.chapters.map((chapter, index) => (
@@ -903,7 +903,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     <div>
                                       <label
                                         htmlFor={`chapter-name-${index}`}
-                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                       >
                                         Chapter Name
                                       </label>
@@ -917,14 +917,14 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                         onChange={(e) =>
                                           handleChapterChange(index, e)
                                         }
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                       />
                                     </div>
 
                                     <div>
                                       <label
                                         htmlFor={`chapter-videourl-${index}`}
-                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                       >
                                         Video URL
                                       </label>
@@ -938,14 +938,14 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                         onChange={(e) =>
                                           handleChapterChange(index, e)
                                         }
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                       />
                                     </div>
 
                                     <div>
                                       <label
                                         htmlFor={`chapter-image-${index}`}
-                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                       >
                                         Or Image
                                       </label>
@@ -954,7 +954,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                       <div className="flex space-x-2 mb-2">
                                         <label
                                           htmlFor={`chapter-image-${index}`}
-                                          className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                          className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                         >
                                           <PlusIcon
                                             className="h-5 w-5"
@@ -983,7 +983,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     <div>
                                       <label
                                         htmlFor={`chapter-text-${index}`}
-                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                       >
                                         Text
                                       </label>
@@ -1023,7 +1023,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                               </div>
                               {/* Files */}
                               <div className="space-y-2 px-4 sm:space-y-0 sm:px-6 sm:py-5">
-                                <h3 className="text-sm font-medium leading-6 text-gray-900">
+                                <h3 className="text-sm font-medium leading-6 text-gray-900 dark:text-gray-400">
                                   Files
                                 </h3>
                                 {posts.files.map((file, index) => (
@@ -1041,7 +1041,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     <div>
                                       <label
                                         htmlFor={`file-name-${index}`}
-                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                       >
                                         File Name
                                       </label>
@@ -1054,7 +1054,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                         onChange={(e) =>
                                           handleFileChange(index, e)
                                         }
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                       />
                                       <label className="text-sm">
                                         {file.url}
@@ -1063,7 +1063,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                     <div>
                                       <label
                                         htmlFor={`file-name-${index}`}
-                                        className="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                        className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 sm:mt-1.5"
                                       >
                                         File Category
                                       </label>
@@ -1076,7 +1076,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                                         onChange={(e) =>
                                           handleFileCatChange(index, e)
                                         }
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                       />
                                       <label className="text-sm">
                                         {file.url}
@@ -1099,7 +1099,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                               <div className="flex justify-end space-x-3">
                                 <button
                                   type="button"
-                                  className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                  className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                                   onClick={() => setOpen(false)}
                                 >
                                   Cancel

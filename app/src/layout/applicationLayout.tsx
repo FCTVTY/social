@@ -641,7 +641,7 @@ const ApplicationLayout: React.FC<Props> = ({
                       aria-hidden="true"
                     />
                     <Combobox.Input
-                      className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                      className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 dark:text-gray-400 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                       placeholder="Search..."
                       onChange={(event) => setQuery(event.target.value)}
                     />
@@ -680,7 +680,9 @@ const ApplicationLayout: React.FC<Props> = ({
                                 <p
                                   className={classNames(
                                     "text-sm font-medium",
-                                    active ? "text-gray-900" : "text-gray-700",
+                                    active
+                                      ? "text-gray-900 dark:text-gray-400"
+                                      : "text-gray-700",
                                   )}
                                 >
                                   {item.name}
@@ -698,10 +700,10 @@ const ApplicationLayout: React.FC<Props> = ({
                         className="mx-auto h-6 w-6 text-gray-400"
                         aria-hidden="true"
                       />
-                      <p className="mt-4 font-semibold text-gray-900">
+                      <p className="mt-4 font-semibold text-gray-900 dark:text-gray-400">
                         Help with searching
                       </p>
-                      <p className="mt-2 text-gray-900">
+                      <p className="mt-2 text-gray-900 dark:text-gray-400">
                         Use this tool to quickly search for users and projects
                         across our entire platform. You can also use the search
                         modifiers found in the footer below to limit the results
@@ -716,10 +718,10 @@ const ApplicationLayout: React.FC<Props> = ({
                         className="mx-auto h-6 w-6 text-gray-400"
                         aria-hidden="true"
                       />
-                      <p className="mt-4 font-semibold text-gray-900">
+                      <p className="mt-4 font-semibold text-gray-900 dark:text-gray-400">
                         No results found
                       </p>
-                      <p className="mt-2 text-gray-900">
+                      <p className="mt-2 text-gray-900 dark:text-gray-400">
                         We couldn’t find anything with that term. Please try
                         again.
                       </p>
@@ -733,7 +735,7 @@ const ApplicationLayout: React.FC<Props> = ({
                         "mx-1 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold sm:mx-2",
                         query.startsWith("#")
                           ? "border-indigo-600 text-indigo-600"
-                          : "border-gray-400 text-gray-900",
+                          : "border-gray-400 text-gray-900 dark:text-gray-400",
                       )}
                     >
                       #
@@ -745,7 +747,7 @@ const ApplicationLayout: React.FC<Props> = ({
                         "mx-1 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold sm:mx-2",
                         query.startsWith(">")
                           ? "border-indigo-600 text-indigo-600"
-                          : "border-gray-400 text-gray-900",
+                          : "border-gray-400 text-gray-900 dark:text-gray-400",
                       )}
                     >
                       &gt;
@@ -756,7 +758,7 @@ const ApplicationLayout: React.FC<Props> = ({
                         "mx-1 flex h-5 w-5 items-center justify-center rounded border bg-white font-semibold sm:mx-2",
                         query === "?"
                           ? "border-indigo-600 text-indigo-600"
-                          : "border-gray-400 text-gray-900",
+                          : "border-gray-400 text-gray-900 dark:text-gray-400",
                       )}
                     >
                       ?
@@ -928,7 +930,7 @@ const ApplicationLayout: React.FC<Props> = ({
 
                   <Disclosure.Panel className="sm:hidden">
                     <div className="space-y-1 pb-4 pt-2">
-                      {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-900 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
+                      {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-900 dark:text-gray-400 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                       <Disclosure.Button
                         as="a"
                         href="#"
@@ -939,21 +941,21 @@ const ApplicationLayout: React.FC<Props> = ({
                       <Disclosure.Button
                         as="a"
                         href="#"
-                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-900 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-900 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                       >
                         Team
                       </Disclosure.Button>
                       <Disclosure.Button
                         as="a"
                         href="#"
-                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-900 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-900 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                       >
                         Projects
                       </Disclosure.Button>
                       <Disclosure.Button
                         as="a"
                         href="#"
-                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-900 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                        className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-900 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                       >
                         Calendar
                       </Disclosure.Button>
@@ -1267,7 +1269,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                     to={team.href}
                                     className={classNames(
                                       team.current
-                                        ? "text-gray-900 bg-gray-200 dark:bg-gray-800 dark:text-white"
+                                        ? "text-gray-900 dark:text-gray-400 bg-gray-200 dark:bg-gray-800 dark:text-white"
                                         : "text-gray-400 hover:text-white hover:bg-gray-900",
                                       "group flex gap-x-3 rounded-md p-2 text-sm leading-6 mr-[26px]",
                                     )}
@@ -1313,7 +1315,7 @@ const ApplicationLayout: React.FC<Props> = ({
                         </li>
                       )}
                       <li className="-mx-6 mt-auto">
-                        <div className="mt-auto p-6 text-sm text-gray-900 dark:text-dark-txt">
+                        <div className="mt-auto p-6 text-sm text-gray-900 dark:text-gray-400 dark:text-dark-txt">
                           <img
                             className="mb-2 h-7 w-auto dark:hidden"
                             src={LogoSquare}
@@ -1474,7 +1476,7 @@ const ApplicationLayout: React.FC<Props> = ({
                   id=""
                 />
                 <button
-                  className="w-full p-2 bg-gray-50 rounded-full text-gray-900 border border-gray-700 "
+                  className="w-full p-2 bg-gray-50 rounded-full text-gray-900 dark:text-gray-400 border border-gray-700 "
                   type="submit"
                 >
                   Unlock
@@ -1526,12 +1528,12 @@ const ApplicationLayout: React.FC<Props> = ({
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title
                         as="h3"
-                        className="text-base font-semibold leading-6 text-gray-900"
+                        className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-400"
                       >
                         Debug panel
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-900">
+                        <p className="text-sm text-gray-900 dark:text-gray-400">
                           <div className="debug-panel mt-10">
                             <div className="debug-info">
                               <div className="p-4">
@@ -1695,7 +1697,7 @@ const ResultItem = React.forwardRef(
         className={`${
           active
             ? "bg-blue-400  rounded-lg text-gray-100 "
-            : "transparent text-gray-900"
+            : "transparent text-gray-900 dark:text-gray-400"
         } 'rounded-lg px-4 py-2 flex items-center cursor-pointer justify-between `}
       >
         <div className="flex items-center gap-2 text-base">
@@ -1724,7 +1726,7 @@ const ResultItem = React.forwardRef(
                 className={`${
                   active
                     ? "bg-white text-blue-400 "
-                    : "bg-gray-200 text-gray-900"
+                    : "bg-gray-200 text-gray-900 dark:text-gray-400"
                 } ' px-3 py-2 flex rounded-md items-center cursor-pointer justify-between `}
               >
                 {sc}

@@ -165,14 +165,14 @@ export default function PostView({ host, channel, post }: HomeProps) {
                               />
                             </div>
                             <div className="ml-3">
-                              <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900">
+                              <p className="text-sm font-medium text-gray-700 dark:text-white group-hover:text-gray-900 dark:text-gray-400">
                                 {ppost.profile.first_name}{" "}
                                 {ppost.profile.last_name} - Published{" "}
                                 {formatDistanceToNow(new Date(ppost.date), {
                                   addSuffix: true,
                                 })}{" "}
                               </p>
-                              <p className="text-xs font-medium text-gray-900 group-hover:text-gray-700">
+                              <p className="text-xs font-medium text-gray-900 dark:text-gray-400 group-hover:text-gray-700">
                                 View profile
                               </p>
                             </div>
@@ -187,7 +187,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                         {ppost.article && ppost.article !== "" ? (
                           <>
                             <dd
-                              className=" mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+                              className=" mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
                               dangerouslySetInnerHTML={{
                                 __html: ppost.article,
                               }}
@@ -204,7 +204,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                           <>
                             {" "}
                             <p
-                              className="mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+                              className="mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
                               dangerouslySetInnerHTML={{ __html: ppost.desc }}
                             ></p>
                             {hasUrld && (
@@ -321,7 +321,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                               <div className="text-sm">
                                                 <Link
                                                   to={activityItem._id}
-                                                  className="font-medium text-gray-900 dark:text-white"
+                                                  className="font-medium text-gray-900 dark:text-gray-400 dark:text-white"
                                                 >
                                                   {
                                                     activityItem.profile
@@ -333,7 +333,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                   }
                                                 </Link>
                                               </div>
-                                              <p className="mt-0.5 text-sm text-gray-900">
+                                              <p className="mt-0.5 text-sm text-gray-900 dark:text-gray-400">
                                                 Commented{" "}
                                                 {formatDistanceToNow(
                                                   new Date(activityItem.date),
@@ -424,7 +424,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                 </span>
               </h3>
               <p
-                className="text-gray-900 pb-5"
+                className="text-gray-900 dark:text-gray-400 pb-5"
                 dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
               ></p>{" "}
             </div>
@@ -510,7 +510,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                             &middot;
                           </span>
 
-                          <p className="sm:block sm:text-xs sm:text-gray-900">
+                          <p className="sm:block sm:text-xs sm:text-gray-900 dark:text-gray-400">
                             <a
                               href={post.url}
                               className="font-medium underline hover:text-gray-700"
