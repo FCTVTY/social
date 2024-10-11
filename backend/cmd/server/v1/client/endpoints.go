@@ -15,7 +15,9 @@ import (
 	"bhiveserver/models"
 	"bytes"
 	"context"
+	"crypto/rand"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/common-nighthawk/go-figure"
@@ -23,6 +25,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"log"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -517,7 +520,12 @@ func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(rw).Encode(result.InsertedID)
 
 }
-
+func randomBase16String(l int) string {
+	buff := make([]byte, int(math.Ceil(float64(l)/2)))
+	rand.Read(buff)
+	str := hex.EncodeToString(buff)
+	return str[:l] // strip 1 extra character we get from odd length results
+}
 func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
@@ -599,10 +607,10 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 			} else {
 				log.Printf("Successfully created %s\n", bucketName)
 			}
-
+			random := randomBase16String(16)
 			// Upload the test file
 			// Change the value of filePath if the file is in another location
-			objectName := v.Community + "/" + chapter.Name + ".webp"
+			objectName := v.Community + "/" + random + "/" + chapter.Name + ".webp"
 			imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
 			if err != nil {
 				log.Fatalln("Error decoding base64 string:", err)
@@ -619,7 +627,7 @@ func CreateCourse(rw http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Fatalln("Error uploading the image:", err)
 			}
-			embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + v.Community + "/" + chapter.Name + ".webp"
+			embedUrl := "https://s3.app.bhivecommunity.co.uk/files/" + v.Community + "/" + random + "/" + chapter.Name + ".webp"
 
 			v.Chapters[i].Image = embedUrl
 		}
@@ -756,7 +764,7 @@ func UpdateCourse(rw http.ResponseWriter, r *http.Request) {
 				log.Printf("Successfully created %s\n", bucketName)
 			}
 
-			objectName := updatedCourse.Community + "/" + chapter.Name + ".webp"
+			objectName := updatedCourse.Community + "/" + courseID + "/" + chapter.Name + ".webp"
 			imageData, err := base64.StdEncoding.DecodeString(base64.StdEncoding.EncodeToString(buf.Bytes()))
 			if err != nil {
 				log.Fatalln("Error decoding base64 string:", err)
