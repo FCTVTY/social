@@ -1186,7 +1186,7 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, "User not found", http.StatusNotFound)
 			return
 		}
-		http.Error(rw, "Failed to fetch user details", http.StatusInternalServerError)
+		http.Error(rw, "Failed to fetch user details :"+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
