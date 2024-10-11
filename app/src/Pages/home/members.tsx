@@ -163,10 +163,15 @@ export default function MembersPage({ host, channel }: HomeProps) {
                             )}
                           </Link>
                         </p>
-                        <p className="mt-1 flex text-xs leading-5 text-gray-900 dark:text-gray-400 dark:text-white">
-                          {person.bio.substring(0, 20)}{" "}
-                          {person.bio.length >= 20 && "..."}
-                        </p>
+                        <p
+                          className="mt-1 flex text-xs leading-5 text-gray-900 dark:text-gray-400 dark:text-white"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              person.bio.length >= 20
+                                ? person.bio.substring(0, 20) + "..."
+                                : person.bio,
+                          }}
+                        ></p>
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-x-4">
