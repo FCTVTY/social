@@ -108,9 +108,15 @@ export default function MembersPage({ host, channel }: HomeProps) {
                             </svg>
                           )}
                         </h3>
-                        <p className="text-sm leading-6 text-gray-600 truncate">
-                          {person.bio}
-                        </p>
+                        <p
+                          className="text-sm leading-6 text-gray-600 truncate"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              person.bio.length >= 30
+                                ? person.bio.substring(0, 30) + "..."
+                                : person.bio,
+                          }}
+                        ></p>
                       </Link>
                     </li>
                   ))}
