@@ -14,7 +14,7 @@ import {
   Profile,
 } from "../../interfaces/interfaces";
 import { getApiDomain } from "../../lib/auth/supertokens";
-import Comment from "./comment";
+import Comment from "../home/comment";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { ClockIcon, GlobeIcon, PersonStandingIcon } from "lucide-react";
 import { UserIcon } from "@heroicons/react/20/solid";
