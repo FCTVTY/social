@@ -155,7 +155,7 @@ export default function EventPage({ host, channel }: HomeProps) {
           <div className="mt-[-2.5rem]">
             <div>
               <img
-                className="h-48 w-full object-cover lg:h-64"
+                className="h-48 w-full object-cover lg:h-64 rounded-t-lg"
                 src={ppost?.media}
                 alt=""
               />
