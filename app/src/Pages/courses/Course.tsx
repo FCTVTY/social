@@ -479,7 +479,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
 
                         {posts && posts.chapters[currentChapterIndex].text && (
                           <p
-                            className="text-base m-2 "
+                            className="text-base m-2 list-disc"
                             dangerouslySetInnerHTML={{
                               __html: posts.chapters[currentChapterIndex].text,
                             }}
@@ -511,7 +511,7 @@ export default function CoursePage({ host, roles, setRoles }: HomeProps) {
                             <Tab.Panel className="-mb-10">
                               <h3 className="sr-only">Course Details</h3>
                               <p
-                                className="text-base mt-10 mb-36"
+                                className="text-base mt-10 mb-36 list-disc"
                                 dangerouslySetInnerHTML={{
                                   __html: posts?.desc,
                                 }}
