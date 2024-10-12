@@ -148,7 +148,10 @@ strong {
 
 
 }
+.list-disc ul {
 
+    margin-left:10px
+}
 .list-disc ul li {
     list-style-type: disc;
 }
