@@ -24,14 +24,22 @@ import ical, { ICalEvent } from "ical-generator";
 import ICalendarLink from "react-icalendar-link";
 import { Link, useParams } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
+import { toast } from "react-toastify";
 
 interface HomeProps {
   host?: string;
   channel?: string;
   post?: string;
+  roles;
+  setRoles;
 }
 
-export default function EventPage({ host, channel }: HomeProps) {
+export default function EventPage({
+  host,
+  channel,
+  roles,
+  setRoles,
+}: HomeProps) {
   const [ppost, setPost] = useState<PPosts | null>(null);
   const [ev, setEv] = useState<EventDetails | null>(null);
   const [open, setOpen] = useState(false);
@@ -156,7 +164,7 @@ export default function EventPage({ host, channel }: HomeProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setPostData({ ...postData, [name]: value });
+    setPost({ ...ppost, [name]: value });
   };
   const handleImageCChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -166,7 +174,7 @@ export default function EventPage({ host, channel }: HomeProps) {
 
     reader.onload = function (event) {
       const base64String = event.target?.result as string;
-      setPostData((prevState) => ({
+      setPost((prevState) => ({
         ...prevState,
         media: base64String,
       }));
@@ -184,7 +192,7 @@ export default function EventPage({ host, channel }: HomeProps) {
 
     reader.onload = function (event) {
       const base64String = event.target?.result as string;
-      setPostData((prevState) => ({
+      setPost((prevState) => ({
         ...prevState,
 
         logo: base64String,
@@ -200,15 +208,15 @@ export default function EventPage({ host, channel }: HomeProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setEventData({ ...eventData, [name]: value });
-    setPostData({ ...postData, eventDetails: { ...eventData, [name]: value } });
+    setEv({ ...ev, [name]: value });
+    setPost({ ...ppost, eventdetails: { ...ev, [name]: value } });
   };
 
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEventData({ ...eventData, etype: e.target.value });
-    setPostData({
-      ...postData,
-      eventDetails: { ...eventData, etype: e.target.value },
+    setEv({ ...ev, etype: e.target.value });
+    setPost({
+      ...ppost,
+      eventdetails: { ...ev, etype: e.target.value },
     });
   };
   function formatDate(date) {
@@ -223,20 +231,41 @@ export default function EventPage({ host, channel }: HomeProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // @ts-ignore
-    postData.communites = community?.community;
-    // @ts-ignore
-    postData.channelstring = community?.channels[0].id;
-    const date = new Date();
 
-    postData.date = formatDate(date);
-    if (postData.eventDetails?.date) {
-      const eventDate = new Date(postData.eventDetails.date);
-      postData.eventDetails.date = formatDate(eventDate);
+    //check if date2 is set...
+
+    if (ppost.eventdetails.date2 == undefined) {
+      alert("Unable to save");
+      alert("Date is missing");
+    } else {
+      const date = new Date();
+
+      ppost.date = formatDate(date);
+      ppost.id = ppost?._id;
+      if (ppost?.eventdetails?.date) {
+        const eventDate = new Date(ppost.eventdetails.date2);
+        ppost.eventdetails.date = formatDate(eventDate);
+      }
+
+      // Handle form submission, e.g., send postData to an API
+      console.log(ppost);
+      await axios
+        .post(`${getApiDomain()}/community/updateEvent`, ppost, {})
+        .then(function (response) {
+          console.log("Success:", response.data);
+          toast.success("Event updated successfully");
+        })
+        .catch(function (error) {
+          console.error("Error:", error); // Log the entire error
+          if (error.response && error.response.data) {
+            toast.error("Error: " + error.response.data);
+          } else {
+            toast.error("An unexpected error occurred.");
+          }
+        });
+
+      setOpen(false);
     }
-    // Handle form submission, e.g., send postData to an API
-    console.log(postData);
-    await axios.post(`${getApiDomain()}/community/createEvent`, postData, {});
-    setOpen(false);
     //window.location.reload();
   };
 
@@ -330,19 +359,21 @@ export default function EventPage({ host, channel }: HomeProps) {
                           <span>Event Directions</span>
                         </a>
                       )}
-                      {ev?.etype === "In-Person" && going && (
-                        <button
-                          type="button"
-                          onClick={() => setOpen(true)}
-                          className="hidden lg:inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                          <PencilIcon
-                            className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span>Edit Event</span>
-                        </button>
-                      )}
+                      {roles &&
+                        (roles.includes("admin") ||
+                          roles.includes("moderator")) && (
+                          <button
+                            type="button"
+                            onClick={() => setOpen(true)}
+                            className="hidden lg:inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            <PencilIcon
+                              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                            <span>Edit Event</span>
+                          </button>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -718,7 +749,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                                           value="In-Person"
                                           onChange={handleRadioChange}
                                           type="radio"
-                                          checked={ppost.type === "In-Person"}
+                                          checked={ev?.etype === "In-Person"}
                                           className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                         />
                                       </div>
@@ -753,11 +784,13 @@ export default function EventPage({ host, channel }: HomeProps) {
                                   </label>
                                 </div>
                                 <div className="sm:col-span-2">
+                                  (old date){" "}
+                                  {format(ev?.date, "do MMMM, yyyy H:mma")}
+                                  <br />
                                   <input
                                     type="datetime-local"
-                                    name="date"
-                                    id="date"
-                                    value={ppost.date}
+                                    name="date2"
+                                    id="date2"
                                     onChange={handleEventChange}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   />
@@ -792,7 +825,7 @@ export default function EventPage({ host, channel }: HomeProps) {
                                     type="text"
                                     name="location"
                                     id="location"
-                                    value={ppost.location}
+                                    value={ev?.location}
                                     onChange={handleEventChange}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   />

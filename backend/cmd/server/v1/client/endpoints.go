@@ -520,6 +520,102 @@ func CreateEvent(rw http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(rw).Encode(result.InsertedID)
 
 }
+
+func UpdateEvent(rw http.ResponseWriter, r *http.Request) {
+	// Retrieve session from request context
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+	roles, err := userroles.GetRolesForUser("public", userID, nil)
+	if err != nil {
+		http.Error(rw, "failed to get user roles", http.StatusInternalServerError)
+		return
+	}
+
+	hasRole := false
+	for _, role := range roles.OK.Roles {
+		if role == "admin" || role == "moderator" {
+			hasRole = true
+			break
+		}
+	}
+
+	if !hasRole {
+		http.Error(rw, "user does not have the required role", http.StatusForbidden) // 403 Forbidden for insufficient role
+		return
+	}
+
+	// Decode the request body into the course model
+	var updatedEvent models.EventPost
+	err = json.NewDecoder(r.Body).Decode(&updatedEvent)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	//clean up chapter text
+	re := regexp.MustCompile(`(?i)\s*style="[^"]*"`)
+
+	// Remove all inline style attributes
+	updatedEvent.Desc = re.ReplaceAllString(updatedEvent.Desc, "")
+	updatedEvent.Article = re.ReplaceAllString(updatedEvent.Article, "")
+
+	// Validate that the course ID is provided
+
+	// Find the existing course in the database
+	courseID := updatedEvent.ID.Hex()
+	var existingCourse models.EventPost
+
+	objectID, err := primitive.ObjectIDFromHex(courseID)
+	if err != nil {
+		http.Error(rw, "invalid post ID", http.StatusBadRequest)
+		return
+	}
+	fmt.Println(objectID)
+	fmt.Println(updatedEvent.Desc)
+	err = postCollection.FindOne(context.Background(), bson.M{"_id": objectID}).Decode(&existingCourse)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			http.Error(rw, "event not found", http.StatusNotFound)
+		} else {
+			http.Error(rw, "failed to find event: "+err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	if updatedEvent.Media != "" && !strings.HasPrefix(updatedEvent.Media, "https") {
+		img, _, err := decodeDataURI(updatedEvent.Media)
+		if err != nil {
+			log.Fatalf("Failed to decode data URI: %v", err)
+		}
+
+		var buf bytes.Buffer
+		err = webp.Encode(&buf, img, &webp.Options{Lossless: true})
+		if err != nil {
+			log.Fatalf("Failed to encode image to WebP: %v", err)
+		}
+
+		webpDataURI := "data:image/webp;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+		updatedEvent.Media = webpDataURI
+	}
+
+	// Update the course in the database
+	filter := bson.M{"_id": objectID}
+	update := bson.M{"$set": updatedEvent}
+	_, err = postCollection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		http.Error(rw, "failed to update event: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK)
+	json.NewEncoder(rw).Encode("Course updated successfully")
+}
+
 func randomBase16String(l int) string {
 	buff := make([]byte, int(math.Ceil(float64(l)/2)))
 	rand.Read(buff)
