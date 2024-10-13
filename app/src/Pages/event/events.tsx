@@ -292,14 +292,17 @@ export default function EventsPage({
           className="divide-y divide-gray-100 dark:divide-zinc-900 overflow-hidden bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
         >
           {posts &&
-            posts.map((post) => (
-              <EventItem
-                post={post}
-                profile=""
-                lite=""
-                jsonpost={JSON.stringify(post, null, 2)}
-              ></EventItem>
-            ))}
+            posts
+              .filter((post) => new Date(post.eventdetails?.date) > new Date()) // Filter future events
+              .map((post) => (
+                <EventItem
+                  key={post.id} // Add a key for performance optimization (assuming post has an id)
+                  post={post}
+                  profile=""
+                  lite=""
+                  jsonpost={JSON.stringify(post, null, 2)}
+                />
+              ))}
 
           <div ref={handleObserver}>
             {loading && (
