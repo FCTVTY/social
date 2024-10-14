@@ -420,7 +420,7 @@ export default function CoursesPage({
           posts
             .filter((post) => post.featured)
             .map((product) => (
-              <div className="bg-white dark:bg-gray-900 shadow rounded-xl">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-xl my-2 ">
                 <section
                   aria-labelledby="features-heading"
                   className="relative"

@@ -61,6 +61,7 @@ import store from "./store/store";
 import ApplicationLayoutFull from "./layout/applicationLayoutFull";
 import LockPost from "./Pages/home/LockPost";
 import ProfilePage from "./Pages/profile/Profile";
+import { GlobalDebug } from "./lib/global";
 
 initSuperTokens();
 
@@ -73,14 +74,9 @@ interface AppContextType {
 // Create the context
 
 function App() {
-  if (process.env.NODE_ENV !== "development") {
-    // Disable all console methods in production
-    console.log = () => {};
-    console.error = () => {};
-    console.warn = () => {};
-    console.info = () => {};
-    console.debug = () => {};
-  }
+  useEffect(() => {
+    GlobalDebug(false, true);
+  }, []);
 
   const [subdomain, setSubDomain] = useState("null");
   const [communityFound, setCommunity] = useState("null");
