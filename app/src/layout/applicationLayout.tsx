@@ -544,49 +544,53 @@ const ApplicationLayout: React.FC<Props> = ({
   const hiddenTeams = teams.slice(4);
   const [isOpen, setIsOpen] = useState(false);
   // target element that will be dismissed
-  const $targetEl: HTMLElement = document.getElementById("toast-loggedin");
+  // Target element
+  const $targetEl: HTMLElement | null =
+    document.getElementById("toast-loggedin");
 
-  // optional trigger element
-  const $triggerEl: HTMLElement = document.getElementById("toast-loggedin");
+  // Optional trigger element
+  const $triggerEl: HTMLElement | null =
+    document.getElementById("toast-loggedin");
 
-  // options object
-  const options: DismissOptions = {
-    transition: "transition-opacity",
-    duration: 1000,
-    timing: "ease-out",
+  // Check if $targetEl exists before proceeding
+  if ($targetEl) {
+    // Options object for Dismiss
+    const options: DismissOptions = {
+      transition: "transition-opacity",
+      duration: 1000,
+      timing: "ease-out",
 
-    // callback functions
-    onHide: (context, targetEl) => {
-      console.log("element has been dismissed");
-      console.log(targetEl);
-    },
-  };
+      // Callback function when the element is hidden
+      onHide: (context, targetEl) => {
+        console.log("element has been dismissed");
+        console.log(targetEl);
+      },
+    };
 
-  // instance options object
-  const instanceOptions: InstanceOptions = {
-    id: "targetElement",
-    override: true,
-  };
+    // Instance options for Dismiss
+    const instanceOptions: InstanceOptions = {
+      id: "targetElement",
+      override: true,
+    };
 
-  /*
-   * $targetEl (required)
-   * $triggerEl (optional)
-   * options (optional)
-   * instanceOptions (optional)
-   */
-  const dismiss: DismissInterface = new Dismiss(
-    $targetEl,
-    $triggerEl,
-    options,
-    instanceOptions,
-  );
-  //dismiss.hide();
-  function delayedGreeting() {
-    dismiss.hide();
+    // Create a new Dismiss instance
+    const dismiss: DismissInterface = new Dismiss(
+      $targetEl,
+      $triggerEl || undefined, // Fallback to undefined if $triggerEl is null
+      options,
+      instanceOptions,
+    );
+
+    // Function to trigger the dismiss
+    function delayedGreeting() {
+      dismiss.hide();
+    }
+
+    // Set a timer to trigger the dismiss after 2000 milliseconds
+    setTimeout(delayedGreeting, 2000);
+  } else {
+    console.error("The target element with ID 'toast-loggedin' was not found.");
   }
-
-  // Set a timer to execute the delayedGreeting function after 2000 milliseconds
-  setTimeout(delayedGreeting, 2000);
 
   const [query, setQuery] = useState("");
   const [kopen, setKOpen] = useState(false);
