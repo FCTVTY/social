@@ -497,4 +497,5 @@ function App() {
 
 window.UserRoleClaim = UserRoles.UserRoleClaim;
 window.PermissionClaim = UserRoles.PermissionClaim;
+console.clear();
 export default App;
