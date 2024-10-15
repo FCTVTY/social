@@ -30,7 +30,7 @@ export default function FAQ({ host, channel }: HomeProps) {
         "\n" +
         "Note: If you have a Community Success Manager please contact them directly for assistance." +
         "\n" +
-        "<h2 class='text-2xl py-10'>Contact Support<h2>" +
+        "<h2 class='text-2xl py-10'>Contact Support</h2>" +
         "If you need assistance with issues relating to your site or need to share sensitive information with the B:hive Team (for example: need to share app credentials or personal information), please contact the Support Team directly through the Contact B:hive modal or email us directly at support@bhivecommunity.co.uk.",
     },
 
