@@ -1,11 +1,13 @@
 {
   "name": "vite-react-typescript-starter",
   "private": true,
-  "version": "1.2.33",
+  "version": "1.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "prebuild": "npm version patch && ./scripts/sync-version.sh",
+    "prebuildMinor": "npm version minor && ./scripts/sync-version.sh",
+    "prebuildMajor": "npm version major && ./scripts/sync-version.sh",
     "build": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
