@@ -139,7 +139,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
   // @ts-ignore
   // @ts-ignore
   return (
-    <div className="h-[100vh]">
+    <div className=" h-min-screen dark:bg-gray-900">
       <div className="lg:grid lg:grid-cols-5 lg:grid-rows-1 lg:gap-4">
         <div className="lg:col-span-3">
           {ppost && (
@@ -288,7 +288,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                           </div>
                         </div>
 
-                        <div className="divide-x"></div>
+                        <div className="divide-x dark:hidden"></div>
 
                         <div className="flow-root mt-3">
                           <ul role="list" className="-mb-8">
@@ -384,7 +384,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
             <p className="text-center py-3">comments have been disabled</p>
           )}
         </div>
-        <div className="lg:col-span-2 lg:col-start-4 px-4 sm:px-6 lg:px-8 ">
+        <div className="lg:col-span-2 lg:col-start-4 px-4 sm:px-6 lg:px-8 md:mt-10">
           <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
             <div className="rounded-t-lg  overflow-hidden">
               <img
