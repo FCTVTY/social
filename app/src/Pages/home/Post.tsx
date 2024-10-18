@@ -425,7 +425,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
               </h3>
               <p
                 className="text-gray-900 dark:text-gray-400 pb-5"
-                dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
+                dangerouslySetInnerHTML={{ __html: ppost?.profile?.bio || "" }}
               ></p>{" "}
             </div>
             <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around hidden">
