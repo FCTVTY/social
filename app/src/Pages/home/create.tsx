@@ -82,7 +82,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
     }));
   };
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [counter, setCounter] = useState<boolean>(true);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -95,6 +95,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
       toast.success("Post Created");
       onSubmit();
       setLoading(false);
+      setCounter(true);
       setContent("");
       setPost((prevState) => ({
         ...prevState,
@@ -113,6 +114,11 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
   const handleInputChange = () => {
     const text = contentEditableRef.current.innerHTML;
     console.log(text);
+    if (text.length > 3) {
+      setCounter(false);
+    } else {
+      setCounter(true);
+    }
     setContent(text);
     setPost((prevState) => ({
       ...prevState,
@@ -305,6 +311,7 @@ export default function Create({ onSubmit, channel, profiles }: CreateProps) {
               variant="ghost"
               className=" py-3 font-medium text-white bg-gray-950 hover:bg-gray-800 bg-primary"
               loading={loading}
+              disabled={counter}
             >
               {" "}
               Create
