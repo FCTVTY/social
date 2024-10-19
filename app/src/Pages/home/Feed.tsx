@@ -201,6 +201,7 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
         setAds(adsData);
         setProfile(profileData);
         setskelloading(false);
+        toast.success("Feed Loaded");
       }
     } catch (error) {
       console.error("Error fetching community details:", error);
@@ -441,93 +442,99 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                 </div>
               </ul>
             </div>
-
-            <div className="lg:col-span-2 lg:col-start-4 ">
-              <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
-                <div className="rounded-t-lg overflow-hidden">
-                  <img
-                    className="object-cover object-top w-full aspect-video"
-                    src={profile?.coverPicture}
-                    alt=""
-                  />
-                </div>
-                <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
-                  <img
-                    className="object-cover object-center "
-                    src={profile?.profilePicture}
-                    alt=""
-                  />
-                </div>
-                <div className="text-center mt-2 mx-auto">
-                  <h2 className="font-semibold">
-                    <span className="inline-flex">
-                      {profile?.first_name} {profile?.last_name}
-                      {profile?.verified && (
-                        <>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="size-6 h-5 w-5 ml-2 text-rose-600"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </>
-                      )}
-                    </span>
-                  </h2>
-                  <p
-                    className="text-gray-900 dark:text-gray-400 pb-5"
-                    dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
-                  ></p>
-                  {roles && roles.length > 0 && (
-                    <div className="pb-5">
-                      {roles.map((role) => {
-                        let roleClasses = "";
-                        let roleLabel = "";
-
-                        switch (role) {
-                          case "god":
-                            roleClasses = "bg-rose-100 text-rose-700";
-                            roleLabel = "GOD";
-                            break;
-                          case "admin":
-                            roleClasses = "bg-purple-100 text-purple-700";
-                            roleLabel = "Admin";
-                            break;
-                          case "moderator":
-                            roleClasses = "bg-green-100 text-green-700";
-                            roleLabel = "Moderator";
-                            break;
-                          // Add more roles as needed
-                          default:
-                            roleClasses = "bg-gray-100 text-gray-700";
-                            roleLabel =
-                              role.charAt(0).toUpperCase() + role.slice(1); // Capitalize first letter
-                            break;
-                        }
-
-                        return (
-                          <p
-                            className="text-gray-900 dark:text-gray-400"
-                            key={role}
-                          >
-                            <span
-                              className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ${roleClasses}`}
+            {profile && (
+              <div className="lg:col-span-2 lg:col-start-4 ">
+                <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 mb-4 dark:text-white ">
+                  <div className="rounded-t-lg overflow-hidden">
+                    <img
+                      className="object-cover object-top w-full aspect-video"
+                      src={
+                        profile?.coverPicture ||
+                        "https://picsum.photos/1600/600"
+                      }
+                      alt=""
+                    />
+                  </div>
+                  <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
+                    <img
+                      className="object-cover object-center "
+                      src={
+                        profile?.profilePicture ||
+                        `https://eu.ui-avatars.com/api/?name=${profile?.first_name}+${profile?.last_name}&size=250`
+                      }
+                      alt=""
+                    />
+                  </div>
+                  <div className="text-center mt-2 mx-auto">
+                    <h2 className="font-semibold">
+                      <span className="inline-flex">
+                        {profile?.first_name} {profile?.last_name}
+                        {profile?.verified && (
+                          <>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="size-6 h-5 w-5 ml-2 text-rose-600"
                             >
-                              {roleLabel}
-                            </span>
-                          </p>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-                {profile && (
+                              <path
+                                fillRule="evenodd"
+                                d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </>
+                        )}
+                      </span>
+                    </h2>
+                    <p
+                      className="text-gray-900 dark:text-gray-400 pb-5"
+                      dangerouslySetInnerHTML={{ __html: profile?.bio || "" }}
+                    ></p>
+                    {roles && roles.length > 0 && (
+                      <div className="pb-5">
+                        {roles.map((role) => {
+                          let roleClasses = "";
+                          let roleLabel = "";
+
+                          switch (role) {
+                            case "god":
+                              roleClasses = "bg-rose-100 text-rose-700";
+                              roleLabel = "GOD";
+                              break;
+                            case "admin":
+                              roleClasses = "bg-purple-100 text-purple-700";
+                              roleLabel = "Admin";
+                              break;
+                            case "moderator":
+                              roleClasses = "bg-green-100 text-green-700";
+                              roleLabel = "Moderator";
+                              break;
+                            // Add more roles as needed
+                            default:
+                              roleClasses = "bg-gray-100 text-gray-700";
+                              roleLabel =
+                                role.charAt(0).toUpperCase() + role.slice(1); // Capitalize first letter
+                              break;
+                          }
+
+                          return (
+                            <p
+                              className="text-gray-900 dark:text-gray-400"
+                              key={role}
+                            >
+                              <span
+                                className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ${roleClasses}`}
+                              >
+                                {roleLabel}
+                              </span>
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
                   <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
                     <li className="flex flex-col items-center justify-around">
                       <ScrollText />
@@ -538,251 +545,252 @@ export default function Feed({ host, channel, roles, setRoles }: HomeProps) {
                       <div>{profile?.commentCount}</div>
                     </li>
                   </ul>
-                )}
-                <div className="p-4 border-t mx-8 mt-2 hidden">
-                  <button className="w-1/2 block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-6 py-2">
-                    Follow
-                  </button>
+
+                  <div className="p-4 border-t mx-8 mt-2 hidden">
+                    <button className="w-1/2 block mx-auto rounded-full bg-gray-900 hover:shadow-lg font-semibold text-white px-6 py-2">
+                      Follow
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 ml-2">
-                About
-              </span>
+                <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 ml-2">
+                  About
+                </span>
 
-              <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 p-3 mb-4 dark:text-white ">
-                <img
-                  src={community && community.community?.logo}
-                  className="mx-auto h-20 w-40 py-1 object-contain dark:hidden"
-                />
-                <img
-                  src={
-                    (community && community.community?.dLogo) ||
-                    (community && community.community?.logo)
-                  }
-                  className="mx-auto h-20 w-40 py-1 object-contain hidden dark:block"
-                />
+                <div className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 p-3 mb-4 dark:text-white ">
+                  <img
+                    src={community && community.community?.logo}
+                    className="mx-auto h-20 w-40 py-1 object-contain dark:hidden"
+                  />
+                  <img
+                    src={
+                      (community && community.community?.dLogo) ||
+                      (community && community.community?.logo)
+                    }
+                    className="mx-auto h-20 w-40 py-1 object-contain hidden dark:block"
+                  />
 
-                <p
-                  className={`py-6`}
-                  dangerouslySetInnerHTML={{
-                    __html: community?.community?.desc,
-                  }}
-                ></p>
-                <dl>
-                  {!community?.community?.private && (
-                    <>
-                      <dt className="inline-flex py-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="inline-block w-5 h-5 mr-1"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                          />
-                        </svg>
-                        Public
-                      </dt>
-                      <dd className="text-sm ">
-                        Anyone can see who's in the community and what they
-                        post.
-                      </dd>
-                    </>
-                  )}
-                  {community?.community?.private && (
-                    <>
-                      <dt className="inline-flex py-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                          />
-                        </svg>
-                        Private
-                      </dt>
-                      <dd className="text-sm ">
-                        Only community members can see who's in the community
-                        and what they post.
-                      </dd>
-                    </>
-                  )}
-                </dl>
-              </div>
-
-              <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 mt-4 ml-2">
-                Sponsors
-              </span>
-              {ads &&
-                ads.length > 0 &&
-                (() => {
-                  const randomIndex = Math.floor(Math.random() * ads.length);
-                  const randomPost = ads[randomIndex];
-                  if (!randomPost) {
-                    return null; // Return null if randomPost is undefined
-                  }
-                  return [randomPost].map((post) => (
-                    <div
-                      key={post._id}
-                      className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl"
-                    >
-                      <article className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
-                        <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
-                          <a href={post.url} className="block shrink-0">
-                            <img
-                              alt=""
-                              src={post.logo}
-                              className="size-14 rounded-lg object-contain"
+                  <p
+                    className={`py-6`}
+                    dangerouslySetInnerHTML={{
+                      __html: community?.community?.desc,
+                    }}
+                  ></p>
+                  <dl>
+                    {!community?.community?.private && (
+                      <>
+                        <dt className="inline-flex py-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="inline-block w-5 h-5 mr-1"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
                             />
-                          </a>
+                          </svg>
+                          Public
+                        </dt>
+                        <dd className="text-sm ">
+                          Anyone can see who's in the community and what they
+                          post.
+                        </dd>
+                      </>
+                    )}
+                    {community?.community?.private && (
+                      <>
+                        <dt className="inline-flex py-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                            />
+                          </svg>
+                          Private
+                        </dt>
+                        <dd className="text-sm ">
+                          Only community members can see who's in the community
+                          and what they post.
+                        </dd>
+                      </>
+                    )}
+                  </dl>
+                </div>
 
-                          <div>
-                            <h3 className="font-medium sm:text-lg">
-                              <a href={post.url} className="hover:underline">
-                                {" "}
-                                {post.name}{" "}
-                              </a>
-                            </h3>
+                <span className="truncate text-base font-medium leading-7 text-slate-400 dark:text-white py-3 mt-4 ml-2">
+                  Sponsors
+                </span>
+                {ads &&
+                  ads.length > 0 &&
+                  (() => {
+                    const randomIndex = Math.floor(Math.random() * ads.length);
+                    const randomPost = ads[randomIndex];
+                    if (!randomPost) {
+                      return null; // Return null if randomPost is undefined
+                    }
+                    return [randomPost].map((post) => (
+                      <div
+                        key={post._id}
+                        className="col-span-1 flex flex-col divide-y divide-gray-200  max-w-4xl"
+                      >
+                        <article className="rounded-xl border border-gray-100 bg-white dark:bg-gray-900 dark:border-gray-800 dark:text-white">
+                          <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
+                            <a href={post.url} className="block shrink-0">
+                              <img
+                                alt=""
+                                src={post.logo}
+                                className="size-14 rounded-lg object-contain"
+                              />
+                            </a>
 
-                            <p className="line-clamp-2 text-sm text-gray-700">
-                              {post.ad}
-                            </p>
-
-                            <div className="mt-2 sm:flex sm:items-center sm:gap-2">
-                              <span
-                                className="hidden sm:block"
-                                aria-hidden="true"
-                              >
-                                &middot;
-                              </span>
-
-                              <p className="sm:block sm:text-xs sm:text-gray-900 dark:text-gray-400">
-                                <a
-                                  href={post.url}
-                                  className="font-medium underline hover:text-gray-700"
-                                >
+                            <div>
+                              <h3 className="font-medium sm:text-lg">
+                                <a href={post.url} className="hover:underline">
                                   {" "}
-                                  Read More{" "}
+                                  {post.name}{" "}
                                 </a>
+                              </h3>
+
+                              <p className="line-clamp-2 text-sm text-gray-700">
+                                {post.ad}
                               </p>
+
+                              <div className="mt-2 sm:flex sm:items-center sm:gap-2">
+                                <span
+                                  className="hidden sm:block"
+                                  aria-hidden="true"
+                                >
+                                  &middot;
+                                </span>
+
+                                <p className="sm:block sm:text-xs sm:text-gray-900 dark:text-gray-400">
+                                  <a
+                                    href={post.url}
+                                    className="font-medium underline hover:text-gray-700"
+                                  >
+                                    {" "}
+                                    Read More{" "}
+                                  </a>
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div className="flex justify-end">
-                          <strong className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 dark:bg-zinc-600 px-3 py-1.5 text-white">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="2"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                              />
-                            </svg>
+                          <div className="flex justify-end">
+                            <strong className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-slate-900 dark:bg-zinc-600 px-3 py-1.5 text-white">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                                />
+                              </svg>
 
-                            <span className="text-[10px] font-medium sm:text-xs">
-                              Sponsor
-                            </span>
-                          </strong>
-                        </div>
-                      </article>
-                    </div>
-                  ));
-                })()}
-              <div className="rounded-xl border border-gray-100 bg-white p-3 mt-4 hidden">
-                <h2 className="text-xl">Members</h2>
+                              <span className="text-[10px] font-medium sm:text-xs">
+                                Sponsor
+                              </span>
+                            </strong>
+                          </div>
+                        </article>
+                      </div>
+                    ));
+                  })()}
+                <div className="rounded-xl border border-gray-100 bg-white p-3 mt-4 hidden">
+                  <h2 className="text-xl">Members</h2>
 
-                <dl className="">
-                  <dt className="inline-flex py-2">Newest Members</dt>
-                  <dd className="text-sm text-gray-700">
-                    <div className="isolate flex -space-x-2 overflow-hidden">
-                      <img
-                        className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <img
-                        className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <img
-                        className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <img
-                        className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </div>
-                  </dd>
-                </dl>
-                <dl className="hidden">
-                  <dt className="inline-flex py-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="inline-block w-5 h-5 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
-                      />
-                    </svg>
-                    Admins & Moderators
-                  </dt>
-                  <dd className="text-sm text-gray-700">
-                    <div className="isolate flex -space-x-2 overflow-hidden">
-                      <img
-                        className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <img
-                        className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <img
-                        className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                        alt=""
-                      />
-                      <img
-                        className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </div>
-                  </dd>
-                </dl>
+                  <dl className="">
+                    <dt className="inline-flex py-2">Newest Members</dt>
+                    <dd className="text-sm text-gray-700">
+                      <div className="isolate flex -space-x-2 overflow-hidden">
+                        <img
+                          className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <img
+                          className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <img
+                          className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <img
+                          className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                      </div>
+                    </dd>
+                  </dl>
+                  <dl className="hidden">
+                    <dt className="inline-flex py-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="inline-block w-5 h-5 mr-1"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
+                        />
+                      </svg>
+                      Admins & Moderators
+                    </dt>
+                    <dd className="text-sm text-gray-700">
+                      <div className="isolate flex -space-x-2 overflow-hidden">
+                        <img
+                          className="relative z-30 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <img
+                          className="relative z-20 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <img
+                          className="relative z-10 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                          alt=""
+                        />
+                        <img
+                          className="relative z-0 inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

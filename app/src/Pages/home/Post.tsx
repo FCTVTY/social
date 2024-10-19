@@ -399,7 +399,10 @@ export default function PostView({ host, channel, post }: HomeProps) {
             <div className="mx-auto w-32 h-32 relative -mt-16 border-4 border-white dark:border-gray-800 rounded-full overflow-hidden">
               <img
                 className="object-cover object-center h-32"
-                src={ppost?.profile?.profilePicture}
+                src={
+                  ppost?.profile?.profilePicture ||
+                  `https://eu.ui-avatars.com/api/?name=${ppost?.profile?.first_name}+${ppost?.profile?.last_name}&size=250`
+                }
                 alt=""
               />
             </div>

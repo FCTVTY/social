@@ -142,7 +142,10 @@ export default function MembersPage({ host, channel }: HomeProps) {
                     <div className="flex min-w-0 gap-x-4">
                       <img
                         className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                        src={person.profilePicture}
+                        src={
+                          person.profilePicture ||
+                          `https://eu.ui-avatars.com/api/?name=${person.first_name}+${person.last_name}&size=250`
+                        }
                         alt=""
                       />
                       <div className="min-w-0 flex-auto">
