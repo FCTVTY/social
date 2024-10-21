@@ -6,13 +6,14 @@ import (
 	_ "bhiveserver/models"
 	"encoding/json"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rollbar/rollbar-go"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -379,41 +380,81 @@ func handlePreview(w http.ResponseWriter, r *http.Request) {
 // fetchMetadata fetches and parses metadata from a URL
 func fetchMetadata(url string) (Metadata, error) {
 	// Fetch the content from the provided URL
-	resp, err := http.Get(url)
+	// Create a custom HTTP client
+	client := &http.Client{}
+
+	// Create a new request
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		fmt.Println(err.Error())
-		return Metadata{}, err
+		//return "", err
+	}
+
+	// Set custom headers, including the User-Agent as a bot
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux i686; rv:131.0) Gecko/20100101 Firefox/131.0")
+	// Optionally, you can add other headers if needed
+	// req.Header.Set("Authorization", "Bearer <token>")
+
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		//	return "", err
 	}
 	defer resp.Body.Close()
-	fmt.Println(resp.Body)
-	// Parse the HTML content
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
+
+	// Read the HTML content
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return Metadata{}, err
 	}
 
-	// Try to extract Open Graph metadata first
-	title, _ := doc.Find(`meta[property="og:title"]`).Attr("content")
-	description, _ := doc.Find(`meta[property="og:description"]`).Attr("content")
-	image, _ := doc.Find(`meta[property="og:image"]`).Attr("content")
+	//
 
-	// If Open Graph data is missing, fall back to regular metadata
+	html := string(body)
+	fmt.Println(html)
+	// Extract Open Graph metadata using regex
+	title := extractMetaTagContent(html, `meta property="og:title" content="(.*?)"`)
+	description := extractMetaTagContent(html, `meta property="og:description" content="(.*?)"`)
+	image := extractMetaTagContent(html, `meta property="og:image" content="(.*?)"`)
+
+	// Fallback to standard metadata if Open Graph is missing
 	if title == "" {
-		title = doc.Find("title").Text()
+		title = extractTagContent(html, "<title>(.*?)</title>")
 	}
 	if description == "" {
-		description, _ = doc.Find(`meta[name="description"]`).Attr("content")
+		description = extractMetaTagContent(html, `meta name="description" content="(.*?)"`)
 	}
 	if image == "" {
-		image, _ = doc.Find(`meta[property="image"]`).Attr("content") // Consider other image properties if needed
+		image = extractMetaTagContent(html, `meta property="image" content="(.*?)"`)
 	}
 
-	// Create and return metadata object
+	// Check if metadata was extracted
+
+	// Return the metadata
 	return Metadata{
 		Title:       title,
 		Description: description,
 		Image:       image,
 	}, nil
+}
+
+// extractMetaTagContent extracts the content of a meta tag using regex
+func extractMetaTagContent(html, pattern string) string {
+	re := regexp.MustCompile(pattern)
+	match := re.FindStringSubmatch(html)
+	if len(match) > 1 {
+		return match[1]
+	}
+	return ""
+}
+
+// extractTagContent extracts content from standard HTML tags (like <title>) using regex
+func extractTagContent(html, pattern string) string {
+	re := regexp.MustCompile(pattern)
+	match := re.FindStringSubmatch(html)
+	if len(match) > 1 {
+		return strings.TrimSpace(match[1])
+	}
+	return ""
 }
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(response http.ResponseWriter, r *http.Request) {
