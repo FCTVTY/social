@@ -33,7 +33,7 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function PostView({ host, channel, post }: HomeProps) {
+export default function PostView({ host, channel, post, roles }: HomeProps) {
   const [ppost, setPost] = useState<PPosts>();
   const [postLikes, setPostLikes] = useState<PostLike[]>();
   const [profile, setProfile] = useState<Profile>();
@@ -212,7 +212,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                           <>
                             {" "}
                             <p
-                              className="mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-gray-100 font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+                              className="mb-5 posts text-base leading-5 text-gray-900 dark:text-gray-400  dark:text-white font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-white break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
                               dangerouslySetInnerHTML={{ __html: ppost.desc }}
                             ></p>
                             {hasUrld && (
@@ -339,8 +339,21 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                     activityItem.profile
                                                       .last_name
                                                   }
-                                                </Link>
+                                                </Link>{" "}
+                                                {roles &&
+                                                  (roles.includes("admin") ||
+                                                    roles.includes(
+                                                      "moderator",
+                                                    )) && (
+                                                    <a
+                                                      className="rounded-md bg-red-500 m-3 px-1.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                      href={`/removeComment/${activityItem._id}`}
+                                                    >
+                                                      Delete Comment
+                                                    </a>
+                                                  )}
                                               </div>
+
                                               <p className="mt-0.5 text-sm text-gray-900 dark:text-gray-400">
                                                 Commented{" "}
                                                 {formatDistanceToNow(
@@ -355,6 +368,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                   __html: activityItem.comment,
                                                 }}
                                               ></p>
+
                                               {activityItem.comment.match(
                                                 /(https?:\/\/[^\s]+)/g,
                                               ) && (

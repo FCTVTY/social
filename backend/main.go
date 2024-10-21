@@ -229,6 +229,11 @@ func main() {
 			session.VerifySession(nil, client.PostDelete).ServeHTTP(rw, r)
 			return
 		}
+		if parsedURL.Path == "/v1/removecomment" && r.Method == "GET" {
+			session.VerifySession(nil, client.CommentDelete).ServeHTTP(rw, r)
+			return
+		}
+
 		if parsedURL.Path == "/v1/lockpost" && r.Method == "GET" {
 			session.VerifySession(nil, client.PostLock).ServeHTTP(rw, r)
 			return
@@ -349,7 +354,8 @@ type Metadata struct {
 }
 
 func handlePreview(w http.ResponseWriter, r *http.Request) {
-	// Enable CORS for the frontend
+	// Enable CORS for the frontend (if needed)
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	// Get the "url" query parameter
 	url := r.URL.Query().Get("url")
@@ -359,34 +365,55 @@ func handlePreview(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch the content from the provided URL
-	resp, err := http.Get(url)
+	metadata, err := fetchMetadata(url)
 	if err != nil {
-		http.Error(w, "Failed to fetch the URL", http.StatusInternalServerError)
+		http.Error(w, "Failed to fetch metadata", http.StatusInternalServerError)
 		return
-	}
-	defer resp.Body.Close()
-
-	// Parse the HTML content
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-	if err != nil {
-		http.Error(w, "Failed to parse HTML", http.StatusInternalServerError)
-		return
-	}
-
-	// Extract title, description, and image metadata
-	title := doc.Find("title").Text()
-	description, _ := doc.Find(`meta[name="description"]`).Attr("content")
-	image, _ := doc.Find(`meta[property="og:image"]`).Attr("content")
-
-	// Create metadata object
-	metadata := Metadata{
-		Title:       title,
-		Description: description,
-		Image:       image,
 	}
 
 	// Return metadata as JSON
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(metadata)
+}
+
+// fetchMetadata fetches and parses metadata from a URL
+func fetchMetadata(url string) (Metadata, error) {
+	// Fetch the content from the provided URL
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err.Error())
+		return Metadata{}, err
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Body)
+	// Parse the HTML content
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return Metadata{}, err
+	}
+
+	// Try to extract Open Graph metadata first
+	title, _ := doc.Find(`meta[property="og:title"]`).Attr("content")
+	description, _ := doc.Find(`meta[property="og:description"]`).Attr("content")
+	image, _ := doc.Find(`meta[property="og:image"]`).Attr("content")
+
+	// If Open Graph data is missing, fall back to regular metadata
+	if title == "" {
+		title = doc.Find("title").Text()
+	}
+	if description == "" {
+		description, _ = doc.Find(`meta[name="description"]`).Attr("content")
+	}
+	if image == "" {
+		image, _ = doc.Find(`meta[property="image"]`).Attr("content") // Consider other image properties if needed
+	}
+
+	// Create and return metadata object
+	return Metadata{
+		Title:       title,
+		Description: description,
+		Image:       image,
+	}, nil
 }
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(response http.ResponseWriter, r *http.Request) {

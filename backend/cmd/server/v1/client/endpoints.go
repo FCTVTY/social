@@ -1239,6 +1239,14 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 		if post["userid"] == sessionContainer.GetUserID() {
 			post["deletable"] = true // Adding delete flag to the post
 		}
+		// Type assert to string and strip inline color styles
+		if desc, ok := post["desc"].(string); ok {
+			post["desc"] = stripInlineColors(desc)
+		}
+
+		if article, ok := post["article"].(string); ok {
+			post["article"] = stripInlineColors(article)
+		}
 		posts = append(posts, post)
 	}
 	if err := cursor.Err(); err != nil {
@@ -1253,6 +1261,13 @@ func Posts(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func stripInlineColors(input string) string {
+	// Regular expression to match inline color styles
+	re := regexp.MustCompile(`(?i)color\s*:\s*[^;]+;?|(?i)background-color\s*:\s*[^;]+;?`)
+	return re.ReplaceAllString(input, "")
+}
+
 func Post(rw http.ResponseWriter, r *http.Request) {
 	// Retrieve session from request context
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
@@ -1281,6 +1296,14 @@ func Post(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Type assert to string and strip inline color styles
+	if desc, ok := post["desc"].(string); ok {
+		post["desc"] = stripInlineColors(desc)
+	}
+
+	if article, ok := post["article"].(string); ok {
+		post["article"] = stripInlineColors(article)
+	}
 	var profile models.Profile
 
 	// Fetch the user's profile
@@ -2101,6 +2124,64 @@ func PostDelete(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
 	rw.Write([]byte("post deleted successfully"))
 }
+
+func CommentDelete(rw http.ResponseWriter, r *http.Request) {
+	sessionContainer := session.GetSessionFromRequestContext(r.Context())
+	if sessionContainer == nil {
+		http.Error(rw, "no session found", http.StatusUnauthorized) // 401 Unauthorized for no session
+		return
+	}
+
+	userID := sessionContainer.GetUserID()
+	roles, err := userroles.GetRolesForUser("public", userID, nil)
+	if err != nil {
+		http.Error(rw, "failed to get user roles", http.StatusInternalServerError)
+		return
+	}
+
+	hasRole := false
+	for _, role := range roles.OK.Roles {
+		if role == "admin" || role == "moderator" {
+			hasRole = true
+			break
+		}
+	}
+
+	if !hasRole {
+		http.Error(rw, "user does not have the required role", http.StatusForbidden) // 403 Forbidden for insufficient role
+		return
+	}
+
+	name := r.URL.Query().Get("oid")
+	if name == "" {
+		http.Error(rw, "missing object ID", http.StatusBadRequest) // 400 Bad Request for missing ID
+		return
+	}
+
+	objectId, err := primitive.ObjectIDFromHex(name)
+	if err != nil {
+		http.Error(rw, "invalid object ID", http.StatusBadRequest)
+		return
+	}
+
+	data := bson.M{"_id": objectId}
+
+	ctx := context.Background()
+	result, err := commentCollection.DeleteOne(ctx, data)
+	if err != nil {
+		http.Error(rw, "failed to delete", http.StatusInternalServerError)
+		return
+	}
+
+	if result.DeletedCount == 0 {
+		http.Error(rw, "comment not found", http.StatusNotFound) // 404 Not Found if no document is deleted
+		return
+	}
+
+	rw.WriteHeader(http.StatusOK) // 200 OK for successful deletion
+	rw.Write([]byte("comment deleted successfully"))
+}
+
 func PostLock(rw http.ResponseWriter, r *http.Request) {
 	sessionContainer := session.GetSessionFromRequestContext(r.Context())
 	if sessionContainer == nil {

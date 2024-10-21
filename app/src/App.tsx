@@ -62,6 +62,7 @@ import ApplicationLayoutFull from "./layout/applicationLayoutFull";
 import LockPost from "./Pages/home/LockPost";
 import ProfilePage from "./Pages/profile/Profile";
 import { GlobalDebug } from "./lib/global";
+import RemoveComment from "./Pages/home/RemoveComment";
 
 initSuperTokens();
 
@@ -94,8 +95,8 @@ function App() {
     console.log(host);
     if (host === "localhost:5173") {
       // setSubDomain("neo-egvzkmsh")
-      setSubDomain("meta");
-      setHost("meta");
+      setSubDomain("wmb");
+      setHost("wmb");
     }
 
     // Parse the URL
@@ -341,6 +342,16 @@ function App() {
                     <SessionAuth>
                       <ApplicationLayout host={subdomain} channel={channel}>
                         <RemovePost host={subdomain} />
+                      </ApplicationLayout>{" "}
+                    </SessionAuth>
+                  }
+                />
+                <Route
+                  path="/removecomment/:id"
+                  element={
+                    <SessionAuth>
+                      <ApplicationLayout host={subdomain} channel={channel}>
+                        <RemoveComment host={subdomain} />
                       </ApplicationLayout>{" "}
                     </SessionAuth>
                   }
