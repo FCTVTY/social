@@ -130,12 +130,18 @@ export default function PostView({ host, channel, post }: HomeProps) {
       fetchDetails();
     }
   };
+
   const urlPattern = /(https?:\/\/[^\s]+)/g;
 
   // Check if the description contains a URL
-  const hasUrl = urlPattern.test(ppost?.article);
-  const hasUrld = urlPattern.test(ppost?.desc);
+  let hasUrl = false;
+  let hasUrld = false;
 
+  try {
+    hasUrl = urlPattern.test(ppost?.article);
+    hasUrld = urlPattern.test(ppost?.desc);
+  } catch {}
+  console.log(hasUrld);
   // @ts-ignore
   // @ts-ignore
   return (
@@ -195,7 +201,9 @@ export default function PostView({ host, channel, post }: HomeProps) {
                             {hasUrl && (
                               <LinkPreview
                                 url={
-                                  ppost.article.match(/(https?:\/\/[^\s]+)/g)[0]
+                                  ppost?.article.match(
+                                    /(https?:\/\/[^\s]+)/g,
+                                  )[0]
                                 }
                               ></LinkPreview>
                             )}
@@ -210,7 +218,7 @@ export default function PostView({ host, channel, post }: HomeProps) {
                             {hasUrld && (
                               <LinkPreview
                                 url={
-                                  ppost.desc.match(/(https?:\/\/[^\s]+)/g)[0]
+                                  ppost?.desc.match(/(https?:\/\/[^\s]+)/g)[0]
                                 }
                               ></LinkPreview>
                             )}
@@ -347,13 +355,17 @@ export default function PostView({ host, channel, post }: HomeProps) {
                                                   __html: activityItem.comment,
                                                 }}
                                               ></p>
-                                              <LinkPreview
-                                                url={
-                                                  activityItem.comment.match(
-                                                    /(https?:\/\/[^\s]+)/g,
-                                                  )[0]
-                                                }
-                                              ></LinkPreview>
+                                              {activityItem.comment.match(
+                                                /(https?:\/\/[^\s]+)/g,
+                                              ) && (
+                                                <LinkPreview
+                                                  url={
+                                                    activityItem.comment.match(
+                                                      /(https?:\/\/[^\s]+)/g,
+                                                    )[0]
+                                                  }
+                                                ></LinkPreview>
+                                              )}
                                             </div>
                                           </div>
                                         </>
