@@ -720,6 +720,54 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
                 ))}
           </ul>
         </div>
+        {post && post.commentsallowed && (
+          <form
+            onSubmit={handleSubmit}
+            className=" mt-5 flex items-center mb-4 space-x-3"
+          >
+            <>
+              <div
+                ref={contentEditableRef}
+                contentEditable
+                onInput={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Leave a comment"
+                className="a dark:bg-gray-800 flex-1 px-3 py-1.5 placeholder-blueGray-300 text-blueGray-600 relative bg-gray-200 rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"
+                style={{ minHeight: "2rem", whiteSpace: "pre-wrap" }}
+              ></div>
+              {showSuggestions && (
+                <ul className="absolute border border-gray-300 rounded mt-[13rem] z-[100] bg-white shadow-md h-40 overflow-y-auto">
+                  {filteredSuggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="p-2 hover:bg-gray-200 cursor-pointer"
+                    >
+                      <span className="inline-flex">
+                        <div className="avatar mr-2">
+                          <div className="w-8 rounded-full">
+                            <img
+                              src={suggestion.profilePicture}
+                              alt="Tailwind-CSS-Avatar-component"
+                            />
+                          </div>
+                        </div>
+                        {suggestion.first_name} {suggestion.last_name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+            <button
+              className="bg-primary text-white text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+              type="submit"
+              disabled={message.length < 3}
+            >
+              Comment
+            </button>
+          </form>
+        )}
       </div>
     </li>
   );

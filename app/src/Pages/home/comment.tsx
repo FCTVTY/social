@@ -88,6 +88,9 @@ export default function Comment({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (message.length <= 2) {
+      return; // Prevent submission if the message is too short
+    }
     try {
       await axios.post(`${getApiDomain()}/comment`, {
         postId: post,
@@ -134,7 +137,7 @@ export default function Comment({
             onInput={handleInputChange}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
-            placeholder="What's on your mind?"
+            placeholder="Leave a comment"
             className="w-full rounded-lg p-2 text-sm border border-transparent appearance-none rounded-tg placeholder-gray-400 dark:bg-gray-800"
             style={{ minHeight: "4rem", whiteSpace: "pre-wrap" }}
           ></div>
@@ -167,10 +170,11 @@ export default function Comment({
             <div className="flex gap-2"></div>
             <label htmlFor="image-upload" className="cursor-pointer">
               <Button
-                className="my-2 flex items-center justify-center rounded-md py-3 font-medium text-white bg-primary hover:bg-gray-800"
+                className={`my-2 flex items-center justify-center rounded-md py-3 font-medium text-white bg-primary hover:bg-gray-800 ${message.length < 3 ? "opacity-50 cursor-not-allowed" : ""}`}
                 color="blue"
                 variant="solid"
                 type="submit"
+                disabled={message.length < 3} // Disable button if message is less than 3 characters
               >
                 Leave Comment
               </Button>
