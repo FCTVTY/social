@@ -150,7 +150,7 @@ function Notfications() {
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content menu bg-white dark:bg-gray-900 rounded-box card card-compact m-1 w-96 p-3 shadow-xl"
+          className="dropdown-content menu bg-white dark:bg-gray-800 rounded-box card card-compact m-1 w-96 p-3 shadow-xl"
           role="menu"
         >
           <div className="flex items-center justify-between px-2">
@@ -213,7 +213,6 @@ function Notfications() {
             )}
           </div>
 
-          <hr className="-mx-2 mt-2 border-base-content/10" />
           <div className="hidden flex items-center justify-between pt-2">
             <button className="btn text-primary hover:bg-primary/10 btn-sm btn-ghost">
               View All
@@ -879,7 +878,7 @@ const ApplicationLayout: React.FC<Props> = ({
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                           >
-                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48  origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                               <Menu.Item>
                                 {({ active }) => (
                                   <Link
@@ -888,7 +887,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                       active
                                         ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
                                         : "",
-                                      "block px-4 py-2 text-sm text-gray-700",
+                                      "block px-4 py-2 text-sm text-gray-700 dark:text-gray-400",
                                     )}
                                   >
                                     Your Profile
@@ -903,7 +902,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                       active
                                         ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
                                         : "",
-                                      "block px-4 py-2 text-sm text-gray-700",
+                                      "block px-4 py-2 text-sm text-gray-700 dark:text-gray-400",
                                     )}
                                   >
                                     Settings
@@ -918,7 +917,7 @@ const ApplicationLayout: React.FC<Props> = ({
                                       active
                                         ? "bg-gray-100 dark:bg-gray-800 dark:text-white"
                                         : "",
-                                      "block px-4 py-2 text-sm text-gray-700",
+                                      "block px-4 py-2 text-sm text-gray-700 dark:text-gray-400",
                                     )}
                                   >
                                     Sign out
