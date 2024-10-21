@@ -148,10 +148,24 @@ strong {
 
 
 }
+.posts p {
+    margin: 2em 0 2em 0;
+}
+
+.posts> ul {
+
+    margin-left:10px
+}
+
+
+.posts > ul li {
+    list-style-type: disc;
+}
 .list-disc ul {
 
     margin-left:10px
 }
+
 .list-disc ul li {
     list-style-type: disc;
 }

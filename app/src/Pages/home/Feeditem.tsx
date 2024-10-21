@@ -575,7 +575,7 @@ const PostItem = ({ post, profile, lite, roles, supertokensId, profiles }) => {
             <img className="mx-auto my-2 rounded-md" src={post.media} alt="" />
             <p
               dangerouslySetInnerHTML={{ __html: processedDesc }}
-              className="posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-white font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer max-h-40"
+              className="posts text-base leading-5 text-gray-900 dark:text-gray-400 dark:text-white font-normal tracking-normal font-sans normal-case text-gray-900 dark:text-gray-400 dark:text-gray-100 break-words text-ellipsis overflow-hidden relative focus:outline-none cursor-pointer"
             ></p>
           </Link>
           {hasUrl && (
