@@ -410,7 +410,6 @@ func fetchMetadata(url string) (Metadata, error) {
 	//
 
 	html := string(body)
-	fmt.Println(html)
 	// Extract Open Graph metadata using regex
 	title := extractMetaTagContent(html, `meta property="og:title" content="(.*?)"`)
 	description := extractMetaTagContent(html, `meta property="og:description" content="(.*?)"`)

@@ -326,6 +326,33 @@ export default function PostView({ host, channel, post, roles }: HomeProps) {
                                           </div>
                                           <div className="min-w-0 flex-1">
                                             <div>
+                                              {roles &&
+                                                (roles.includes("admin") ||
+                                                  roles.includes(
+                                                    "moderator",
+                                                  )) && (
+                                                  <a
+                                                    href={`/removeComment/${activityItem._id}`}
+                                                    className="btn btn-square btn-outline btn-xs"
+                                                  >
+                                                    <svg
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      className="h-6 w-6"
+                                                      fill="none"
+                                                      viewBox="0 0 24 24"
+                                                      stroke="currentColor"
+                                                    >
+                                                      <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M6 18L18 6M6 6l12 12"
+                                                      />
+                                                    </svg>
+                                                  </a>
+                                                )}
+                                            </div>
+                                            <div>
                                               <div className="text-sm">
                                                 <Link
                                                   to={activityItem._id}
@@ -340,18 +367,6 @@ export default function PostView({ host, channel, post, roles }: HomeProps) {
                                                       .last_name
                                                   }
                                                 </Link>{" "}
-                                                {roles &&
-                                                  (roles.includes("admin") ||
-                                                    roles.includes(
-                                                      "moderator",
-                                                    )) && (
-                                                    <a
-                                                      className="rounded-md bg-red-500 m-3 px-1.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                      href={`/removeComment/${activityItem._id}`}
-                                                    >
-                                                      Delete Comment
-                                                    </a>
-                                                  )}
                                               </div>
 
                                               <p className="mt-0.5 text-sm text-gray-900 dark:text-gray-400">
